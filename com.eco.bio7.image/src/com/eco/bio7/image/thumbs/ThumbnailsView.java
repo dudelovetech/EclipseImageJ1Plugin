@@ -72,7 +72,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.eco.bio7.util.PlaceholderLabel;
+import com.eco.bio7.image.PlaceholderLabel;
+
 
 public class ThumbnailsView extends ViewPart {
 

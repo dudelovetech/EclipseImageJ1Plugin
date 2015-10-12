@@ -75,7 +75,6 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
-import com.eco.bio7.util.PlaceholderLabel;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;

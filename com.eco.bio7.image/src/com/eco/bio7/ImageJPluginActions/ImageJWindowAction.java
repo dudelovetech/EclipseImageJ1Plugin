@@ -32,9 +32,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-
 import com.eco.bio7.image.CanvasView;
-import com.eco.bio7.util.Util;
+import com.eco.bio7.image.Util;
 
 public class ImageJWindowAction extends Action implements IMenuCreator {
 

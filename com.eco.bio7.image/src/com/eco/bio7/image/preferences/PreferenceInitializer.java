@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.eco.bio7.image.Activator;
-import com.eco.bio7.util.Util;
+import com.eco.bio7.image.Util;
 
 /**
  * Class used to initialize default preference values.
