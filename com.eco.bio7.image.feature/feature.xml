@@ -24,7 +24,6 @@
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.draw2d"/>
       <import plugin="com.eco.bio7.albireo"/>
-      <import plugin="com.eco.bio7.libs" version="1.7.0" match="greaterOrEqual"/>
       <import plugin="com.eco.bio7.javaedit" version="1.7.0" match="greaterOrEqual"/>
       <import plugin="com.eco.bio7.util" version="1.7.0" match="greaterOrEqual"/>
    </requires>
