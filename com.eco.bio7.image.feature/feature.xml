@@ -23,9 +23,10 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.draw2d"/>
-      <import plugin="com.eco.bio7.albireo"/>
-      <import plugin="com.eco.bio7.javaedit" version="1.7.0" match="greaterOrEqual"/>
-      <import plugin="com.eco.bio7.util" version="1.7.0" match="greaterOrEqual"/>
+      <import plugin="com.eco.bio7.albireo" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.model.workbench"/>
+      <import plugin="org.eclipse.e4.ui.workbench"/>
+      <import plugin="org.eclipse.ui.editors"/>
    </requires>
 
    <plugin

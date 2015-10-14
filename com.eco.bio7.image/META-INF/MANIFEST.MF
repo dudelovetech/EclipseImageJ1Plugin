@@ -39,6 +39,5 @@ Export-Package: .,
  ij.process,
  ij.text,
  ij.util
-Import-Package: com.eco.bio7.swt,
- org.eclipse.ui.texteditor
+Import-Package: org.eclipse.ui.texteditor
 

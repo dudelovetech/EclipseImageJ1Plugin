@@ -24,8 +24,6 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import com.eco.bio7.swt.SwtAwt;
-
 public class SwtAwtCustom {
 
 	private JApplet panel;

@@ -11,32 +11,21 @@
 
 package com.eco.bio7.image;
 
+import java.util.Vector;
+import javax.swing.JApplet;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 import ij.gui.ImageLayout;
 import ij.gui.ImageWindow;
 import ij.gui.ScrollbarWithLabel;
 
-import java.awt.Frame;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Stack;
-import java.util.Vector;
-
-import javax.swing.JApplet;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-
-import com.eco.bio7.swt.SwtAwt;
 
 public class SwtAwtImageJ {
 
