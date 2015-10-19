@@ -5,7 +5,15 @@ Add the following URL as update site:
 
 https://raw.githubusercontent.com/Bio7/EclipseImageJ1Plugin/master/ImageJPluginUpdateSite
 
-The important view to open is the ImageJ-Canvas which essentially implements the ImageJ interface. There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”).
+The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar:
+
+***Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)***
+
+***Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)***
+
+There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
+
+***Window->Show View->Other->Thumbnails***
 
 Plugins can be installed in the ImageJ plugins folder (see the plugin folder inside of the Eclipse ImageJ plugin). They will be added to the plugin menu automatically.
 
