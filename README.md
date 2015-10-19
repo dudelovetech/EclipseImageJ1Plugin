@@ -7,9 +7,9 @@ https://raw.githubusercontent.com/Bio7/EclipseImageJ1Plugin/master/ImageJPluginU
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar:
 
-***Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)***
+**Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)**
 
-***Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)***
+**Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)**
 
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
