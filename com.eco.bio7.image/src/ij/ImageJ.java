@@ -24,9 +24,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.CustomDetachedImageJView;
 import com.eco.bio7.image.Fullscreen;
@@ -634,7 +636,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					root.validate();
 				}
 				return;
-				/* Changed for Bio7! */
+			/* Changed for Bio7! */
 			case KeyEvent.VK_F2:
 				setFullScreen();
 
@@ -660,7 +662,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			}
 		}
 	}
-
+   /*Changed for Bio7!*/
 	public void setFullScreen() {
 		currentPanel = CanvasView.getCurrent();
 		if (currentPanel != null) {
@@ -668,7 +670,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			index = CanvasView.tabFolder.getSelectionIndex();
 			root = (JPanel) currentPanel.getParent();
 			if (full == null) {
-				full = new Fullscreen(currentPanel);
+				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+				if (javaFXEmbedded==false) {
+					full = new Fullscreen(currentPanel);
+
+				}
 			}
 		}
 	}
@@ -920,7 +927,9 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		return arguments;
 	}
 
-	/** ImageJ calls System.exit() when qutting when 'exitWhenQuitting' is true. */
+	/**
+	 * ImageJ calls System.exit() when qutting when 'exitWhenQuitting' is true.
+	 */
 	public void exitWhenQuitting(boolean ewq) {
 		exitWhenQuitting = ewq;
 	}

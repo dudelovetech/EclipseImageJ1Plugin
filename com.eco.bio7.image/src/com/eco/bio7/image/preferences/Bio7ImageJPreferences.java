@@ -30,6 +30,8 @@ public class Bio7ImageJPreferences extends FieldEditorPreferencePage implements 
 	 * editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
+		
+		addField(new BooleanFieldEditor("JAVAFX_EMBEDDED", "&Use JavaFX to embedd the ImageJ canvas", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor("ROI_MANAGER", "&ROI Manager window on top", getFieldEditorParent()));
 
