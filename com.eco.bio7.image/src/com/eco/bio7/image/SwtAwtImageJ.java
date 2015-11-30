@@ -15,7 +15,6 @@ import java.util.Vector;
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -28,7 +27,7 @@ import ij.gui.ImageCanvas;
 import ij.gui.ImageLayout;
 import ij.gui.ImageWindow;
 import ij.gui.ScrollbarWithLabel;
-import javafx.application.Platform;
+
 
 
 public class SwtAwtImageJ {
@@ -59,6 +58,8 @@ public class SwtAwtImageJ {
 
 	private ScrollbarWithLabel frameselect;
 
+	protected SwingFxSwtView view;
+
 
 	public SwtAwtImageJ(ScrollbarWithLabel channelSelector, ScrollbarWithLabel sliceSelector, ScrollbarWithLabel frameSelector, ImageCanvas ic, ImagePlus plusin, ImageWindow window) {
 		this.im = ic;
@@ -72,6 +73,8 @@ public class SwtAwtImageJ {
 		ve = new Vector();
 		ve.add(plus);
 		ve.add(win);
+		/*Create a new JavaFX Swing node!*/
+		view=new SwingFxSwtView();
 		
 
 	}
@@ -101,7 +104,7 @@ public class SwtAwtImageJ {
 
 				
 				a = new JPanel();
-				SwingFxSwtView view=new SwingFxSwtView();
+				
 				view.embedd(top,a);
 				a.add(im);// Add the Image canvas to the JPanel
 				a.setLayout(new ImageLayout(im));

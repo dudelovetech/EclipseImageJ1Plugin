@@ -196,7 +196,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 				if (activated instanceof CustomDetachedImageJView) {
 					customView = (CustomDetachedImageJView) activated;
 
-					SwtAwtCustom swt = new SwtAwtCustom(viewPanel, customView);
+					FXSwtAwtCustom swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
 					ImageJ.setCustomView(customView);
 

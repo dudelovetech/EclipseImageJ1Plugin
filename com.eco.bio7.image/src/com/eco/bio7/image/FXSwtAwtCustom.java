@@ -25,7 +25,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class SwtAwtCustom {
+public class FXSwtAwtCustom {
 
 	private JApplet panel;
 
@@ -46,31 +46,17 @@ public class SwtAwtCustom {
 	protected Scene scene;
 
 	protected Stage stage2;
+	
+	SwingFxSwtView fxView;
 
-	public SwtAwtCustom(JPanel Jpanel, CustomDetachedImageJView view) {
+	public FXSwtAwtCustom(JPanel Jpanel, CustomDetachedImageJView view) {
 		this.view = view;
 		this.jpanel = Jpanel;
 		ve = new Vector();
 		ve.add(Jpanel);
-
+		fxView = new SwingFxSwtView();
 	}
 
-	public SwtAwtCustom(Panel panel, CustomDetachedImageJView view) {
-		this.view = view;
-		this.awtPanel = panel;
-		ve = new Vector();
-		ve.add(panel);
-
-	}
-
-	/*
-	 * public SwtAwtCustom(GLCanvas canvas, com.sun.opengl.util.Animator
-	 * anim,CustomView view) {
-	 * 
-	 * ve = new Vector(); ve.add(anim); this.canvas = canvas;
-	 * 
-	 * }
-	 */
 
 	public void addTab(final String title) {
        /*Add JavaFX to embed the ImageJ canvas!*/
@@ -85,8 +71,7 @@ public class SwtAwtCustom {
 					top = new Composite(view.getCustomViewParent(), SWT.NONE);
 					top.setLayout(new FillLayout());
 					comp.setData(ve);
-					SwingFxSwtView view = new SwingFxSwtView();
-					view.embedd(top, jpanel);
+					fxView.embedd(top, jpanel);
 
 				}
 			});
