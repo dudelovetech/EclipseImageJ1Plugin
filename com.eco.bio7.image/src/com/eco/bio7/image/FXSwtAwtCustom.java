@@ -54,7 +54,7 @@ public class FXSwtAwtCustom {
 		this.jpanel = Jpanel;
 		ve = new Vector();
 		ve.add(Jpanel);
-		fxView = new SwingFxSwtView();
+		
 	}
 
 
@@ -63,6 +63,7 @@ public class FXSwtAwtCustom {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		if (javaFXEmbedded) {
+			SwingFxSwtView fxView = new SwingFxSwtView();
 			Composite comp = view.getCustomViewParent();
 			Display dis = comp.getDisplay();
 			dis.syncExec(new Runnable() {

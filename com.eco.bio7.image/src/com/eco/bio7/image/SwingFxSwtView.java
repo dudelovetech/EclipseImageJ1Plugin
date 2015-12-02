@@ -40,8 +40,10 @@ public class SwingFxSwtView {
 
 	private StackPane pane;
 
-	public void embedd(Composite top, JComponent comp) {
+	public Composite top;
 
+	public void embedd(Composite top, JComponent comp) {
+        this.top=top;
 		canvas = new FXCanvas(top, SWT.NORMAL) {
 			public Point computeSize(int wHint, int hHint, boolean changed) {
 				getScene().getWindow().sizeToScene();
@@ -61,7 +63,8 @@ public class SwingFxSwtView {
 					gc.fillRectangle(canvas.getBounds());
 					gc.setFont(new Font(Display.getDefault(), "Arial", 20, SWT.NORMAL));
 					gc.drawString("Fullscreen Mode! Press ESC in the fullscreen window", 10, 10);
-					gc.drawString("to return the display to this view!", 10, 60);
+					gc.drawString("to return the display to this view. Don't close this view", 10, 60);
+					gc.drawString("in fullscreen mode!", 10, 110);
 
 				} else {
 
@@ -89,7 +92,7 @@ public class SwingFxSwtView {
 			}
 		});
 		canvas.setScene(scene);
-		// canvas.layout();
+		canvas.layout();
 		canvas.redraw();
 		top.layout();
 		// contentPane.add(jpanel);

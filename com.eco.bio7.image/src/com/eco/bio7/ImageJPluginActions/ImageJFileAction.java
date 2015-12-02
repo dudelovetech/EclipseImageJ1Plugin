@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.IJTabs;
 
 public class ImageJFileAction extends Action implements IMenuCreator {
@@ -36,21 +38,18 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 	String[] newImage = { "Image...", "Text Window", "Internal Clipboard", "System Clipboard" };
 
-	String[] imp = { "Image Sequence...", "Raw...", "LUT... ", "Text Image... ", "Text File... ", "Results... ", "URL...", "Stack From List...", "TIFF Virtual Stack...", "AVI...",
-			"XY Coordinates... " };
+	String[] imp = { "Image Sequence...", "Raw...", "LUT... ", "Text Image... ", "Text File... ", "Results... ", "URL...", "Stack From List...", "TIFF Virtual Stack...", "AVI...", "XY Coordinates... " };
 
-	String[] saveas = { "Tiff...", "Gif...", "Jpeg...", "BMP...", "PNG...", "PGM...", "Text Image...", "ZIP...", "Raw Data...", "Image Sequence... ", "AVI... ", "FITS...", "LUT...", "Selection...",
-			"XY Coordinates...", "Results...", "Text..." };
+	String[] saveas = { "Tiff...", "Gif...", "Jpeg...", "BMP...", "PNG...", "PGM...", "Text Image...", "ZIP...", "Raw Data...", "Image Sequence... ", "AVI... ", "FITS...", "LUT...", "Selection...", "XY Coordinates...", "Results...", "Text..." };
 
-	String[] url = { "NileBend.jpg","sea-grass.jpg","particles.gif", "blobs.gif","embryos.jpg","Cell_Colony.jpg", "mri-stack.zip", "leaf.jpg", "Tree_Rings.jpg", "FluorescentCells.jpg","Diatoms.jpg" ,"baboon.jpg", "bat-cochlea-volume.zip",
-			"flybrain.zip", "Rat_Hippocampal_Neuron.zip", "Spindly-GFP.zip","hela-cells.zip","3D_Chromosome.zip", "organ-of-corti.zip", "confocal-series.zip","egg.jpg","microm.jpg","fluoview-multi.tif","mri.gif","snowflake.gif" };
+	String[] url = { "NileBend.jpg", "sea-grass.jpg", "particles.gif", "blobs.gif", "embryos.jpg", "Cell_Colony.jpg", "mri-stack.zip", "leaf.jpg", "Tree_Rings.jpg", "FluorescentCells.jpg", "Diatoms.jpg", "baboon.jpg", "bat-cochlea-volume.zip", "flybrain.zip", "Rat_Hippocampal_Neuron.zip",
+			"Spindly-GFP.zip", "hela-cells.zip", "3D_Chromosome.zip", "organ-of-corti.zip", "confocal-series.zip", "egg.jpg", "microm.jpg", "fluoview-multi.tif", "mri.gif", "snowflake.gif" };
 
 	MenuItem[] save_as = new MenuItem[saveas.length];
 
 	MenuItem[] import_as = new MenuItem[imp.length];
 
 	MenuItem[] samples = new MenuItem[url.length];
-
 
 	public ImageJFileAction() {
 		setId("File");
@@ -172,15 +171,24 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 							 * url[count]); WindowManager.checkForDuplicateName
 							 * = true;
 							 */
-							if(imp!=null){
-							SwingUtilities.invokeLater(new Runnable() {
-								// !!
-								public void run() {
-
+							if (imp != null) {
+								/* Add JavaFX to embed the ImageJ canvas! */
+								IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+								boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+								/*If we are using the JavaFX bridge don't use the Swing thread!*/
+								if (javaFXEmbedded) {
 									imp.show();
 									IJ.showStatus("");
+								} else {
+									SwingUtilities.invokeLater(new Runnable() {
+										// !!
+										public void run() {
+
+											imp.show();
+											IJ.showStatus("");
+										}
+									});
 								}
-							});
 							}
 							monitor.done();
 							return Status.OK_STATUS;
@@ -205,10 +213,11 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 		menuItem10.setText("Page Setup");
 		MenuItem menuItem11 = new MenuItem(fMenu, SWT.PUSH);
 		menuItem11.setText("Print");
-		/*MenuItem menuItem13 = new MenuItem(fMenu, SWT.PUSH);
-		menuItem13.setText("Select Device");
-		MenuItem menuItem14 = new MenuItem(fMenu, SWT.PUSH);
-		menuItem14.setText("Aquire");*/
+		/*
+		 * MenuItem menuItem13 = new MenuItem(fMenu, SWT.PUSH);
+		 * menuItem13.setText("Select Device"); MenuItem menuItem14 = new
+		 * MenuItem(fMenu, SWT.PUSH); menuItem14.setText("Aquire");
+		 */
 		MenuItem menuItem6 = new MenuItem(fMenu, SWT.PUSH);
 		menuItem6.setText("Close All Tabs");
 
@@ -267,17 +276,21 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-                /*Close detached views! Not reliable for many perspectives!*/
-				/*IWorkbenchPage wbp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				CanvasView canv = CanvasView.getCanvas_view();
-				ArrayList<String> detArr = canv.getDetachedSecViewIDs();
-
-				for (int i = 0; i < detArr.size(); i++) {
-					wbp.hideView(wbp.findViewReference("com.eco.bio7.image.detachedImage", detArr.get(i)));
-				}
-
-				detArr.clear();*/
-                /*Close the tabs!*/
+				/* Close detached views! Not reliable for many perspectives! */
+				/*
+				 * IWorkbenchPage wbp =
+				 * PlatformUI.getWorkbench().getActiveWorkbenchWindow().
+				 * getActivePage(); CanvasView canv =
+				 * CanvasView.getCanvas_view(); ArrayList<String> detArr =
+				 * canv.getDetachedSecViewIDs();
+				 * 
+				 * for (int i = 0; i < detArr.size(); i++) {
+				 * wbp.hideView(wbp.findViewReference(
+				 * "com.eco.bio7.image.detachedImage", detArr.get(i))); }
+				 * 
+				 * detArr.clear();
+				 */
+				/* Close the tabs! */
 				IJTabs.deleteAllTabs();
 			}
 
@@ -350,7 +363,6 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 			}
 		});
 
-		
 		return fMenu;
 	}
 

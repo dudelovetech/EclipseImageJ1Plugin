@@ -58,7 +58,7 @@ public class SwtAwtImageJ {
 
 	private ScrollbarWithLabel frameselect;
 
-	protected SwingFxSwtView view;
+	//protected SwingFxSwtView view;
 
 
 	public SwtAwtImageJ(ScrollbarWithLabel channelSelector, ScrollbarWithLabel sliceSelector, ScrollbarWithLabel frameSelector, ImageCanvas ic, ImagePlus plusin, ImageWindow window) {
@@ -74,7 +74,7 @@ public class SwtAwtImageJ {
 		ve.add(plus);
 		ve.add(win);
 		/*Create a new JavaFX Swing node!*/
-		view=new SwingFxSwtView();
+		
 		
 
 	}
@@ -88,7 +88,7 @@ public class SwtAwtImageJ {
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-
+				SwingFxSwtView	view=new SwingFxSwtView();
 				ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
 				//ci.setData(plus);// add a reference to the image for use as
 				// selected tab
