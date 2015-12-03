@@ -2,6 +2,7 @@ package ij.plugin;
 import ij.*;
 import ij.gui.*;
 import ij.process.*;
+import javafx.application.Platform;
 import ij.measure.Calibration;
 import ij.macro.Interpreter;
 import ij.io.FileInfo;
@@ -294,7 +295,14 @@ public class StackEditor implements PlugIn {
 				SwingUtilities.invokeAndWait(new Runnable() {
 
 					public void run() {
+						
+						Platform.runLater(new Runnable() {
+
+							public void run() {
+						
 						imp2.show();
+							}
+						});
 					}
 				});
 			} catch (InvocationTargetException e) {

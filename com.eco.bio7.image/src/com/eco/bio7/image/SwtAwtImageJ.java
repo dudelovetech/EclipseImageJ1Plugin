@@ -27,8 +27,7 @@ import ij.gui.ImageCanvas;
 import ij.gui.ImageLayout;
 import ij.gui.ImageWindow;
 import ij.gui.ScrollbarWithLabel;
-
-
+import javafx.application.Platform;
 
 public class SwtAwtImageJ {
 
@@ -58,8 +57,7 @@ public class SwtAwtImageJ {
 
 	private ScrollbarWithLabel frameselect;
 
-	//protected SwingFxSwtView view;
-
+	// protected SwingFxSwtView view;
 
 	public SwtAwtImageJ(ScrollbarWithLabel channelSelector, ScrollbarWithLabel sliceSelector, ScrollbarWithLabel frameSelector, ImageCanvas ic, ImagePlus plusin, ImageWindow window) {
 		this.im = ic;
@@ -73,126 +71,129 @@ public class SwtAwtImageJ {
 		ve = new Vector();
 		ve.add(plus);
 		ve.add(win);
-		/*Create a new JavaFX Swing node!*/
-		
-		
+		/* Create a new JavaFX Swing node! */
 
 	}
 
 	public void addTab(final String title) {
-		/*Add JavaFX to embed the ImageJ canvas!*/
+		/* Add JavaFX to embed the ImageJ canvas! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		boolean javaFXEmbedded=store.getBoolean("JAVAFX_EMBEDDED");
-		if(javaFXEmbedded){
-		Display dis = CanvasView.getParent2().getDisplay();
-		dis.syncExec(new Runnable() {
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+		if (javaFXEmbedded) {
+			Platform.runLater(new Runnable() {
+				SwingFxSwtView view = new SwingFxSwtView();
 
-			public void run() {
-				SwingFxSwtView	view=new SwingFxSwtView();
-				ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
-				//ci.setData(plus);// add a reference to the image for use as
-				// selected tab
-				ci.setData(ve);// add a vector with the data from the
-				// ImageWindow and the Image!!
-				ci.setText(title);
-				ci.isShowing();
+				public void run() {
+					Display dis = CanvasView.getParent2().getDisplay();
+					dis.syncExec(new Runnable() {
 
-				top = new Composite(CanvasView.tabFolder,SWT.NONE);
-				top.setLayout(new FillLayout());
-				
-				ci.setControl(top);
+						public void run() {
 
-				
-				a = new JPanel();
-				
-				view.embedd(top,a);
-				a.add(im);// Add the Image canvas to the JPanel
-				a.setLayout(new ImageLayout(im));
-				
-				if (channelselect != null) {
-					a.add(channelselect);
+							ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
+							// ci.setData(plus);// add a reference to the image
+							// for use as
+							// selected tab
+							ci.setData(ve);// add a vector with the data from
+											// the
+							// ImageWindow and the Image!!
+							ci.setText(title);
+							ci.isShowing();
+
+							top = new Composite(CanvasView.tabFolder, SWT.NONE);
+							top.setLayout(new FillLayout());
+
+							ci.setControl(top);
+
+							a = new JPanel();
+
+							view.embedd(top, a);
+							a.add(im);// Add the Image canvas to the JPanel
+							a.setLayout(new ImageLayout(im));
+
+							if (channelselect != null) {
+								a.add(channelselect);
+							}
+							if (sliceselect != null) {
+								a.add(sliceselect);
+							}
+							if (frameselect != null) {
+								a.add(frameselect);
+							}
+
+							ve.add(a); // Add to the vector for access
+							CanvasView.tabFolder.setLayout(null);
+							CanvasView.tabFolder.showItem(ci);
+							CanvasView.tabFolder.setSelection(ci);
+							CanvasView.setCurrent(a);
+
+						}
+					});
+
 				}
-				if (sliceselect != null) {
-					a.add(sliceselect);
-				}
-				if (frameselect != null) {
-					a.add(frameselect);
-				}
+			});
+		} else {
+			/* Add SWT_AWT to embed the ImageJ canvas! */
+			Display dis = CanvasView.getParent2().getDisplay();
+			dis.syncExec(new Runnable() {
 
-				
-				ve.add(a); // Add to the vector for access
-				CanvasView.tabFolder.setLayout(null);
-				CanvasView.tabFolder.showItem(ci);
-				CanvasView.tabFolder.setSelection(ci);
-				CanvasView.setCurrent(a);
-					
+				public void run() {
 
-			}
-		});
-		}
-		else{
-			/*Add SWT_AWT to embed the ImageJ canvas!*/
-		Display dis = CanvasView.getParent2().getDisplay();
-		dis.syncExec(new Runnable() {
+					ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
+					// ci.setData(plus);// add a reference to the image for use
+					// as
+					// selected tab
+					ci.setData(ve);// add a vector with the data from the
+					// ImageWindow and the Image!!
+					ci.setText(title);
+					ci.isShowing();
 
-			public void run() {
-
-				ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
-				//ci.setData(plus);// add a reference to the image for use as
-				// selected tab
-				ci.setData(ve);// add a vector with the data from the
-				// ImageWindow and the Image!!
-				ci.setText(title);
-				ci.isShowing();
-
-				top = new Composite(CanvasView.tabFolder, SWT.NO_BACKGROUND | SWT.EMBEDDED);
-				try {
-					System.setProperty("sun.awt.noerasebackground", "true");
-				} catch (NoSuchMethodError error) {
-				}
-				ci.setControl(top);
-
-				frame = SWT_AWT.new_Frame(top);
-				SwtAwt.setSwtAwtFocus(frame, top);
-				panel = new JApplet() {
-					public void update(java.awt.Graphics g) {
-						// Do not erase the background 
-						paint(g);
+					top = new Composite(CanvasView.tabFolder, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+					try {
+						System.setProperty("sun.awt.noerasebackground", "true");
+					} catch (NoSuchMethodError error) {
 					}
-				};
-				// panel.addLayout(new java.awt.BorderLayout());
-				frame.add(panel);
+					ci.setControl(top);
 
-				JRootPane root = new JRootPane();
-				panel.add(root);
-				contentPane = root.getContentPane();
+					frame = SWT_AWT.new_Frame(top);
+					SwtAwt.setSwtAwtFocus(frame, top);
+					panel = new JApplet() {
+						public void update(java.awt.Graphics g) {
+							// Do not erase the background
+							paint(g);
+						}
+					};
+					// panel.addLayout(new java.awt.BorderLayout());
+					frame.add(panel);
 
-				a = new JPanel();
-				contentPane.add(a);
-				a.add(im);// Add the Image canvas to the JPanel
-				a.setLayout(new ImageLayout(im));
-				// a.setLayout(new java.awt.BorderLayout());
-				if (channelselect != null) {
-					a.add(channelselect);
+					JRootPane root = new JRootPane();
+					panel.add(root);
+					contentPane = root.getContentPane();
+
+					a = new JPanel();
+					contentPane.add(a);
+					a.add(im);// Add the Image canvas to the JPanel
+					a.setLayout(new ImageLayout(im));
+					// a.setLayout(new java.awt.BorderLayout());
+					if (channelselect != null) {
+						a.add(channelselect);
+					}
+					if (sliceselect != null) {
+						a.add(sliceselect);
+					}
+					if (frameselect != null) {
+						a.add(frameselect);
+					}
+
+					ve.add(a); // Add to the vector for access
+					CanvasView.tabFolder.setLayout(null);
+					CanvasView.tabFolder.showItem(ci);
+					CanvasView.tabFolder.setSelection(ci);
+					CanvasView.setCurrent(a);
+
 				}
-				if (sliceselect != null) {
-					a.add(sliceselect);
-				}
-				if (frameselect != null) {
-					a.add(frameselect);
-				}
-
-				ve.add(a); // Add to the vector for access
-				CanvasView.tabFolder.setLayout(null);
-				CanvasView.tabFolder.showItem(ci);
-				CanvasView.tabFolder.setSelection(ci);
-				CanvasView.setCurrent(a);
-
-			}
-		});
+			});
 		}
 	}
-	
 
 	public JPanel getPanel() {
 		return a;

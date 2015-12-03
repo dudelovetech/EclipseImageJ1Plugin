@@ -74,11 +74,11 @@ public class SwingFxSwtView {
 		});
 
 		swingNode = new SwingNode();
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				swingNode.setContent(comp);
-			}
-		});
+		/*SwingUtilities.invokeLater(new Runnable() {
+			public void run() {*/
+		swingNode.setContent(comp);
+		/*	}
+		});*/
 
 		pane = new StackPane();
 		pane.getChildren().add(swingNode);
