@@ -8,12 +8,22 @@ import java.util.zip.*;
 import java.awt.geom.*;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.eclipse.jface.preference.IPreferenceStore;
+
+import com.eco.bio7.image.Activator;
 
 import ij.*;
 import ij.process.*;
@@ -40,8 +50,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	private static int lastNonShiftClick = -1;
 	private static boolean allowMultipleSelections = true; 
 	private static String moreButtonLabel = "More "+'\u00bb';
-	private Panel panel;
-	private static Frame instance;
+	private JPanel panel;
+	private static JFrame instance;
 	private static int colorIndex = 4;
 	private JList list;
 	private DefaultListModel listModel;
@@ -50,9 +60,9 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	private boolean macro;
 	private boolean ignoreInterrupts;
 	private PopupMenu pm;
-	private Button moreButton, colorButton;
-	private Checkbox showAllCheckbox = new Checkbox("Show All", false);
-	private Checkbox labelsCheckbox = new Checkbox("Labels", false);
+	private JButton moreButton, colorButton;
+	private JCheckBox showAllCheckbox = new JCheckBox("Show All", false);
+	private JCheckBox labelsCheckbox = new JCheckBox("Labels", false);
 
 	private static boolean measureAll = true;
 	private static boolean onePerSlice = true;
@@ -80,6 +90,10 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			return;
 		instance = this;
 		list = new JList();
+		/* Changed for Bio7! */
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean onTop = store.getBoolean("ROI_MANAGER");
+		instance.setAlwaysOnTop(onTop);
 		showWindow();
 	}
 	
@@ -107,9 +121,9 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		list.addMouseListener(this);
 		list.addMouseWheelListener(this);
 		if (IJ.isLinux()) list.setBackground(Color.white);
-		JScrollPane scrollPane = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add("Center", scrollPane);
-		panel = new Panel();
+		panel = new JPanel();
 		int nButtons = BUTTONS;
 		panel.setLayout(new GridLayout(nButtons, 1, 5, 0));
 		addButton("Add [t]");
@@ -141,7 +155,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 
 	void addButton(String label) {
-		Button b = new Button(label);
+		JButton b = new JButton(label);
 		b.addActionListener(this);
 		b.addKeyListener(IJ.getInstance());
 		b.addMouseListener(this);
@@ -151,6 +165,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 
 	void addPopupMenu() {
 		pm=new PopupMenu();
+		
 		//addPopupItem("Select All");
 		addPopupItem("Open...");
 		addPopupItem("Save...");
@@ -263,11 +278,11 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getSource();
-		boolean showAllMode = showAllCheckbox.getState();
+		boolean showAllMode = showAllCheckbox.isSelected();
 		if (source==showAllCheckbox) {
 			if (firstTime && okToSet())
-				labelsCheckbox.setState(true);
-			showAll(showAllCheckbox.getState()?SHOW_ALL:SHOW_NONE);
+				labelsCheckbox.setSelected(true);
+			showAll(showAllCheckbox.isSelected()?SHOW_ALL:SHOW_NONE);
 			if (Recorder.record && recordShowAll) {
 				if (showAllMode)
 						Recorder.record("roiManager", "Show All");
@@ -280,9 +295,9 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		}
 		if (source==labelsCheckbox) {
 			if (firstTime && okToSet())
-				showAllCheckbox.setState(true);
-			boolean editState = labelsCheckbox.getState();
-			boolean showAllState = showAllCheckbox.getState();
+				showAllCheckbox.setSelected(true);
+			boolean editState = labelsCheckbox.isSelected();
+			boolean showAllState = showAllCheckbox.isSelected();
 			if (!showAllState && !editState)
 				showAll(SHOW_NONE);
 			else {
@@ -294,7 +309,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 						Recorder.record("roiManager", "Show All without labels");
 				}
 				if (editState && !showAllState && okToSet()) {
-					showAllCheckbox.setState(true);
+					showAllCheckbox.setSelected(true);
 					recordShowAll = false;
 				}
 			}
@@ -586,7 +601,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		rois.set(index, roi);
 		listModel.setElementAt(name2, index);
 		list.setSelectedIndex(index);
-		if (Prefs.useNamesAsLabels && labelsCheckbox.getState()) {
+		if (Prefs.useNamesAsLabels && labelsCheckbox.isSelected()) {
 			ImagePlus imp = WindowManager.getCurrentImage();
 			if (imp!=null) imp.draw();
 		}
@@ -633,7 +648,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 				}
 			}
 		}
-		if (showAllCheckbox.getState() && !restoreCentered && !noUpdateMode) {
+		if (showAllCheckbox.isSelected() && !restoreCentered && !noUpdateMode) {
 			roi.setImage(null);
 			imp.setRoi(roi);
 			return true;
@@ -1148,7 +1163,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		}
 		if (record() && (mode==DRAW||mode==FILL))
 			Recorder.record("roiManager", mode==DRAW?"Draw":"Fill");
-		if (showAllCheckbox.getState())
+		if (showAllCheckbox.isSelected())
 			runCommand("show none");
 		imp.updateAndDraw();
 		return true;
@@ -1280,7 +1295,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 			
 	public boolean getDrawLabels() {
-		return labelsCheckbox.getState();
+		return labelsCheckbox.isSelected();
 	}
 
 	void combine() {
@@ -1549,8 +1564,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	private void labels() {
 		ImagePlus imp = WindowManager.getCurrentImage();
 		if (imp!=null) {
-			showAllCheckbox.setState(true);
-			labelsCheckbox.setState(true);
+			showAllCheckbox.setSelected(true);
+			labelsCheckbox.setSelected(true);
 			showAll(LABELS);
 		}
 		try {
@@ -1597,10 +1612,10 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		}
 	}
 
-	Panel makeButtonPanel(GenericDialog gd) {
-		Panel panel = new Panel();
+	JPanel makeButtonPanel(GenericDialog gd) {
+		JPanel panel = new JPanel();
 		//buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-		colorButton = new Button("\"Show All\" Color...");
+		colorButton = new JButton("\"Show All\" Color...");
 		colorButton.addActionListener(this);
 		panel.add(colorButton);
 		return panel;
@@ -1656,7 +1671,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		ImagePlus imp = WindowManager.getCurrentImage();
 		if (imp==null)
 			return;
-		if (showAllCheckbox.getState()) {
+		if (showAllCheckbox.isSelected()) {
 			if (getCount()>0) {
 				Roi[] rois = getRoisAsArray();
 				Overlay overlay = newOverlay();
@@ -1863,21 +1878,21 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		else if (cmd.equals("show all")) {
 			if (WindowManager.getCurrentImage()!=null) {
 				showAll(SHOW_ALL);
-				showAllCheckbox.setState(true);
+				showAllCheckbox.setSelected(true);
 			}
 		} else if (cmd.equals("show none")) {
 			if (WindowManager.getCurrentImage()!=null) {
 				showAll(SHOW_NONE);
-				showAllCheckbox.setState(false);
+				showAllCheckbox.setSelected(false);
 			}
 		} else if (cmd.equals("show all with labels")) {
-			labelsCheckbox.setState(true);
+			labelsCheckbox.setSelected(true);
 			showAll(LABELS);
-			showAllCheckbox.setState(true);
+			showAllCheckbox.setSelected(true);
 			if (Interpreter.isBatchMode()) IJ.wait(250);
 		} else if (cmd.equals("show all without labels")) {
-			showAllCheckbox.setState(true);
-			labelsCheckbox.setState(false);
+			showAllCheckbox.setSelected(true);
+			labelsCheckbox.setSelected(false);
 			showAll(NO_LABELS);
 			if (Interpreter.isBatchMode()) IJ.wait(250);
 		} else if (cmd.equals("deselect")||cmd.indexOf("all")!=-1) {
@@ -1962,7 +1977,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		} else if (cmd.equals("usenames")) {
 			Prefs.useNamesAsLabels = name.equals("true")?true:false;
 			macro = false;
-			if (labelsCheckbox.getState()) {
+			if (labelsCheckbox.isSelected()) {
 				ImagePlus imp = WindowManager.getCurrentImage();
 				if (imp!=null) imp.draw();
 			}
@@ -2136,8 +2151,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 
 	public void setEditMode(ImagePlus imp, boolean editMode) {
-		showAllCheckbox.setState(editMode);
-		labelsCheckbox.setState(editMode);
+		showAllCheckbox.setSelected(editMode);
+		labelsCheckbox.setSelected(editMode);
 		showAll(editMode?LABELS:SHOW_NONE);
 	}
 	
@@ -2146,7 +2161,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		super.close();
 		instance = null;
 		Prefs.saveLocation(LOC_KEY, getLocation());
-		if (!showAllCheckbox.getState() || IJ.macroRunning())
+		if (!showAllCheckbox.isSelected() || IJ.macroRunning())
 			return;
 		int n = getCount();
 		ImagePlus imp = WindowManager.getCurrentImage();
@@ -2257,7 +2272,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	
 	private Overlay newOverlay() {
 		Overlay overlay = OverlayLabels.createOverlay();
-		overlay.drawLabels(labelsCheckbox.getState());
+		overlay.drawLabels(labelsCheckbox.isSelected());
 		if (overlay.getLabelFont()==null && overlay.getLabelColor()==null) {
 			overlay.setLabelColor(Color.white);
 			overlay.drawBackgrounds(true);
@@ -2352,7 +2367,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
     		if (imageID!=0 && imp.getID()!=imageID) {
     			showAll(SHOW_NONE);
     			if (okToSet())
-					showAllCheckbox.setState(false);
+					showAllCheckbox.setSelected(false);
 				deselect();
 				imageID = 0;
     		}

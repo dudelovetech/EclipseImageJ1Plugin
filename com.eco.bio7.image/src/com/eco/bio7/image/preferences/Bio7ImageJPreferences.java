@@ -5,6 +5,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import com.eco.bio7.image.Activator;
 
+
 /**
  * This class represents a preference page that is contributed to the
  * Preferences dialog. By subclassing <samp>FieldEditorPreferencePage</samp>, we
@@ -42,6 +43,17 @@ public class Bio7ImageJPreferences extends FieldEditorPreferencePage implements 
 		addField(new IntegerFieldEditor("FONT_SIZE_CORRECTION", "Fontsize correction (Restart necessary)", getFieldEditorParent()));
 		
 		addField(new BooleanFieldEditor("FONT_ANTIALIASED", "Antialiased Fonts", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
+	
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Image Methods Dialog Size:", getFieldEditorParent()));
+		addField(new IntegerFieldEditor("IMAGE_METHODS_SIZE_X", "x", getFieldEditorParent()));
+		addField(new IntegerFieldEditor("IMAGE_METHODS_SIZE_Y", "y", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("ImageJ Toolbar Dialog Size:", getFieldEditorParent()));
+		addField(new IntegerFieldEditor("IMAGEJ_TOOLBAR_SIZE_X", "x", getFieldEditorParent()));
+		addField(new IntegerFieldEditor("IMAGEJ_TOOLBAR_SIZE_Y", "y", getFieldEditorParent()));
+	
+	
 	}
 
 	/*

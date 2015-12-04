@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import java.io.*;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+
 import java.awt.datatransfer.*;
 import ij.gui.*;
 import ij.process.*;
@@ -46,10 +51,10 @@ public class CalibrationBar implements PlugIn {
 	Calibration cal;
 	int[] histogram;
 	Image img;
-	Button setup, redraw, insert, unInsert;
-	Checkbox ne,nw,se,sw;
+	JButton setup, redraw, insert, unInsert;
+	JCheckBox ne,nw,se,sw;
 	CheckboxGroup locGroup;
-	Label value, note;
+	JLabel value, note;
 	int newMaxCount;
 	boolean logScale;
 	int win_width;

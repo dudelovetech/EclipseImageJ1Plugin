@@ -23,6 +23,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault("ROI_MANAGER", false);
 		store.setDefault("RESULTS_TABLE", false);
 		store.setDefault("MACRO_RECORDER", false);
+		/* Dialog Sizes for ImageJ dialogs! */
+		store.setDefault("IMAGE_METHODS_SIZE_X", 360);// 260
+		store.setDefault("IMAGE_METHODS_SIZE_Y", 1000);// 790
+		store.setDefault("IMAGEJ_TOOLBAR_SIZE_X", 750);// 580
+		store.setDefault("IMAGEJ_TOOLBAR_SIZE_Y", 150);// 130
 
 		if (Util.getOS().equals("Windows")) {
 			store.setDefault("FONT_SIZE_CORRECTION", 0);

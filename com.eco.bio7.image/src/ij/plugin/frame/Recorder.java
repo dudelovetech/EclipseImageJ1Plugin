@@ -2,6 +2,11 @@ package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import java.io.*;
 import ij.*;
 import ij.plugin.*;
@@ -25,8 +30,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	private final static int MACRO=0, JAVASCRIPT=1, BEANSHELL=2, JAVA=3;
 	private final static String[] modes = {"Macro", "JavaScript", "BeanShell", "Java"};
 	private Choice mode;
-	private Button makeMacro, help;
-	private TextField fileName;
+	private JButton makeMacro, help;
+	private JTextField fileName;
 	private String fitTypeStr = CurveFitter.fitList[0];
 	private static TextArea textArea;
 	private static Recorder instance;
@@ -55,7 +60,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		record = true;
 		scriptMode = false;
 		recordInMacros = false;
-		Panel panel = new Panel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		panel.add(new Label("  Record:"));
 		mode = new Choice();
 		for (int i=0; i<modes.length; i++)
@@ -66,15 +71,15 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		mode.select(m);
 		panel.add(mode);
 		panel.add(new Label("    Name:"));
-		fileName = new TextField(defaultName, 15);
+		fileName = new JTextField(defaultName, 15);
 		setFileName();
 		panel.add(fileName);
 		panel.add(new Label("   "));
-		makeMacro = new Button("Create");
+		makeMacro = new JButton("Create");
 		makeMacro.addActionListener(this);
 		panel.add(makeMacro);
 		panel.add(new Label("   "));
-		help = new Button("?");
+		help = new JButton("?");
 		help.addActionListener(this);
 		panel.add(help);
 		add("North", panel);
