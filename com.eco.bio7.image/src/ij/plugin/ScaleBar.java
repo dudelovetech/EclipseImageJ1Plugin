@@ -2,14 +2,9 @@ package ij.plugin;
 import ij.*;
 import ij.process.*;
 import ij.gui.*;
-
 import java.awt.*;
-
 import ij.measure.*;
-
 import java.awt.event.*;
-
-import javax.swing.JCheckBox;
 
 /** This plugin implements the Analyze/Tools/Draw Scale Bar command.
 	Divakar Ramachandran added options to draw a background 
@@ -22,6 +17,7 @@ public class ScaleBar implements PlugIn {
 	static final String[] colors = {"White","Black","Light Gray","Gray","Dark Gray","Red","Green","Blue","Yellow"};
 	static final String[] bcolors = {"None","Black","White","Dark Gray","Gray","Light Gray","Yellow","Blue","Green","Red"};
 	static final String[] checkboxLabels = {"Bold Text", "Hide Text", "Serif Font", "Overlay"};
+	final static String SCALE_BAR = "|SB|";
 	static double barWidth;
 	static int defaultBarHeight = 4;
 	static int barHeightInPixels = defaultBarHeight;
@@ -30,7 +26,7 @@ public class ScaleBar implements PlugIn {
 	static String bcolor = bcolors[0];
 	static boolean boldText = true;
 	static boolean hideText;
-	static boolean createOverlay;
+	static boolean createOverlay = true;
 	static int defaultFontSize = 14;
 	static int fontSize;
 	static boolean labelAll;
@@ -43,13 +39,10 @@ public class ScaleBar implements PlugIn {
 	boolean serifFont;
 	boolean[] checkboxStates = new boolean[4];
 	boolean showingOverlay, drawnScaleBar;
-	Overlay baseOverlay;
-
 
 	public void run(String arg) {
 		imp = WindowManager.getCurrentImage();
 		if (imp!=null) {
-			baseOverlay = imp.getOverlay();
 			if (showDialog(imp) && imp.getStackSize()>1 && labelAll)
 				labelSlices(imp);
 		} else
@@ -114,7 +107,7 @@ public class ScaleBar implements PlugIn {
 			boldText = hideText = serifFont = createOverlay = false;
 		else
 			updateScalebar();
-		GenericDialog gd = new BarDialog("ScaleBar Plus");
+		GenericDialog gd = new BarDialog("Scale Bar");
 		gd.addNumericField("Width in "+units+": ", barWidth, digits);
 		gd.addNumericField("Height in pixels: ", barHeightInPixels, 0);
 		gd.addNumericField("Font size: ", fontSize, 0);
@@ -133,8 +126,11 @@ public class ScaleBar implements PlugIn {
 		if (gd.wasCanceled()) {
 			imp.getProcessor().reset();
 			imp.updateAndDraw();
-			if (showingOverlay)
-				imp.setOverlay(null);
+			Overlay overlay = imp.getOverlay();
+			if (showingOverlay && overlay!=null) {
+				overlay.remove(SCALE_BAR);
+				imp.draw();
+			}
 			return false;
 		}
 		barWidth = gd.getNextNumber();
@@ -169,11 +165,11 @@ public class ScaleBar implements PlugIn {
 	}
 
 	void createOverlay(ImagePlus imp) {
-		Overlay overlay = baseOverlay;
-		if (overlay!=null)
-			overlay = overlay.duplicate();
-		else
+		Overlay overlay = imp.getOverlay();
+		if (overlay==null)
 			overlay = new Overlay();
+		else
+			overlay.remove(SCALE_BAR);
 		Color color = getColor();
 		Color bcolor = getBColor();
 		int x = xloc;
@@ -201,15 +197,15 @@ public class ScaleBar implements PlugIn {
 			h = h+ margin*2;
 			Roi background = new Roi(x2, y2, w, h);
 			background.setFillColor(bcolor);
-			overlay.add(background);
+			overlay.add(background, SCALE_BAR);
 		}
 		Roi bar = new Roi(x, y, barWidthInPixels, barHeightInPixels);
 		bar.setFillColor(color);
-		overlay.add(bar);
+		overlay.add(bar, SCALE_BAR);
 		if (!hideText) {
 			TextRoi text = new TextRoi(x+xoffset, y+barHeightInPixels, label, font);
 			text.setStrokeColor(color);
-			overlay.add(text);
+			overlay.add(text, SCALE_BAR);
 		}
 		imp.setOverlay(overlay);
 		showingOverlay = true;
@@ -376,10 +372,10 @@ public class ScaleBar implements PlugIn {
 			bcolor = bcol.getSelectedItem();
 			Choice loc = (Choice)(choice.elementAt(2));
 			location = loc.getSelectedItem();
-			boldText = ((JCheckBox)(checkbox.elementAt(0))).isSelected();
-			hideText = ((JCheckBox)(checkbox.elementAt(1))).isSelected();
-			serifFont = ((JCheckBox)(checkbox.elementAt(2))).isSelected();
-			createOverlay = ((JCheckBox)(checkbox.elementAt(3))).isSelected();
+			boldText = ((Checkbox)(checkbox.elementAt(0))).getState();
+			hideText = ((Checkbox)(checkbox.elementAt(1))).getState();
+			serifFont = ((Checkbox)(checkbox.elementAt(2))).getState();
+			createOverlay = ((Checkbox)(checkbox.elementAt(3))).getState();
 			updateScalebar();
 		}
 

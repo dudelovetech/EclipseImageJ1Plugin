@@ -28,6 +28,7 @@ public class Functions implements MacroConstants, Measurements {
     boolean updateNeeded;
     boolean autoUpdate = true;
     ImageProcessor defaultIP;
+    ImagePlus defaultImp;
     int imageType;
     boolean colorSet, fontSet;
     Color defaultColor;
@@ -93,7 +94,7 @@ public class Functions implements MacroConstants, Measurements {
 	void doFunction(int type) {
 		switch (type) {
 			case RUN: doRun(); break;
-			case SELECT: IJ.selectWindow(getStringArg()); resetImage(); break;
+			case SELECT: IJ.selectWindow(getStringArg()); resetImage(); interp.selectCount++; break;
 			case WAIT: IJ.wait((int)getArg()); break;
 			case BEEP: interp.getParens(); IJ.beep(); break;
 			case RESET_MIN_MAX: interp.getParens(); IJ.resetMinAndMax(); resetImage(); break;
@@ -787,10 +788,12 @@ public class Functions implements MacroConstants, Measurements {
 		if (imp.getWindow()==null && IJ.getInstance()!=null && !interp.isBatchMode() && WindowManager.getTempCurrentImage()==null)
 			throw new RuntimeException(Macro.MACRO_CANCELED);
 		defaultIP = null;
+		defaultImp = imp;
 		return imp;
 	}
 	
 	void resetImage() {
+		defaultImp = null;
 		defaultIP = null;
 		colorSet = fontSet = false;
 		lineWidth = 1;
@@ -951,7 +954,9 @@ public class Functions implements MacroConstants, Measurements {
 
 	void updateAndDraw() {
 		if (autoUpdate) {
-			ImagePlus imp = getImage();
+			ImagePlus imp = defaultImp;
+			if (imp==null)
+				imp = getImage();
 			imp.updateChannelAndDraw();
 			imp.changes = true;
 		} else
@@ -1969,7 +1974,7 @@ public class Functions implements MacroConstants, Measurements {
 		}
 		Roi roi = null;
 		if (roiType==Roi.LINE) {
-			if (xcoord.length!=2)
+			if (!(xcoord!=null&&xcoord.length==2||xfcoord!=null&&xfcoord.length==2))
 				interp.error("2 element arrays expected");
 			if (floatCoordinates)
 				roi = new Line(xfcoord[0], yfcoord[0], xfcoord[1], yfcoord[1]);
@@ -2010,6 +2015,9 @@ public class Functions implements MacroConstants, Measurements {
 			return;
 		} else if (name.equals("getValues")) {
 			getPlotValues();
+			return;
+		} else if (name.equals("showValues")) {
+			showPlotValues();
 			return;
 		}
 		// the following commands work with a plot under construction or an image with a plot created previously
@@ -2150,6 +2158,19 @@ public class Functions implements MacroConstants, Measurements {
 			ya[i] = new Variable(yvalues[i]);
 		xvar.setArray(xa);
 		yvar.setArray(ya);
+	}
+
+	void showPlotValues() {
+		interp.getParens();
+		ImagePlus imp = getImage();
+		ImageWindow win = imp.getWindow();
+		if (win==null || !(win instanceof PlotWindow)) {
+			interp.error("No plot window");
+			return;
+		}
+		PlotWindow pw = (PlotWindow)win;
+		ResultsTable rt = pw.getResultsTable();
+		rt.show("Results");
 	}
 
 	void newPlot() {
@@ -2811,6 +2832,7 @@ public class Functions implements MacroConstants, Measurements {
 			interp.getRightParen();
 		}
 		resetImage();
+		interp.selectCount++;
 	}
 	
 	void selectImage(String title) {
@@ -4786,7 +4808,8 @@ public class Functions implements MacroConstants, Measurements {
 	}
 	
 	void waitForUser() {
-		if (waitForUserDialog!=null && waitForUserDialog.isVisible())
+		IJ.wait(50);
+		if (waitForUserDialog!=null && waitForUserDialog.isShowing())
 			interp.error("Duplicate call");
 		String title = "Action Required";
 		String text = "   Click \"OK\" to continue     ";
@@ -4802,7 +4825,9 @@ public class Functions implements MacroConstants, Measurements {
 		}
 		waitForUserDialog = new WaitForUserDialog(title, text);
 		Interpreter instance = Interpreter.getInstance();
+		interp.waitingForUser = true;
 		waitForUserDialog.show();
+		interp.waitingForUser = false;
 		Interpreter.setInstance(instance); // works around bug caused by use of drawing tools
 		if (waitForUserDialog.escPressed())
 			throw new RuntimeException(Macro.MACRO_CANCELED);

@@ -7,7 +7,7 @@ import ij.macro.Interpreter;
 import ij.text.TextWindow;
 import ij.plugin.frame.PlugInFrame;
 import ij.util.Tools;
-
+import ij.macro.Interpreter;
 import java.awt.*;
 import java.util.*;
 

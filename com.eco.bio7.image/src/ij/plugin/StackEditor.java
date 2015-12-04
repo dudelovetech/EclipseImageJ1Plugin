@@ -290,6 +290,8 @@ public class StackEditor implements PlugIn {
 			if (info!=null && !info.equals(label))
 				imp2.setProperty("Info", info);
 			
+			imp2.setIJMenuBar(i==size);
+			
 			/*Changed for Bio7!*/
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {

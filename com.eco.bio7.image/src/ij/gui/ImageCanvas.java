@@ -3,7 +3,6 @@ package ij.gui;
 import java.awt.*;
 import java.util.Properties;
 import java.awt.image.*;
-
 import ij.process.*;
 import ij.measure.*;
 import ij.plugin.WandToolOptions;
@@ -13,14 +12,12 @@ import ij.plugin.tool.PlugInTool;
 import ij.macro.*;
 import ij.*;
 import ij.util.*;
-
 import java.awt.event.*;
 import java.util.*;
 import java.awt.geom.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.swing.JPanel;
-//import javax.swing.JPanel;
+
 
 import com.eco.bio7.image.CanvasView;
 
@@ -1224,7 +1221,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			this.requestFocus();
 
 		}
-		// if (ij==null) return;
+		
 		showCursorStatus = true;
 		int toolID = Toolbar.getToolId();
 		ImageWindow win = imp.getWindow();
@@ -1438,7 +1435,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		int handle = roi != null ? roi.isHandle(sx, sy) : -1;
 		boolean multiPointMode = roi != null && (roi instanceof PointRoi) && handle == -1 && Toolbar.getToolId() == Toolbar.POINT && Toolbar.getMultiPointMode();
 		if (multiPointMode) {
-			imp.setRoi(((PointRoi) roi).addPoint(offScreenXD(sx), offScreenYD(sy)));
+			((PointRoi)roi).addPoint(imp, offScreenXD(sx), offScreenYD(sy));
+			imp.setRoi(roi);
 			return;
 		}
 		setRoiModState(e, roi, handle);

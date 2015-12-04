@@ -1,14 +1,11 @@
 package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.JDialog;
-
 import ij.*;
 import ij.plugin.*;
 
 /**  This is a non-modal dialog that plugins can extend. */
-public class PlugInDialog extends JDialog implements PlugIn, WindowListener, FocusListener {
+public class PlugInDialog extends Dialog implements PlugIn, WindowListener, FocusListener {
 
 	String title;
 	
@@ -17,10 +14,8 @@ public class PlugInDialog extends JDialog implements PlugIn, WindowListener, Foc
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		this.title = title;
 		ImageJ ij = IJ.getInstance();
-		if (IJ.isMacOSX() && ij!=null) {
+		if (IJ.isMacOSX() && ij!=null)
 			ij.toFront(); // needed for keyboard shortcuts to work
-			ij.setMenuBar(Menus.getMenuBar());
-		}
 		addWindowListener(this);
  		addFocusListener(this);
 		if (IJ.isLinux()) setBackground(ImageJ.backgroundColor);
@@ -50,16 +45,10 @@ public class PlugInDialog extends JDialog implements PlugIn, WindowListener, Foc
     }
 
     public void windowActivated(WindowEvent e) {
-		ImageJ ij = IJ.getInstance();
-		if (IJ.isMacOSX() && ij!=null) {
-			IJ.wait(10); // may be needed for Java 1.4 on OS X
-			ij.setMenuBar(Menus.getMenuBar());
-		}
-		WindowManager.setWindow(this);
+        WindowManager.setWindow(this);
 	}
 
 	public void focusGained(FocusEvent e) {
-		//IJ.log("PlugInFrame: focusGained");
 		WindowManager.setWindow(this);
 	}
 

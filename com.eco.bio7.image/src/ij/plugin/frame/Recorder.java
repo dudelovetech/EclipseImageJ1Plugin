@@ -2,11 +2,6 @@ package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import java.io.*;
 import ij.*;
 import ij.plugin.*;
@@ -30,10 +25,10 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	private final static int MACRO=0, JAVASCRIPT=1, BEANSHELL=2, JAVA=3;
 	private final static String[] modes = {"Macro", "JavaScript", "BeanShell", "Java"};
 	private Choice mode;
-	private JButton makeMacro, help;
-	private JTextField fileName;
+	private Button makeMacro, help;
+	private TextField fileName;
 	private String fitTypeStr = CurveFitter.fitList[0];
-	private static JTextArea textArea;
+	private static TextArea textArea;
 	private static Recorder instance;
 	private static String commandName;
 	private static String commandOptions;
@@ -71,19 +66,19 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		mode.select(m);
 		panel.add(mode);
 		panel.add(new Label("    Name:"));
-		fileName = new JTextField(defaultName, 15);
+		fileName = new TextField(defaultName, 15);
 		setFileName();
 		panel.add(fileName);
 		panel.add(new Label("   "));
-		makeMacro = new JButton("Create");
+		makeMacro = new Button("Create");
 		makeMacro.addActionListener(this);
 		panel.add(makeMacro);
 		panel.add(new Label("   "));
-		help = new JButton("?");
+		help = new Button("?");
 		help.addActionListener(this);
 		panel.add(help);
 		add("North", panel);
-		textArea = new JTextArea("", 15, 80);
+		textArea = new TextArea("", 15, 80, TextArea.SCROLLBARS_VERTICAL_ONLY);
 		textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		if (IJ.isLinux()) textArea.setBackground(Color.white);
 		add("Center", textArea);
@@ -289,8 +284,16 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		recordCall(javaMode()?className+" "+call:call);
 	}
 
+	public static void recordRoi(Roi roi) {
+		if (roi==null)
+			return;
+		Polygon polygon = roi.getPolygon();
+		recordRoi(polygon, roi.getType());
+	}
+
 	public static void recordRoi(Polygon p, int type) {
-		if (textArea==null) return;
+		if (textArea==null)
+			return;
 		if (scriptMode)
 			{recordScriptRoi(p,type); return;}
 		if (type==Roi.ANGLE||type==Roi.POINT) {
@@ -304,7 +307,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 			String typeStr= type==Roi.ANGLE?"angle":"point";
 			textArea.append("makeSelection(\""+typeStr+"\","+xarr+","+yarr+");\n");
 		} else {
-			String method = type==Roi.POLYGON?"makePolygon":"makeLine";
+			String method = type>=Roi.LINE && type<=Roi.FREELINE?"makeLine":"makePolygon";
 			StringBuffer args = new StringBuffer();
 			for (int i=0; i<p.npoints; i++) {
 				args.append(p.xpoints[i]+",");
@@ -430,7 +433,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	public static void saveCommand() {
 		String name = commandName;
 		if (name!=null) {
-			if (commandOptions==null && (name.equals("Fill")||name.equals("Clear")))
+			if (commandOptions==null && (name.equals("Fill")||name.equals("Clear")||name.equals("Draw")))
 				commandOptions = "slice";
 			if (!fgColorSet && (name.equals("Fill")||name.equals("Draw")))
 				setForegroundColor(Toolbar.getForegroundColor());
@@ -481,6 +484,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 				else if (name.equals("Results...")) // Save As>Results
 					;
 				else if (name.equals("Run...")) // Plugins>Macros>Run
+					;
+				else if (scriptMode && name.equals("Text Image... ")) // File>Import>Text Image
 					;
 				else {
 					if (name.equals("Calibrate...")&&commandOptions.startsWith("function=None"))
@@ -804,5 +809,12 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 			recordString("setOption(\"BlackBackground\", "+bb+");\n");
 		bbSet = true;
 	}
-
+	
+	/** Override windowActivated in PlugInFrame. */
+	public void windowActivated(WindowEvent e) {
+		if (IJ.isMacintosh() && !IJ.isJava17())
+			this.setMenuBar(Menus.getMenuBar());
+		WindowManager.setWindow(this);
+	}
+	
 }

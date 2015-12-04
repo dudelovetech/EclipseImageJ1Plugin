@@ -3,11 +3,8 @@ import ij.*;
 import ij.process.*;
 import ij.gui.*;
 import ij.measure.Calibration;
-
 import java.awt.*;
 import java.awt.image.*;
-
-import com.eco.bio7.image.CanvasView;
 
 /** Implements the Flip and Rotate commands in the Image/Transform submenu. */
 public class Transformer implements PlugInFilter {
@@ -47,7 +44,7 @@ public class Transformer implements PlugInFilter {
 			if (arg.equals("right")) {
 	    		s2 = sp.rotateRight();
 	    		if (transformOrigin) {
-	    			double xOrigin = imp.getWidth()-1 - cal.yOrigin;
+	    			double xOrigin = imp.getHeight()-1 - cal.yOrigin;
 	    			double yOrigin = cal.xOrigin;
 	    			cal.xOrigin = xOrigin;
 	    			cal.yOrigin = yOrigin;
@@ -56,7 +53,7 @@ public class Transformer implements PlugInFilter {
 	    		s2 = sp.rotateLeft();
 	    		if (transformOrigin) {
 	    			double xOrigin = cal.yOrigin;
-	    			double yOrigin = imp.getHeight()-1 - cal.xOrigin;
+	    			double yOrigin = imp.getWidth()-1 - cal.xOrigin;
 	    			cal.xOrigin = xOrigin;
 	    			cal.yOrigin = yOrigin;
 	    		}
@@ -70,9 +67,6 @@ public class Transformer implements PlugInFilter {
 				cal.setXUnit(cal.getYUnit());
 				cal.setYUnit(xUnit);
 			}
-			/*Changed for Bio7!*/
-	    	//CanvasView.getCurrent().invalidate();
-			CanvasView.getCurrent().validate();
 			return;
 		}
 	}

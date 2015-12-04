@@ -1827,9 +1827,8 @@ public class IJ {
 			imp.show();
 	}
 
-	/**
-	 * Opens the specified file as a tiff, bmp, dicom, fits, pgm, gif or jpeg
-	 * image and returns an ImagePlus object if successful. Calls
+	/** Opens the specified file as a tiff, bmp, dicom, fits, pgm, gif, jpeg 
+	 * or text image and returns an ImagePlus object if successful. Calls
 	 * HandleExtraFileTypes plugin if the file type is not recognised. Displays
 	 * a file open dialog if 'path' is null or an empty string. Note that 'path'
 	 * can also be a URL. Some reader plugins, including the Bio-Formats plugin,

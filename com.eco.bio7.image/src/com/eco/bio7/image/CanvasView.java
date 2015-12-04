@@ -17,9 +17,11 @@ import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
+import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.io.Opener;
 import ij.plugin.DragAndDrop;
+import ij.plugin.FolderOpener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -441,14 +443,20 @@ public class CanvasView extends ViewPart {
 	}
 
 	private void openDirectory(File f, String path) {
+		if (path==null) return;
+		if (!(path.endsWith(File.separator)||path.endsWith("/")))
+			path += File.separator;
 		String[] names = f.list();
-		String msg = "Open all " + names.length + " images in \"" + f.getName() + "\" as a stack?";
+		names = (new FolderOpener()).trimFileList(names);
+		if (names==null)
+			return;
+		String msg = "Open all "+names.length+" images in \"" + f.getName() + "\" as a stack?";
 		GenericDialog gd = new GenericDialog("Open Folder");
-		gd.setInsets(10, 5, 0);
+		gd.setInsets(10,5,0);
 		gd.addMessage(msg);
-		gd.setInsets(15, 35, 0);
+		gd.setInsets(15,35,0);
 		gd.addCheckbox("Convert to RGB", DragAndDrop.convertToRGB);
-		gd.setInsets(0, 35, 0);
+		gd.setInsets(0,35,0);
 		gd.addCheckbox("Use Virtual Stack", DragAndDrop.virtualStack);
 		gd.enableYesNoCancel();
 		gd.showDialog();
@@ -457,17 +465,22 @@ public class CanvasView extends ViewPart {
 		if (gd.wasOKed()) {
 			DragAndDrop.convertToRGB = gd.getNextBoolean();
 			DragAndDrop.virtualStack = gd.getNextBoolean();
-			String options = " sort";
-			if (DragAndDrop.convertToRGB)
-				options += " convert_to_rgb";
-			if (DragAndDrop.virtualStack)
-				options += " use";
-			IJ.run("Image Sequence...", "open=[" + path + "/]" + options);
+			String options  = " sort";
+			if (DragAndDrop.convertToRGB) options += " convert_to_rgb";
+			if (DragAndDrop.virtualStack) options += " use";
+			IJ.run("Image Sequence...", "open=[" + path + "]"+options);
+			DirectoryChooser.setDefaultDirectory(path);
 		} else {
-			for (int k = 0; k < names.length; k++) {
-				IJ.redirectErrorMessages();
-				if (!names[k].startsWith("."))
-					(new Opener()).open(path + "/" + names[k]);
+			for (int k=0; k<names.length; k++) {
+				if (!names[k].startsWith(".")) {
+					IJ.redirectErrorMessages(true);
+					ImagePlus imp = IJ.openImage(path+names[k]);
+					if (imp!=null) {
+						imp.setIJMenuBar(k==names.length-1);
+						imp.show();
+					}
+					IJ.redirectErrorMessages(false);
+				}
 			}
 		}
 		IJ.register(DragAndDrop.class);

@@ -60,6 +60,9 @@ public class Interpreter implements MacroConstants {
 	boolean inLoop;
 	int loopDepth;
 	static boolean tempShowMode;
+	boolean waitingForUser;
+	int selectCount;
+
 	
 	static TextWindow arrayWindow;
 	int inspectStkIndex = -1;
@@ -612,7 +615,7 @@ public class Interpreter implements MacroConstants {
 		getToken();
 		switch (token) {
 			case PREDEFINED_FUNCTION: case USER_FUNCTION: case VAR:
-			case WORD: case '(': case PLUS_PLUS: case RETURN:
+			case WORD: case '(': case PLUS_PLUS: case RETURN: case ARRAY_FUNCTION:
 			case NUMERIC_FUNCTION: case STRING_FUNCTION:
 				skipSimpleStatement();
 				break;
@@ -1738,6 +1741,11 @@ public class Interpreter implements MacroConstants {
 			if (rt!=null && rt.size()>0)
 				rt.show("Results");
 		}
+		if (IJ.isMacOSX() && selectCount>0 && debugger==null) {
+			Frame frame = WindowManager.getFrontWindow();
+			if (frame!=null && (frame instanceof ImageWindow))
+				ImageWindow.setImageJMenuBar((ImageWindow)frame);
+		}
 	}
 	
 	/** Aborts currently running macro. */
@@ -2080,6 +2088,11 @@ public class Interpreter implements MacroConstants {
 	
 	static void setTempShowMode(boolean mode) {
 		tempShowMode = mode;
+	}
+	
+	public static boolean nonBatchMacroRunning() {
+		Interpreter interp = getInstance();
+		return interp!=null && !interp.waitingForUser && interp.debugger==null && interp.selectCount>0 && !isBatchMode();
 	}
 
 } // class Interpreter

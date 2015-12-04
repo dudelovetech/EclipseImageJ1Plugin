@@ -5,7 +5,7 @@ import ij.util.*;
 import ij.gui.ImageWindow;
 import ij.plugin.MacroInstaller;
 import ij.gui.Toolbar;
-
+import ij.macro.Interpreter;
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
@@ -129,7 +129,7 @@ public class Menus {
 		Menu importMenu = getMenu("File>Import", true);
 		file.addSeparator();
 		addPlugInItem(file, "Close", "ij.plugin.Commands(\"close\")", KeyEvent.VK_W, false);
-		addPlugInItem(file, "Close All", "ij.plugin.Commands(\"close-all\")", 0, false);
+		addPlugInItem(file, "Close All", "ij.plugin.Commands(\"close-all\")", KeyEvent.VK_W, true);
 		addPlugInItem(file, "Save", "ij.plugin.Commands(\"save\")", KeyEvent.VK_S, false);
 		saveAsMenu = getMenu("File>Save As", true);
 		addPlugInItem(file, "Revert", "ij.plugin.Commands(\"revert\")", KeyEvent.VK_R, false);
@@ -287,10 +287,14 @@ public class Menus {
 		addExample(submenu, "Semi-log Plot", "Semi-log_Plot.ijm");
 		addExample(submenu, "Arrow Plot", "Arrow_Plot.ijm");
 		addExample(submenu, "Process Folder", "Batch_Process_Folder.ijm");
+		addExample(submenu, "OpenDialog Demo", "OpenDialog_Demo.ijm");
 		addExample(submenu, "Sine/Cosine Table", "Sine_Cosine_Table.ijm");
+		addExample(submenu, "Non-numeric Table", "Non-numeric_Table.ijm");
 		addExample(submenu, "Overlay", "Overlay.ijm");
 		addExample(submenu, "Stack Overlay", "Stack_Overlay.ijm");
 		addExample(submenu, "Array Functions", "Array_Functions.ijm");
+		addExample(submenu, "Dual Progress Bars", "Dual_Progress_Bars.ijm");
+		addExample(submenu, "Grab Viridis Colormap", "Grab_Viridis_Colormap.ijm");
 		addExample(submenu, "Tool", "Circle_Tool.ijm");
 		submenu.addActionListener(listener);
 		menu.add(submenu);
@@ -301,8 +305,10 @@ public class Menus {
 		addExample(submenu, "Arrow Plot", "Arrow_Plot.js");
 		addExample(submenu, "Process Folder", "Batch_Process_Folder.js");
 		addExample(submenu, "Sine/Cosine Table", "Sine_Cosine_Table.js");
+		addExample(submenu, "Non-numeric Table", "Non-numeric_Table.js");
 		addExample(submenu, "Overlay", "Overlay.js");
 		addExample(submenu, "Stack Overlay", "Stack_Overlay.js");
+		addExample(submenu, "Dual Progress Bars", "Dual_Progress_Bars.js");
 		submenu.addActionListener(listener);
 		menu.add(submenu);
 		submenu = new Menu("BeanShell");
@@ -328,6 +334,11 @@ public class Menus {
 		addExample(submenu, "Plugin Tool", "Prototype_Tool.java");
 		submenu.addActionListener(listener);
 		menu.add(submenu);
+		menu.addSeparator();
+		CheckboxMenuItem item = new CheckboxMenuItem("Autorun");
+		menu.add(item);
+		item.addItemListener(ij);
+		item.setState(Prefs.autoRunExamples);
 		return menu;
 	}
 
@@ -692,17 +703,16 @@ public class Menus {
 			InputStream is = getConfigurationFile(jar);
 			if (is == null)
 				continue;
-			int maxEntries = 100;
-			String[] entries = new String[maxEntries];
-			int nEntries = 0;
+			ArrayList entries = new ArrayList(20);
 			LineNumberReader lnr = new LineNumberReader(new InputStreamReader(is));
 			try {
 				while (true) {
 					String s = lnr.readLine();
-					if (s == null || nEntries == maxEntries - 1)
+					if (s == null)
 						break;
+
 					if (s.length() >= 3 && !s.startsWith("#"))
-						entries[nEntries++] = s;
+						entries.add(s);
 				}
 			} catch (IOException e) {
 			} finally {
@@ -712,10 +722,11 @@ public class Menus {
 				} catch (IOException e) {
 				}
 			}
-			for (int j = 0; j < nEntries; j++) {
-				installJarPlugin(jar, entries[j]);
+
+			for (int j = 0; j < entries.size(); j++) {
+				installJarPlugin(jar, (String) entries.get(j));
 				/* Changed for Bio7! */
-				bio7JarAllCommand.add(entries[j]);
+				bio7JarAllCommand.add((String) entries.get(j));
 			}
 		}
 	}
@@ -1754,4 +1765,5 @@ public class Menus {
 		IJ.runPlugIn("ij.plugin.ClassChecker", "");
 		IJ.showStatus("Menus updated: " + m.nPlugins + " commands, " + m.nMacros + " macros");
 	}
+	
 }

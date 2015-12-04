@@ -220,6 +220,11 @@ public class ImageStack {
 		return nSlices;
 	}
 
+	/** Returns the number of slices in this stack. */
+	public int size() {
+		return getSize();
+	}
+
 	/**
 	 * Returns the slice labels as an array of Strings. Note that the size of
 	 * the returned array may be greater than the number of slices currently in
@@ -420,7 +425,6 @@ public class ImageStack {
 		}
 	}
 
-	
 	public float[] getVoxels(int x0, int y0, int z0, int w, int h, int d, float[] voxels) {
 		boolean inBounds = x0 >= 0 && x0 + w <= width && y0 >= 0 && y0 + h <= height && z0 >= 0 && z0 + d <= nSlices;
 		if (voxels == null || voxels.length != w * h * d)
@@ -464,7 +468,6 @@ public class ImageStack {
 		return voxels;
 	}
 
-	
 	public float[] getVoxels(int x0, int y0, int z0, int w, int h, int d, float[] voxels, int channel) {
 		if (getBitDepth() != 24)
 			return getVoxels(x0, y0, z0, w, h, d, voxels);

@@ -74,6 +74,8 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 	private boolean activeOverlayRoi;
 	private Properties props;
 	private boolean isCursor;
+	private double xcenter = Double.NaN;
+	private double ycenter;
 
 
 	/** Creates a rectangular ROI. */
@@ -1293,9 +1295,9 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 		}
 		previousRoi.modState = NO_MODS;
 		PointRoi p1 = (PointRoi)previousRoi;
-		Rectangle r = getBounds();
 		FloatPolygon poly = getFloatPolygon();
-		imp.setRoi(p1.addPoint(poly.xpoints[0], poly.ypoints[0]));
+		p1.addPoint(imp, poly.xpoints[0], poly.ypoints[0]);
+		imp.setRoi(p1);
 	}
 	
 	void subtractPoints() {
@@ -1951,6 +1953,48 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 
 	public String getDebugInfo() {
 		return "";
+	}
+	
+	public FloatPolygon getRotationCenter() {
+		FloatPolygon p = new FloatPolygon();
+		Rectangle2D r = getFloatBounds();
+		if (Double.isNaN(xcenter)) {
+			xcenter = r.getX()+r.getWidth()/2.0;
+			ycenter = r.getY()+r.getHeight()/2.0;
+		}
+		p.addPoint(xcenter,ycenter);
+		return p;
+	}
+
+	public void setRotationCenter(double x, double y) {
+		xcenter = x;
+		ycenter = y;
+	}
+	
+	/* 
+	 * Returns the center of the of this selection's countour, or the
+	 * center of the bounding box of composite selections.<br> 
+	 * Author: Peter Haub (phaub at dipsystems.de)
+	 */
+	public double[] getContourCentroid() {
+		double xC=0, yC=0, lSum=0, x, y, dx, dy, l;
+		FloatPolygon poly = getFloatPolygon();
+		int nPoints = poly.npoints;
+		int n2 = nPoints-1;
+		for (int n1=0; n1<nPoints; n1++){
+			dx = poly.xpoints[n1] - poly.xpoints[n2];
+			dy = poly.ypoints[n1] - poly.ypoints[n2];
+			x = poly.xpoints[n2] + dx/2.0;
+			y = poly.ypoints[n2] + dy/2.0;
+			l = Math.sqrt(dx*dx + dy*dy);
+			xC += x*l;
+			yC += y*l;
+			lSum += l;
+			n2 = n1;
+		}
+		xC /= lSum;
+		yC /= lSum;
+		return new double[]{xC, yC};
 	}
 
 	/** Returns a hashcode for this Roi that typically changes 
