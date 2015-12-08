@@ -19,7 +19,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault("JAVAFX_EMBEDDED", true);
+		store.setDefault("JAVAFX_EMBEDDED", false);
 		store.setDefault("ROI_MANAGER", false);
 		store.setDefault("RESULTS_TABLE", false);
 		store.setDefault("MACRO_RECORDER", false);
