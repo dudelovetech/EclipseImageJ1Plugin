@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.eco.bio7.albireo.feature_2.0.0.201512081714.jar" id="com.eco.bio7.albireo.feature" version="2.0.0.201512081714">
+   <feature url="features/com.eco.bio7.albireo.feature_2.0.0.201512081718.jar" id="com.eco.bio7.albireo.feature" version="2.0.0.201512081718">
       <category name="ImageJ"/>
    </feature>
-   <feature url="features/com.eco.bio7.image.feature_1.50.5.201512081714.jar" id="com.eco.bio7.image.feature" version="1.50.5.201512081714">
+   <feature url="features/com.eco.bio7.image.feature_1.50.5.201512081718.jar" id="com.eco.bio7.image.feature" version="1.50.5.201512081718">
       <category name="ImageJ"/>
    </feature>
    <category-def name="ImageJ" label="Scientific Image Analysis">
