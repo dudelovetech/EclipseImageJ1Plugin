@@ -8,6 +8,11 @@ import ij.*;
 import ij.plugin.frame.Recorder;
 import ij.util.Java2;
 import ij.macro.Interpreter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /** This class displays a dialog window from 
 	which the user can save a file. */ 
@@ -17,6 +22,7 @@ public class SaveDialog {
 	private String name;
 	private String title;
 	private String ext;
+	protected FileDialog fd;
 	
 	/** Displays a file save dialog with 'title' as the 
 		title, 'defaultName' as the initial file name, and
@@ -177,46 +183,40 @@ public class SaveDialog {
 		} catch (Exception e) {}
 	}
 
-	// Save using FileDialog
-	void save(String title, String defaultDir, String defaultName) {
-		ImageJ ij = IJ.getInstance();
-		Frame parent = ij!=null?ij:new Frame();
-		FileDialog fd = new FileDialog(parent, title, FileDialog.SAVE);
-		if (defaultName!=null)
-			fd.setFile(defaultName);
-		if (defaultDir!=null)
-			fd.setDirectory(defaultDir);
-		fd.show();
-		name = fd.getFile();
-		String origName = name;
-		if (noExtension(name)) {
-			if (".raw".equals(ext))
-				ext = null;
-			name = setExtension(name, ext);
-			boolean dialog = name!=null && !name.equals(origName) && IJ.isMacOSX() && !IJ.isMacro();
-			if (dialog) {
-				File f = new File( fd.getDirectory()+getFileName());
-				if (!f.exists()) dialog = false;
+	/* Changed for Bio7! */
+	void save(String title, final String defaultDir, final String defaultName) {
+		final Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+				Shell s = new Shell(SWT.ON_TOP);
+				fd = new FileDialog(s, SWT.SAVE);
+				fd.setText("Save");
+				if (defaultName != null)
+					fd.setFileName(defaultName);
+				if (defaultDir != null)
+					fd.setFilterPath(defaultDir);
+
+				name = fd.open();
+				if (name != null) {
+					File file = new File(name);
+					name = file.getName();
+					dir = fd.getFilterPath() + File.separator;
+				}
+				if (name == null)
+					Macro.abort();
+
 			}
-			if (dialog) {
-				Font font = new Font("SansSerif", Font.BOLD, 12);
-				GenericDialog gd = new GenericDialog("Replace File?");
-				gd.addMessage("\""+name+"\" already exists.\nDo you want to replace it?", font);
-				gd.addMessage("To avoid this dialog, enable"
-				+"\n\"Show all filename extensions\"\nin Finder Preferences.");
-				gd.setOKLabel("Replace");
-				gd.showDialog();
-				if (gd.wasCanceled())
-					name = null;
-			}
-		}
-		if (IJ.debugMode) IJ.log(origName+"->"+name);
-		dir = fd.getDirectory();
-		if (name==null)
-			Macro.abort();
-		fd.dispose();
-		if (ij==null)
-			parent.dispose();
+		});
+		/*
+		 * ImageJ ij = IJ.getInstance(); Frame parent = ij!=null?ij:new Frame();
+		 * FileDialog fd = new FileDialog(parent, title, FileDialog.SAVE); if
+		 * (defaultName!=null) fd.setFile(defaultName); if (defaultDir!=null)
+		 * fd.setDirectory(defaultDir); fd.show(); name = fd.getFile(); if
+		 * (name!=null && name.indexOf(".")==-1) name = setExtension(name, ext);
+		 * dir = fd.getDirectory(); if (name==null) Macro.abort(); fd.dispose();
+		 * if (ij==null) parent.dispose();
+		 */
 	}
 	
 	private boolean noExtension(String name) {

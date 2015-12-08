@@ -9,6 +9,12 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+
 /** This class displays a dialog window from 
 	which the user can select an input file. */ 
  public class OpenDialog {
@@ -19,6 +25,7 @@ import javax.swing.filechooser.*;
 	private static String defaultDirectory;
 	private static Frame sharedFrame;
 	private String title;
+	protected FileDialog fd;
 	private static String lastDir, lastName;
 
 	
@@ -143,28 +150,49 @@ import javax.swing.filechooser.*;
 		} catch (Exception e) {}
 	}
 	
-	// Uses the AWT FileDialog class to display the dialog box
-	void open(String title, String path, String fileName) {
+	/* Changed for Bio7 Linux to Swt! */
+	void open(String title, final String path, final String fileName) {
 		Frame parent = IJ.getInstance();
-		if (parent==null) {
-			if (sharedFrame==null) sharedFrame = new Frame();
+		if (parent == null) {
+			if (sharedFrame == null)
+				sharedFrame = new Frame();
 			parent = sharedFrame;
 		}
-		FileDialog fd = new FileDialog(parent, title);
-		if (path!=null)
-			fd.setDirectory(path);
-		if (fileName!=null)
-			fd.setFile(fileName);
-		//GUI.center(fd);
-		fd.show();
-		name = fd.getFile();
-		if (name==null) {
-			if (IJ.isMacOSX())
-				System.setProperty("apple.awt.fileDialogForDirectories", "false");
-			Macro.abort();
-		} else
-			dir = fd.getDirectory();
+		final Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+				Shell s = new Shell(SWT.ON_TOP);
+				fd = new org.eclipse.swt.widgets.FileDialog(s, SWT.OPEN);
+				fd.setText("Load");
+				if (path != null)
+					fd.setFilterPath(path);
+				if (fileName != null)
+					fd.setFileName(fileName);
+
+				name = fd.open();
+				if (name != null) {
+					File file = new File(name);
+					if (file == null) {
+						Macro.abort();
+						return;
+					}
+					name = file.getName();
+					dir = fd.getFilterPath() + File.separator;
+				}
+
+			}
+		});
+		/*
+		 * FileDialog fd = new FileDialog(parent, title); if (path!=null)
+		 * fd.setDirectory(path); if (fileName!=null) fd.setFile(fileName);
+		 * //GUI.center(fd); fd.show(); name = fd.getFile(); if (name==null) {
+		 * if (IJ.isMacOSX())
+		 * System.setProperty("apple.awt.fileDialogForDirectories", "false");
+		 * Macro.abort(); } else dir = fd.getDirectory();
+		 */
 	}
+
 
 	void decodePath(String path) {
 		int i = path.lastIndexOf('/');
