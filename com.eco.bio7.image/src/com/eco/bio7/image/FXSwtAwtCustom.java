@@ -73,6 +73,7 @@ public class FXSwtAwtCustom {
 					top.setLayout(new FillLayout());
 					comp.setData(ve);
 					fxView.embedd(top, jpanel);
+					
 
 				}
 			});

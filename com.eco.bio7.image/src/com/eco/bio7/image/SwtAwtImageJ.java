@@ -80,10 +80,8 @@ public class SwtAwtImageJ {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		if (javaFXEmbedded) {
-			Platform.runLater(new Runnable() {
-				SwingFxSwtView view = new SwingFxSwtView();
-
-				public void run() {
+			SwingFxSwtView view = new SwingFxSwtView();
+			
 					Display dis = CanvasView.getParent2().getDisplay();
 					dis.syncExec(new Runnable() {
 
@@ -105,7 +103,8 @@ public class SwtAwtImageJ {
 							ci.setControl(top);
 
 							a = new JPanel();
-
+                           /*At this point we open and initialize the JavaFX toolkit by means of the JavaFX SWT panel!*/
+							
 							view.embedd(top, a);
 							a.add(im);// Add the Image canvas to the JPanel
 							a.setLayout(new ImageLayout(im));
@@ -129,8 +128,6 @@ public class SwtAwtImageJ {
 						}
 					});
 
-				}
-			});
 		} else {
 			/* Add SWT_AWT to embed the ImageJ canvas! */
 			Display dis = CanvasView.getParent2().getDisplay();

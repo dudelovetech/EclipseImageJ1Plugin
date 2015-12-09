@@ -118,6 +118,7 @@ public class CanvasView extends ViewPart {
 		canvas_view = this;
 
 		this.getViewSite();
+		javafx.application.Platform.setImplicitExit(false);
 	}
 
 	public void createPartControl(Composite parent) {
@@ -128,24 +129,27 @@ public class CanvasView extends ViewPart {
 		parent.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(final ControlEvent e) {
-               /*Here we write the values in the com.eco.bio7 plugin preferences with the help of scoped preferences!*/
+				/*
+				 * Here we write the values in the com.eco.bio7 plugin
+				 * preferences with the help of scoped preferences!
+				 */
 				Rectangle rec = parent.getClientArea();
 
 				IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.eco.bio7");
 				if (store != null) {
 					String selection = store.getString("PLOT_DEVICE_SELECTION");
 					String pathTo = store.getString("pathTempR");
-					int correction=0;
-					if(tabFolder.isDisposed()==false&&tabFolder!=null){
-						/*Height correction for the plot!*/
-						correction=CanvasView.tabFolder.getTabHeight();
+					int correction = 0;
+					if (tabFolder.isDisposed() == false && tabFolder != null) {
+						/* Height correction for the plot! */
+						correction = CanvasView.tabFolder.getTabHeight();
 					}
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
-						
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height-correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height-correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
@@ -156,7 +160,7 @@ public class CanvasView extends ViewPart {
 		getViewSite().getPage().addPartListener(new IPartListener() {
 			public void partActivated(IWorkbenchPart part) {
 				if (part instanceof CanvasView) {
-					
+
 				}
 			}
 
@@ -228,16 +232,22 @@ public class CanvasView extends ViewPart {
 					for (int i = 0; i < fileList.length; i++) {
 
 						final int x = i;
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
+						IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+						boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+						if (javaFXEmbedded) {
+							openFile(new File(fileList[x].toString()));
+						} else {
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
 
-								/*
-								 * Opener o = new Opener();
-								 * o.open(fileList[x].toString());
-								 */
-								openFile(new File(fileList[x].toString()));
-							}
-						});
+									/*
+									 * Opener o = new Opener();
+									 * o.open(fileList[x].toString());
+									 */
+									openFile(new File(fileList[x].toString()));
+								}
+							});
+						}
 					}
 
 				}
@@ -362,7 +372,10 @@ public class CanvasView extends ViewPart {
 						// detachedSecViewIDs.add(id);
 						custom.setPanel(current, id);
 						custom.setData(plu, win);
-						/*Only hide the tab without to close the ImagePlus object!*/
+						/*
+						 * Only hide the tab without to close the ImagePlus
+						 * object!
+						 */
 						IJTabs.hideTab();
 					}
 
@@ -398,7 +411,11 @@ public class CanvasView extends ViewPart {
 	}
 
 	public void dispose() {
-
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+		if (javaFXEmbedded) {
+         IJTabs.deleteAllTabs();
+		}
 	}
 
 	public static CanvasView getCanvas_view() {
@@ -443,20 +460,21 @@ public class CanvasView extends ViewPart {
 	}
 
 	private void openDirectory(File f, String path) {
-		if (path==null) return;
-		if (!(path.endsWith(File.separator)||path.endsWith("/")))
+		if (path == null)
+			return;
+		if (!(path.endsWith(File.separator) || path.endsWith("/")))
 			path += File.separator;
 		String[] names = f.list();
 		names = (new FolderOpener()).trimFileList(names);
-		if (names==null)
+		if (names == null)
 			return;
-		String msg = "Open all "+names.length+" images in \"" + f.getName() + "\" as a stack?";
+		String msg = "Open all " + names.length + " images in \"" + f.getName() + "\" as a stack?";
 		GenericDialog gd = new GenericDialog("Open Folder");
-		gd.setInsets(10,5,0);
+		gd.setInsets(10, 5, 0);
 		gd.addMessage(msg);
-		gd.setInsets(15,35,0);
+		gd.setInsets(15, 35, 0);
 		gd.addCheckbox("Convert to RGB", DragAndDrop.convertToRGB);
-		gd.setInsets(0,35,0);
+		gd.setInsets(0, 35, 0);
 		gd.addCheckbox("Use Virtual Stack", DragAndDrop.virtualStack);
 		gd.enableYesNoCancel();
 		gd.showDialog();
@@ -465,18 +483,20 @@ public class CanvasView extends ViewPart {
 		if (gd.wasOKed()) {
 			DragAndDrop.convertToRGB = gd.getNextBoolean();
 			DragAndDrop.virtualStack = gd.getNextBoolean();
-			String options  = " sort";
-			if (DragAndDrop.convertToRGB) options += " convert_to_rgb";
-			if (DragAndDrop.virtualStack) options += " use";
-			IJ.run("Image Sequence...", "open=[" + path + "]"+options);
+			String options = " sort";
+			if (DragAndDrop.convertToRGB)
+				options += " convert_to_rgb";
+			if (DragAndDrop.virtualStack)
+				options += " use";
+			IJ.run("Image Sequence...", "open=[" + path + "]" + options);
 			DirectoryChooser.setDefaultDirectory(path);
 		} else {
-			for (int k=0; k<names.length; k++) {
+			for (int k = 0; k < names.length; k++) {
 				if (!names[k].startsWith(".")) {
 					IJ.redirectErrorMessages(true);
-					ImagePlus imp = IJ.openImage(path+names[k]);
-					if (imp!=null) {
-						imp.setIJMenuBar(k==names.length-1);
+					ImagePlus imp = IJ.openImage(path + names[k]);
+					if (imp != null) {
+						imp.setIJMenuBar(k == names.length - 1);
 						imp.show();
 					}
 					IJ.redirectErrorMessages(false);

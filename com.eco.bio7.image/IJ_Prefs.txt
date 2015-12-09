@@ -1,8 +1,9 @@
 #ImageJ 1.50e Preferences
-#Wed Dec 09 11:11:05 CET 2015
+#Wed Dec 09 16:53:53 CET 2015
 menu.size=15
 fps=7.0
 new.type=0
+dir.image=I\:\\GisData\\
 new.width=400
 fcolor=\#FFFFFF
 div-by-zero=Infinity
@@ -18,7 +19,9 @@ new.slices=1
 raw.width=512
 new.height=400
 new.fill=1
+recent01=I\:\\GisData\\craterlake_30m.tif
 bcolor=\#000000
+recent00=I\:\\GisData\\Baghdad_IRQ_02Feb2015_RE_Geo.tif
 ap.options=64
 measurements=19
 precision=3
