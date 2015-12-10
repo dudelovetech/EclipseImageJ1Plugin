@@ -11,19 +11,18 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 4. Added some preferences to scale the ImageJ toolbar dialog, etc.
 
-### Installation
+### Installation:
 
 Add the following URL as update site: 
 
 **https://sourceforge.net/projects/bio7/files/imagej/
 
-The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar:
+The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar. You find them in Eclipse under: Window->Show View->Other. First open the ImageJ-Canvas!
 
 **Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)**
 
 **Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)**
 
-First open the ImageJ-Canvas!
 
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
