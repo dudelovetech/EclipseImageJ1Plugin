@@ -5,33 +5,42 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            category="com.eco.bio7.image"
+            category="com.eco.bio7.image.plugin"
             class="com.eco.bio7.image.CanvasView"
             icon="bin/images/toij.gif"
             id="com.eco.bio7.imagej"
             name="ImageJ-Canvas"/>
       <view
-            category="com.eco.bio7.image"
+            category="com.eco.bio7.image.plugin"
             class="com.eco.bio7.image.thumbs.ThumbnailsView"
             icon="bin/images/bild.gif"
             id="com.eco.bio7.thumbnails"
             name="Thumbnails"/>
       <view
             allowMultiple="true"
-            category="com.eco.bio7.image"
+            category="com.eco.bio7.image.plugin.extra"
             class="com.eco.bio7.image.IJtoolbar"
             icon="bin/images/toij.gif"
             id="com.eco.bio7.ijtoolbar"
             name="ImageJ-Toolbar"/>
       <view
             allowMultiple="true"
-            category="com.eco.bio7.image"
+            category="com.eco.bio7.image.plugin.extra"
             class="com.eco.bio7.image.CustomDetachedImageJView"
             icon="bin/images/toij.gif"
             id="com.eco.bio7.image.detachedImage"
             name="Image"
             restorable="true">
       </view>
+      <category
+            id="com.eco.bio7.image.plugin"
+            name="ImageJ">
+      </category>
+      <category
+            id="com.eco.bio7.image.plugin.extra"
+            name="ImageJ Extra"
+            parentCategory="com.eco.bio7.image.plugin">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -39,7 +48,7 @@
             category="com.eco.bio7.preferences.Bio7PreferencePage"
             class="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
             id="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
-            name="Preferences ImageJ">
+            name="ImageJ">
       </page>
    </extension>
    <extension
