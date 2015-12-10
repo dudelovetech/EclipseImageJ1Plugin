@@ -15,7 +15,7 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 Add the following URL as update site: 
 
-**https://sourceforge.net/projects/bio7/files/imagej/
+**https://sourceforge.net/projects/bio7/files/imagej/**
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar. You find them in Eclipse under: Window->Show View->Other. First open the ImageJ-Canvas!
 
