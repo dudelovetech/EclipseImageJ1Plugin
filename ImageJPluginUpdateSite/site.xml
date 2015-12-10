@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.eco.bio7.albireo.feature_2.1.0.qualifier.jar" id="com.eco.bio7.albireo.feature" version="2.1.0.qualifier">
+   <feature url="features/com.eco.bio7.albireo.feature_2.1.0.201512101549.jar" id="com.eco.bio7.albireo.feature" version="2.1.0.201512101549">
       <category name="ImageJPlugin"/>
    </feature>
-   <feature url="features/com.eco.bio7.image.feature_1.50.5.qualifier.jar" id="com.eco.bio7.image.feature" version="1.50.5.qualifier">
+   <feature url="features/com.eco.bio7.image.feature_1.50.5.201512101549.jar" id="com.eco.bio7.image.feature" version="1.50.5.201512101549">
       <category name="ImageJPlugin"/>
    </feature>
    <category-def name="ImageJPlugin" label="ImageJ">
       <description>
-         Scientific Image Analysis
+         Eclipse plugin which embeds the Scientific Image Analysis tool ImageJ.
       </description>
    </category-def>
 </site>
