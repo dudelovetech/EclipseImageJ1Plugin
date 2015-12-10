@@ -1,7 +1,7 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-## New in 1.50e:
+### New in 1.50e:
 
 1. Updated ImageJ to 1.50e
 
@@ -11,10 +11,11 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 4. Added some preferences to scale the ImageJ toolbar dialog, etc.
 
+### Installation
 
 Add the following URL as update site: 
 
-https://sourceforge.net/projects/bio7/files/imagej/
+**https://sourceforge.net/projects/bio7/files/imagej/
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar:
 
