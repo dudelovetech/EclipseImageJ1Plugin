@@ -8,7 +8,8 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 2. Enabled the compilation of ImageJ java plugins from the ImageJ menu (tools.jar required in the lib folder of the JRE!).
 
 3. Added an experimental option in the preferences to open images in a Swing in JavaFX in SWT tab (future replacement for SWT_AWT). Images can  be opened in fullscreen with: F1 = primary monitor true fullscreen, F2 = primary monitor fullscreen, F3 = secondary monitor fullscreen, F4 = tertiary monitor fullscreen, F5 = quartary monitor fullscreen.
-Important for MacOSX : Please add the option -Dprism.order=sw in the Eclipse.ini to avoid a crash when using JavaFX!
+
+**Important for MacOSX : Please add the option -Dprism.order=sw in the Eclipse.ini to avoid a crash when using JavaFX!**
 
 4. Added some preferences to scale the ImageJ toolbar dialog, etc.
 
