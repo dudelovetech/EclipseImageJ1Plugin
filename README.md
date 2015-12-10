@@ -13,6 +13,8 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 ### Installation:
 
+**Important for MacOSX : Please add the option -Dprism.order=sw in the Eclipse.ini to avoid a crash when using JavaFX!**
+
 Add the following URL as update site: 
 
 **https://sourceforge.net/projects/bio7/files/imagej/**
