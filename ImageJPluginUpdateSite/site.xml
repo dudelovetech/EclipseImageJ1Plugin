@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.eco.bio7.albireo.feature_2.1.0.201512091727.jar" id="com.eco.bio7.albireo.feature" version="2.1.0.201512091727">
+   <feature url="features/com.eco.bio7.albireo.feature_2.1.0.201512101127.jar" id="com.eco.bio7.albireo.feature" version="2.1.0.201512101127">
       <category name="ImageJPlugin"/>
    </feature>
-   <feature url="features/com.eco.bio7.image.feature_1.5.6.201512091727.jar" id="com.eco.bio7.image.feature" version="1.5.6.201512091727">
+   <feature url="features/com.eco.bio7.image.feature_1.5.7.201512101127.jar" id="com.eco.bio7.image.feature" version="1.5.7.201512101127">
       <category name="ImageJPlugin"/>
    </feature>
    <category-def name="ImageJPlugin" label="ImageJ">
