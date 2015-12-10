@@ -7,7 +7,7 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 2. Enabled the compilation of ImageJ java plugins from the ImageJ menu (tools.jar required in the lib folder of the JRE!).
 
-3. Added an experimental option in the preferences to open images in a Swing->JavaFX-SWT tab (future replacement for SWT_AWT). Images can  be opened in fullscreen with: F1 = primary monitor true fullscreen, F2 = primary monitor fullscreen, F3 = secondary monitor fullscreen, F4 = tertiary monitor fullscreen, F5 = quartary monitor fullscreen.
+3. Added an experimental option in the preferences to open images in a Swing in JavaFX in SWT tab (future replacement for SWT_AWT). Images can  be opened in fullscreen with: F1 = primary monitor true fullscreen, F2 = primary monitor fullscreen, F3 = secondary monitor fullscreen, F4 = tertiary monitor fullscreen, F5 = quartary monitor fullscreen.
 
 4. Added some preferences to scale the ImageJ toolbar dialog, etc.
 
@@ -23,10 +23,11 @@ The important views to open are the ImageJ-Canvas which essentially implements t
 
 **Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)**
 
-
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
 ***Window->Show View->Other->Thumbnails***
+
+Preferences can be found under "Preferences ImageJ".
 
 Plugins can be installed in the ImageJ plugins folder (see the plugin folder inside of the Eclipse ImageJ plugin). They will be added to the plugin menu automatically.
 
