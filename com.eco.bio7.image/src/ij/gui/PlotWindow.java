@@ -134,7 +134,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	public PlotWindow(String title, String xLabel, String yLabel, float[] xValues, float[] yValues) {
 		super(createImage(title, xLabel, yLabel, xValues, yValues));
 		plot = staticPlot;
-		((PlotCanvas) getCanvas()).setPlot(plot);
+		//Changed for Bio7!
+		//((PlotCanvas)getCanvas()).setPlot(plot);
 	}
 
 	/**
@@ -147,7 +148,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	/** Creates a PlotWindow from a Plot object. */
 	PlotWindow(Plot plot) {
 		super(plot.getImagePlus());
-		((PlotCanvas) getCanvas()).setPlot(plot);
+		//Changed for Bio7!
+		//((PlotCanvas)getCanvas()).setPlot(plot);
 		this.plot = plot;
 		draw();
 	}
@@ -812,7 +814,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				plot.useTemplate(this.plot, this.plot.templateFlags);
 				plot.setPlotMaker(plotMaker);
 				this.plot = plot;
-				((PlotCanvas) ic).setPlot(plot);
+				/*Changed for Bio7!*/
+				//((PlotCanvas)ic).setPlot(plot);
 				ImageProcessor ip = plot.getProcessor();
 				if (ip != null && imp != null) {
 					imp.setProcessor(null, ip);
