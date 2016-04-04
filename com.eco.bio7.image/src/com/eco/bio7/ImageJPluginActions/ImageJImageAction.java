@@ -28,7 +28,7 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 	String[] thetype = { "8-bit", "16-bit", "32-bit", "8-bit Color",
 			"RGB Color", "RGB Stack", "HSB Stack","Lab Stack"};
 	String[] theadjust = { "Brightness/Contrast...", "Window/Level...",
-			"Color Balance...", "Threshold...", "Size...", "Canvas Size...","Line Width... "};
+			"Color Balance...", "Threshold...","Color Threshold...", "Size...", "Canvas Size...","Line Width... "};
 	String[] thecolour = { "Stack to RGB", "Make Composite",
 			"Split Channels", "Merge Channels...","Channels Tool...", "Show LUT","Display LUTs", "Edit LUT...",
 			"Color Picker..." };
