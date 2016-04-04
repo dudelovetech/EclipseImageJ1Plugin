@@ -127,6 +127,7 @@ public class ImagesToStack implements PlugIn {
 		FileInfo fi = image[0].getOriginalFileInfo();
 		if (fi != null && fi.directory == null)
 			fi = null;
+		Overlay overlay = new Overlay();
 		/* Changed for Bio7! - using the amount of open Tabs! */
 		for (int i = 0; i < items.length; i++) {
 
@@ -187,8 +188,7 @@ public class ImagesToStack implements PlugIn {
 						ip2 = new ColorProcessor(width, height);
 						break;
 					}
-					int xoff = 0,
-					yoff = 0;
+					int xoff = 0, yoff = 0;
 					if (method == COPY_CENTER) {
 						xoff = (width - ip.getWidth()) / 2;
 						yoff = (height - ip.getHeight()) / 2;
@@ -203,8 +203,18 @@ public class ImagesToStack implements PlugIn {
 					ip = ip.resize(width, height);
 					break;
 				}
-			} else if (keep)
-				ip = ip.duplicate();
+			} else {
+				if (keep)
+					ip = ip.duplicate();
+				Overlay overlay2 = image[i].getOverlay();
+				if (overlay2 != null) {
+					for (int j = 0; j < overlay2.size(); j++) {
+						Roi roi = overlay2.get(j);
+						roi.setPosition(i + 1);
+						overlay.add((Roi) roi.clone());
+					}
+				}
+			}
 			stack.addSlice(label, ip);
 			if (i == 0 && invertedLut && !allInvertedLuts)
 				stack.setColorModel(null);
@@ -228,6 +238,8 @@ public class ImagesToStack implements PlugIn {
 			fi.nImages = imp.getStackSize();
 			imp.setFileInfo(fi);
 		}
+		if (overlay.size() > 0)
+			imp.setOverlay(overlay);
 		imp.show();
 	}
 

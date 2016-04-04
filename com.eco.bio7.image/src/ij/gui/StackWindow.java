@@ -12,7 +12,9 @@ import javax.swing.JScrollBar;
 
 import com.eco.bio7.image.SwtAwtImageJ;
 
-/** This class is an extended ImageWindow that displays stacks and hyperstacks. */
+/**
+ * This class is an extended ImageWindow that displays stacks and hyperstacks.
+ */
 public class StackWindow extends ImageWindow implements Runnable, AdjustmentListener, ActionListener, MouseWheelListener {
 
 	protected JScrollBar sliceSelector; // for backward compatibity with Image5D
@@ -93,7 +95,8 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		if (cSelector != null || zSelector != null || tSelector != null)
 			removeScrollbars();
 		ImageJ ij = IJ.getInstance();
-		// IJ.log("StackWindow: "+hyperStack+" "+nChannels+" "+nSlices+" "+nFrames+" "+imp);
+		// IJ.log("StackWindow: "+hyperStack+" "+nChannels+" "+nSlices+"
+		// "+nFrames+" "+imp);
 		if (nChannels > 1) {
 			cSelector = new ScrollbarWithLabel(this, 1, 1, 1, nChannels + 1, 'c');
 			add(cSelector);
@@ -219,7 +222,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 					slice = 1;
 				else if (slice > imp.getStack().getSize())
 					slice = imp.getStack().getSize();
-				imp.setSlice(slice);
+				setSlice(imp, slice);
 				imp.updateStatusbarValue();
 				SyncWindows.setZ(this, slice);
 			}
@@ -239,7 +242,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	/** Displays the specified slice and updates the stack scrollbar. */
 	public void showSlice(int index) {
 		if (imp != null && index >= 1 && index <= imp.getStackSize()) {
-			imp.setSlice(index);
+			setSlice(imp, index);
 			SyncWindows.setZ(this, index);
 		}
 	}
@@ -254,7 +257,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 			zSelector.setMaximum(stackSize + 1);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				if (imp != null)
+				if (imp != null && zSelector != null)
 					zSelector.setValue(imp.getCurrentSlice());
 
 			}
@@ -275,7 +278,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 				int s = slice;
 				slice = 0;
 				if (s != imp.getCurrentSlice())
-					imp.setSlice(s);
+					setSlice(imp, s);
 			}
 		}
 	}
@@ -343,11 +346,20 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		}
 	}
 
+	private void setSlice(ImagePlus imp, int n) {
+		if (imp.isLocked()) {
+			IJ.beep();
+			IJ.showStatus("Image is locked");
+		} else
+			imp.setSlice(n);
+	}
+
 	public boolean validDimensions() {
 		int c = imp.getNChannels();
 		int z = imp.getNSlices();
 		int t = imp.getNFrames();
-		// IJ.log(c+" "+z+" "+t+" "+nChannels+" "+nSlices+" "+nFrames+" "+imp.getStackSize());
+		// IJ.log(c+" "+z+" "+t+" "+nChannels+" "+nSlices+" "+nFrames+"
+		// "+imp.getStackSize());
 		int size = imp.getStackSize();
 		if (c == size && c * z * t == size && nSlices == size && nChannels * nSlices * nFrames == size)
 			return true;

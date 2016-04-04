@@ -2,6 +2,7 @@ package ij.plugin;
 import ij.*;
 import ij.gui.*;
 import ij.io.*;
+import ij.process.ImageProcessor;
 import java.io.*;
 import java.awt.Point;
 import java.awt.datatransfer.*;
@@ -21,7 +22,7 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 	private Iterator iterator;
 	public static boolean convertToRGB;
 	public static boolean virtualStack;
-	public boolean openAsVirtualStack;
+	private boolean openAsVirtualStack;
 	
 	public void run(String arg) {
 		ImageJ ij = IJ.getInstance();
@@ -146,6 +147,12 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 			Iterator iterator = this.iterator;
 			while(iterator.hasNext()) {
 				Object obj = iterator.next();
+				String str = ""+obj;
+				if (str!=null && str.startsWith("https:/")) {
+					if (!str.startsWith("https://"))
+						str = str.replace("https:/", "http://");
+					obj = str;
+				}
 				if (obj!=null && (obj instanceof String))
 					openURL((String)obj);
 				else
@@ -177,7 +184,11 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 							(new FileInfoVirtualStack()).run(path);
 						else if (openAsVirtualStack && (path.endsWith(".avi")||path.endsWith(".AVI")))
 							IJ.run("AVI...", "open=["+path+"] use");
-						else
+						else if (openAsVirtualStack && (path.endsWith(".txt"))) {
+							ImageProcessor ip = (new TextReader()).open(path);
+							if (ip!=null)
+								new ImagePlus(f.getName(),ip).show();
+						} else
 							(new Opener()).openAndAddToRecent(path);
 						OpenDialog.setLastDirectory(f.getParent()+File.separator);
 						OpenDialog.setLastName(f.getName());

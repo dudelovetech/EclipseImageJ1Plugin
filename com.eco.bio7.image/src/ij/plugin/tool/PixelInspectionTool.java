@@ -1,13 +1,11 @@
 package ij.plugin.tool;
 import ij.*;
-import ij.plugin.frame.PlugInAwtFrame;
 import ij.plugin.frame.PlugInFrame;
 import ij.process.*;
 import ij.measure.*;
 import ij.plugin.filter.Analyzer;
 import ij.gui.*;
 import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.datatransfer.*;
@@ -109,8 +107,7 @@ public class  PixelInspectionTool extends PlugInTool {
 }
 
 
-/*Changed for Bio7 - uses extra class PlugInAwtFrame instead of PlugInFrame!*/
-class PixelInspector extends PlugInAwtFrame
+class PixelInspector extends PlugInFrame
 		implements ImageListener, KeyListener, MouseListener, Runnable {
 	//ImageListener: listens to changes of image data
 	//KeyListener: for fix/unfix key
@@ -447,6 +444,8 @@ class PixelInspector extends PlugInAwtFrame
 			double[] minmax = Tools.getMinMax(data);
 			double maxDataValue = Math.max(Math.abs(minmax[0]), Math.abs(minmax[1]));
 			digits = (int)(6-Math.log(maxDataValue)/Math.log(10));
+			if (maxDataValue==0.0)
+				digits = 6;
 			expMode = digits<-1 || digits>7;
 			if (Math.min(minmax[0], minmax[1]) < 0)
 				digits--; //more space needed for minus sign

@@ -102,7 +102,9 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		this(title, WindowManager.getCurrentImage() != null ? (Frame) WindowManager.getCurrentImage().getWindow() : IJ.getInstance() != null ? IJ.getInstance() : new Frame());
 	}
 
-	/** Creates a new GenericDialog using the specified title and parent frame. */
+	/**
+	 * Creates a new GenericDialog using the specified title and parent frame.
+	 */
 	public GenericDialog(String title, Frame parent) {
 		super(parent == null ? new Frame() : parent, title, true);
 		if (Prefs.blackCanvas) {
@@ -119,11 +121,11 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		addKeyListener(this);
 		addWindowListener(this);
 	}
-	/*Changed for Bio7! Get the layout from a Swing dialog!*/
-	public  LayoutManager getLayout(){
-        return this.getContentPane().getLayout();
-    }
 
+	/* Changed for Bio7! Get the layout from a Swing dialog! */
+	public LayoutManager getLayout() {
+		return this.getContentPane().getLayout();
+	}
 
 	// void showFields(String id) {
 	// String s = id+": ";
@@ -187,7 +189,10 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 			columns -= 2;
 		if (columns < 1)
 			columns = 1;
-		TextField tf = new TextField(IJ.d2s(defaultValue, digits), columns);
+		String defaultString = IJ.d2s(defaultValue, digits);
+		if (Double.isNaN(defaultValue))
+			defaultString = "";
+		TextField tf = new TextField(defaultString, columns);
 		if (IJ.isLinux())
 			tf.setBackground(Color.white);
 		tf.addActionListener(this);
@@ -959,7 +964,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		if (macro) {
 			label = (String) labels.get((Object) tf);
 			theText = Macro.getValue(macroOptions, label, theText);
-			// IJ.write("getNextNumber: "+label+"  "+theText);
+			// IJ.write("getNextNumber: "+label+" "+theText);
 		}
 		String originalText = (String) defaultText.elementAt(nfIndex);
 		double defaultValue = ((Double) (defaultValues.elementAt(nfIndex))).doubleValue();
@@ -1582,8 +1587,8 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	 * that case.
 	 */
 	private void notifyListeners(AWTEvent e) {
-		if (dialogListeners==null)
-			        	return;
+		if (dialogListeners == null)
+			return;
 		boolean everythingOk = true;
 		for (int i = 0; everythingOk && i < dialogListeners.size(); i++)
 			try {
@@ -1599,13 +1604,14 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 																																												// Java
 																																												// 1.4
 			}
-		boolean workaroundOSXbug = IJ.isMacOSX() && okay!=null && !okay.isEnabled() && everythingOk;
+		boolean workaroundOSXbug = IJ.isMacOSX() && okay != null && !okay.isEnabled() && everythingOk;
 		if (previewCheckbox != null)
 			previewCheckbox.setEnabled(everythingOk);
-		if (okay!=null)
-			            okay.setEnabled(everythingOk);
-			        if (workaroundOSXbug)
-		        	repaint(); // OSX 10.4 bug delays update of enabled until the next input
+		if (okay != null)
+			okay.setEnabled(everythingOk);
+		if (workaroundOSXbug)
+			repaint(); // OSX 10.4 bug delays update of enabled until the next
+						// input
 	}
 
 	public void paintComponent(Graphics g) {

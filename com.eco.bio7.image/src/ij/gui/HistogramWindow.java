@@ -93,7 +93,8 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	/** Displays a histogram using the specified title and ImageStatistics. */
 	public HistogramWindow(String title, ImagePlus imp, ImageStatistics stats) {
 		super(NewImage.createRGBImage(title, WIN_WIDTH, WIN_HEIGHT, 1, NewImage.FILL_WHITE));
-		// IJ.log("HistogramWindow: "+stats.histMin+"  "+stats.histMax+"  "+stats.nBins);
+		// IJ.log("HistogramWindow: "+stats.histMin+" "+stats.histMax+"
+		// "+stats.nBins);
 		this.yMax = stats.histYMax;
 		showHistogram(imp, stats);
 	}
@@ -160,11 +161,14 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 
 	private void setup(ImagePlus imp) {
 		boolean isRGB = imp.getType() == ImagePlus.COLOR_RGB;
-		/*Changed for Bio7! Introduced new JFrame because we have no real Image Window in Bio7!*/
+		/*
+		 * Changed for Bio7! Introduced new JFrame because we have no real Image
+		 * Window in Bio7!
+		 */
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(2, 4, 0, 0));
 		int hgap = IJ.isMacOSX() || isRGB ? 1 : 5;
-		//buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
+		// buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
 		int trim = IJ.isMacOSX() ? 6 : 0;
 		list = new TrimmedButton("List", trim);
 		list.addActionListener(this);
@@ -198,15 +202,15 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 			valueAndCount.add(count);
 			buttons.add(valueAndCount);
 		}
-		/*Changed for Bio7!*/
-		/*Changed for Bio7!*/
-		JFrame fr=new JFrame();
+		/* Changed for Bio7! */
+		/* Changed for Bio7! */
+		JFrame fr = new JFrame();
 		fr.setContentPane(buttons);
 		fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		fr.setBounds(100, 100, 450, 172);
 		fr.setAlwaysOnTop(true);
 		fr.setVisible(true);
-		//add(buttons);
+		// add(buttons);
 		pack();
 	}
 
@@ -462,6 +466,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	public ResultsTable getResultsTable() {
 		ResultsTable rt = new ResultsTable();
 		rt.showRowNumbers(false);
+		rt.setPrecision(digits);
 		String vheading = stats.binSize == 1.0 ? "value" : "bin start";
 		if (cal.calibrated() && !cal.isSigned16Bit()) {
 			for (int i = 0; i < stats.nBins; i++) {
@@ -469,16 +474,13 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 				rt.setValue(vheading, i, cal.getCValue(stats.histMin + i * stats.binSize));
 				rt.setValue("count", i, histogram[i]);
 			}
-			rt.setDecimalPlaces(0, 0);
-			rt.setDecimalPlaces(1, digits);
-			rt.setDecimalPlaces(2, 0);
+
 		} else {
 			for (int i = 0; i < stats.nBins; i++) {
 				rt.setValue(vheading, i, cal.getCValue(stats.histMin + i * stats.binSize));
 				rt.setValue("count", i, histogram[i]);
 			}
-			rt.setDecimalPlaces(0, digits);
-			rt.setDecimalPlaces(1, 0);
+
 		}
 		return rt;
 	}

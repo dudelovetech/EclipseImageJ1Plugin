@@ -33,9 +33,12 @@ public class WindowManager {
 
 	/** Makes the image contained in the specified window the active image. */
 	public static void setCurrentWindow(ImageWindow win) {
-		if (win == null || win.isClosed() || win.getImagePlus() == null) // deadlock-"wait to lock"
+		if (win == null || win.isClosed() || win.getImagePlus() == null) // deadlock-"wait
+																			// to
+																			// lock"
 			return;
-		// IJ.log("setCurrentWindow: "+win.getImagePlus().getTitle()+" ("+(currentWindow!=null?currentWindow.getImagePlus().getTitle():"null")
+		// IJ.log("setCurrentWindow: "+win.getImagePlus().getTitle()+"
+		// ("+(currentWindow!=null?currentWindow.getImagePlus().getTitle():"null")
 		// + ")");
 		setWindow(win);
 		tempImageTable.remove(Thread.currentThread());
@@ -78,7 +81,8 @@ public class WindowManager {
 		if (img == null)
 			img = getActiveImage();
 		// if (img!=null)
-		// IJ.log("getCurrentImage: "+img.getTitle()+" "+Thread.currentThread().hashCode()+str);
+		// IJ.log("getCurrentImage: "+img.getTitle()+"
+		// "+Thread.currentThread().hashCode()+str);
 		return img;
 	}
 
@@ -87,7 +91,8 @@ public class WindowManager {
 	 * Call again with a null argument to revert to the previous active image.
 	 */
 	public static void setTempCurrentImage(ImagePlus img) {
-		// IJ.log("setTempImage: "+(img!=null?img.getTitle():"null")+" "+Thread.currentThread().hashCode());
+		// IJ.log("setTempImage: "+(img!=null?img.getTitle():"null")+"
+		// "+Thread.currentThread().hashCode());
 		if (img == null)
 			tempImageTable.remove(Thread.currentThread());
 		else
@@ -111,10 +116,24 @@ public class WindowManager {
 		else if (frontWindow != null && (frontWindow instanceof ImageWindow))
 			return frontWindow != null ? ((ImageWindow) frontWindow).getImagePlus() : null;
 		else if (imageList.size() > 0) {
+			ImagePlus imp = getFocusManagerActiveImage();
+			if (imp != null)
+				return imp;
 			ImageWindow win = (ImageWindow) imageList.elementAt(imageList.size() - 1);
 			return win.getImagePlus();
 		} else
 			return Interpreter.getLastBatchModeImage();
+	}
+
+	private static ImagePlus getFocusManagerActiveImage() {
+		if (IJ.isMacro())
+			return null;
+		KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		Window win = kfm.getActiveWindow();
+		ImagePlus imp = null;
+		if (win != null && (win instanceof ImageWindow))
+			imp = ((ImageWindow) win).getImagePlus();
+		return imp;
 	}
 
 	/** Returns the number of open image windows. */
@@ -188,21 +207,25 @@ public class WindowManager {
 		list.toArray(frames);
 		return frames;
 	}
-	
-	/** Returns an array containing a list of the non-image Frames and Dialogs. */
-		public synchronized static Window[] getAllNonImageWindows() {
-			ArrayList list = new ArrayList();
-			for (int i=0; i<nonImageList.size(); i++) {
-				Object win = nonImageList.elementAt(i);
-				if (win instanceof Window)
-					list.add(win);
-			}
-			Window[] windows = new Window[list.size()];
-			list.toArray(windows);
-			return windows;
-		}
 
-	/** Returns an array containing the titles of non-image Frames and Dialogs. */
+	/**
+	 * Returns an array containing a list of the non-image Frames and Dialogs.
+	 */
+	public synchronized static Window[] getAllNonImageWindows() {
+		ArrayList list = new ArrayList();
+		for (int i = 0; i < nonImageList.size(); i++) {
+			Object win = nonImageList.elementAt(i);
+			if (win instanceof Window)
+				list.add(win);
+		}
+		Window[] windows = new Window[list.size()];
+		list.toArray(windows);
+		return windows;
+	}
+
+	/**
+	 * Returns an array containing the titles of non-image Frames and Dialogs.
+	 */
 	public synchronized static String[] getNonImageTitles() {
 		ArrayList list = new ArrayList();
 		for (int i = 0; i < nonImageList.size(); i++) {
@@ -360,7 +383,9 @@ public class WindowManager {
 		return name;
 	}
 
-	/** If 'name' is not unique, adds -1, -2, etc. as needed to make it unique. */
+	/**
+	 * If 'name' is not unique, adds -1, -2, etc. as needed to make it unique.
+	 */
 	public static String makeUniqueName(String name) {
 		return isDuplicateName(name) ? getUniqueName(name) : name;
 	}

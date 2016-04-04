@@ -18,7 +18,6 @@ import java.awt.geom.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 
-
 import com.eco.bio7.image.CanvasView;
 
 /** This is a Canvas used to display images in a Window. */
@@ -601,14 +600,6 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		return new Dimension(dstWidth, dstHeight);
 	}
 
-	int count;
-
-	/*
-	 * public Graphics getGraphics() { Graphics g = super.getGraphics();
-	 * IJ.write("getGraphics: "+count++); if (IJ.altKeyDown()) throw new
-	 * IllegalArgumentException(""); return g; }
-	 */
-
 	/** Returns the current cursor location in image coordinates. */
 	public Point getCursorLoc() {
 		return new Point(xMouse, yMouse);
@@ -885,18 +876,17 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		Dimension newSize = canEnlarge(newWidth, newHeight);
 		if (newSize != null) {
 			setSize(newSize.width, newSize.height);
-			if (newSize.width != newWidth || newSize.height != newHeight){
-			setMagnification(newMag);
-			/* Changed for Bio7! */
-			CanvasView.getCurrent().validate();
-			adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
-			}
-			else{
+			if (newSize.width != newWidth || newSize.height != newHeight) {
+				setMagnification(newMag);
+				/* Changed for Bio7! */
+				CanvasView.getCurrent().validate();
+				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
+			} else {
 				setMagnification(newMag);
 				/* Changed for Bio7! */
 				CanvasView.getCurrent().validate();
 			}
-			
+
 			imp.getWindow().pack();
 		} else // can't enlarge window
 			adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
@@ -904,8 +894,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 		/* changed for Bio7! */
 
-		//CanvasView.getCurrent().validate();
-		//adjustSourceRect(newMag, sx, sy);
+		// CanvasView.getCurrent().validate();
+		// adjustSourceRect(newMag, sx, sy);
 		/*
 		 * if (srcRect.width<imageWidth || srcRect.height<imageHeight)
 		 * resetMaxBounds();
@@ -1032,7 +1022,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			/* Changes for Bio7! */
 			// CanvasView.getCurrent().invalidate();
 			CanvasView.getCurrent().validate();
-			//adjustSourceRect(newMag, sx, sy);
+			// adjustSourceRect(newMag, sx, sy);
 
 			return;
 		}
@@ -1069,7 +1059,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		repaint();
 		/* Changes for Bio7! */
 		CanvasView.getCurrent().validate();
-		//adjustSourceRect(newMag, sx, sy);
+		// adjustSourceRect(newMag, sx, sy);
 	}
 
 	int sqr(int x) {
@@ -1221,7 +1211,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			this.requestFocus();
 
 		}
-		
+
 		showCursorStatus = true;
 		int toolID = Toolbar.getToolId();
 		ImageWindow win = imp.getWindow();
@@ -1236,9 +1226,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		int x = e.getX();
 		int y = e.getY();
 		flags = e.getModifiers();
-		// IJ.log("Mouse pressed: " + e.isPopupTrigger() + " " +
-		// ij.modifiers(flags));
-		// if (toolID!=Toolbar.MAGNIFIER && e.isPopupTrigger()) {
+
 		if (toolID != Toolbar.MAGNIFIER && (e.isPopupTrigger() || (!IJ.isMacintosh() && (flags & Event.META_MASK) != 0))) {
 			handlePopupMenu(e);
 			return;
@@ -1285,12 +1273,12 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			if (IJ.shiftKeyDown())
 				zoomToSelection(ox, oy);
 			else if ((flags & (Event.ALT_MASK | Event.META_MASK | Event.CTRL_MASK)) != 0) {
-				// IJ.run("Out");
+
 				zoomOut(x, y);
 				if (getMagnification() < 1.0)
 					imp.repaintWindow();
 			} else {
-				// IJ.run("In");
+
 				zoomIn(x, y);
 				if (getMagnification() <= 1.0)
 					imp.repaintWindow();
@@ -1435,7 +1423,21 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		int handle = roi != null ? roi.isHandle(sx, sy) : -1;
 		boolean multiPointMode = roi != null && (roi instanceof PointRoi) && handle == -1 && Toolbar.getToolId() == Toolbar.POINT && Toolbar.getMultiPointMode();
 		if (multiPointMode) {
-			((PointRoi)roi).addPoint(imp, offScreenXD(sx), offScreenYD(sy));
+			double oxd = offScreenXD(sx);
+			double oyd = offScreenYD(sy);
+			if (e.isShiftDown()) {
+				FloatPolygon points = roi.getFloatPolygon();
+				if (points.npoints > 0) {
+					double x0 = points.xpoints[0];
+					double y0 = points.ypoints[0];
+					double slope = Math.abs((oxd - x0) / (oyd - y0));
+					if (slope >= 1.0)
+						oyd = points.ypoints[0];
+					else
+						oxd = points.xpoints[0];
+				}
+			}
+			((PointRoi) roi).addPoint(imp, oxd, oyd);
 			imp.setRoi(roi);
 			return;
 		}

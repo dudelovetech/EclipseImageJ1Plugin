@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.awt.image.*;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -59,13 +58,14 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 	boolean imageWasUpdated;
 	ImageJ ij;
 	double minThreshold, maxThreshold;  // 0-255
-	JScrollBar minSlider, maxSlider;
+	JScrollBar minSlider;
+	JScrollBar maxSlider;
 	JLabel label1, label2;               // for current threshold
 	JLabel percentiles;
 	boolean done;
 	int lutColor;
 	Choice methodChoice, modeChoice;
-	JCheckBox darkBackground, stackHistogram;
+	Checkbox darkBackground, stackHistogram;
 	boolean firstActivation = true;
 
 
@@ -73,7 +73,14 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		super("Threshold");
 		ImagePlus cimp = WindowManager.getCurrentImage();
 		if (cimp!=null && cimp.getBitDepth()==24) {
-			IJ.run(cimp, "Color Threshold...", "");
+			IJ.error("Threshold Adjuster",
+				"Image>Adjust>Threshold only works with grayscale images.\n"
+				+"What you can do:\n"
+				+"   Image>Type>8-bit (convert to grayscale)\n"
+				+"   Image>Type>RGB Stack (convert to RGB stack)\n"
+				+"   Image>Type>HSB Stack (convert to HSB stack)\n"
+				+"   Image>Color>Split Channels (convert to 3 grayscale images)\n"
+				+"   Image>Adjust>Color Threshold (do color thresholding)\n");
 			return;
 		}
 		if (instance!=null) {
@@ -159,7 +166,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		c.gridwidth = 1;
 		c.weightx = 0;
 		c.insets = new Insets(2, 0, 0, 10);
-		label2 = new JLabel(text, Label.RIGHT);
+		label2 = new JLabel(text, JLabel.RIGHT);
     	label2.setFont(font);
 		add(label2, c);
 				
@@ -190,12 +197,12 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		// checkboxes
 		panel = new JPanel();
 		boolean db = Prefs.get(DARK_BACKGROUND, Prefs.blackBackground?true:false);
-        darkBackground = new JCheckBox("Dark background");
-        darkBackground.setSelected(db);
+        darkBackground = new Checkbox("Dark background");
+        darkBackground.setState(db);
         darkBackground.addItemListener(this);
         panel.add(darkBackground);
-        stackHistogram = new JCheckBox("Stack histogram");
-        stackHistogram.setSelected(false);
+        stackHistogram = new Checkbox("Stack histogram");
+        stackHistogram.setState(false);
         stackHistogram.addItemListener(this);
         panel.add(stackHistogram);
         c.gridx = 0;
@@ -301,6 +308,12 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 			mode = modeChoice.getSelectedIndex();
 			setLutColor(mode);
 			doStateChange = true;
+			if (Recorder.record) {
+				if (Recorder.scriptMode())
+					Recorder.recordCall("ThresholdAdjuster.setMode(\""+modes[mode]+"\");");
+				else
+					Recorder.recordString("call(\"ij.plugin.frame.ThresholdAdjuster.setMode\", \""+modes[mode]+"\");\n");
+			}
 		} else
 			doAutoAdjust = true;
 		notify();
@@ -371,7 +384,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 	}
 	
     boolean entireStack(ImagePlus imp) {
-        return stackHistogram!=null && stackHistogram.isSelected() && imp.getStackSize()>1;
+        return stackHistogram!=null && stackHistogram.getState() && imp.getStackSize()>1;
     }
 
 	void autoSetLevels(ImageProcessor ip, ImageStatistics stats) {
@@ -381,7 +394,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 			return;
 		}
 		//int threshold = ip.getAutoThreshold(stats.histogram);
-		boolean darkb = darkBackground!=null && darkBackground.isSelected();
+		boolean darkb = darkBackground!=null && darkBackground.getState();
 		boolean invertedLut = ip.isInvertedLut();
 		int modifiedModeCount = stats.histogram[stats.mode];
 		if (!method.equals(methodNames[DEFAULT]))
@@ -401,7 +414,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		}
 		if (minThreshold>255) minThreshold = 255;
 		if (Recorder.record) {
-			boolean stack = stackHistogram!=null && stackHistogram.isSelected();
+			boolean stack = stackHistogram!=null && stackHistogram.getState();
 			String options = method+(darkb?" dark":"")+(stack?" stack":"");
 			if (Recorder.scriptMode())
 				Recorder.recordCall("IJ.setAutoThreshold(imp, \""+options+"\");");
@@ -699,7 +712,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
  	
  	void runThresholdCommand() {
 		Thresholder.setMethod(method);
-		Thresholder.setBackground(darkBackground.isSelected()?"Dark":"Light");
+		Thresholder.setBackground(darkBackground.getState()?"Dark":"Light");
 		if (Recorder.record) {
 			Recorder.setCommand("Convert to Mask");
 			(new Thresholder()).run("mask");
@@ -782,7 +795,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		done = true;
 		Prefs.saveLocation(LOC_KEY, getLocation());
 		Prefs.set(MODE_KEY, mode);
-		Prefs.set(DARK_BACKGROUND, darkBackground.isSelected());
+		Prefs.set(DARK_BACKGROUND, darkBackground.getState());
 		synchronized(this) {
 			notify();
 		}
@@ -817,30 +830,52 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		}
     }
 
-    /** Returns the current thresholding method ("Default", "Huang", etc). */
+	/** Returns the current thresholding method ("Default", "Huang", etc). */
 	public static String getMethod() {
 		return method;
 	}
+	
 	/** Sets the thresholding method ("Default", "Huang", etc). */
-		public static void setMethod(String thresholdingMethod) {
-			boolean valid = false;
-			for (int i=0; i<methodNames.length; i++) {
-				if (methodNames[i].equals(thresholdingMethod)) {
-					valid = true;
-					break;
-				}
-			}
-			if (valid) {
-				method = thresholdingMethod;
-				if (instance!=null)
-					instance.methodChoice.select(method);
+	public static void setMethod(String thresholdingMethod) {
+		boolean valid = false;
+		for (int i=0; i<methodNames.length; i++) {
+			if (methodNames[i].equals(thresholdingMethod)) {
+				valid = true;
+				break;
 			}
 		}
+		if (valid) {
+			method = thresholdingMethod;
+			if (instance!=null)
+				instance.methodChoice.select(method);
+		}
+	}
 	
 	/** Returns the current mode ("Red","B&W" or"Over/Under"). */
 	public static String getMode() {
 		return modes[mode];
 	}
+	
+	/** Sets the current mode ("Red","B&W" or"Over/Under"). */
+	public static void setMode(String tmode) {
+		if (instance!=null) synchronized (instance) {
+			ThresholdAdjuster ta = ((ThresholdAdjuster)instance);
+			if (modes[0].equals(tmode))
+				mode = 0;
+			else if (modes[1].equals(tmode))
+				mode = 1;
+			else if (modes[2].equals(tmode))
+				mode = 2;
+			else
+				return;
+			ta.setLutColor(mode);
+			ta.doStateChange = true;
+			ta.modeChoice.select(mode);
+			ta.notify();
+		}
+	}
+
+
 
 } // ThresholdAdjuster class
 

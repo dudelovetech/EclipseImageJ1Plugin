@@ -93,6 +93,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private boolean antialiasRendering = true;
 	private boolean ignoreGlobalCalibration;
 	public boolean setIJMenuBar = true;
+	public boolean typeSet;
 
 	/** Constructs an uninitialized ImagePlus. */
 	public ImagePlus() {
@@ -164,6 +165,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		if (locked) {
 			IJ.beep();
 			IJ.showStatus("\"" + title + "\" is locked");
+			if (IJ.macroRunning())
+				IJ.wait(500);
 			return false;
 		} else {
 			locked = true;
@@ -1003,7 +1006,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			return;
 		if (win != null) {
 			if (ij != null)
-				Menus.updateWindowMenuItem(this.title, title);
+				Menus.updateWindowMenuItem(this, this.title, title);
 			String virtual = stack != null && stack.isVirtual() ? " (V)" : "";
 			String global = getGlobalCalibration() != null ? " (G)" : "";
 			String scale = "";
@@ -1189,10 +1192,12 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the bit depth, 8, 16, 24 (RGB) or 32. RGB images actually use 32
-	 * bits per pixel.
+	 * Returns the bit depth, 8, 16, 24 (RGB) or 32, or 0 if the bit depth is
+	 * unknown. RGB images actually use 32 bits per pixel.
 	 */
 	public int getBitDepth() {
+		if (imageType == GRAY8 && ip == null && img == null && !typeSet)
+			return 0;
 		int bitDepth = 0;
 		switch (imageType) {
 		case GRAY8:
@@ -1230,6 +1235,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			return;
 		int previousType = imageType;
 		imageType = type;
+		typeSet = true;
 		if (imageType != previousType) {
 			if (win != null)
 				Menus.updateMenus();
@@ -1937,7 +1943,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		deleteRoi();
 	}
 
-	public void saveRoi() {
+	public synchronized void saveRoi() {
 		if (roi != null) {
 			roi.endPaste();
 			Rectangle r = roi.getBounds();
@@ -2335,7 +2341,6 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/** Sets this image's calibration. */
 	public void setCalibration(Calibration cal) {
-		// IJ.write("setCalibration: "+cal);
 		if (cal == null)
 			calibration = null;
 		else {
@@ -2355,6 +2360,14 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/** Returns the system-wide calibration, or null. */
 	public Calibration getGlobalCalibration() {
+		return globalCalibration;
+	}
+
+	/**
+	 * This is a version of getGlobalCalibration() that can be called from a
+	 * static context.
+	 */
+	public static Calibration getStaticGlobalCalibration() {
 		return globalCalibration;
 	}
 

@@ -46,8 +46,10 @@ public class PlugInFrame extends JFrame implements PlugIn, WindowListener, Focus
     }
 
     public void windowActivated(WindowEvent e) {
-		if (IJ.isMacintosh())
+		if (IJ.isMacintosh()) {
 			this.setMenuBar(Menus.getMenuBar());
+			Menus.setMenuBarCount++;
+		}
 		WindowManager.setWindow(this);
 	}
 

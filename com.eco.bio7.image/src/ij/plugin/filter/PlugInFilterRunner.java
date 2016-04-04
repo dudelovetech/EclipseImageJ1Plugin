@@ -6,7 +6,6 @@ import ij.plugin.filter.PlugInFilter.*;
 import ij.plugin.filter.*;
 import ij.measure.Calibration;
 import ij.macro.Interpreter;
-
 import java.awt.*;
 import java.util.*;
 
@@ -57,7 +56,8 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 		if (imp != null) {
 			roi = imp.getRoi();
 			if (roi!=null) roi.endPaste();				// prepare the image: finish previous paste operation (if any)
-			if (!imp.lock()) return;					// exit if image is in use
+			if (!imp.lock())
+				return;					// exit if image is in use
 			nPasses = ((flags&PlugInFilter.CONVERT_TO_FLOAT)!=0) ? imp.getProcessor().getNChannels():1;
 		}
 		if (theFilter instanceof ExtendedPlugInFilter) { // calling showDialog required?
@@ -82,7 +82,8 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 			}
 		} // if ExtendedPlugInFilter
 		if ((flags&PlugInFilter.DONE)!=0) {
-			if (imp != null) imp.unlock();
+			if (imp != null)
+				imp.unlock();
 			return;
 		} else if (imp==null) {
 			((PlugInFilter)theFilter).run(null);		// not DONE, but NO_IMAGE_REQUIRED
