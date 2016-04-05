@@ -806,7 +806,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	}
 
 	// the background thread for live plotting.
-	public void run() {
+	public void run() { 
 		while (true) {
 			IJ.wait(50); // delay to make sure the roi has been updated
 			Plot plot = plotMaker.getPlot();
