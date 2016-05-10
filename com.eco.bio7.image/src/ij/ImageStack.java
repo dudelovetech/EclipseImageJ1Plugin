@@ -371,7 +371,8 @@ public class ImageStack {
 	}
 
 	/**
-	 * Returns, as a double, the specified voxel. Use the
+	 /** Returns, as a double, the specified voxel. Returns
+	 * NaN if x, y or z are beyond the stack limits. Use the
 	 * ImagePlus.getStackIndex() method to convert a C,Z,T hyperstack position
 	 * (one-based) into a z index (zero-based).
 	 * 
@@ -392,11 +393,11 @@ public class ImageStack {
 			case RGB:
 				int[] ints = (int[]) stack[z];
 				return ints[y * width + x] & 0xffffffff;
-			default:
-				return 0.0;
+			default: 
+				return Double.NaN;
 			}
 		} else
-			return 0.0;
+			throw new IndexOutOfBoundsException();
 	}
 
 	/* Sets the value of the specified voxel. */
