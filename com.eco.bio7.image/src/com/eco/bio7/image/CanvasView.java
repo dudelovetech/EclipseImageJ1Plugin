@@ -11,31 +11,12 @@
 
 package com.eco.bio7.image;
 
-import ij.IJ;
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
-import ij.io.DirectoryChooser;
-import ij.io.OpenDialog;
-import ij.io.Opener;
-import ij.plugin.DragAndDrop;
-import ij.plugin.FolderOpener;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Vector;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import org.eclipse.albireo.core.AwtEnvironment;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.action.ControlContribution;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -51,6 +32,8 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -58,18 +41,14 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 import com.eco.bio7.ImageJPluginActions.ImageJAnalyzeAction;
 import com.eco.bio7.ImageJPluginActions.ImageJEditAction;
 import com.eco.bio7.ImageJPluginActions.ImageJFileAction;
@@ -77,6 +56,17 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
+import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.GenericDialog;
+import ij.gui.ImageWindow;
+import ij.io.DirectoryChooser;
+import ij.io.OpenDialog;
+import ij.io.Opener;
+import ij.plugin.DragAndDrop;
+import ij.plugin.FolderOpener;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;
@@ -122,7 +112,24 @@ public class CanvasView extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
-		AwtEnvironment awt = new AwtEnvironment(parent.getDisplay());
+
+		parent.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				/* Save the ImageJ preferences when the view is closed! */
+				try {
+					ij.Prefs.savePreferences();
+				} catch (RuntimeException ex) {
+
+					ex.printStackTrace();
+				}
+
+			}
+		});
+
+		//AwtEnvironment awt = new AwtEnvironment(parent.getDisplay());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "com.eco.bio7.imagej");
 
@@ -414,7 +421,7 @@ public class CanvasView extends ViewPart {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		if (javaFXEmbedded) {
-         IJTabs.deleteAllTabs();
+			IJTabs.deleteAllTabs();
 		}
 	}
 
