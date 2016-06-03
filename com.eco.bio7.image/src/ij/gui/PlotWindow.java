@@ -739,7 +739,8 @@ public class PlotWindow extends ImageWindow implements ActionListener,	ItemListe
 				plot.useTemplate(this.plot, this.plot.templateFlags);
 				plot.setPlotMaker(plotMaker);
 				this.plot = plot;
-				((PlotCanvas)ic).setPlot(plot);
+				/*Changed for Bio7!*/
+				//((PlotCanvas)ic).setPlot(plot);
 				ImageProcessor ip = plot.getProcessor();
 				if (ip!=null && imp!=null) {
 					imp.setProcessor(null, ip);
