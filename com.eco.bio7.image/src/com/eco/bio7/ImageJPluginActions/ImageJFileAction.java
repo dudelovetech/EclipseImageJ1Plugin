@@ -42,8 +42,8 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 	String[] saveas = { "Tiff...", "Gif...", "Jpeg...", "BMP...", "PNG...", "PGM...", "Text Image...", "ZIP...", "Raw Data...", "Image Sequence... ", "AVI... ", "FITS...", "LUT...", "Selection...", "XY Coordinates...", "Results...", "Text..." };
 
-	String[] url = { "NileBend.jpg", "sea-grass.jpg", "particles.gif", "blobs.gif", "embryos.jpg", "Cell_Colony.jpg", "mri-stack.zip", "leaf.jpg", "Tree_Rings.jpg", "FluorescentCells.jpg", "Diatoms.jpg", "baboon.jpg", "bat-cochlea-volume.zip", "flybrain.zip", "Rat_Hippocampal_Neuron.zip",
-			"Spindly-GFP.zip", "hela-cells.zip", "3D_Chromosome.zip", "organ-of-corti.zip", "confocal-series.zip", "egg.jpg", "microm.jpg", "fluoview-multi.tif", "mri.gif", "snowflake.gif" };
+	String[] url = { "NileBend.jpg", "sea-grass.jpg", "particles.gif", "blobs.gif", "embryos.jpg", "Cell_Colony.jpg", "mri-stack.zip", "leaf.jpg", "Tree_Rings.jpg", "FluorescentCells.jpg", "Diatoms.jpg", "baboon.jpg", "bat-cochlea-volume.zip", "flybrain.zip", "Rat_Hippocampal_Neuron.zip","t1-head-raw.zip",
+			"Spindly-GFP.zip", "hela-cells.zip", "3D_Chromosome.zip", "organ-of-corti.zip", "confocal-series.zip", "egg.jpg", "microm.jpg", "fluoview-multi.tif", "mri.gif", "snowflake.gif","GFAP-FVII.zip","blood-brain-barrier.zip"};
 
 	MenuItem[] save_as = new MenuItem[saveas.length];
 
@@ -106,13 +106,13 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 			import_as[i].setText(imp[i]);
 			import_as[i].addSelectionListener(new SelectionListener() {
 
-				public void widgetSelected(SelectionEvent e) {
+	public void widgetSelected(SelectionEvent e) {
 
-					IJ.getInstance().doCommand(imp[count]);
+		IJ.getInstance().doCommand(imp[count]);
 
-				}
+	}
 
-				public void widgetDefaultSelected(SelectionEvent e) {
+	public void widgetDefaultSelected(SelectionEvent e) {
 
 				}
 			});
@@ -164,7 +164,7 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 							IJ.showStatus("Opening: " + url);
 
-							imp = IJ.openImage("http://rsb.info.nih.gov/ij/images/" + url[count]);
+							imp = IJ.openImage("http://wsr.imagej.net/images/" + url[count]);
 							/*
 							 * ImagePlus imp = new
 							 * ImagePlus("http://rsb.info.nih.gov/ij/images/" +
