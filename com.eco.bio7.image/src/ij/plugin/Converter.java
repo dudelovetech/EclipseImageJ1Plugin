@@ -4,6 +4,8 @@ import ij.process.*;
 import ij.gui.*;
 import java.awt.*;
 
+import com.eco.bio7.image.IJTabs;
+
 /** Implements the conversion commands in the Image/Type submenu. */
 public class Converter implements PlugIn {
 
@@ -89,9 +91,13 @@ public class Converter implements PlugIn {
 				else if (item.equals("32-bit"))
 					ic.convertToGray32();
 				else if (item.equals("RGB Stack")) {
+					/*Changed for Bio7!*/
+					IJTabs.deleteActiveTab();
 			    	Undo.reset(); // Reversible; no need for Undo
 					ic.convertToRGBStack();
 		    	} else if (item.equals("HSB Stack")) {
+		    		/*Changed for Bio7!*/
+		    		IJTabs.deleteActiveTab();
 			    	Undo.reset();
 					ic.convertToHSB();
 		    	} else if (item.equals("Lab Stack")) {

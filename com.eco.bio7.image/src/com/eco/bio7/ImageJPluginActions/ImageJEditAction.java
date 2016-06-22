@@ -34,8 +34,8 @@ public class ImageJEditAction extends Action implements IMenuCreator {
 			 "Properties... ","Scale... ","Rotate...", "Enlarge...", "Make Band...",
 			"Specify...","Straighten...","To Bounding Box","Line to Area","Area to Line","Image to Selection...","Interpolate","Add to Manager"};
 	String[] options = { "Line Width...", "Input/Output...", "Fonts...",
-			"Profile Plot Options...", "Point Tool...","Rounded Rect Tool...", "Colors...",
-			"Appearance...", "Conversions...", "Memory & Threads...","Proxy Settings...","Compiler...","DICOM...","Misc..." };
+			"Plots...", "Rounded Rect Tool...","Arrow Tool...","Point Tool...","Wand Tool...", "Colors...",
+			"Appearance...", "Conversions...", "Memory & Threads...","Proxy Settings...","Compiler...","DICOM...","Misc...","Reset..."};
 	MenuItem[] option_ = new MenuItem[options.length];
 	MenuItem[] select_ = new MenuItem[select.length];
 

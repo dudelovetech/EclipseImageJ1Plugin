@@ -7,6 +7,8 @@ import ij.plugin.filter.Analyzer;
 import java.awt.*;
 import java.util.Vector;
 
+import javax.swing.JCheckBox;
+
 /** This plugin implements the Image/Overlay/Labels command. */
 public class OverlayLabels implements PlugIn, DialogListener {
 	private static final String[] fontSizes = {"7", "8", "9", "10", "12", "14", "18", "24", "28", "36", "48", "72"};
@@ -88,7 +90,7 @@ public class OverlayLabels implements PlugIn, DialogListener {
 			if ((showNames&&!showNames2) || colorChanged || sizeChanged) {
 				showLabels = true;
 				Vector checkboxes = gd.getCheckboxes();
-				((Checkbox)checkboxes.elementAt(0)).setState(true);
+				((JCheckBox)checkboxes.elementAt(0)).setSelected(true);
 			}
 			overlay.drawLabels(showLabels);
 			Analyzer.drawLabels(showLabels);

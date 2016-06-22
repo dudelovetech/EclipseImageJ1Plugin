@@ -98,7 +98,7 @@ public class Resizer implements PlugIn, TextListener, ItemListener  {
 			}
 			checkboxes = gd.getCheckboxes();
 			if (!IJ.macroRunning())
-				((Checkbox)checkboxes.elementAt(0)).addItemListener(this);
+				((JCheckBox)checkboxes.elementAt(0)).addItemListener(this);
 			gd.showDialog();
 			if (gd.wasCanceled()) {
 				imp.unlock();

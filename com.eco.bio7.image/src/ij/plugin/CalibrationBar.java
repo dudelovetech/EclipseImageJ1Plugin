@@ -441,8 +441,8 @@ public class CalibrationBar implements PlugIn {
 			location = ( (Choice)(choice.elementAt(0)) ).getSelectedItem();
 			fillColor = ( (Choice)(choice.elementAt(1)) ).getSelectedItem();
 			textColor = ( (Choice)(choice.elementAt(2)) ).getSelectedItem();
-			boldText = ( (Checkbox)(checkbox.elementAt(0)) ).getState();
-			flatten = !( (Checkbox)(checkbox.elementAt(1)) ).getState();
+			boldText = ( (JCheckBox)(checkbox.elementAt(0)) ).isSelected();
+			flatten = !( (JCheckBox)(checkbox.elementAt(1)) ).isSelected();
 			updateColorBar();
 		}
 

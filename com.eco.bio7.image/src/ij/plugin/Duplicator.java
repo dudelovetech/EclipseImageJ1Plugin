@@ -2,6 +2,7 @@ package ij.plugin;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
+import javax.swing.JCheckBox;
 import ij.*;
 import ij.process.*;
 import ij.gui.*;
@@ -22,7 +23,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 	private static boolean staticDuplicateStack;
 	private boolean duplicateStack;
 	private int first, last;
-	private Checkbox checkbox;
+	private JCheckBox checkbox;
 	private TextField titleField, rangeField;
 	private TextField[] rangeFields;
 	private int firstC, lastC, firstZ, lastZ, firstT, lastT;
@@ -265,7 +266,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			gd.setInsets(2, 30, 3);
 			gd.addStringField("Range:", "1-"+stackSize);
 			if (!isMacro) {
-				checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
+				checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
 				checkbox.addItemListener(this);
 				Vector v = gd.getStringFields();
 				titleField = (TextField)v.elementAt(0);
@@ -306,7 +307,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 		if (titleChanged)
 			return null;
 		String title = defaultTitle;
-		if (imp.getStackSize()>1 && !duplicateStack && !legacyMacro && (checkbox==null||!checkbox.getState())) {
+		if (imp.getStackSize()>1 && !duplicateStack && !legacyMacro && (checkbox==null||!checkbox.isSelected())) {
 			ImageStack stack = imp.getStack();
 			String label = stack.getShortSliceLabel(imp.getCurrentSlice());
 			if (label!=null && label.length()==0)
@@ -382,7 +383,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			nRangeFields++;
 		}
 		if (!isMacro) {
-			checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
+			checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
 			checkbox.addItemListener(this);
 			Vector v = gd.getStringFields();
 			rangeFields = new TextField[3];
@@ -467,11 +468,11 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			if (!titleField.getText().equals(getNewTitle()))
 				titleChanged = true;
 		} else
-			checkbox.setState(true);
+			checkbox.setSelected(true);
 	}
 	
 	public void itemStateChanged(ItemEvent e) {
-		duplicateStack = checkbox.getState();
+		duplicateStack = checkbox.isSelected();
 		if (titleField!=null) {
 			String title = getNewTitle();
 			if (title!=null && !title.equals(titleField.getText())) {
