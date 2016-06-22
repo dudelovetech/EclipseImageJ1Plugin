@@ -275,6 +275,7 @@ public class PlotWindow extends ImageWindow implements ActionListener,	ItemListe
 	/** Releases the resources used by this PlotWindow */
 	public void dispose() {
 		plot.dispose();
+		removeListeners();
 		plot = null;
 		plotMaker = null;
 		srcImp = null;
@@ -772,7 +773,7 @@ public class PlotWindow extends ImageWindow implements ActionListener,	ItemListe
 	}
 	
 	private void removeListeners() {
-		if (IJ.debugMode) IJ.log("PlotWindow.removeListeners");
+		if (IJ.debugMode) IJ.log("PlotWindow.removeListeners: "+srcImp);
 		if (srcImp==null)
 			return;
 		ImagePlus.removeImageListener(this);

@@ -81,19 +81,7 @@ public class OverlayCommands implements PlugIn {
 			if (roi.getFillColor()==null)
 				roi.setFillColor(defaultRoi.getFillColor());
 		}
-		boolean setPos = defaultRoi.getPosition()!=0;
-		int stackSize = imp.getStackSize();
-		if (setPos && stackSize>1) {
-			if (imp.isHyperStack()||imp.isComposite()) {
-				boolean compositeMode = imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE;
-				int channel = !compositeMode||imp.getNChannels()==stackSize?imp.getChannel():0;
-				if (imp.getNSlices()>1)
-					roi.setPosition(channel, imp.getSlice(), 0);
-				else if (imp.getNFrames()>1)
-					roi.setPosition(channel, 0, imp.getFrame());
-			} else
-				roi.setPosition(imp.getCurrentSlice());
-		}
+		setPosition(imp, roi);
 		boolean points = roi instanceof PointRoi && ((PolygonRoi)roi).getNCoordinates()>1;
 		if (IJ.altKeyDown() || (IJ.macroRunning() && Macro.getOptions()!=null)) {
 			RoiProperties rp = new RoiProperties("Add to Overlay", roi);
@@ -110,7 +98,6 @@ public class OverlayCommands implements PlugIn {
 		if (overlay==null || newOverlay)
 			overlay = OverlayLabels.createOverlay();
 		overlay.add(roi);
-		defaultRoi.setPosition(setPos?1:0);
 		imp.setOverlay(overlay);
 		boolean brushRoi = roi.getType()==Roi.COMPOSITE && Toolbar.getToolId()==Toolbar.OVAL && Toolbar.getBrushSize()>0;
 		if (points || (roi instanceof ImageRoi) || (roi instanceof Arrow&&!Prefs.keepArrowSelections) || brushRoi)
@@ -199,11 +186,29 @@ public class OverlayCommands implements PlugIn {
 		if (createImageRoi)
 			imp.setRoi(roi);
 		else {
+			setPosition(imp, roi);
 			Overlay overlayList = imp.getOverlay();
-			if (overlayList==null) overlayList = new Overlay();
+			if (overlayList==null)
+				overlayList = new Overlay();
 			overlayList.add(roi);
 			imp.setOverlay(overlayList);
 			Undo.setup(Undo.OVERLAY_ADDITION, imp);
+		}
+	}
+	
+	private void setPosition(ImagePlus imp, Roi roi) {
+		boolean setPos = defaultRoi.getPosition()!=0;
+		int stackSize = imp.getStackSize();
+		if (setPos && stackSize>1) {
+			if (imp.isHyperStack()||imp.isComposite()) {
+				boolean compositeMode = imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE;
+				int channel = !compositeMode||imp.getNChannels()==stackSize?imp.getChannel():0;
+				if (imp.getNSlices()>1)
+					roi.setPosition(channel, imp.getSlice(), 0);
+				else if (imp.getNFrames()>1)
+					roi.setPosition(channel, 0, imp.getFrame());
+			} else
+				roi.setPosition(imp.getCurrentSlice());
 		}
 	}
 
@@ -238,16 +243,14 @@ public class OverlayCommands implements PlugIn {
 
 	void flatten() {
 		ImagePlus imp = IJ.getImage();
-		if (imp.getStackSize()>1 || imp.getBitDepth()==24) {
-			Overlay overlay = imp.getOverlay();
-			Overlay roiManagerOverlay = null;
-			ImageCanvas ic = imp.getCanvas();
-			if (ic!=null)
-				roiManagerOverlay = ic.getShowAllList();
-			if (overlay==null && roiManagerOverlay==null && !imp.isComposite() && !(IJ.macroRunning()&&imp.getStackSize()==1)) {
-				IJ.error("Flatten", "Overlay or multi-channel image required");
-				return;
-			}
+		Overlay overlay = imp.getOverlay();
+		Overlay roiManagerOverlay = null;
+		ImageCanvas ic = imp.getCanvas();
+		if (ic!=null)
+			roiManagerOverlay = ic.getShowAllList();
+		if (overlay==null && imp.getRoi()==null && roiManagerOverlay==null && !imp.isComposite() && !IJ.macroRunning()) {
+			IJ.error("Flatten", "Overlay, selection or multi-channel image required");
+			return;
 		}
 		int flags = IJ.setupDialog(imp, 0);
 		if (flags==PlugInFilter.DONE)
@@ -256,6 +259,10 @@ public class OverlayCommands implements PlugIn {
 			//Added by Marcel Boeglin 2014.01.24
 			if (!IJ.isJava16()) {
 				IJ.error("Flatten Stack", "Java 1.6 required to flatten a stack");
+				return;
+			}
+			if (overlay==null && roiManagerOverlay==null && !imp.isComposite()) {
+				IJ.error("Flatten", "Overlay or multi-channel image required");
 				return;
 			}
 			flattenStack(imp);

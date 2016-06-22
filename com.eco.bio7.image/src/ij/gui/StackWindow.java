@@ -318,7 +318,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	}
 
 	public boolean isHyperStack() {
-		return hyperStack;
+		return hyperStack && getNScrollbars()>0;
 	}
 
 	public void setPosition(int channel, int slice, int frame) {

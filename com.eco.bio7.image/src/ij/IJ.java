@@ -880,7 +880,7 @@ public class IJ {
 		double np = n;
 		if (n < 0.0)
 			np = -n;
-		if (decimalPlaces < 0) {
+		if (decimalPlaces<0) synchronized(IJ.class) {
 			decimalPlaces = -decimalPlaces;
 			if (decimalPlaces > 9)
 				decimalPlaces = 9;

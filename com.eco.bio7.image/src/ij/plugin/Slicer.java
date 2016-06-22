@@ -4,12 +4,9 @@ import ij.process.*;
 import ij.gui.*;
 import ij.measure.*;
 import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
-import javax.swing.JCheckBox;
 
 /** Implements the Image/Stacks/Reslice command. Known shortcomings: 
 	for FREELINE or POLYLINE ROI, spatial calibration is ignored: 
@@ -20,10 +17,15 @@ import javax.swing.JCheckBox;
 public class Slicer implements PlugIn, TextListener, ItemListener {
 
 	private static final String[] starts = {"Top", "Left", "Bottom", "Right"};
-	private static String startAt = starts[0];
-	private static boolean rotate;
-	private static boolean flip;
-	private static int sliceCount = 1;
+	private static String startAtS = starts[0];
+	private static boolean rotateS;
+	private static boolean flipS;
+	private static int sliceCountS = 1;
+	
+	private String startAt = starts[0];
+	private boolean rotate;
+	private boolean flip;
+	private int sliceCount = 1;
 	private boolean nointerpolate = Prefs.avoidResliceInterpolation;
 	private double inputZSpacing = 1.0;
 	private double outputZSpacing = 1.0;
@@ -268,12 +270,18 @@ public class Slicer implements PlugIn, TextListener, ItemListener {
 		boolean line = roi!=null && roi.getType()==Roi.LINE;
 		if (line) saveLineInfo(roi);
 		String macroOptions = Macro.getOptions();
-		if (macroOptions!=null) {
+		boolean macroRunning = macroOptions!=null;
+		if (macroRunning) {
 			if (macroOptions.indexOf("input=")!=-1)
 				macroOptions = macroOptions.replaceAll("slice=", "slice_count=");
 			macroOptions = macroOptions.replaceAll("slice=", "output=");
 			Macro.setOptions(macroOptions);
 			nointerpolate = false;
+		} else {
+			startAt = startAtS;
+			rotate = rotateS;
+			flip = flipS;
+			sliceCount = sliceCountS;
 		}
 		GenericDialog gd = new GenericDialog("Reslice");
 		gd.addNumericField("Output spacing ("+units+"):", outputSpacing, 3);
@@ -293,20 +301,18 @@ public class Slicer implements PlugIn, TextListener, ItemListener {
 		gd.setInsets(5, 0, 0);
 		gd.addMessage("Output size: "+getSize(cal.pixelDepth,outputSpacing,outputSlices)+"				");
 		fields = gd.getNumericFields();
-		if (!IJ.macroRunning()) {
+		if (!macroRunning) {
 			for (int i=0; i<fields.size(); i++)
 				((TextField)fields.elementAt(i)).addTextListener(this);
 		}
 		checkboxes = gd.getCheckboxes();
-		if (!IJ.macroRunning())
-			((JCheckBox)checkboxes.elementAt(2)).addItemListener(this);
+		if (!macroRunning)
+			((Checkbox)checkboxes.elementAt(2)).addItemListener(this);
 		message = (Label)gd.getMessage();
-        gd.addHelp(IJ.URL+"/docs/menus/image.html#reslice");
+		gd.addHelp(IJ.URL+"/docs/menus/image.html#reslice");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return false;
-		//inputZSpacing = gd.getNextNumber();
-		//if (cal.pixelDepth==0.0) cal.pixelDepth = 1.0;
 		outputZSpacing = gd.getNextNumber()/cal.pixelWidth;
 		if (line) {
 			outputSlices = (int)gd.getNextNumber();
@@ -317,8 +323,13 @@ public class Slicer implements PlugIn, TextListener, ItemListener {
 		flip = gd.getNextBoolean();
 		rotate = gd.getNextBoolean();
 		nointerpolate = gd.getNextBoolean();
-		if (!IJ.isMacro())
+		if (!macroRunning) {
 			Prefs.avoidResliceInterpolation = nointerpolate;
+			startAtS = startAt;
+			rotateS = rotate;
+			flipS = flip;
+			sliceCountS = sliceCount;
+		}
 		return true;
 	}
 	
@@ -651,8 +662,8 @@ public class Slicer implements PlugIn, TextListener, ItemListener {
 
 	public void itemStateChanged(ItemEvent e) {
 		if (IJ.isMacOSX()) IJ.wait(100);
-		JCheckBox cb = (JCheckBox)checkboxes.elementAt(2);
-        nointerpolate = cb.isSelected();
+		Checkbox cb = (Checkbox)checkboxes.elementAt(2);
+        nointerpolate = cb.getState();
         updateSize();
 	}
 

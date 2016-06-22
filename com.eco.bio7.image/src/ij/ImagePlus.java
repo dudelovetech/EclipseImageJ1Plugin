@@ -895,16 +895,13 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an ImageStatistics object generated using the standard
-	 * measurement options (area, mean, mode, min and max). This plugin
-	 * demonstrates how get the area, mean and max of the current image or
-	 * selection:
+	 * Returns an ImageStatistics object generated using all measurement
+	 * options. This code demonstrates how to get the area, mean, max and median
+	 * of the current image or selection:
 	 * 
 	 * <pre>
-	 * public class Get_Statistics implements PlugIn {
-	 * 	public void run(String arg) {
-	 * 		ImagePlus imp = IJ.getImage();
-	 * 		ImageStatistics stats = imp.getStatistics();
+	        imp = IJ.getImage();
+	        stats = imp.getStatistics();
 	 * 		IJ.log("Area: " + stats.area);
 	 * 		IJ.log("Mean: " + stats.mean);
 	 * 		IJ.log("Max: " + stats.max);
@@ -916,25 +913,25 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 * @see ij.process.ImageStatistics#getStatistics
 	 */
 	public ImageStatistics getStatistics() {
-		return getStatistics(AREA + MEAN + MODE + MIN_MAX);
+		return getStatistics(ALL_STATS);
+	}
+
+	/**
+	 * Returns an ImageStatistics object generated using all measurement options
+	 * and ignoring calibration.
+	 */
+	public ImageStatistics getRawStatistics() {
+		setupProcessor();
+		if (roi != null && roi.isArea())
+			ip.setRoi(roi);
+		else
+			ip.resetRoi();
+		return ImageStatistics.getStatistics(ip);
 	}
 
 	/**
 	 * Returns an ImageStatistics object generated using the specified
-	 * measurement options. This plugin demonstrates how get the area and
-	 * centroid of the current selection:
-	 * 
-	 * <pre>
-	 * public class Get_Statistics implements PlugIn, Measurements {
-	 * 	public void run(String arg) {
-	 * 		ImagePlus imp = IJ.getImage();
-	 * 		ImageStatistics stats = imp.getStatistics(MEDIAN + CENTROID);
-	 * 		IJ.log("Median: " + stats.median);
-	 * 		IJ.log("xCentroid: " + stats.xCentroid);
-	 * 		IJ.log("yCentroid: " + stats.yCentroid);
-	 * 	}
-	 * }
-	 * </pre>
+	 * measurement options.
 	 * 
 	 * @see ij.process.ImageStatistics
 	 * @see ij.measure.Measurements
@@ -1728,7 +1725,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			setCurrentSlice(n);
 			Object pixels = null;
 			Overlay overlay2 = null;
-			if (stack.isVirtual() && !((stack instanceof FileInfoVirtualStack)||(stack instanceof AVI_Reader))) {
+			if (stack.isVirtual() && !((stack instanceof FileInfoVirtualStack) || (stack instanceof AVI_Reader))) {
 				ImageProcessor ip2 = stack.getProcessor(currentSlice);
 				overlay2 = ip2.getOverlay();
 				if (overlay2 != null || getOverlay() != null)
@@ -2227,9 +2224,24 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		this.ignoreFlush = ignoreFlush;
 	}
 
-	/** Returns a copy (clone) of this ImagePlus. */
+	/**
+	 * Returns a copy of this image or stack, cropped if there is an ROI.
+	 * 
+	 * @see #crop
+	 * @see ij.plugin.Duplicator#run
+	 */
 	public ImagePlus duplicate() {
 		return (new Duplicator()).run(this);
+	}
+
+	/**
+	 * Returns a copy this image or stack slice, cropped if there is an ROI.
+	 * 
+	 * @see #duplicate
+	 * @see ij.plugin.Duplicator#crop
+	 */
+	public ImagePlus crop() {
+		return (new Duplicator()).crop(this);
 	}
 
 	/**

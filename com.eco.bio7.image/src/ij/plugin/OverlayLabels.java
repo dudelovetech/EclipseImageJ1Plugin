@@ -3,10 +3,9 @@ import ij.*;
 import ij.process.*;
 import ij.gui.*;
 import ij.util.Tools;
+import ij.plugin.filter.Analyzer;
 import java.awt.*;
 import java.util.Vector;
-
-import javax.swing.JCheckBox;
 
 /** This plugin implements the Image/Overlay/Labels command. */
 public class OverlayLabels implements PlugIn, DialogListener {
@@ -86,12 +85,13 @@ public class OverlayLabels implements PlugIn, DialogListener {
 			|| drawBackgrounds!=drawBackgrounds2 || colorChanged || sizeChanged
 			|| bold!=bold2;
 		if (changes) {
-			if (showNames || colorChanged || sizeChanged) {
+			if ((showNames&&!showNames2) || colorChanged || sizeChanged) {
 				showLabels = true;
 				Vector checkboxes = gd.getCheckboxes();
-				((JCheckBox)checkboxes.elementAt(0)).setSelected(true);
+				((Checkbox)checkboxes.elementAt(0)).setState(true);
 			}
 			overlay.drawLabels(showLabels);
+			Analyzer.drawLabels(showLabels);
 			overlay.drawNames(showNames);
 			overlay.drawBackgrounds(drawBackgrounds);
 			Color color = Colors.getColor(colorName, Color.white);

@@ -91,6 +91,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	private String helpURL;
 	private String yesLabel, noLabel;
 	private boolean smartRecording;
+	private Vector imagePanels;
 
 	/**
 	 * Creates a new GenericDialog with the specified title. Uses the current
@@ -833,7 +834,11 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 
 	/** Adds an image to the dialog. */
 	public void addImage(ImagePlus image) {
-		addPanel(new ImagePanel(image));
+		ImagePanel imagePanel = new ImagePanel(image);
+		addPanel(imagePanel);
+		if (imagePanels == null)
+			imagePanels = new Vector();
+		imagePanels.add(imagePanel);
 	}
 
 	/**
@@ -1457,6 +1462,11 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		centerDialog = false;
 	}
 
+	public void setDefaultString(int index, String str) {
+		if (defaultStrings != null && index >= 0 && index < defaultStrings.size())
+			defaultStrings.set(index, str);
+	}
+
 	protected void setup() {
 	}
 
@@ -1612,6 +1622,14 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		if (workaroundOSXbug)
 			repaint(); // OSX 10.4 bug delays update of enabled until the next
 						// input
+	}
+
+	public void repaint() {
+		super.repaint();
+		if (imagePanels != null) {
+			for (int i = 0; i < imagePanels.size(); i++)
+				((ImagePanel) imagePanels.get(i)).repaint();
+		}
 	}
 
 	public void paintComponent(Graphics g) {
