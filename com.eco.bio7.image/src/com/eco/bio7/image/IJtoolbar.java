@@ -39,7 +39,7 @@ public class IJtoolbar extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
-		Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+		//Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 		getViewSite().getPage().addPartListener(new IPartListener2() {
 
 			public void partActivated(IWorkbenchPartReference partRef) {
@@ -91,14 +91,23 @@ public class IJtoolbar extends ViewPart {
 
 			}
 		});
-		frame = SWT_AWT.new_Frame(top);
-		/*final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
+		
+		jpp = new JPanel();
+		jpp.setLayout(new GridLayout(2, 1));
+		jpp.add(IJ.getInstance().toolbar);
+		jpp.add(IJ.getInstance().statusBar);
+        
+		
+		SwingFxSwtView view=new SwingFxSwtView();
+		view.embedd(parent,jpp);
+		/*frame = SWT_AWT.new_Frame(top);
+		final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
 		ef.addWindowListener(new WindowAdapter() {
 			public void windowActivated(WindowEvent e) {
 				ef.synthesizeWindowActivation(true);
 			}
 		});
-*/      SwtAwt.setSwtAwtFocus(frame, top);
+      SwtAwt.setSwtAwtFocus(frame, top);
 		panel = new JApplet() {
 			public void update(java.awt.Graphics g) {
 
@@ -115,7 +124,7 @@ public class IJtoolbar extends ViewPart {
 		jpp.add(IJ.getInstance().toolbar);
 		jpp.add(IJ.getInstance().statusBar);
 
-		contentPane.add(jpp);
+		contentPane.add(jpp);*/
 
 	}
 
