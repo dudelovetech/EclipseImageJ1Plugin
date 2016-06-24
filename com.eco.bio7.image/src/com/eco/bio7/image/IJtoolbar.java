@@ -27,11 +27,8 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
 
-
 public class IJtoolbar extends ViewPart {
 
-	private static Frame frame;
-	private static Panel panel;
 	private JPanel jpp;
 
 	public IJtoolbar() {
@@ -39,7 +36,7 @@ public class IJtoolbar extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
-		//Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+
 		getViewSite().getPage().addPartListener(new IPartListener2() {
 
 			public void partActivated(IWorkbenchPartReference partRef) {
@@ -91,53 +88,55 @@ public class IJtoolbar extends ViewPart {
 
 			}
 		});
-		
-		jpp = new JPanel();
-		jpp.setLayout(new GridLayout(2, 1));
-		jpp.add(IJ.getInstance().toolbar);
-		jpp.add(IJ.getInstance().statusBar);
-        
-		
-		SwingFxSwtView view=new SwingFxSwtView();
-		view.embedd(parent,jpp);
-		/*frame = SWT_AWT.new_Frame(top);
-		final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
-		ef.addWindowListener(new WindowAdapter() {
-			public void windowActivated(WindowEvent e) {
-				ef.synthesizeWindowActivation(true);
-			}
-		});
-      SwtAwt.setSwtAwtFocus(frame, top);
-		panel = new JApplet() {
-			public void update(java.awt.Graphics g) {
+		/*
+		 * On MacOSX the javaFX integration works fine and avoids some errors!
+		 */
+		if (Util.getOS().equals("Mac")) {
+			//
 
-				paint(g);
-			}
-		};
+			jpp = new JPanel();
+			jpp.setLayout(new GridLayout(2, 1));
+			jpp.add(IJ.getInstance().toolbar);
+			jpp.add(IJ.getInstance().statusBar);
 
-		frame.add(panel);
-		JRootPane roote = new JRootPane();
-		panel.add(roote);
-		java.awt.Container contentPane = roote.getContentPane();
-		jpp = new JPanel();
-		jpp.setLayout(new GridLayout(2, 1));
-		jpp.add(IJ.getInstance().toolbar);
-		jpp.add(IJ.getInstance().statusBar);
+			SwingFxSwtView view = new SwingFxSwtView();
+			view.embedd(parent, jpp);
+		}
+		/*
+		 * On Windows and Linux we use the SWT_AWT bridge!
+		 */
+		else {
+			Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+			Frame frame = SWT_AWT.new_Frame(top);
+			/*
+			 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
+			 * ef.addWindowListener(new WindowAdapter() { public void
+			 * windowActivated(WindowEvent e) {
+			 * ef.synthesizeWindowActivation(true); } });
+			 */
+			SwtAwt.setSwtAwtFocus(frame, top);
+			Panel panel = new JApplet() {
+				public void update(java.awt.Graphics g) {
 
-		contentPane.add(jpp);*/
+					paint(g);
+				}
+			};
 
+			frame.add(panel);
+			JRootPane roote = new JRootPane();
+			panel.add(roote);
+			java.awt.Container contentPane = roote.getContentPane();
+			jpp = new JPanel();
+			jpp.setLayout(new GridLayout(2, 1));
+			jpp.add(IJ.getInstance().toolbar);
+			jpp.add(IJ.getInstance().statusBar);
+
+			contentPane.add(jpp);
+		}
 	}
 
 	public void setFocus() {
 
-	}
-
-	public static Frame getFrame() {
-		return frame;
-	}
-
-	public static Panel getPanel() {
-		return panel;
 	}
 
 }
