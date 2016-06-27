@@ -2,7 +2,7 @@
 <feature
       id="com.eco.bio7.image.feature"
       label="Bio7 ImageJ Plugin"
-      version="1.50.5.qualifier"
+      version="1.51.4.qualifier"
       provider-name="Bio7">
 
    <description>
@@ -132,6 +132,6 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="com.eco.bio7.image"
          download-size="0"
          install-size="0"
-         version="1.50.5"/>
+         version="1.51.4"/>
 
 </feature>
