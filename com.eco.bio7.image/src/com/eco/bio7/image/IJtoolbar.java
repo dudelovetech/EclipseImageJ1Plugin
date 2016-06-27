@@ -91,7 +91,7 @@ public class IJtoolbar extends ViewPart {
 		/*
 		 * On MacOSX the javaFX integration works fine and avoids some errors!
 		 */
-		if (Util.getOS().equals("Mac")) {
+		/*if (Util.getOS().equals("Mac")) {
 			//
 
 			jpp = new JPanel();
@@ -101,11 +101,11 @@ public class IJtoolbar extends ViewPart {
 
 			SwingFxSwtView view = new SwingFxSwtView();
 			view.embedd(parent, jpp);
-		}
+		}*/
 		/*
 		 * On Windows and Linux we use the SWT_AWT bridge!
 		 */
-		else {
+		//else {
 			Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 			Frame frame = SWT_AWT.new_Frame(top);
 			/*
@@ -132,7 +132,7 @@ public class IJtoolbar extends ViewPart {
 			jpp.add(IJ.getInstance().statusBar);
 
 			contentPane.add(jpp);
-		}
+		//}
 	}
 
 	public void setFocus() {
