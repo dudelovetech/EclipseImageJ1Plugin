@@ -1,5 +1,6 @@
 package ij.gui;
 
+import ij.ImageJ;
 import ij.macro.Interpreter;
 
 import java.awt.*;
@@ -39,6 +40,8 @@ public class ProgressBar extends JPanel {
         y = 5;
         width = canvasWidth - 8;
         height = canvasHeight - 7;
+        /*Changed for Bio7!*/
+        this.setBackground(ImageJ.getSystemColour());
     }
 
     void fill3DRect(Graphics g, int x, int y, int width, int height) {
