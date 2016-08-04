@@ -5,6 +5,9 @@ import ij.util.*;
 import ij.plugin.Colors;
 import java.awt.*;
 import java.util.Vector;
+
+import javax.swing.JScrollBar;
+
 import java.awt.event.*;
 
 
@@ -47,7 +50,7 @@ public class ColorChooser implements TextListener, AdjustmentListener {
 			((TextField)colors.elementAt(i)).addTextListener(this);
 		sliders = gd.getSliders();
 		for (int i=0; i<sliders.size(); i++)
-			((Scrollbar)sliders.elementAt(i)).addAdjustmentListener(this);
+			((JScrollBar)sliders.elementAt(i)).addAdjustmentListener(this);
 		gd.showDialog();
 		if (gd.wasCanceled()) return null;
 		int red = (int)gd.getNextNumber();
@@ -71,7 +74,7 @@ public class ColorChooser implements TextListener, AdjustmentListener {
 		Object source = e.getSource();
 		for (int i=0; i<sliders.size(); i++) {
 			if (source==sliders.elementAt(i)) {
-				Scrollbar sb = (Scrollbar)source;
+				JScrollBar sb = (JScrollBar)source;
 				TextField tf = (TextField)colors.elementAt(i);
 			}
 		}
