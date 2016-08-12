@@ -742,7 +742,7 @@ public class Menus {
 		addSorted = false;
 		Menu menu;
 		s = s.trim();
-		System.out.println(s);
+		//System.out.println(s);
 		if (s.startsWith("Plugins>")) {
 			//extract name after Plugins>
 			int firstComma = s.indexOf(',');
