@@ -13,6 +13,9 @@ package com.eco.bio7.ImageJPluginActions;
 
 import ij.IJ;
 import ij.ImagePlus;
+
+import java.util.Hashtable;
+
 import javax.swing.SwingUtilities;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -362,6 +365,9 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 			}
 		});
+		/*Add the menu to the HashMap!*/
+		Hashtable menuTable=MenuHashMap.getMenuTable();
+		menuTable.put("File",fMenu);
 
 		return fMenu;
 	}

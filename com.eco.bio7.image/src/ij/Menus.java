@@ -732,6 +732,7 @@ public class Menus {
 				installJarPlugin(jar, (String) entries.get(j));
 				/* Changed for Bio7! */
 				bio7JarAllCommand.add((String) entries.get(j));
+				
 			}
 		}
 	}
@@ -741,14 +742,20 @@ public class Menus {
 		addSorted = false;
 		Menu menu;
 		s = s.trim();
+		System.out.println(s);
 		if (s.startsWith("Plugins>")) {
+			//extract name after Plugins>
 			int firstComma = s.indexOf(',');
+			//no comma or smaller than word plugins
 			if (firstComma == -1 || firstComma <= 8)
 				menu = null;
 			else {
+				//Extract name to first comma (before name of plugin)
 				String name = s.substring(8, firstComma);
 				menu = getPluginsSubmenu(name);
 			}
+			//   Plugins>FeatureJ, "FeatureJ Derivatives", featurej.FJ_Derivatives
+		//give the name of the jar is description is empty or is 'plugins'
 		} else if (s.startsWith("\"") || s.startsWith("Plugins")) {
 			String name = getSubmenuName(jar);
 			if (name != null)
@@ -757,6 +764,7 @@ public class Menus {
 				menu = pluginsMenu;
 			addSorted = true;
 		} else {
+			//Creates a menu  from the text!
 			int firstQuote = s.indexOf('"');
 			String name = firstQuote < 0 ? s : s.substring(0, firstQuote).trim();
 			int comma = name.indexOf(',');
@@ -772,6 +780,7 @@ public class Menus {
 		s = s.substring(firstQuote, s.length()); // remove menu
 		if (menu != null) {
 			addPluginSeparatorIfNeeded(menu);
+			//Adds the command to the hashtable!
 			addPluginItem(menu, s);
 			addSorted = false;
 		}
@@ -820,10 +829,11 @@ public class Menus {
 	private static Menu getMenu(String menuPath) {
 		return getMenu(menuPath, false);
 	}
-
+   /*Creates the menu and adds menus for the jar plugins!*/
 	private static Menu getMenu(String menuName, boolean readFromProps) {
 		if (menuName.endsWith(">"))
 			menuName = menuName.substring(0, menuName.length() - 1);
+		
 		Menu result = (Menu) menus.get(menuName);
 		if (result == null) {
 			int offset = menuName.lastIndexOf('>');
@@ -840,9 +850,12 @@ public class Menus {
 				else if (menuName.equals("Plugins"))
 					pluginsMenu = result;
 			} else {
+				//B identifying the last index of > we can get the parent menu. Names are store as e.g. 'plugins>submenu'
 				String parentName = menuName.substring(0, offset);
 				String menuItemName = menuName.substring(offset + 1);
+				// Recursive call to get all parent menus!
 				Menu parentMenu = getMenu(parentName);
+				
 				result = new Menu(menuItemName);
 				addPluginSeparatorIfNeeded(parentMenu);
 				if (readFromProps)

@@ -11,6 +11,8 @@
 
 package com.eco.bio7.ImageJPluginActions;
 
+import java.util.Hashtable;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -161,6 +163,9 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
+		/*Add the menu to the HashMap!*/
+		Hashtable menuTable=MenuHashMap.getMenuTable();
+		menuTable.put("Window",fMenu);
 
 		return fMenu;
 	}

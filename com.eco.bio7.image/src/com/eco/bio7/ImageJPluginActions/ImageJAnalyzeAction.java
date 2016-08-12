@@ -13,6 +13,8 @@ package com.eco.bio7.ImageJPluginActions;
 
 import ij.IJ;
 import java.awt.EventQueue;
+import java.util.Hashtable;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -312,6 +314,9 @@ public class ImageJAnalyzeAction extends Action implements IMenuCreator {
 
 			}
 		});
+		/*Add the menu to the HashMap!*/
+		Hashtable menuTable=MenuHashMap.getMenuTable();
+		menuTable.put("Analyze",fMenu);
 
 		return fMenu;
 	}
