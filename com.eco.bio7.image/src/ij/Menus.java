@@ -780,7 +780,7 @@ public class Menus {
 		s = s.substring(firstQuote, s.length()); // remove menu
 		if (menu != null) {
 			addPluginSeparatorIfNeeded(menu);
-			//Adds the command to the hashtable!
+			//Adds the command to the hashtable and create a menuItem!
 			addPluginItem(menu, s);
 			addSorted = false;
 		}
