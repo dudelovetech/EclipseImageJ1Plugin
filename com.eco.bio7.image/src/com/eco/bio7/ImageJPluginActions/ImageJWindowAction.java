@@ -23,6 +23,8 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -48,6 +50,10 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 	protected Point p;
 
+	private MenuItem menuItemFx;
+
+	private boolean selected;
+
 	public ImageJWindowAction() {
 		setId("Window");
 		setToolTipText("ImageJ");
@@ -61,6 +67,20 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			fMenu.dispose();
 		}
 		fMenu = new Menu(parent);
+
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				menuItemFx.dispose();
+
+				createJavaFXOptionMenu();
+			}
+		});
 
 		MenuItem menuItem = new MenuItem(fMenu, SWT.PUSH);
 
@@ -98,16 +118,20 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 				IViewReference ref = null;
 				IWorkbenchPartSite part = null;
-				
-				/*Preferences form the Bio7Plugin!*/
-				/*IPreferencesService service = Platform.getPreferencesService();
-				int xSize = service.getInt("com.eco.bio7", "IMAGE_METHODS_SIZE_X", 260, null);
-				int ySize = service.getInt("com.eco.bio7", "IMAGE_METHODS_SIZE_Y", 790, null);*/
-				
+
+				/* Preferences form the Bio7Plugin! */
+				/*
+				 * IPreferencesService service =
+				 * Platform.getPreferencesService(); int xSize =
+				 * service.getInt("com.eco.bio7", "IMAGE_METHODS_SIZE_X", 260,
+				 * null); int ySize = service.getInt("com.eco.bio7",
+				 * "IMAGE_METHODS_SIZE_Y", 790, null);
+				 */
+
 				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-				int xSize =store.getInt("IMAGE_METHODS_SIZE_X");
-				int ySize  =store.getInt("IMAGE_METHODS_SIZE_Y");
-				
+				int xSize = store.getInt("IMAGE_METHODS_SIZE_X");
+				int ySize = store.getInt("IMAGE_METHODS_SIZE_Y");
+
 				try {
 					part = page.showView("com.eco.bio7.image_methods").getSite();
 					ref = part.getPage().findViewReference("com.eco.bio7.image_methods");
@@ -119,7 +143,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 				EModelService s = (EModelService) part.getService(EModelService.class);
 
 				MPartSashContainerElement p = (MPart) part.getService(MPart.class);
-				
+
 				String os = Util.getOS();
 				if (os != null) {
 					Point pt = CanvasView.getCanvas_view().tabFolder.getShell().getLocation();
@@ -128,20 +152,21 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 						if (p.getCurSharedRef() != null) {
 							p = p.getCurSharedRef();
 
-							s.detach(p, (pt.x + pSize.x/2), pt.y + 30, xSize, ySize);
+							s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
 						}
 
 					} else if (os.equals("Windows")) {
 						if (p.getCurSharedRef() != null) {
 							p = p.getCurSharedRef();
 
-							s.detach(p, (pt.x + pSize.x/2), pt.y + 30, xSize, ySize);						}
+							s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
+						}
 
 					} else if (os.equals("Mac")) {
 						if (p.getCurSharedRef() != null) {
 							p = p.getCurSharedRef();
 
-							s.detach(p, (pt.x + pSize.x/2), pt.y + 30, xSize, ySize);
+							s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
 						}
 
 					}
@@ -154,8 +179,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 					}
 
 				}
-				
-				
 
 			}
 
@@ -163,9 +186,48 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
-		
+		new MenuItem(fMenu, SWT.SEPARATOR);
+		/*Create the dynamic menu which is later disposed and recreated every time the menu is shown!*/
+		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
+
 
 		return fMenu;
+	}
+
+	private void createJavaFXOptionMenu() {
+		
+		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
+
+		menuItemFx.setText("Open Image in FX Panel (experim.)");
+
+		if (selected == false) {
+			menuItemFx.setSelection(false);
+		} else {
+			menuItemFx.setSelection(true);
+		}
+
+		menuItemFx.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				boolean openInFXPanel = store.getBoolean("JAVAFX_EMBEDDED");
+				System.out.println(openInFXPanel);
+				if (openInFXPanel == false) {
+					store.setValue("JAVAFX_EMBEDDED", true);
+					selected = true;
+
+				} else {
+					store.setValue("JAVAFX_EMBEDDED", false);
+					selected = false;
+				}
+
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
 	}
 
 	public void dispose() {
@@ -182,16 +244,18 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 		IViewReference ref = null;
 		IWorkbenchPartSite part = null;
-		
-		/*Preferences form the Bio7Plugin!*/
-		//IPreferencesService service = Platform.getPreferencesService();
-		//int xSize = service.getInt("com.eco.bio7", "IMAGEJ_TOOLBAR_SIZE_X", 600, null);
-		//int ySize = service.getInt("com.eco.bio7", "IMAGEJ_TOOLBAR_SIZE_Y", 135, null);
-		
+
+		/* Preferences form the Bio7Plugin! */
+		// IPreferencesService service = Platform.getPreferencesService();
+		// int xSize = service.getInt("com.eco.bio7", "IMAGEJ_TOOLBAR_SIZE_X",
+		// 600, null);
+		// int ySize = service.getInt("com.eco.bio7", "IMAGEJ_TOOLBAR_SIZE_Y",
+		// 135, null);
+
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		int xSize =store.getInt("IMAGEJ_TOOLBAR_SIZE_X");
-		int ySize  =store.getInt("IMAGEJ_TOOLBAR_SIZE_Y");
-		
+		int xSize = store.getInt("IMAGEJ_TOOLBAR_SIZE_X");
+		int ySize = store.getInt("IMAGEJ_TOOLBAR_SIZE_Y");
+
 		try {
 			part = page.showView("com.eco.bio7.ijtoolbar").getSite();
 			ref = part.getPage().findViewReference("com.eco.bio7.ijtoolbar");
@@ -235,7 +299,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			ref.getView(false).getViewSite().getShell().setSize(xSize, ySize);
 		}
-		
 
 	}
 

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2005-2016 M. Austenfeld
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     M. Austenfeld
+ *******************************************************************************/
+
 package com.eco.bio7.ImageJPluginActions;
 
 import java.awt.CheckboxMenuItem;
@@ -10,12 +21,11 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import ij.IJ;
 import ij.ImagePlus;
-import ij.ImageStack;
 import ij.Menus;
 import ij.WindowManager;
 
 /**
- * @author M. Austenfeld A class to store and access the ImageJ SWT menus.
+ * @author M. Austenfeld A class to built the ImageJ plugin SWT menus.
  */
 public class ImageJSubmenu {
 
@@ -60,7 +70,6 @@ public class ImageJSubmenu {
 				Menu currentSubMenu = mainMenuStack.peek();
 
 				if (mItem instanceof CheckboxMenuItem) {
-					
 
 					MenuItem it = new MenuItem(currentSubMenu, SWT.CHECK);
 
@@ -87,22 +96,22 @@ public class ImageJSubmenu {
 						if (IJ.getImage().getType() == 0 && label.equals("8-bit")) {
 
 							it.setSelection(true);
-							 menuBit=it;
-							
+							menuBit = it;
+
 						} else if (IJ.getImage().getType() == 1 && label.equals("16-bit")) {
 							it.setSelection(true);
-							 menuBit=it;
+							menuBit = it;
 						} else if (IJ.getImage().getType() == 2 && label.equals("32-bit")) {
 							it.setSelection(true);
-                            menuBit=it;
+							menuBit = it;
 						} else if (IJ.getImage().getType() == 3 && label.equals("8-bit Color")) {
 							it.setSelection(true);
-							 menuBit=it;
+							menuBit = it;
 						}
 
 						else if (IJ.getImage().getType() == 4 && label.equals("RGB Color")) {
 							it.setSelection(true);
-							menuBit=it;
+							menuBit = it;
 						} else if (imp.getStack().isRGB() && label.equals("RGB Stack")) {
 							it.setSelection(true);
 							menuBit.setSelection(false);
@@ -122,28 +131,61 @@ public class ImageJSubmenu {
 				}
 
 				else {
-
+					/* If we have a menu seperator! */
 					if (label.equals("-")) {
 						new MenuItem(currentSubMenu, SWT.SEPARATOR);
+						/* If we have a menu item! */
 					} else if (!(label.equals("-"))) {
-						MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
-						String lab = mItem.getLabel();
 
-						it.setText(lab);
+						/* Don't show unused actions! */
+						String labelMenuItem = mItem.getLabel();
 
-						it.addSelectionListener(new SelectionListener() {
+						if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Refresh Menus") || labelMenuItem.equals("Update ImageJ...")) {
 
-							public void widgetSelected(SelectionEvent e) {
-								String cmd = mItem.getActionCommand();
-								IJ.doCommand(cmd);
+							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
+							String lab = mItem.getLabel();
 
+							it.setText(lab);
+
+							it.addSelectionListener(new SelectionListener() {
+
+								public void widgetSelected(SelectionEvent e) {
+									IJ.showMessage("Disabled for the Eclipse ImageJ plugin!");
+
+								}
+
+								public void widgetDefaultSelected(SelectionEvent e) {
+
+								}
+							});
+
+						} else {
+
+							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
+							String lab = mItem.getLabel();
+							/*Create shortcuts if available!*/
+							if (mItem.getShortcut() != null) {
+								//System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey());
+								it.setAccelerator(mItem.getShortcut().getKey());
+								it.setText(lab+"\t"+mItem.getShortcut());
+							}
+							else{
+							it.setText(lab);
 							}
 
-							public void widgetDefaultSelected(SelectionEvent e) {
+							it.addSelectionListener(new SelectionListener() {
 
-							}
-						});
+								public void widgetSelected(SelectionEvent e) {
+									String cmd = mItem.getActionCommand();
+									IJ.doCommand(cmd);
 
+								}
+
+								public void widgetDefaultSelected(SelectionEvent e) {
+
+								}
+							});
+						}
 					}
 
 				}
