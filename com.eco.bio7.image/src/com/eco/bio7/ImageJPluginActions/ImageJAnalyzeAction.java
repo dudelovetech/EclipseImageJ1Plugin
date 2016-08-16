@@ -19,6 +19,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
@@ -28,14 +30,14 @@ import org.eclipse.swt.widgets.MenuItem;
 public class ImageJAnalyzeAction extends Action implements IMenuCreator {
 
 	private Menu fMenu;
-	String[] thegels = { "Select First Lane", "Select Next Lane", "Plot Lanes",
+	/*String[] thegels = { "Select First Lane", "Select Next Lane", "Plot Lanes",
 			"Re-plot Lanes","Reset", "Label Peaks", "Gel Analyzer Options..."};
 	String[] thetools = { "Save XY Coordinates...", "Fractal Box Count...",
 			"Analyze Line Graph", "Curve Fitting...", "ROI Manager...",
 			"Scale Bar...", "Calibration Bar..."};
 
 	MenuItem[] gels_ = new MenuItem[thegels.length];
-	MenuItem[] tools_ = new MenuItem[thetools.length];
+	MenuItem[] tools_ = new MenuItem[thetools.length];*/
 
 	public ImageJAnalyzeAction() {
 		setId("Analyze");
@@ -44,8 +46,37 @@ public class ImageJAnalyzeAction extends Action implements IMenuCreator {
 
 		setMenuCreator(this);
 	}
-
+	
 	public Menu getMenu(Control parent) {
+		if (fMenu != null) {
+			fMenu.dispose();
+		}
+		fMenu = new Menu(parent);
+
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+				}
+				new ImageJSubmenu().addSubMenus(fMenu,"Analyze");
+
+			}
+		});
+
+		return fMenu;
+	}
+
+	/*public Menu getMenu(Control parent) {
 		if (fMenu != null) {
 			fMenu.dispose();
 		}
@@ -314,12 +345,10 @@ public class ImageJAnalyzeAction extends Action implements IMenuCreator {
 
 			}
 		});
-		/*Add the menu to the HashMap!*/
-		Hashtable menuTable=MenuHashMap.getMenuTable();
-		menuTable.put("Analyze",fMenu);
+		
 
 		return fMenu;
-	}
+	}*/
 
 	public void dispose() {
 

@@ -12,6 +12,7 @@
 package com.eco.bio7.ImageJPluginActions;
 
 import ij.IJ;
+import ij.ImageStack;
 
 import java.util.Hashtable;
 
@@ -19,6 +20,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
@@ -28,36 +31,23 @@ import org.eclipse.swt.widgets.MenuItem;
 public class ImageJImageAction extends Action implements IMenuCreator {
 
 	private Menu fMenu;
-	String[] thetype = { "8-bit", "16-bit", "32-bit", "8-bit Color",
-			"RGB Color", "RGB Stack", "HSB Stack","Lab Stack"};
-	String[] theadjust = { "Brightness/Contrast...", "Window/Level...",
-			"Color Balance...", "Threshold...","Color Threshold...", "Size...", "Canvas Size...","Line Width... "};
-	String[] thecolour = { "Stack to RGB", "Make Composite",
-			"Split Channels", "Merge Channels...","Channels Tool...", "Show LUT","Display LUTs", "Edit LUT...",
-			"Color Picker..." };
-	String[] thestacks = { "Add Slice", "Delete Slice", "Next Slice [>]",
-			"Previous Slice [<]", "Set Slice...", "Images to Stack","Stack to Images",
-			
-			"Make Montage...", "Reslice [/]...","Orthogonal Views",
-			"Z Project...", "3D Project...", "Plot Z-axis Profile",
-			"Label..."};
-	
-	String[] thestacktools = {"Combine...","Concatenate...","Reduce...","Reverse","Insert...","Montage to Stack...",
-			"Make Substack...","Grouped Z Project...","Set Label...","Remove Slice Labels","Start Animation [\\]", "Stop Animation", "Animation Options..."};
+	/*String[] thetype = { "8-bit", "16-bit", "32-bit", "8-bit Color", "RGB Color", "RGB Stack", "HSB Stack", "Lab Stack" };
+	String[] theadjust = { "Brightness/Contrast...", "Window/Level...", "Color Balance...", "Threshold...", "Color Threshold...", "Size...", "Canvas Size...", "Line Width... " };
+	String[] thecolour = { "Stack to RGB", "Make Composite", "Split Channels", "Merge Channels...", "Channels Tool...", "Show LUT", "Display LUTs", "Edit LUT...", "Color Picker..." };
+	String[] thestacks = { "Add Slice", "Delete Slice", "Next Slice [>]", "Previous Slice [<]", "Set Slice...", "Images to Stack", "Stack to Images",
 
-	String[] thehyperstacks = {"New Hyperstack...","Stack to Hyperstack...","Hyperstack to Stack","Reduce Dimensionality...","Channels Tool..."};
+			"Make Montage...", "Reslice [/]...", "Orthogonal Views", "Z Project...", "3D Project...", "Plot Z-axis Profile", "Label..." };
 
-	String[] thezoom = { "In [+]", "Out [-]", "View 100%", "Original Scale","Set... ",
-			"To Selection" };
-	String[] thelookuptables = { "Fire", "Grays", "Ice", "Spectrum",
-			"3-3-2 RGB", "Red", "Green", "Blue", "Cyan", "Magenta", "Yellow",
-			"Red/Green", "Invert LUT", "Apply LUT", };
-	String[] thetransform = {"Flip Horizontally","Flip Vertically","Flip Z","Rotate 90 Degrees Right","Rotate 90 Degrees Left","Rotate... ","Translate...","Bin...","Image to Results","Results to Image"};
-    
-	String[] theoverlay = { "Add Selection...", "Add Image...",
-			"Hide Overlay", "Show Overlay","From ROI Manager", "To ROI Manager","Remove Overlay",
-			"Flatten","Labels...","Overlay Options...","List Elements"};
-	
+	String[] thestacktools = { "Combine...", "Concatenate...", "Reduce...", "Reverse", "Insert...", "Montage to Stack...", "Make Substack...", "Grouped Z Project...", "Set Label...", "Remove Slice Labels", "Start Animation [\\]", "Stop Animation", "Animation Options..." };
+
+	String[] thehyperstacks = { "New Hyperstack...", "Stack to Hyperstack...", "Hyperstack to Stack", "Reduce Dimensionality...", "Channels Tool..." };
+
+	String[] thezoom = { "In [+]", "Out [-]", "View 100%", "Original Scale", "Set... ", "To Selection" };
+	String[] thelookuptables = { "Fire", "Grays", "Ice", "Spectrum", "3-3-2 RGB", "Red", "Green", "Blue", "Cyan", "Magenta", "Yellow", "Red/Green", "Invert LUT", "Apply LUT", };
+	String[] thetransform = { "Flip Horizontally", "Flip Vertically", "Flip Z", "Rotate 90 Degrees Right", "Rotate 90 Degrees Left", "Rotate... ", "Translate...", "Bin...", "Image to Results", "Results to Image" };
+
+	String[] theoverlay = { "Add Selection...", "Add Image...", "Hide Overlay", "Show Overlay", "From ROI Manager", "To ROI Manager", "Remove Overlay", "Flatten", "Labels...", "Overlay Options...", "List Elements" };
+
 	MenuItem[] adjust_ = new MenuItem[theadjust.length];
 	MenuItem[] type_ = new MenuItem[thetype.length];
 	MenuItem[] colour_ = new MenuItem[thecolour.length];
@@ -67,7 +57,7 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 	MenuItem[] zoom_ = new MenuItem[thezoom.length];
 	MenuItem[] lookuptables_ = new MenuItem[thelookuptables.length];
 	MenuItem[] thetransform_ = new MenuItem[thetransform.length];
-	MenuItem[] theoverlay_ = new MenuItem[theoverlay.length];
+	MenuItem[] theoverlay_ = new MenuItem[theoverlay.length];*/
 
 	public ImageJImageAction() {
 		setId("Image");
@@ -75,35 +65,140 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 		setText("Image");
 		setMenuCreator(this);
 	}
-
+	
 	public Menu getMenu(Control parent) {
 		if (fMenu != null) {
 			fMenu.dispose();
 		}
 		fMenu = new Menu(parent);
 
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+				}
+				new ImageJSubmenu().addSubMenus(fMenu,"Image");
+
+			}
+		});
+
+		return fMenu;
+	}
+
+	/*public Menu getMenu(Control parent) {
+		if (fMenu != null) {
+			fMenu.dispose();
+		}
+		fMenu = new Menu(parent);
+
 		Menu fMenu2 = new Menu(fMenu);
+		fMenu2.addMenuListener(new MenuListener() {
+			private boolean mainType = true;
+
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu2.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+
+				}
+				
+				 * MenuItem menuItem_type = new MenuItem(fMenu, SWT.CASCADE);
+				 * menuItem_type.setMenu(fMenu2);
+				 * menuItem_type.setText("&Type");
+				 
+				ImageStack st = IJ.getImage().getImageStack();
+
+				for (int i = 0; i < thetype.length; i++) {
+					final int count = i;
+					type_[i] = new MenuItem(fMenu2, SWT.CHECK);
+					type_[i].setSelection(false);
+					type_[i].setText("&" + thetype[i]);
+
+					System.out.println(IJ.getImage().getType());
+
+					if (IJ.getImage().getType() == i) {
+
+						type_[i].setSelection(true);
+					}
+
+					type_[i].addSelectionListener(new SelectionListener() {
+
+						public void widgetSelected(SelectionEvent e) {
+
+							IJ.getInstance().doCommand(thetype[count]);
+
+						}
+
+						public void widgetDefaultSelected(SelectionEvent e) {
+
+						}
+					});
+				}
+
+				if (st.isRGB()) {
+					for (int i = 0; i < 5; i++) {
+						type_[i].setSelection(false);
+					}
+
+					type_[5].setSelection(true);
+
+				}
+
+				else if (st.isHSB()) {
+					for (int i = 0; i < 5; i++) {
+						type_[i].setSelection(false);
+					}
+					type_[6].setSelection(true);
+
+				} else if (st.isLab()) {
+					for (int i = 0; i < 5; i++) {
+						type_[i].setSelection(false);
+					}
+					type_[7].setSelection(true);
+
+				}
+
+			}
+		});
 		MenuItem menuItem_type = new MenuItem(fMenu, SWT.CASCADE);
 		menuItem_type.setMenu(fMenu2);
-		menuItem_type.setText("Type");
-		for (int i = 0; i < thetype.length; i++) {
-			final int count = i;
-			type_[i] = new MenuItem(fMenu2, SWT.CHECK);
-			type_[i].setText(thetype[i]);
-
-			type_[i].addSelectionListener(new SelectionListener() {
-
-				public void widgetSelected(SelectionEvent e) {
-
-					IJ.getInstance().doCommand(thetype[count]);
-
-				}
-
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-		}
+		menuItem_type.setText("&Type");
+		
+		 * menuItem_type.setText("&Type"); for (int i = 0; i < thetype.length;
+		 * i++) { final int count = i; type_[i] = new MenuItem(fMenu2,
+		 * SWT.CHECK); type_[i].setSelection(false); type_[i].setText("&" +
+		 * thetype[i]);
+		 * 
+		 * type_[i].addSelectionListener(new SelectionListener() {
+		 * 
+		 * public void widgetSelected(SelectionEvent e) {
+		 * 
+		 * IJ.getInstance().doCommand(thetype[count]);
+		 * 
+		 * }
+		 * 
+		 * public void widgetDefaultSelected(SelectionEvent e) {
+		 * 
+		 * } }); }
+		 
 
 		Menu fMenu3 = new Menu(fMenu);
 		MenuItem menuItem_adjust = new MenuItem(fMenu, SWT.CASCADE);
@@ -127,7 +222,6 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 			});
 		}
 
-
 		Menu fMenuColour = new Menu(fMenu);
 		MenuItem menuItem_colour = new MenuItem(fMenu, SWT.CASCADE);
 		menuItem_colour.setMenu(fMenuColour);
@@ -140,7 +234,7 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 			colour_[i].addSelectionListener(new SelectionListener() {
 
 				public void widgetSelected(SelectionEvent e) {
-					
+
 					IJ.getInstance().doCommand(thecolour[count]);
 
 				}
@@ -172,7 +266,7 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 				}
 			});
 		}
-		
+
 		Menu fMenuStackTools = new Menu(fMenuStacks);
 		MenuItem menuItem_stacktools = new MenuItem(fMenuStacks, SWT.CASCADE);
 		menuItem_stacktools.setMenu(fMenuStackTools);
@@ -261,8 +355,8 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 		}
 		Menu fMenu9 = new Menu(fMenu);
 		MenuItem menuItem_thetransform = new MenuItem(fMenu, SWT.CASCADE);
-		 menuItem_thetransform.setMenu(fMenu9);
-		 menuItem_thetransform.setText("Transform");
+		menuItem_thetransform.setMenu(fMenu9);
+		menuItem_thetransform.setText("Transform");
 
 		for (int i = 0; i < thetransform.length; i++) {
 			final int count = i;
@@ -333,7 +427,6 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 
 			}
 		});
-		
 
 		menuItem2.addSelectionListener(new SelectionListener() {
 
@@ -411,13 +504,11 @@ public class ImageJImageAction extends Action implements IMenuCreator {
 
 			}
 		});
+
 		
-		/*Add the menu to the HashMap!*/
-		Hashtable menuTable=MenuHashMap.getMenuTable();
-		menuTable.put("Image",fMenu);
 
 		return fMenu;
-	}
+	}*/
 
 	public void dispose() {
 

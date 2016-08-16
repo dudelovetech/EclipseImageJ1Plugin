@@ -20,6 +20,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
@@ -32,7 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 public class ImageJEditAction extends Action implements IMenuCreator {
 
 	private Menu fMenu;
-	String[] select = { "Select All", "Select None", "Restore Selection",
+	/*String[] select = { "Select All", "Select None", "Restore Selection",
 			"Fit Spline", "Fit Ellipse", "Convex Hull","Make Inverse","Create Selection","Create Mask",
 			 "Properties... ","Scale... ","Rotate...", "Enlarge...", "Make Band...",
 			"Specify...","Straighten...","To Bounding Box","Line to Area","Area to Line","Image to Selection...","Interpolate","Add to Manager"};
@@ -40,7 +42,7 @@ public class ImageJEditAction extends Action implements IMenuCreator {
 			"Plots...", "Rounded Rect Tool...","Arrow Tool...","Point Tool...","Wand Tool...", "Colors...",
 			"Appearance...", "Conversions...", "Memory & Threads...","Proxy Settings...","Compiler...","DICOM...","Misc...","Reset..."};
 	MenuItem[] option_ = new MenuItem[options.length];
-	MenuItem[] select_ = new MenuItem[select.length];
+	MenuItem[] select_ = new MenuItem[select.length];*/
 
 	public ImageJEditAction() {
 		setId("Edit");
@@ -48,8 +50,37 @@ public class ImageJEditAction extends Action implements IMenuCreator {
 		setText("Edit");
 		setMenuCreator(this);
 	}
-
+	
 	public Menu getMenu(Control parent) {
+		if (fMenu != null) {
+			fMenu.dispose();
+		}
+		fMenu = new Menu(parent);
+
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+				}
+				new ImageJSubmenu().addSubMenus(fMenu,"Edit");
+
+			}
+		});
+
+		return fMenu;
+	}
+
+	/*public Menu getMenu(Control parent) {
 		if (fMenu != null) {
 			fMenu.dispose();
 		}
@@ -354,12 +385,10 @@ public class ImageJEditAction extends Action implements IMenuCreator {
 
 			}
 		});
-		/*Add the menu to the HashMap!*/
-		Hashtable menuTable=MenuHashMap.getMenuTable();
-		menuTable.put("Edit",fMenu);
+		
 		
 		return fMenu;
-	}
+	}*/
 
 	public void dispose() {
 

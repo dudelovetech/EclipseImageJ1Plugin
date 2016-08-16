@@ -49,6 +49,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
+import com.eco.bio7.ImageJPluginActions.ImageJHelp;
 import com.eco.bio7.ImageJPluginActions.ImageJAnalyzeAction;
 import com.eco.bio7.ImageJPluginActions.ImageJEditAction;
 import com.eco.bio7.ImageJPluginActions.ImageJFileAction;
@@ -89,13 +91,15 @@ public class CanvasView extends ViewPart {
 
 	private ImageJPluginsAction plugins;
 
-	private ImageJWindowAction imagej_window;
+	private ImageJWindowAction window;
 
 	protected String[] fileList;
 
 	protected ImagePlus plu;
 
 	protected ImageWindow win;
+
+	private ImageJHelp help;
 
 	private static CanvasView canvas_view;
 
@@ -224,7 +228,8 @@ public class CanvasView extends ViewPart {
 		process = new ImageJProcessAction();
 		analyze = new ImageJAnalyzeAction();
 		plugins = new ImageJPluginsAction();
-		imagej_window = new ImageJWindowAction();
+		window = new ImageJWindowAction();
+		help = new ImageJHelp();
 
 		initializeToolBar();
 		tabFolder = new CTabFolder(parent, SWT.TOP);
@@ -408,7 +413,8 @@ public class CanvasView extends ViewPart {
 		tbm.add(process);
 		tbm.add(analyze);
 		tbm.add(plugins);
-		tbm.add(imagej_window);
+		tbm.add(window);
+		tbm.add(help);
 		tbm.add(new PlaceholderLabel().getPlaceholderLabel());
 
 	}

@@ -26,6 +26,8 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
@@ -39,7 +41,7 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 	private Menu fMenu;
 
-	String[] newImage = { "Image...", "Text Window", "Internal Clipboard", "System Clipboard" };
+	/*String[] newImage = { "Image...", "Text Window", "Internal Clipboard", "System Clipboard" };
 
 	String[] imp = { "Image Sequence...", "Raw...", "LUT... ", "Text Image... ", "Text File... ", "Results... ", "URL...", "Stack From List...", "TIFF Virtual Stack...", "AVI...", "XY Coordinates... " };
 
@@ -52,7 +54,7 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 	MenuItem[] import_as = new MenuItem[imp.length];
 
-	MenuItem[] samples = new MenuItem[url.length];
+	MenuItem[] samples = new MenuItem[url.length];*/
 
 	public ImageJFileAction() {
 		setId("File");
@@ -60,8 +62,38 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 		setText("File");
 		setMenuCreator(this);
 	}
-
+	
 	public Menu getMenu(Control parent) {
+		if (fMenu != null) {
+			fMenu.dispose();
+		}
+		fMenu = new Menu(parent);
+
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+				}
+				new ImageJSubmenu().addSubMenus(fMenu,"File");
+
+			}
+		});
+
+		return fMenu;
+	}
+
+	/*public Menu getMenu(Control parent) {
+		
 		if (fMenu != null) {
 			fMenu.dispose();
 		}
@@ -94,10 +126,10 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 		MenuItem menuItem3 = new MenuItem(fMenu, SWT.PUSH);
 		menuItem3.setText("Open Next");
 
-		/*
+		
 		 * MenuItem menuItem5 = new MenuItem(fMenu, SWT.PUSH);
 		 * menuItem5.setText("Open Recent");
-		 */
+		 
 		Menu fMenu2 = new Menu(fMenu);
 
 		MenuItem menuItem21 = new MenuItem(fMenu, SWT.CASCADE);
@@ -168,17 +200,17 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 							IJ.showStatus("Opening: " + url);
 
 							imp = IJ.openImage("http://wsr.imagej.net/images/" + url[count]);
-							/*
+							
 							 * ImagePlus imp = new
 							 * ImagePlus("http://rsb.info.nih.gov/ij/images/" +
 							 * url[count]); WindowManager.checkForDuplicateName
 							 * = true;
-							 */
+							 
 							if (imp != null) {
-								/* Add JavaFX to embed the ImageJ canvas! */
+								 Add JavaFX to embed the ImageJ canvas! 
 								IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 								boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-								/*If we are using the JavaFX bridge don't use the Swing thread!*/
+								If we are using the JavaFX bridge don't use the Swing thread!
 								if (javaFXEmbedded) {
 									imp.show();
 									IJ.showStatus("");
@@ -216,11 +248,11 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 		menuItem10.setText("Page Setup");
 		MenuItem menuItem11 = new MenuItem(fMenu, SWT.PUSH);
 		menuItem11.setText("Print");
-		/*
+		
 		 * MenuItem menuItem13 = new MenuItem(fMenu, SWT.PUSH);
 		 * menuItem13.setText("Select Device"); MenuItem menuItem14 = new
 		 * MenuItem(fMenu, SWT.PUSH); menuItem14.setText("Aquire");
-		 */
+		 
 		MenuItem menuItem6 = new MenuItem(fMenu, SWT.PUSH);
 		menuItem6.setText("Close All Tabs");
 
@@ -261,7 +293,7 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 			}
 		});
 
-		/*
+		
 		 * menuItem5.addSelectionListener(new SelectionListener() {
 		 * 
 		 * public void selectionChanged(SelectionChangedEvent event) { }
@@ -271,7 +303,7 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 		 * IJ.getInstance().doCommand("OpenRecent"); }
 		 * 
 		 * public void widgetDefaultSelected(SelectionEvent e) { } });
-		 */
+		 
 		menuItem6.addSelectionListener(new SelectionListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -279,8 +311,8 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				/* Close detached views! Not reliable for many perspectives! */
-				/*
+				 Close detached views! Not reliable for many perspectives! 
+				
 				 * IWorkbenchPage wbp =
 				 * PlatformUI.getWorkbench().getActiveWorkbenchWindow().
 				 * getActivePage(); CanvasView canv =
@@ -292,8 +324,8 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 				 * "com.eco.bio7.image.detachedImage", detArr.get(i))); }
 				 * 
 				 * detArr.clear();
-				 */
-				/* Close the tabs! */
+				 
+				 Close the tabs! 
 				IJTabs.deleteAllTabs();
 			}
 
@@ -365,12 +397,10 @@ public class ImageJFileAction extends Action implements IMenuCreator {
 
 			}
 		});
-		/*Add the menu to the HashMap!*/
-		Hashtable menuTable=MenuHashMap.getMenuTable();
-		menuTable.put("File",fMenu);
+		
 
 		return fMenu;
-	}
+	}*/
 
 	public void dispose() {
 

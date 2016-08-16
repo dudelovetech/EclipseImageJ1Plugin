@@ -19,6 +19,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
@@ -50,8 +52,37 @@ public class ImageJProcessAction extends Action implements IMenuCreator {
 		setText("Process");
 		setMenuCreator(this);
 	}
-
+	
 	public Menu getMenu(Control parent) {
+		if (fMenu != null) {
+			fMenu.dispose();
+		}
+		fMenu = new Menu(parent);
+
+		fMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuShown(MenuEvent e) {
+
+				MenuItem[] menuItems = fMenu.getItems();
+				// Only delete the plugins menu items and menus!
+				for (int i = 0; i < menuItems.length; i++) {
+					if (menuItems[i] != null) {
+						menuItems[i].dispose();
+					}
+				}
+				new ImageJSubmenu().addSubMenus(fMenu,"Process");
+
+			}
+		});
+
+		return fMenu;
+	}
+
+	/*public Menu getMenu(Control parent) {
 		if (fMenu != null) {
 			fMenu.dispose();
 		}
@@ -353,11 +384,9 @@ public class ImageJProcessAction extends Action implements IMenuCreator {
 			}
 		});
 
-		/* Add the menu to the HashMap! */
-		Hashtable menuTable = MenuHashMap.getMenuTable();
-		menuTable.put("Process", fMenu);
+		
 		return fMenu;
-	}
+	}*/
 
 	public void dispose() {
 

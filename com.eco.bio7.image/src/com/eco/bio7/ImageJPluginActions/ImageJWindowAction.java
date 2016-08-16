@@ -163,9 +163,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
-		/*Add the menu to the HashMap!*/
-		Hashtable menuTable=MenuHashMap.getMenuTable();
-		menuTable.put("Window",fMenu);
+		
 
 		return fMenu;
 	}
