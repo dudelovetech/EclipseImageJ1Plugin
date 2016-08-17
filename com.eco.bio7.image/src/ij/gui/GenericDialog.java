@@ -46,8 +46,8 @@ import ij.macro.*;
  * 
  * To work with macros, the first word of each component label must be unique.
  * If this is not the case, add underscores, which will be converted to spaces
- * when the dialog is displayed. For example, change the checkbox labels
- * "Show Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
+ * when the dialog is displayed. For example, change the checkbox labels "Show
+ * Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
  */
 public class GenericDialog extends JDialog implements ActionListener, TextListener, FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 
@@ -100,7 +100,19 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	 * recorder but this requires that the first word of each label be unique.
 	 */
 	public GenericDialog(String title) {
-		this(title, WindowManager.getCurrentImage() != null ? (Frame) WindowManager.getCurrentImage().getWindow() : IJ.getInstance() != null ? IJ.getInstance() : new Frame());
+		this(title, getParentFrame());
+	}
+
+	private static Frame getParentFrame() {
+		Frame parent = WindowManager.getCurrentImage() != null ? (Frame) WindowManager.getCurrentImage().getWindow() : IJ.getInstance() != null ? IJ.getInstance() : new Frame();
+		if (IJ.isMacOSX() && IJ.isJava18()) {
+			ImageJ ij = IJ.getInstance();
+			if (ij != null && ij.isActive())
+				parent = ij;
+			else
+				parent = null;
+		}
+		return parent;
 	}
 
 	/**

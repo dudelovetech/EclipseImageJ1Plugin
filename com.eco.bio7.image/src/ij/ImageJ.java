@@ -97,7 +97,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the
 	 * version string.
 	 */
-	public static final String VERSION = "1.51d";
+	public static final String VERSION = "1.51e";
 	public static final String BUILD = "";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
@@ -399,10 +399,10 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			MenuItem item = (MenuItem) e.getSource();
 			String cmd = e.getActionCommand();
 			Frame frame = WindowManager.getFrontWindow();
-						if (frame!=null && (frame instanceof Fitter)) {
-							((Fitter)frame).actionPerformed(e);
-							return;
-						}
+			if (frame != null && (frame instanceof Fitter)) {
+				((Fitter) frame).actionPerformed(e);
+				return;
+			}
 			commandName = cmd;
 			ImagePlus imp = null;
 			if (item.getParent() == Menus.getOpenRecentMenu()) {
@@ -436,8 +436,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		MenuComponent parent = (MenuComponent) item.getParent();
 		String cmd = e.getItem().toString();
 		if ("Autorun".equals(cmd)) // Examples>Autorun
-						Prefs.autoRunExamples = e.getStateChange()==1;
-					else if ((Menu)parent==Menus.window)
+			Prefs.autoRunExamples = e.getStateChange() == 1;
+		else if ((Menu) parent == Menus.window)
 			WindowManager.activateWindow(cmd, item);
 		else
 			doCommand(cmd);
@@ -572,7 +572,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			case KeyEvent.VK_BACK_SPACE: // delete
 				if (deleteOverlayRoi(imp))
 					return;
-				if (imp!=null&&imp.getOverlay()!=null&&imp==GelAnalyzer.getGelImage())
+				if (imp != null && imp.getOverlay() != null && imp == GelAnalyzer.getGelImage())
 					return;
 				cmd = "Clear";
 				hotkey = true;
@@ -610,11 +610,11 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				if (IJ.shiftKeyDown() && imp == Orthogonal_Views.getImage())
 					return;
 				if (IJ.isMacOSX() && IJ.isJava18()) {
-											RoiManager rm = RoiManager.getInstance();
-											boolean rmActive = rm!=null && rm==WindowManager.getActiveWindow();
-											if (rmActive && (keyCode==KeyEvent.VK_DOWN||keyCode==KeyEvent.VK_UP))
-											  rm.repaint();
-										}
+					RoiManager rm = RoiManager.getInstance();
+					boolean rmActive = rm != null && rm == WindowManager.getActiveWindow();
+					if (rmActive && (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_UP))
+						rm.repaint();
+				}
 				boolean stackKey = imp.getStackSize() > 1 && (roi == null || IJ.shiftKeyDown());
 				boolean zoomKey = roi == null || IJ.shiftKeyDown() || IJ.controlKeyDown();
 				if (stackKey && keyCode == KeyEvent.VK_RIGHT)
@@ -676,7 +676,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			}
 		}
 	}
-   /*Changed for Bio7!*/
+
+	/* Changed for Bio7! */
 	public void setFullScreen() {
 		currentPanel = CanvasView.getCurrent();
 		if (currentPanel != null) {
@@ -686,7 +687,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			if (full == null) {
 				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 				boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-				if (javaFXEmbedded==false) {
+				if (javaFXEmbedded == false) {
 					full = new Fullscreen(currentPanel);
 
 				}
@@ -722,7 +723,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 
 	private boolean ignoreArrowKeys(ImagePlus imp) {
 		Frame frame = WindowManager.getFrontWindow();
-		String title = frame!=null?frame.getTitle():null;
+		String title = frame != null ? frame.getTitle() : null;
 		if (title != null && title.equals("ROI Manager"))
 			return true;
 		// Control Panel?
@@ -779,10 +780,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		if (IJ.isMacintosh() && !quitting) {
 			IJ.wait(10); // may be needed for Java 1.4 on OS X
 			MenuBar mb = Menus.getMenuBar();
-						if (mb!=null && mb!=getMenuBar()) {
-							setMenuBar(mb);
-							Menus.setMenuBarCount++;
-						}
+			if (mb != null && mb != getMenuBar()) {
+				setMenuBar(mb);
+				Menus.setMenuBarCount++;
+				if (IJ.debugMode)
+					IJ.log("setMenuBar: " + Menus.setMenuBarCount);
+			}
 		}
 	}
 

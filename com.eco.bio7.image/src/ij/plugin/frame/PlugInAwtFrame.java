@@ -48,9 +48,9 @@ public class PlugInAwtFrame extends Frame implements PlugIn, WindowListener, Foc
     }
 
     public void windowActivated(WindowEvent e) {
-		if (IJ.isMacintosh() && IJ.getInstance()!=null) {
-			IJ.wait(10); // may be needed for Java 1.4 on OS X
-			setMenuBar(Menus.getMenuBar());
+    	if (Prefs.setIJMenuBar) {
+			this.setMenuBar(Menus.getMenuBar());
+			Menus.setMenuBarCount++;
 		}
 		WindowManager.setWindow(this);
 	}

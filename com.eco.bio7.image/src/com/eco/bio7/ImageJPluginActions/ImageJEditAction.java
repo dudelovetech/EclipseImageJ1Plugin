@@ -13,11 +13,19 @@ package com.eco.bio7.ImageJPluginActions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
+
+import ij.gui.Toolbar;
 
 public class ImageJEditAction extends Action implements IMenuCreator {
 
@@ -52,6 +60,59 @@ public class ImageJEditAction extends Action implements IMenuCreator {
 					}
 				}
 				new ImageJSubmenu().addSubMenus(fMenu, "Edit");
+
+				new MenuItem(fMenu, SWT.SEPARATOR);
+
+				MenuItem menuItemColFor = new MenuItem(fMenu, SWT.PUSH);
+
+				menuItemColFor.setText("Colour Foreground");
+
+				menuItemColFor.addSelectionListener(new SelectionListener() {
+
+					public void widgetSelected(SelectionEvent e) {
+
+						Shell shell = new Shell();
+						ColorDialog dialog = new ColorDialog(shell, SWT.APPLICATION_MODAL);
+						// dialog.setRGB(rgb);
+						dialog.setText("Foreground Colour");
+						RGB color = dialog.open();
+						if (color != null) {
+
+							Toolbar.setForegroundColor(new java.awt.Color(color.red, color.green, color.blue));
+
+						}
+
+					}
+
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+
+				MenuItem menuItemColBack = new MenuItem(fMenu, SWT.PUSH);
+
+				menuItemColBack.setText("Colour Background");
+				menuItemColBack.addSelectionListener(new SelectionListener() {
+
+					public void widgetSelected(SelectionEvent e) {
+
+						Shell shell = new Shell();
+						ColorDialog dialog = new ColorDialog(shell, SWT.APPLICATION_MODAL);
+						// dialog.setRGB(rgb);
+						dialog.setText("Background Colour");
+						RGB color = dialog.open();
+						if (color != null) {
+
+							Toolbar.setBackgroundColor(new java.awt.Color(color.red, color.green, color.blue));
+
+						}
+
+					}
+
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
 
 			}
 		});

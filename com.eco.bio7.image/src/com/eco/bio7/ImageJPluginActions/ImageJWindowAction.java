@@ -11,17 +11,12 @@
 
 package com.eco.bio7.ImageJPluginActions;
 
-import java.util.Hashtable;
-
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainerElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
@@ -31,13 +26,11 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-
 import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.Util;
@@ -45,8 +38,6 @@ import com.eco.bio7.image.Util;
 public class ImageJWindowAction extends Action implements IMenuCreator {
 
 	private Menu fMenu;
-
-	private Shell shell;
 
 	protected Point p;
 
@@ -92,10 +83,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 		menuItem.addSelectionListener(new SelectionListener() {
 
-			public void selectionChanged(SelectionChangedEvent event) {
-
-			}
-
 			public void widgetSelected(SelectionEvent e) {
 
 				showtoolbar();
@@ -108,25 +95,12 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 		});
 		menuItem1.addSelectionListener(new SelectionListener() {
 
-			public void selectionChanged(SelectionChangedEvent event) {
-
-			}
-
 			public void widgetSelected(SelectionEvent e) {
 
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
 				IViewReference ref = null;
 				IWorkbenchPartSite part = null;
-
-				/* Preferences form the Bio7Plugin! */
-				/*
-				 * IPreferencesService service =
-				 * Platform.getPreferencesService(); int xSize =
-				 * service.getInt("com.eco.bio7", "IMAGE_METHODS_SIZE_X", 260,
-				 * null); int ySize = service.getInt("com.eco.bio7",
-				 * "IMAGE_METHODS_SIZE_Y", 790, null);
-				 */
 
 				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 				int xSize = store.getInt("IMAGE_METHODS_SIZE_X");
@@ -187,18 +161,20 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			}
 		});
 		new MenuItem(fMenu, SWT.SEPARATOR);
-		/*Create the dynamic menu which is later disposed and recreated every time the menu is shown!*/
+		/*
+		 * Create the dynamic menu which is later disposed and recreated every
+		 * time the menu is shown!
+		 */
 		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
-
 
 		return fMenu;
 	}
 
 	private void createJavaFXOptionMenu() {
-		
+
 		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
 
-		menuItemFx.setText("Open Image in FX Panel (experim.)");
+		menuItemFx.setText("Open in JavaFX Panel (exp.)");
 
 		if (selected == false) {
 			menuItemFx.setSelection(false);
@@ -212,7 +188,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 				boolean openInFXPanel = store.getBoolean("JAVAFX_EMBEDDED");
-				System.out.println(openInFXPanel);
 				if (openInFXPanel == false) {
 					store.setValue("JAVAFX_EMBEDDED", true);
 					selected = true;

@@ -54,7 +54,7 @@ public class IJ {
 	private static ProgressBar progressBar;
 	private static TextPanel textPanel;
 	private static String osname, osarch;
-	private static boolean isMac, isWin, isJava16, isJava17, isJava18, isLinux, is64Bit;
+	private static boolean isMac, isWin, isJava16, isJava17, isJava18, isJava19, isLinux, is64Bit;
 	private static boolean controlDown, altDown, spaceDown, shiftDown;
 	private static boolean macroRunning;
 	private static Thread previousThread;
@@ -86,6 +86,7 @@ public class IJ {
 			isJava16 = version.compareTo("1.5") > 0;
 			isJava17 = version.compareTo("1.6") > 0;
 			isJava18 = version.compareTo("1.7") > 0;
+			isJava19 = version.compareTo("1.8") > 0;
 		}
 		dfs = new DecimalFormatSymbols(Locale.US);
 		df = new DecimalFormat[10];
@@ -793,9 +794,9 @@ public class IJ {
 	}
 
 	/**
-	 * Runs the garbage collector and returns a string something like
-	 * "64K of 256MB (25%)" that shows how much of the available memory is in
-	 * use. This is the string displayed when the user clicks in the status bar.
+	 * Runs the garbage collector and returns a string something like "64K of
+	 * 256MB (25%)" that shows how much of the available memory is in use. This
+	 * is the string displayed when the user clicks in the status bar.
 	 */
 	public static String freeMemory() {
 		long inUse = currentMemory();
@@ -880,26 +881,27 @@ public class IJ {
 		double np = n;
 		if (n < 0.0)
 			np = -n;
-		if (decimalPlaces<0) synchronized(IJ.class) {
-			decimalPlaces = -decimalPlaces;
-			if (decimalPlaces > 9)
-				decimalPlaces = 9;
-			if (sf == null) {
-				if (dfs == null)
-					dfs = new DecimalFormatSymbols(Locale.US);
-				sf = new DecimalFormat[10];
-				sf[1] = new DecimalFormat("0.0E0", dfs);
-				sf[2] = new DecimalFormat("0.00E0", dfs);
-				sf[3] = new DecimalFormat("0.000E0", dfs);
-				sf[4] = new DecimalFormat("0.0000E0", dfs);
-				sf[5] = new DecimalFormat("0.00000E0", dfs);
-				sf[6] = new DecimalFormat("0.000000E0", dfs);
-				sf[7] = new DecimalFormat("0.0000000E0", dfs);
-				sf[8] = new DecimalFormat("0.00000000E0", dfs);
-				sf[9] = new DecimalFormat("0.000000000E0", dfs);
+		if (decimalPlaces < 0)
+			synchronized (IJ.class) {
+				decimalPlaces = -decimalPlaces;
+				if (decimalPlaces > 9)
+					decimalPlaces = 9;
+				if (sf == null) {
+					if (dfs == null)
+						dfs = new DecimalFormatSymbols(Locale.US);
+					sf = new DecimalFormat[10];
+					sf[1] = new DecimalFormat("0.0E0", dfs);
+					sf[2] = new DecimalFormat("0.00E0", dfs);
+					sf[3] = new DecimalFormat("0.000E0", dfs);
+					sf[4] = new DecimalFormat("0.0000E0", dfs);
+					sf[5] = new DecimalFormat("0.00000E0", dfs);
+					sf[6] = new DecimalFormat("0.000000E0", dfs);
+					sf[7] = new DecimalFormat("0.0000000E0", dfs);
+					sf[8] = new DecimalFormat("0.00000000E0", dfs);
+					sf[9] = new DecimalFormat("0.000000000E0", dfs);
+				}
+				return sf[decimalPlaces].format(n); // use scientific notation
 			}
-			return sf[decimalPlaces].format(n); // use scientific notation
-		}
 		if (decimalPlaces < 0)
 			decimalPlaces = 0;
 		if (decimalPlaces > 9)
@@ -1095,6 +1097,11 @@ public class IJ {
 	/** Returns true if ImageJ is running on a Java 1.8 or greater JVM. */
 	public static boolean isJava18() {
 		return isJava18;
+	}
+
+	/** Returns true if ImageJ is running on a Java 1.9 or greater JVM. */
+	public static boolean isJava19() {
+		return isJava19;
 	}
 
 	/** Returns true if ImageJ is running on Linux. */
@@ -1864,8 +1871,8 @@ public class IJ {
 	}
 
 	/**
-	 * Opens a URL and returns the contents as a string. Returns
-	 * "<Error: message>" if there an error, including host or file not found.
+	 * Opens a URL and returns the contents as a string. Returns "<Error:
+	 * message>" if there an error, including host or file not found.
 	 */
 	public static String openUrlAsString(String url) {
 		// if (!trustManagerCreated && url.contains("nih.gov")) trustAllCerts();
@@ -1896,49 +1903,38 @@ public class IJ {
 		else
 			return "";
 	}
-	
-	/* 
-	public static void addRootCA() throws Exception {
-		String path = "/Users/wayne/Downloads/Certificates/lets-encrypt-x1-cross-signed.pem";
-		InputStream fis = new BufferedInputStream(new FileInputStream(path));
-		Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(fis);
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(null, null);
-		ks.setCertificateEntry(Integer.toString(1), ca);
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-		tmf.init(ks);
-		SSLContext ctx = SSLContext.getInstance("TLS");
-		ctx.init(null, tmf.getTrustManagers(), null); 
-		HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
-	}
-	*/
-	
+
 	/*
-	// Create a new trust manager that trust all certificates
-	// http://stackoverflow.com/questions/10135074/download-file-from-https-server-using-java
-	private static void trustAllCerts() {
-		trustManagerCreated = true;
-		TrustManager[] trustAllCerts = new TrustManager[] {
-			new X509TrustManager() {
-				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-				public void checkClientTrusted (java.security.cert.X509Certificate[] certs, String authType) {
-				}
-				public void checkServerTrusted (java.security.cert.X509Certificate[] certs, String authType) {
-				}
-			}
-		};
-		// Activate the new trust manager
-		try {
-			SSLContext sc = SSLContext.getInstance("SSL");
-			sc.init(null, trustAllCerts, new java.security.SecureRandom());
-			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (Exception e) {
-			IJ.log(""+e);
-		}
-	}
-	*/
+	 * public static void addRootCA() throws Exception { String path =
+	 * "/Users/wayne/Downloads/Certificates/lets-encrypt-x1-cross-signed.pem";
+	 * InputStream fis = new BufferedInputStream(new FileInputStream(path));
+	 * Certificate ca =
+	 * CertificateFactory.getInstance("X.509").generateCertificate(fis);
+	 * KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+	 * ks.load(null, null); ks.setCertificateEntry(Integer.toString(1), ca);
+	 * TrustManagerFactory tmf =
+	 * TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()
+	 * ); tmf.init(ks); SSLContext ctx = SSLContext.getInstance("TLS");
+	 * ctx.init(null, tmf.getTrustManagers(), null);
+	 * HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory()); }
+	 */
+
+	/*
+	 * // Create a new trust manager that trust all certificates //
+	 * http://stackoverflow.com/questions/10135074/download-file-from-https-
+	 * server-using-java private static void trustAllCerts() {
+	 * trustManagerCreated = true; TrustManager[] trustAllCerts = new
+	 * TrustManager[] { new X509TrustManager() { public
+	 * java.security.cert.X509Certificate[] getAcceptedIssuers() { return null;
+	 * } public void checkClientTrusted (java.security.cert.X509Certificate[]
+	 * certs, String authType) { } public void checkServerTrusted
+	 * (java.security.cert.X509Certificate[] certs, String authType) { } } }; //
+	 * Activate the new trust manager try { SSLContext sc =
+	 * SSLContext.getInstance("SSL"); sc.init(null, trustAllCerts, new
+	 * java.security.SecureRandom());
+	 * HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory()); }
+	 * catch (Exception e) { IJ.log(""+e); } }
+	 */
 
 	/**
 	 * Saves the current image, lookup table, selection or text window to the

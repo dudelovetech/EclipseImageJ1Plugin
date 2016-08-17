@@ -22,8 +22,8 @@ import org.osgi.framework.Bundle;
 /** Compiles and runs plugins using the javac compiler. */
 public class Compiler implements PlugIn, FilenameFilter {
 
-	private static final int TARGET14 = 0, TARGET15 = 1, TARGET16 = 2, TARGET17 = 3, TARGET18 = 4;
-	private static final String[] targets = { "1.4", "1.5", "1.6", "1.7", "1.8" };
+	private static final int TARGET14=0, TARGET15=1, TARGET16=2,  TARGET17=3,  TARGET18=4, TARGET19=5;
+	private static final String[] targets = {"1.4", "1.5", "1.6", "1.7", "1.8", "1.9"};
 	private static final String TARGET_KEY = "javac.target";
 	private static CompilerTool compilerTool;
 	private static String dir, name;
@@ -159,13 +159,19 @@ public class Compiler implements PlugIn, FilenameFilter {
 		Vector sources = new Vector();
 		sources.add(path);
 
-		/*
-		 * if (IJ.debugMode){ StringBuilder builder = new StringBuilder();
-		 * builder.append("javac"); for (int i=0; i< options.size(); i++){
-		 * builder.append(" "); builder.append(options.get(i)); } for (int i=0;
-		 * i< sources.size(); i++){ builder.append(" ");
-		 * builder.append(sources.get(i)); } IJ.log(builder.toString()); }
-		 */
+		/*if (IJ.debugMode) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("javac");
+			for (int i=0; i< options.size(); i++){
+				builder.append(" ");
+				builder.append(options.get(i));
+			}
+			for (int i=0; i< sources.size(); i++){
+				builder.append(" ");
+				builder.append(sources.get(i));
+			}
+			IJ.log(builder.toString());
+		}*/
 
 		boolean errors = true;
 		String s = "not compiled";
@@ -201,36 +207,36 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	// Adds .jar files in plugins folder, and subfolders, to the classpath
-	void addJars(String path, StringBuffer sb) {
-		String[] list = null;
-		File f = new File(path);
-		if (f.exists() && f.isDirectory())
-			list = f.list();
-		if (list == null)
-			return;
-		if (!path.endsWith(File.separator))
-			path += File.separator;
-		for (int i = 0; i < list.length; i++) {
-			File f2 = new File(path + list[i]);
-			if (f2.isDirectory())
-				addJars(path + list[i], sb);
-			else if (list[i].endsWith(".jar") && (list[i].indexOf("_") == -1 || list[i].equals("loci_tools.jar") || list[i].contains("3D_Viewer"))) {
-				sb.append(File.pathSeparator + path + list[i]);
-				if (IJ.debugMode)
-					IJ.log("javac classpath: " + path + list[i]);
+		void addJars(String path, StringBuffer sb) {
+			String[] list = null;
+			File f = new File(path);
+			if (f.exists() && f.isDirectory())
+				list = f.list();
+			if (list==null)
+				return;
+			boolean isJarsFolder = path.endsWith("jars");
+			if (!path.endsWith(File.separator))
+				path += File.separator;
+			for (int i=0; i<list.length; i++) {
+				File f2 = new File(path+list[i]);
+				if (f2.isDirectory())
+					addJars(path+list[i], sb);
+				else if (list[i].endsWith(".jar")&&(!list[i].contains("_")||isJarsFolder||list[i].equals("loci_tools.jar"))) {
+					sb.append(File.pathSeparator+path+list[i]);
+					//IJ.log("javac classpath: "+path+list[i]);
+				}
 			}
 		}
-	}
-
-	void showErrors(String s) {
-		if (errors == null || !errors.isVisible()) {
-			errors = (Editor) IJ.runPlugIn("ij.plugin.frame.Editor", "");
-			errors.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		
+		void showErrors(String s) {
+			if (errors==null || !errors.isVisible()) {
+				errors = (Editor)IJ.runPlugIn("ij.plugin.frame.Editor", "");
+				errors.setFont(new Font("Monospaced", Font.PLAIN, 12));
+			}
+			if (errors!=null)
+				errors.display("Errors", s);
+			IJ.showStatus("done (errors)");
 		}
-		if (errors != null)
-			errors.display("Errors", s);
-		IJ.showStatus("done (errors)");
-	}
 
 	// open the .java source file
 	boolean open(String path, String msg) {
@@ -304,14 +310,14 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	void validateTarget() {
-		if (target < 0 || target > TARGET18)
+		if (target<TARGET16 || target>TARGET19)
 			target = TARGET16;
-		if (target > TARGET15 && !(IJ.isJava16() || IJ.isJava17() || IJ.isJava18()))
-			target = TARGET15;
-		if (target > TARGET16 && !(IJ.isJava17() || IJ.isJava18()))
+		if (target>TARGET16 && !(IJ.isJava17()||IJ.isJava18()||IJ.isJava19()))
 			target = TARGET16;
-		if (target > TARGET17 && !IJ.isJava18())
+		if (target>TARGET17 && !(IJ.isJava18()||IJ.isJava19()))
 			target = TARGET17;
+		if (target>TARGET18 && !IJ.isJava19())
+			target = TARGET18;
 		Prefs.set(TARGET_KEY, target);
 	}
 

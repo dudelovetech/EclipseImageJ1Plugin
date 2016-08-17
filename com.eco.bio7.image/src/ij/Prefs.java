@@ -55,7 +55,7 @@ public class Prefs {
 
 	public static final String vistaHint = ""; // no longer used
 
-	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4, REVERSE_NEXT_PREVIOUS_ORDER=1<<5, AUTO_RUN_EXAMPLES=1<<6, SHOW_ALL_POINTS=1<<7;
+	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4, REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7;
 	public static final String OPTIONS2 = "prefs.options2";
 
 	/** file.separator system property */
@@ -153,7 +153,9 @@ public class Prefs {
 	public static boolean subPixelResolution;
 	/** Adjust contrast when scrolling stacks (or hold shift key down) */
 	public static boolean autoContrast;
-	/** Allow lines to be created with one click at start and another at the end */
+	/**
+	 * Allow lines to be created with one click at start and another at the end
+	 */
 	public static boolean enhancedLineTool;
 	/** Keep arrow selection after adding to overlay */
 	public static boolean keepArrowSelections;
@@ -167,9 +169,11 @@ public class Prefs {
 	 */
 	public static boolean reverseNextPreviousOrder;
 	/** Automatically run examples in Help/Examples menu. */
-		public static boolean autoRunExamples = true;
-		/** Ignore stack positions when displaying points. */
-		public static boolean showAllPoints;
+	public static boolean autoRunExamples = true;
+	/** Ignore stack positions when displaying points. */
+	public static boolean showAllPoints;
+	/** Set MenuBar on Macs running Java 8. */
+	public static boolean setIJMenuBar = IJ.isMacOSX();
 	static Properties ijPrefs = new Properties();
 	static Properties props = new Properties(ijPrefs);
 	static String prefsDir;
@@ -264,7 +268,9 @@ public class Prefs {
 		return null;
 	}
 
-	/** Returns the URL of the directory that contains the ImageJ sample images. */
+	/**
+	 * Returns the URL of the directory that contains the ImageJ sample images.
+	 */
 	public static String getImagesURL() {
 		return imagesURL;
 	}
@@ -453,9 +459,9 @@ public class Prefs {
 			}
 			if (resetPreferences) {
 				File f = new File(path);
-								if (!f.exists())
-									IJ.error("Edit>Options>Reset", "Unable to reset preferences. File not found at\n"+path);
-								boolean rtn = f.delete();
+				if (!f.exists())
+					IJ.error("Edit>Options>Reset", "Unable to reset preferences. File not found at\n" + path);
+				boolean rtn = f.delete();
 				resetPreferences = false;
 			} else
 				savePrefs(prefs, path);
@@ -478,7 +484,7 @@ public class Prefs {
 	}
 
 	static void loadOptions() {
-		int defaultOptions = ANTIALIASING+AVOID_RESLICE_INTERPOLATION+ANTIALIASED_TOOLS+MULTI_POINT_MODE + (!IJ.isMacOSX() ? RUN_SOCKET_LISTENER : 0);
+		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + (!IJ.isMacOSX() ? RUN_SOCKET_LISTENER : 0);
 		int options = getInt(OPTIONS, defaultOptions);
 		usePointerCursor = (options & USE_POINTER) != 0;
 		// antialiasedText = (options&ANTIALIASING)!=0;
@@ -518,8 +524,8 @@ public class Prefs {
 		enhancedLineTool = (options2 & ENHANCED_LINE_TOOL) != 0;
 		skipRawDialog = (options2 & SKIP_RAW_DIALOG) != 0;
 		reverseNextPreviousOrder = (options2 & REVERSE_NEXT_PREVIOUS_ORDER) != 0;
-		autoRunExamples = (options2&AUTO_RUN_EXAMPLES)!=0;
-		showAllPoints = (options2&SHOW_ALL_POINTS)!=0;
+		autoRunExamples = (options2 & AUTO_RUN_EXAMPLES) != 0;
+		showAllPoints = (options2 & SHOW_ALL_POINTS) != 0;
 	}
 
 	static void saveOptions(Properties prefs) {
@@ -529,8 +535,7 @@ public class Prefs {
 				+ (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
 		prefs.put(OPTIONS, Integer.toString(options));
 
-		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0) + (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder?REVERSE_NEXT_PREVIOUS_ORDER:0)
-		+ (autoRunExamples?AUTO_RUN_EXAMPLES:0) + (showAllPoints?SHOW_ALL_POINTS:0);
+		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0) + (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0) + (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0);
 		prefs.put(OPTIONS2, Integer.toString(options2));
 	}
 
