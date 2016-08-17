@@ -1,15 +1,17 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.50e:
+### New in 1.51e:
 
-1. Updated ImageJ to 1.50e
+1. Updated ImageJ to 1.51e
 
-2. Enabled the compilation of ImageJ java plugins from the ImageJ menu (tools.jar required in the lib folder of the JRE!).
+2. Reworked the ImageJ plugin view menus. Now all Imagej menus and nested submenus are displayed correctly!
 
-3. Added an experimental option in the preferences to open images in a Swing in JavaFX in SWT tab (future replacement for SWT_AWT). Images can  be opened in fullscreen with: F1 = primary monitor true fullscreen, F2 = primary monitor fullscreen, F3 = secondary monitor fullscreen, F4 = tertiary monitor fullscreen, F5 = quartary monitor fullscreen.
+3. Added a menu switch (menu 'Window') to open images in a Swing in JavaFX in SWT tab (future replacement for SWT_AWT). Images can subsequently be opened in fullscreen with: F1 = primary monitor true fullscreen, F2 = primary monitor fullscreen, F3 = secondary monitor fullscreen, F4 = tertiary monitor fullscreen, F5 = quartary monitor fullscreen.
 
-4. Added some preferences to scale the ImageJ toolbar dialog, etc.
+4. Plugins, scripts and macros are now displayed in their defined menus or submenus.
+
+5. All ImageJ Menus are updated dynamically to recognize copied scripts and macros instantly
 
 ### Installation:
 
