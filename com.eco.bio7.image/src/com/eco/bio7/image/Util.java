@@ -1,5 +1,7 @@
 package com.eco.bio7.image;
 
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +12,7 @@ import java.net.URL;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -23,6 +26,8 @@ import org.osgi.framework.Bundle;
  *
  */
 public class Util {
+
+	private static Font awtFont;
 
 	/**
 	 * A method to get the ImageJ path.
@@ -43,6 +48,34 @@ public class Util {
 		}
 		String path = new File(fileUrl.getFile()).toString();
 		return path;
+	}
+
+	/**
+	 * A method to get the default OS font from SWT to AWT.
+	 * 
+	 * @return the OS font as an AWT font.
+	 */
+	public static java.awt.Font getOSFontToAwt() {
+
+		Display dis = getDisplay();
+		
+		dis.syncExec(new Runnable() {
+			
+			public void run() {
+
+				FontData fontData = dis.getSystemFont().getFontData()[0];
+
+				int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
+
+				int awtFontSize = (int) Math.round((double) fontData.getHeight() * resolution / 72.0);
+
+				/* Font size correction! */
+
+				awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize);
+			}
+		});
+
+		return awtFont;
 	}
 
 	/**
