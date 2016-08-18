@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
+import com.eco.bio7.image.Util;
+
 /** Compiles and runs plugins using the javac compiler. */
 public class Compiler implements PlugIn, FilenameFilter {
 
@@ -123,21 +125,11 @@ public class Compiler implements PlugIn, FilenameFilter {
 
 	boolean compile(String path) {
 
-		/* Add the plugin binary path to execute compilation! */
-		Bundle bundle = Platform.getBundle("com.eco.bio7.image");
-
-		URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
-		URL fileUrl = null;
-		try {
-			fileUrl = FileLocator.toFileURL(locationUrl);
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		String pathParent = fileUrl.getFile();
+		/* Add the ImageJ plugin binary path to execute compilation! */
+		String pathParent = Util.getImageJPath();
 
 		// System.out.println(path);
-		String binPath = pathParent + "bin";// plugins dir;
+		String binPath = pathParent + File.separator+"bin";// plugins dir;
 
 		IJ.showStatus("compiling " + path);
 		String classpath = getClassPath(path) + ";" + binPath;

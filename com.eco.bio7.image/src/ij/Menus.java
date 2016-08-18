@@ -19,7 +19,11 @@ import java.util.zip.*;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
+
+import com.eco.bio7.image.Activator;
+import com.eco.bio7.image.Util;
 
 /**
  * This class installs and updates ImageJ's menus. Note that menu labels, even
@@ -269,8 +273,8 @@ public class Menus {
 
 		if (fontSize != 0)
 			mbar.setFont(getFont());
-		if (ij!=null) {
- 			ij.setMenuBar(mbar);
+		if (ij != null) {
+			ij.setMenuBar(mbar);
 			Menus.setMenuBarCount++;
 		}
 
@@ -732,7 +736,7 @@ public class Menus {
 				installJarPlugin(jar, (String) entries.get(j));
 				/* Changed for Bio7! */
 				bio7JarAllCommand.add((String) entries.get(j));
-				
+
 			}
 		}
 	}
@@ -742,20 +746,20 @@ public class Menus {
 		addSorted = false;
 		Menu menu;
 		s = s.trim();
-		//System.out.println(s);
+		// System.out.println(s);
 		if (s.startsWith("Plugins>")) {
-			//extract name after Plugins>
+			// extract name after Plugins>
 			int firstComma = s.indexOf(',');
-			//no comma or smaller than word plugins
+			// no comma or smaller than word plugins
 			if (firstComma == -1 || firstComma <= 8)
 				menu = null;
 			else {
-				//Extract name to first comma (before name of plugin)
+				// Extract name to first comma (before name of plugin)
 				String name = s.substring(8, firstComma);
 				menu = getPluginsSubmenu(name);
 			}
-			//   Plugins>FeatureJ, "FeatureJ Derivatives", featurej.FJ_Derivatives
-		//give the name of the jar is description is empty or is 'plugins'
+			// Plugins>FeatureJ, "FeatureJ Derivatives", featurej.FJ_Derivatives
+			// give the name of the jar is description is empty or is 'plugins'
 		} else if (s.startsWith("\"") || s.startsWith("Plugins")) {
 			String name = getSubmenuName(jar);
 			if (name != null)
@@ -764,7 +768,7 @@ public class Menus {
 				menu = pluginsMenu;
 			addSorted = true;
 		} else {
-			//Creates a menu  from the text!
+			// Creates a menu from the text!
 			int firstQuote = s.indexOf('"');
 			String name = firstQuote < 0 ? s : s.substring(0, firstQuote).trim();
 			int comma = name.indexOf(',');
@@ -780,7 +784,7 @@ public class Menus {
 		s = s.substring(firstQuote, s.length()); // remove menu
 		if (menu != null) {
 			addPluginSeparatorIfNeeded(menu);
-			//Adds the command to the hashtable and create a menuItem!
+			// Adds the command to the hashtable and create a menuItem!
 			addPluginItem(menu, s);
 			addSorted = false;
 		}
@@ -829,11 +833,12 @@ public class Menus {
 	private static Menu getMenu(String menuPath) {
 		return getMenu(menuPath, false);
 	}
-   /*Creates the menu and adds menus for the jar plugins!*/
+
+	/* Creates the menu and adds menus for the jar plugins! */
 	private static Menu getMenu(String menuName, boolean readFromProps) {
 		if (menuName.endsWith(">"))
 			menuName = menuName.substring(0, menuName.length() - 1);
-		
+
 		Menu result = (Menu) menus.get(menuName);
 		if (result == null) {
 			int offset = menuName.lastIndexOf('>');
@@ -850,12 +855,13 @@ public class Menus {
 				else if (menuName.equals("Plugins"))
 					pluginsMenu = result;
 			} else {
-				//B identifying the last index of > we can get the parent menu. Names are store as e.g. 'plugins>submenu'
+				// B identifying the last index of > we can get the parent menu.
+				// Names are store as e.g. 'plugins>submenu'
 				String parentName = menuName.substring(0, offset);
 				String menuItemName = menuName.substring(offset + 1);
 				// Recursive call to get all parent menus!
 				Menu parentMenu = getMenu(parentName);
-				
+
 				result = new Menu(menuItemName);
 				addPluginSeparatorIfNeeded(parentMenu);
 				if (readFromProps)
@@ -1015,22 +1021,13 @@ public class Menus {
 		/* Changed for Bio7! */
 
 		pluginsPath = macrosPath = null;
-		Bundle bundle = Platform.getBundle("com.eco.bio7.image");
-
-		URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
-		URL fileUrl = null;
-		try {
-			fileUrl = FileLocator.toFileURL(locationUrl);
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		String path = fileUrl.getFile();
-		String currentDir = path;
-		// System.out.println(path);
-		pluginsPath = path + "plugins/";// plugins dir;
-		macrosPath = path + "macros/";// macros dir;
-		ImageJPath = path;
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		/* We need an extra seperator here else the plugins are not found! */
+		pluginsPath = store.getString("PLUGINS_PATH") + File.separator;
+		macrosPath = store.getString("MACROS_PATH") + File.separator;
+		/* Get the installation directory of the ImageJ plugin! */
+		String currentDir = Util.getImageJPath();
+		ImageJPath = Util.getImageJPath();
 
 		File f = pluginsPath != null ? new File(pluginsPath) : null;
 		if (f == null || !f.isDirectory()) {
@@ -1415,7 +1412,7 @@ public class Menus {
 			return;
 		String name = imp.getTitle();
 		String size = ImageWindow.getImageSize(imp);
-		CheckboxMenuItem item = new CheckboxMenuItem(name+" "+size);
+		CheckboxMenuItem item = new CheckboxMenuItem(name + " " + size);
 		item.setActionCommand("" + imp.getID());
 		window.add(item);
 		item.addItemListener(ij);
@@ -1425,8 +1422,8 @@ public class Menus {
 	static synchronized void removeWindowMenuItem(int index) {
 		// IJ.log("removeWindowMenuItem: "+index+" "+windowMenuItems2+"
 		// "+window.getItemCount());
-		if (ij==null)
-						return;
+		if (ij == null)
+			return;
 		try {
 			if (index >= 0 && index < window.getItemCount()) {
 				window.remove(WINDOW_MENU_ITEMS + index);
@@ -1449,28 +1446,29 @@ public class Menus {
 
 	/** Changes the name of an item in the Window menu. */
 	public static synchronized void updateWindowMenuItem(ImagePlus imp, String oldLabel, String newLabel) {
-		if (oldLabel==null || newLabel==null)
+		if (oldLabel == null || newLabel == null)
 			return;
 		int first = WINDOW_MENU_ITEMS;
 		int count = window.getItemCount();
-		try {  // workaround for Linux/Java 5.0/bug
-			for (int i=first; i<count; i++) {
+		try { // workaround for Linux/Java 5.0/bug
+			for (int i = first; i < count; i++) {
 				MenuItem item = window.getItem(i);
 				String label = item.getLabel();
-				if (imp!=null) {  //remove size (e.g. " 24MB")
+				if (imp != null) { // remove size (e.g. " 24MB")
 					int index = label.lastIndexOf(" ");
-					if (index>-1)
+					if (index > -1)
 						label = label.substring(0, index);
 				}
-				if (item!=null && label.equals(oldLabel)) {
+				if (item != null && label.equals(oldLabel)) {
 					String size = "";
-					if (imp!=null)
-						size =  " " + ImageWindow.getImageSize(imp);
-					item.setLabel(newLabel+size);
+					if (imp != null)
+						size = " " + ImageWindow.getImageSize(imp);
+					item.setLabel(newLabel + size);
 					return;
 				}
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 	}
 
 	/** Adds a file path to the beginning of the File/Open Recent submenu. */
@@ -1776,5 +1774,5 @@ public class Menus {
 		IJ.runPlugIn("ij.plugin.ClassChecker", "");
 		IJ.showStatus("Menus updated: " + m.nPlugins + " commands, " + m.nMacros + " macros");
 	}
-	
+
 }

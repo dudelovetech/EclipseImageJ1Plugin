@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
+import com.eco.bio7.image.Util;
+
 import ij.*;
 import ij.plugin.frame.Recorder;
 import ij.plugin.frame.Editor;
@@ -53,7 +55,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 
 	public static final int OVAL_ROI = 0, ELLIPSE_ROI = 1, BRUSH_ROI = 2;
 
-	private static final String[] builtInTools = { "Arrow", "Brush", "Developer Menu", "Flood Filler", "LUT Menu", "Overlay Brush", "Pencil", "Pixel Inspector", "Selection Rotator", "Spray Can", "Stacks Menu" };
+	private static final String[] builtInTools = { "Arrow", "Brush", "Developer Menu", "Flood Filler", "LUT Menu", "Overlay Brush", "Pencil", "Pixel Inspector", "Selection Rotator", "Spray Can",
+			"Stacks Menu" };
 	private static final String[] builtInTools2 = { "Pixel Inspection Tool", "Paintbrush Tool", "Flood Fill Tool" };
 
 	private static final int NUM_TOOLS = 23;
@@ -311,7 +314,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				polyline(6, 4, 8, 2, 12, 1, 15, 2, 16, 4, 15, 7, 12, 8, 9, 11, 9, 14, 6, 16, 2, 16, 0, 13, 1, 10, 4, 9, 6, 7, 6, 4);
 			} else if (ovalType == ELLIPSE_ROI) {
 				yOffset = y + 1;
-				polyline(11, 0, 13, 0, 14, 1, 15, 1, 16, 2, 17, 3, 17, 7, 12, 12, 11, 12, 10, 13, 8, 13, 7, 14, 4, 14, 3, 13, 2, 13, 1, 12, 1, 11, 0, 10, 0, 9, 1, 8, 1, 7, 6, 2, 7, 2, 8, 1, 10, 1, 11, 0);
+				polyline(11, 0, 13, 0, 14, 1, 15, 1, 16, 2, 17, 3, 17, 7, 12, 12, 11, 12, 10, 13, 8, 13, 7, 14, 4, 14, 3, 13, 2, 13, 1, 12, 1, 11, 0, 10, 0, 9, 1, 8, 1, 7, 6, 2, 7, 2, 8, 1, 10, 1, 11,
+						0);
 			} else
 				g.drawOval(x, y + 1, 21, 15);
 			drawTriangle(19, 18);
@@ -1511,9 +1515,10 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				installStartupMacros();
 			} else if (label.equals("Help...")) {
 				IJ.showMessage("Tool Switcher and Loader",
-						"Use this drop down menu to switch to alternative\n" + "macro toolsets or to load additional plugin tools.\n" + "The toolsets listed in the menu are located\n" + "in the ImageJ/macros/toolsets folder and the\n" + "plugin tools are the ones installed in the\n"
-								+ "Plugins>Tools submenu.\n" + " \n" + "Hold the shift key down while selecting a\n" + "toolset to view its source code.\n" + " \n" + "More macro toolsets are available at\n" + "  <" + IJ.URL + "/macros/toolsets/>\n" + " \n" + "Plugin tools can be downloaded from\n"
-								+ "the Tools section of the Plugins page at\n" + "  <" + IJ.URL + "/plugins/>\n");
+						"Use this drop down menu to switch to alternative\n" + "macro toolsets or to load additional plugin tools.\n" + "The toolsets listed in the menu are located\n"
+								+ "in the ImageJ/macros/toolsets folder and the\n" + "plugin tools are the ones installed in the\n" + "Plugins>Tools submenu.\n" + " \n"
+								+ "Hold the shift key down while selecting a\n" + "toolset to view its source code.\n" + " \n" + "More macro toolsets are available at\n" + "  <" + IJ.URL
+								+ "/macros/toolsets/>\n" + " \n" + "Plugin tools can be downloaded from\n" + "the Tools section of the Plugins page at\n" + "  <" + IJ.URL + "/plugins/>\n");
 				return;
 			} else if (label.endsWith("*")) {
 				// load from ij.jar
@@ -2010,17 +2015,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	/* Changed for Bio7! */
 	public String getBio7Path() {
 
-		Bundle bundle = Platform.getBundle("com.eco.bio7.image");
-
-		URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
-		URL fileUrl = null;
-		try {
-			fileUrl = FileLocator.toFileURL(locationUrl);
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		return fileUrl.getFile();
+		return Util.getImageJPath();
 	}
 
 	// public void repaint() {

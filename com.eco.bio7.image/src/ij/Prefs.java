@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
+import com.eco.bio7.image.Util;
+
 import ij.io.*;
 import ij.util.Tools;
 import ij.gui.*;
@@ -191,16 +193,8 @@ public class Prefs {
 	 */
 	public static String load(Object ij, Applet applet) {
 		/* Changed for Bio7! */
-		Bundle bundle = Platform.getBundle("com.eco.bio7.image");
-		URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
-		URL fileUrl = null;
-		try {
-			fileUrl = FileLocator.toFileURL(locationUrl);
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		String path = fileUrl.getFile();
+		
+		String path = Util.getImageJPath();
 
 		InputStream f = ij.getClass().getResourceAsStream(path + PROPS_NAME);
 		if (applet != null)

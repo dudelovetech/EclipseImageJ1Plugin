@@ -5,14 +5,51 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URL;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 
+/**
+ * A utility class for the ImageJ plugin.
+ * 
+ * @author M. Austenfeld
+ *
+ */
 public class Util {
 
+	/**
+	 * A method to get the ImageJ path.
+	 * 
+	 * @return the default path of the ImageJ plugin
+	 */
+	public static String getImageJPath() {
+
+		Bundle bundle = Platform.getBundle("com.eco.bio7.image");
+
+		URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
+		URL fileUrl = null;
+		try {
+			fileUrl = FileLocator.toFileURL(locationUrl);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		String path = new File(fileUrl.getFile()).toString();
+		return path;
+	}
+
+	/**
+	 * A method to detect the current OS.
+	 * 
+	 * @return the OS name as a string
+	 */
 	public static String getOS() {
 		String OS = null;
 		String osname = System.getProperty("os.name");
@@ -42,8 +79,7 @@ public class Util {
 		// Filter the extension of the file.
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return (name.endsWith(extensions[0]) || name.endsWith(extensions[1]) || name.endsWith(extensions[2])
-						|| name.endsWith(extensions[3]) || name.endsWith(extensions[4])
+				return (name.endsWith(extensions[0]) || name.endsWith(extensions[1]) || name.endsWith(extensions[2]) || name.endsWith(extensions[3]) || name.endsWith(extensions[4])
 						|| name.endsWith(extensions[5]));
 			}
 		};
@@ -128,17 +164,18 @@ public class Util {
 		}
 		return null;
 	}
+
 	/**
 	 * Returns a default display.
 	 * 
 	 * @return a display
 	 */
 	public static Display getDisplay() {
-	      Display display = Display.getCurrent();
-	      //may be null if outside the UI thread
-	      if (display == null)
-	         display = Display.getDefault();
-	      return display;		
-	   }
+		Display display = Display.getCurrent();
+		// may be null if outside the UI thread
+		if (display == null)
+			display = Display.getDefault();
+		return display;
+	}
 
 }

@@ -22,7 +22,7 @@ public class Bio7ImageJPreferences extends FieldEditorPreferencePage implements 
 	public Bio7ImageJPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Preferences ImageJ Window");
+		setDescription("Preferences ImageJ");
 	}
 
 	/**
@@ -31,6 +31,12 @@ public class Bio7ImageJPreferences extends FieldEditorPreferencePage implements 
 	 * editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
+		
+		addField(new DirectoryFieldEditor("PLUGINS_PATH", "&Plugins Path", getFieldEditorParent()));
+		
+		addField(new DirectoryFieldEditor("MACROS_PATH", "&Macros Path", getFieldEditorParent()));
+		
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		
 		addField(new BooleanFieldEditor("JAVAFX_EMBEDDED", "&Use JavaFX to embedd the ImageJ canvas", getFieldEditorParent()));
 

@@ -48,7 +48,7 @@
             category="com.eco.bio7.preferences.Bio7PreferencePage"
             class="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
             id="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
-            name="ImageJ">
+            name="Preferences ImageJ">
       </page>
    </extension>
    <extension
