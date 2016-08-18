@@ -23,7 +23,7 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 	private boolean bgKeepPreview;		// tells the background thread to keep the result of preview
 	private Thread previewThread;		 // the thread of the preview
 	private GenericDialog gd;			 // the dialog (if it registers here by setDialog)
-	private JCheckBox previewCheckbox;	 // reference to the preview Checkbox of the dialog
+	private Checkbox previewCheckbox;	 // reference to the preview Checkbox of the dialog
 	private long previewTime;				// time (ms) needed for preview processing
 	private boolean ipChanged;			// whether the image data have been changed
 	private int processedAsPreview;			// the slice processed during preview (if non-zero)
@@ -461,7 +461,7 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 			if (thread==previewThread) {
 				gd.previewRunning(false);
 				IJ.wait(100); // needed on Macs
-				previewCheckbox.setSelected(false);
+				previewCheckbox.setState(false);
 				bgPreviewOn = false;
 				previewThread = null;
 			}
@@ -600,7 +600,7 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 	 */
 	public boolean dialogItemChanged(GenericDialog gd, AWTEvent e) {
 		if (previewCheckbox == null || imp == null) return true;
-		previewCheckboxOn = previewCheckbox.isSelected();
+		previewCheckboxOn = previewCheckbox.getState();
 		if (previewCheckboxOn  && previewThread == null) {
 			bgPreviewOn = true;						//need to start a background thread for preview
 			previewThread = new Thread(this, command+" Preview");

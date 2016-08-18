@@ -448,7 +448,7 @@ public class ImageMath implements ExtendedPlugInFilter, DialogListener {
 	 	if (arg.equals("macro")) {
 	 		String str = gd.getNextString();
 			if (previewing() && macro2!=null && !str.equals(macro2))
-				gd.getPreviewCheckbox().setSelected(false);
+				gd.getPreviewCheckbox().setState(false);
 			macro2 = str;
     	} else if (arg.equals("add")||arg.equals("sub")||arg.equals("set"))
 			addValue = gd.getNextNumber();
