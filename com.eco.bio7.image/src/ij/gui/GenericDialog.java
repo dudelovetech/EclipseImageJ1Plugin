@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.swing.JPanel;
 
+import com.eco.bio7.image.Util;
+
 import ij.*;
 import ij.plugin.frame.Recorder;
 import ij.plugin.ScreenGrabber;
@@ -41,7 +43,7 @@ import ij.macro.*;
 * "Show Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
 */
 public class GenericDialog extends Dialog implements ActionListener, TextListener, 
-FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
+FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener, ComponentListener {
 
 	public static final int MAX_SLIDERS = 25;
 	protected Vector numberField, stringField, checkbox, choice, slider, radioButtonGroups;
@@ -121,6 +123,13 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		macro = macroOptions!=null;
 		addKeyListener(this);
 		addWindowListener(this);
+		//Added for Bio7!
+		addComponentListener(this);
+		/* Changed for Bio7! */
+		Font font=Util.getOSFontToAwt();
+		if (font != null) {
+		setFont(Util.getOSFontToAwt());
+		}
 		
     }
     
@@ -1518,11 +1527,41 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		return macro;
 	}
     
-    public void windowActivated(WindowEvent e) {}
-    public void windowOpened(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {
+    	validate();
+        repaint();
+    }
+    public void windowOpened(WindowEvent e) {
+validate();
+    repaint();}
     public void windowClosed(WindowEvent e) {}
     public void windowIconified(WindowEvent e) {}
     public void windowDeiconified(WindowEvent e) {}
     public void windowDeactivated(WindowEvent e) {}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		validate();
+        repaint();
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
