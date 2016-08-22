@@ -1,5 +1,6 @@
 package com.eco.bio7.image;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
@@ -28,6 +29,7 @@ import org.osgi.framework.Bundle;
 public class Util {
 
 	private static Font awtFont;
+	private static Color col = null;
 
 	/**
 	 * A method to get the ImageJ path.
@@ -58,9 +60,9 @@ public class Util {
 	public static java.awt.Font getOSFontToAwt() {
 
 		Display dis = getDisplay();
-		
+
 		dis.syncExec(new Runnable() {
-			
+
 			public void run() {
 
 				FontData fontData = dis.getSystemFont().getFontData()[0];
@@ -76,6 +78,25 @@ public class Util {
 		});
 
 		return awtFont;
+	}
+
+	public static Color getSWTBackgroundToAWT() {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+
+				org.eclipse.swt.graphics.Color colswt = CanvasView.getCanvas_view().getParent2().getBackground();
+				int r = colswt.getRed();
+				int g = colswt.getGreen();
+				int b = colswt.getBlue();
+				col = new Color(r, g, b);
+
+			}
+		});
+		return col;
+
 	}
 
 	/**
