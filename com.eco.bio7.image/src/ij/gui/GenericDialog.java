@@ -225,7 +225,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			grid.setConstraints(tf, c);
 			add(tf);
 		} else {
-			JPanel panel = new JPanel();
+			Panel panel = new Panel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			panel.add(tf);
 			panel.add(new Label(" " + units));
@@ -491,7 +491,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				if (Recorder.record || macro)
 					saveLabel(cb, labels[i1]);
 				if (IJ.isLinux()) {
-					JPanel panel2 = new JPanel();
+					Panel panel2 = new Panel();
 					panel2.setLayout(new BorderLayout());
 					panel2.add("West", cb);
 					panel.add(panel2);
@@ -1299,7 +1299,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			if (pfr != null) // prepare preview (not in macro mode): tell the
 								// PlugInFilterRunner to listen
 				pfr.setDialog(this);
-			JPanel buttons = new JPanel();
+			Panel buttons = new Panel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new Button(cancelLabel);
 			cancel.addActionListener(this);
