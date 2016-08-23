@@ -225,7 +225,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			grid.setConstraints(tf, c);
 			add(tf);
 		} else {
-			Panel panel = new Panel();
+			JPanel panel = new JPanel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			panel.add(tf);
 			panel.add(new Label(" " + units));
@@ -449,7 +449,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 *            http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int nRows = headings != null ? rows + 1 : rows;
 		panel.setLayout(new GridLayout(nRows, columns, 6, 0));
 		int startCBIndex = cbIndex;
@@ -491,7 +491,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				if (Recorder.record || macro)
 					saveLabel(cb, labels[i1]);
 				if (IJ.isLinux()) {
-					Panel panel2 = new Panel();
+					JPanel panel2 = new JPanel();
 					panel2.setLayout(new BorderLayout());
 					panel2.add("West", cb);
 					panel.add(panel2);
@@ -525,7 +525,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 *            button initially selected
 	 */
 	public void addRadioButtonGroup(String label, String[] items, int rows, int columns, String defaultItem) {
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int n = items.length;
 		panel.setLayout(new GridLayout(rows, columns, 0, 0));
 		CheckboxGroup cg = new CheckboxGroup();
@@ -663,7 +663,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	public void addTextAreas(String text1, String text2, int rows, int columns) {
 		if (textArea1 != null)
 			return;
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		textArea1 = new TextArea(text1, rows, columns, TextArea.SCROLLBARS_NONE);
 		if (IJ.isLinux())
 			textArea1.setBackground(Color.white);
@@ -761,7 +761,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		tf.setEditable(true);
 		firstSlider = false;
 
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		GridBagLayout pgrid = new GridBagLayout();
 		GridBagConstraints pc = new GridBagConstraints();
 		panel.setLayout(pgrid);
@@ -805,7 +805,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 */
 	// extra method to avoid plugin mistake
 	public void addPanel(Panel panel) {
-		Panel panel2 = new Panel();
+		JPanel panel2 = new JPanel();
 		Component[] comp = panel.getComponents();
 		for (int i = 0; i < comp.length; i++) {
 			panel2.add(comp[i]);
@@ -1299,7 +1299,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			if (pfr != null) // prepare preview (not in macro mode): tell the
 								// PlugInFilterRunner to listen
 				pfr.setDialog(this);
-			Panel buttons = new Panel();
+			JPanel buttons = new JPanel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new Button(cancelLabel);
 			cancel.addActionListener(this);
