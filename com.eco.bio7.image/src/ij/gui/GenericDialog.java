@@ -137,7 +137,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (font != null) {
 			setFont(Util.getOSFontToAwt());
 		}
-		setBackground(Util.getSWTBackgroundToAWT());
+		//setBackground(Util.getSWTBackgroundToAWT());
 	}
 
 	// void showFields(String id) {
