@@ -16,6 +16,11 @@ import java.util.UUID;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -58,6 +63,7 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
+
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -101,6 +107,14 @@ public class CanvasView extends ViewPart {
 
 	private ImageJHelp help;
 
+	private String osname;
+
+	private boolean isWin;
+
+	private boolean isMac;
+
+	private boolean isLinux;
+
 	private static CanvasView canvas_view;
 
 	public static CTabFolder tabFolder;
@@ -113,6 +127,47 @@ public class CanvasView extends ViewPart {
 
 		this.getViewSite();
 		javafx.application.Platform.setImplicitExit(false);
+		osname = System.getProperty("os.name");
+		isWin = osname.startsWith("Windows");
+		isMac = !isWin && osname.startsWith("Mac");
+		isLinux = osname.startsWith("Linux");
+
+		if (isWin) {
+
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException e) {
+
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+
+				e.printStackTrace();
+			} catch (UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		} else if (isMac) {
+
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException e) {
+
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+
+				e.printStackTrace();
+			} catch (UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}
+		/* If Linux is the OS! */
+		else if (isLinux) {
+
+		}
+
 	}
 
 	public void createPartControl(Composite parent) {
@@ -133,7 +188,7 @@ public class CanvasView extends ViewPart {
 			}
 		});
 
-		//AwtEnvironment awt = new AwtEnvironment(parent.getDisplay());
+		// AwtEnvironment awt = new AwtEnvironment(parent.getDisplay());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "com.eco.bio7.imagej");
 
@@ -158,9 +213,11 @@ public class CanvasView extends ViewPart {
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
 
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = "
+								+ (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = "
+								+ (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
