@@ -31,6 +31,8 @@ The important views to open are the ImageJ-Canvas which essentially implements t
 
 **Window->Show View->Other->ImageJ->ImageJ-Toolbar (ImageJ toolbar)**
 
+The ImageJ toolbar can also be opened in the ImageJ-Canvas (ImageJ 'Window' menu).
+
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
 ***Window->Show View->Other->ImageJ Extra->Thumbnails***
@@ -40,8 +42,6 @@ Ignore the 'Image' view in the same section which is used to show a detached ima
 Preferences can be found under "Preferences ImageJ".
 
 Plugins can be installed in the ImageJ plugins folder (see the plugin folder inside of the Eclipse ImageJ plugin). They will be added to the plugin menu automatically.
-
-Some plugins will not work by default because of the different interfaces (Swing vs. AWT) but can be adapted more or less easily.
 
 A right-click on an image tab will open the displayed image in an extra view for, e.g., side by side views (x,y,z views). They must be closed separately. 
 
