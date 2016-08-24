@@ -15,6 +15,8 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 6. Added two preferences to define the install location of plugins and macros.
 
+7. Improved plugin compatibility by going back to AWT in some dialogs.
+
 ### Installation:
 
 **Important for MacOSX : Please add the option -Dprism.order=sw in the Eclipse.ini to avoid a crash when using JavaFX!**
