@@ -11,6 +11,8 @@
 
 package com.eco.bio7.image;
 
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.UUID;
 import java.util.Vector;
@@ -18,9 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
-
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -44,6 +46,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -54,7 +57,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 import com.eco.bio7.ImageJPluginActions.ImageJHelp;
 import com.eco.bio7.ImageJPluginActions.ImageJAnalyzeAction;
 import com.eco.bio7.ImageJPluginActions.ImageJEditAction;
@@ -63,7 +65,6 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
-
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -127,11 +128,18 @@ public class CanvasView extends ViewPart {
 
 		this.getViewSite();
 		javafx.application.Platform.setImplicitExit(false);
+		
+
+	}
+
+	public void createPartControl(Composite parent) {
+		
 		osname = System.getProperty("os.name");
 		isWin = osname.startsWith("Windows");
 		isMac = !isWin && osname.startsWith("Mac");
 		isLinux = osname.startsWith("Linux");
-
+       
+		setComponentFont(parent.getDisplay());
 		if (isWin) {
 
 			try {
@@ -165,12 +173,17 @@ public class CanvasView extends ViewPart {
 		}
 		/* If Linux is the OS! */
 		else if (isLinux) {
+			MetalTheme theme = new Bio7LinuxTheme();
 
+			MetalLookAndFeel.setCurrentTheme(theme);
+
+			try {
+				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); //$NON-NLS-1$
+				// SwingUtilities.updateComponentTreeUI(this);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 		}
-
-	}
-
-	public void createPartControl(Composite parent) {
 
 		parent.addDisposeListener(new DisposeListener() {
 
@@ -580,5 +593,74 @@ public class CanvasView extends ViewPart {
 	 * public ArrayList<String> getDetachedSecViewIDs() { return
 	 * detachedSecViewIDs; }
 	 */
+	private void setComponentFont(Display dis) {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean antialiasedFonts = false;
+		antialiasedFonts = store.getBoolean("FONT_ANTIALIASED");
+		if (antialiasedFonts) {
+			System.setProperty("awt.useSystemAAFontSettings", "on");
+			System.setProperty("swing.aatext", "true");
+		}
+
+		
+
+		assert EventQueue.isDispatchThread(); // On AWT event thread
+
+		FontData fontData = dis.getSystemFont().getFontData()[0];
+
+		int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
+
+		int awtFontSize = (int) Math.round((double) fontData.getHeight() * resolution / 72.0);
+		java.awt.Font awtFont = null;
+
+		int fontSizeCorrection = 0;
+		fontSizeCorrection = store.getInt("FONT_SIZE_CORRECTION");
+		/* Font size correction! */
+
+		awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize + fontSizeCorrection);
+
+		// Update the look and feel defaults to use new font.
+		updateLookAndFeel(awtFont);
+
+	}
+
+	private void updateLookAndFeel(java.awt.Font awtFont) {
+		assert awtFont != null;
+		assert EventQueue.isDispatchThread(); // On AWT event thread
+
+		FontUIResource fontResource = new FontUIResource(awtFont);
+
+		UIManager.put("Button.font", fontResource); //$NON-NLS-1$
+		UIManager.put("CheckBox.font", fontResource); //$NON-NLS-1$
+		UIManager.put("ComboBox.font", fontResource); //$NON-NLS-1$
+		UIManager.put("EditorPane.font", fontResource); //$NON-NLS-1$
+		UIManager.put("Label.font", fontResource); //$NON-NLS-1$
+		UIManager.put("List.font", fontResource); //$NON-NLS-1$
+		UIManager.put("Panel.font", fontResource); //$NON-NLS-1$
+		UIManager.put("ProgressBar.font", fontResource); //$NON-NLS-1$
+		UIManager.put("RadioButton.font", fontResource); //$NON-NLS-1$
+		UIManager.put("ScrollPane.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TabbedPane.font", fontResource); //$NON-NLS-1$
+		UIManager.put("Table.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TableHeader.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TextField.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TextPane.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TitledBorder.font", fontResource); //$NON-NLS-1$
+		UIManager.put("ToggleButton.font", fontResource); //$NON-NLS-1$
+		UIManager.put("TreeFont.font", fontResource); //$NON-NLS-1$
+		UIManager.put("ViewportFont.font", fontResource); //$NON-NLS-1$
+		UIManager.put("MenuItem.font", fontResource); //$NON-NLS-1$
+		UIManager.put("CheckboxMenuItem.font", fontResource); //$NON-NLS-1$
+		UIManager.put("PopupMenu.font", fontResource); // $NON-NLS-1
+
+		java.util.Enumeration keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if (value instanceof javax.swing.plaf.FontUIResource)
+				UIManager.put(key, fontResource);
+		}
+
+	}
 
 }

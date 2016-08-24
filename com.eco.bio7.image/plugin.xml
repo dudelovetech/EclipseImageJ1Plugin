@@ -11,14 +11,14 @@
             id="com.eco.bio7.imagej"
             name="ImageJ-Canvas"/>
       <view
-            category="com.eco.bio7.image.plugin"
+            category="com.eco.bio7.image.plugin.extra"
             class="com.eco.bio7.image.thumbs.ThumbnailsView"
             icon="bin/images/bild.gif"
             id="com.eco.bio7.thumbnails"
             name="Thumbnails"/>
       <view
             allowMultiple="true"
-            category="com.eco.bio7.image.plugin.extra"
+            category="com.eco.bio7.image.plugin"
             class="com.eco.bio7.image.IJtoolbar"
             icon="bin/images/toij.gif"
             id="com.eco.bio7.ijtoolbar"
