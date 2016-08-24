@@ -1,9 +1,9 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.51e:
+### New in 1.51f:
 
-1. Updated ImageJ to 1.51e.
+1. Updated ImageJ to 1.51f.
 
 2. Reworked the ImageJ plugin view menus. Now all Imagej menus and nested submenus are displayed correctly!
 
@@ -12,6 +12,8 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 4. Plugins, scripts and macros are now displayed in their defined menus or submenus.
 
 5. All ImageJ Menus are updated dynamically to recognize copied scripts and macros instantly.
+
+6. Added two preferences to define the install location of plugins and macros.
 
 ### Installation:
 
