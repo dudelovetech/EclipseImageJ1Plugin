@@ -27,13 +27,15 @@ Add the following URL as update site:
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar. You find them in Eclipse under: Window->Show View->Other. First open the ImageJ-Canvas!
 
-**Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)**
+**Window->Show View->Other->ImageJ->ImageJ-Canvas (ImageJ panel and menu)**
 
-**Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)**
+**Window->Show View->Other->ImageJ->ImageJ-Toolbar (ImageJ toolbar)**
 
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
-***Window->Show View->Other->Thumbnails***
+***Window->Show View->Other->ImageJ Extra->Thumbnails***
+
+Ignore the 'Image' view in the same section which is used to show a detached image (opened with a mouse right-click on a image tab).
 
 Preferences can be found under "Preferences ImageJ".
 
