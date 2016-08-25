@@ -1,9 +1,9 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.51e:
+### New in 1.51f:
 
-1. Updated ImageJ to 1.51e.
+1. Updated ImageJ to 1.51f.
 
 2. Reworked the ImageJ plugin view menus. Now all Imagej menus and nested submenus are displayed correctly!
 
@@ -12,6 +12,10 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 4. Plugins, scripts and macros are now displayed in their defined menus or submenus.
 
 5. All ImageJ Menus are updated dynamically to recognize copied scripts and macros instantly.
+
+6. Added two preferences to define the install location of plugins and macros.
+
+7. Improved plugin compatibility by going back to AWT in some dialogs.
 
 ### Installation:
 
@@ -23,19 +27,21 @@ Add the following URL as update site:
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar. You find them in Eclipse under: Window->Show View->Other. First open the ImageJ-Canvas!
 
-**Window->Show View->Other->ImageJ-Canvas (ImageJ panel and menu)**
+**Window->Show View->Other->ImageJ->ImageJ-Canvas (ImageJ panel and menu)**
 
-**Window->Show View->Other->ImageJ-Toolbar (ImageJ toolbar)**
+**Window->Show View->Other->ImageJ->ImageJ-Toolbar (ImageJ toolbar)**
+
+The ImageJ toolbar can also be opened in the ImageJ-Canvas (ImageJ 'Window' menu).
 
 There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
 
-***Window->Show View->Other->Thumbnails***
+***Window->Show View->Other->ImageJ Extra->Thumbnails***
+
+Ignore the 'Image' view in the same section which is used to show a detached image (opened with a mouse right-click on a image tab).
 
 Preferences can be found under "Preferences ImageJ".
 
 Plugins can be installed in the ImageJ plugins folder (see the plugin folder inside of the Eclipse ImageJ plugin). They will be added to the plugin menu automatically.
-
-Some plugins will not work by default because of the different interfaces (Swing vs. AWT) but can be adapted more or less easily.
 
 A right-click on an image tab will open the displayed image in an extra view for, e.g., side by side views (x,y,z views). They must be closed separately. 
 
