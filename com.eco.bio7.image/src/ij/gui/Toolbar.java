@@ -110,7 +110,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	private static int arcSize = (int) Prefs.get(CORNER_DIAMETER, 20);
 	private int lineType = LINE;
 	private static boolean legacyMode;
-	private Color gray = IJ.getInstance().getSystemColour();// Changed for Bio7!
+	private Color gray = ImageJ.getSystemColour();// Changed for Bio7!
 	// private Color gray = new Color(228,228,228);
 	private Color brighter = gray.brighter();
 	private Color darker = new Color(180, 180, 180);
@@ -126,7 +126,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		resetButtons();
 		down[0] = true;
 		setForeground(Color.black);
-		setBackground(ImageJ.backgroundColor);
+		setBackground(ImageJ.getSystemColour());//Changed for Bio7!
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		instance = this;

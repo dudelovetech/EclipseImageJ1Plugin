@@ -1,5 +1,6 @@
 package ij.gui;
 
+import ij.IJ;
 import ij.ImageJ;
 import ij.macro.Interpreter;
 
@@ -23,7 +24,7 @@ public class ProgressBar extends JPanel {
 
     private Color barColor = Color.gray;
     private Color fillColor = new Color(204, 204, 255);
-    private Color backgroundColor = ij.ImageJ.backgroundColor;
+    private Color backgroundColor = ImageJ.getSystemColour();//Changed for Bio7!
     private Color frameBrighter = backgroundColor.brighter();
     private Color frameDarker = backgroundColor.darker();
     private boolean dualDisplay = false;

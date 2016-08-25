@@ -11,17 +11,15 @@
 
 package com.eco.bio7.image;
 
+import java.util.Vector;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.widgets.Display;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.ImageWindow;
-
-import java.util.Vector;
-
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * A class for the control of the ImageJ tabs.
@@ -32,6 +30,7 @@ import org.eclipse.swt.widgets.Display;
 public class IJTabs {
 
 	private static int id;
+
 	/**
 	 * Activates the tab with the specified number.
 	 * 
@@ -85,6 +84,8 @@ public class IJTabs {
 	 * Closes all tabs in the ImageJ view.
 	 */
 	public static void deleteAllTabs() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
 
 		for (int i = 0; i < items.length; i++) {
@@ -94,8 +95,16 @@ public class IJTabs {
 			dis.syncExec(new Runnable() {
 
 				public void run() {
+					if (javaFXEmbedded) {
+						if (items[tabcount].getControl().isDisposed() == false) {
+							items[tabcount].getControl().dispose();
+						}
+						items[tabcount].dispose();
+					}
 
-					items[tabcount].dispose();
+					else {
+						items[tabcount].dispose();
+					}
 				}
 			});
 
@@ -116,22 +125,46 @@ public class IJTabs {
 	public static void deleteTab(int number) {
 		final int nrdel = number;
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		Display dis = CanvasView.getParent2().getDisplay();
 		dis.syncExec(new Runnable() {
 
 			public void run() {
 				Vector ve = (Vector) items[nrdel].getData();
-				SwingUtilities.invokeLater(new Runnable() {
-					// !!
-					public void run() {
-						ImagePlus plu = (ImagePlus) ve.get(0);
 
-						final ImageWindow win = (ImageWindow) ve.get(1);
+				if (javaFXEmbedded) {
+					SwingUtilities.invokeLater(new Runnable() {
+						// !!
+						public void run() {
+							ImagePlus plu = (ImagePlus) ve.get(0);
 
-						win.bio7TabClose();
+							final ImageWindow win = (ImageWindow) ve.get(1);
+
+							win.bio7TabClose();
+
+						}
+					});
+					if (items[nrdel].getControl().isDisposed() == false) {
+						items[nrdel].getControl().dispose();
 					}
-				});
-				items[nrdel].dispose();
+					items[nrdel].dispose();
+
+				} else {
+
+					SwingUtilities.invokeLater(new Runnable() {
+						// !!
+						public void run() {
+							ImagePlus plu = (ImagePlus) ve.get(0);
+
+							final ImageWindow win = (ImageWindow) ve.get(1);
+
+							win.bio7TabClose();
+						}
+					});
+					items[nrdel].dispose();
+				}
+
 			}
 		});
 
@@ -147,9 +180,9 @@ public class IJTabs {
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-              if(item!=null){
-				item.dispose();
-              }
+				if (item != null) {
+					item.dispose();
+				}
 			}
 		});
 
@@ -157,7 +190,9 @@ public class IJTabs {
 
 	/**
 	 * Hides the tab with the specified number in the ImageJ view.
-	 * @param number the tab number.
+	 * 
+	 * @param number
+	 *            the tab number.
 	 */
 	public static void hideTabNumber(int number) {
 
@@ -178,27 +213,42 @@ public class IJTabs {
 	 * Deletes the active tab in the ImageJ view.
 	 */
 	public static void deleteActiveTab() {
-
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		final CTabItem item = CanvasView.tabFolder.getSelection();
-		if(item!=null){
-		Display dis = CanvasView.getParent2().getDisplay();
-		dis.syncExec(new Runnable() {
+		if (item != null) {
+			Display dis = CanvasView.getParent2().getDisplay();
+			dis.syncExec(new Runnable() {
 
-			public void run() {
-				Vector ve = (Vector) item.getData();
+				public void run() {
+					Vector ve = (Vector) item.getData();
+					if (javaFXEmbedded) {
+						SwingUtilities.invokeLater(new Runnable() {
+							// !!
+							public void run() {
+								final ImageWindow win = (ImageWindow) ve.get(1);
 
-				SwingUtilities.invokeLater(new Runnable() {
-					// !!
-					public void run() {
+								win.bio7TabClose();
+								if (item.getControl().isDisposed() == false) {
+									item.getControl().dispose();
+								}
+							}
+						});
+						item.dispose();
+					} else {
+						SwingUtilities.invokeLater(new Runnable() {
+							// !!
+							public void run() {
 
-						final ImageWindow win = (ImageWindow) ve.get(1);
+								final ImageWindow win = (ImageWindow) ve.get(1);
 
-						win.bio7TabClose();
+								win.bio7TabClose();
+							}
+						});
+						item.dispose();
 					}
-				});
-				item.dispose();
-			}
-		});
+				}
+			});
 		}
 
 	}
@@ -238,9 +288,10 @@ public class IJTabs {
 			}
 		});
 	}
+
 	public static void setActiveTabID(int theId) {
-		
-		if (id>0){
+
+		if (id > 0) {
 			id = WindowManager.getNthImageID(id);
 		}
 		/* Changed for Bio7! */
@@ -259,10 +310,10 @@ public class IJTabs {
 						public void run() {
 
 							final ImageWindow win2 = (ImageWindow) ve.get(1);
-							
-							ImagePlus plus=WindowManager.getImage(id);
+
+							ImagePlus plus = WindowManager.getImage(id);
 							/* Search for the tab which embeds this instance! */
-							if (win2.getImagePlus()==plus) {
+							if (win2.getImagePlus() == plus) {
 								// calls the selection!
 								CanvasView.getCanvas_view().tabFolder.setSelection(items[count]);
 								// System.out.println("closed");
@@ -295,8 +346,11 @@ public class IJTabs {
 
 							final ImagePlus plus = (ImagePlus) ve.get(0);
 
-							/* Search for the tab which embeds this ImagePlus instance! */
-							if (plus==imagePlus) {
+							/*
+							 * Search for the tab which embeds this ImagePlus
+							 * instance!
+							 */
+							if (plus == imagePlus) {
 								// calls bio7Tabclose!
 								items[count].dispose();
 
@@ -308,7 +362,7 @@ public class IJTabs {
 
 			}
 		});
-		
+
 	}
 
 }

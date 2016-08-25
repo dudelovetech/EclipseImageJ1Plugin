@@ -196,7 +196,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusBar = new JPanel();
 		statusBar.setLayout(new BorderLayout());
 		statusBar.setForeground(Color.black);
-		statusBar.setBackground(backgroundColor);
+		statusBar.setBackground(getSystemColour());//Changed for Bio7!
 		statusLine = new JLabel();
 		statusLine.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		statusLine.addKeyListener(this);

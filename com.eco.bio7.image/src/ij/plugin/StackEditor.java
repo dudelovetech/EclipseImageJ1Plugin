@@ -11,10 +11,17 @@ import ij.io.FileInfo;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.SwingUtilities;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+
+import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.IJTabs;
+import com.eco.bio7.image.Util;
 
 /** Implements the AddSlice, DeleteSlice and "Stack to Images" commands. */
 public class StackEditor implements PlugIn {
@@ -280,6 +287,8 @@ public class StackEditor implements PlugIn {
 
 		ImageStack stack = imp.getStack();
 		/* Changed for Bio7! */
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		IJTabs.deleteActiveTab();
 		int size = stack.getSize();
 		if (size > 30 && !IJ.isMacro()) {
@@ -326,26 +335,55 @@ public class StackEditor implements PlugIn {
 			}
 
 			/* Changed for Bio7! */
-			try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-
-					public void run() {
-
-						Platform.runLater(new Runnable() {
+			if (javaFXEmbedded) {
+				try {
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
 
 							public void run() {
 
-								imp2.show();
+								try {
+									Util.runAndWait(new Runnable() {
+
+										public void run() {
+
+											imp2.show();
+
+										}
+									});
+								} catch (InterruptedException | ExecutionException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
 							}
 						});
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				});
-			} catch (InvocationTargetException e) {
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-				e.printStackTrace();
-			} catch (InterruptedException e) {
+			} else {
+				try {
+					SwingUtilities.invokeAndWait(new Runnable() {
 
-				e.printStackTrace();
+						public void run() {
+
+							imp2.show();
+
+						}
+					});
+				} catch (InvocationTargetException e) {
+
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
 			}
 		}
 		imp.changes = false;

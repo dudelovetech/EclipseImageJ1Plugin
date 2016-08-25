@@ -128,17 +128,16 @@ public class CanvasView extends ViewPart {
 
 		this.getViewSite();
 		javafx.application.Platform.setImplicitExit(false);
-		
 
 	}
 
 	public void createPartControl(Composite parent) {
-		
+
 		osname = System.getProperty("os.name");
 		isWin = osname.startsWith("Windows");
 		isMac = !isWin && osname.startsWith("Mac");
 		isLinux = osname.startsWith("Linux");
-       
+
 		setComponentFont(parent.getDisplay());
 		if (isWin) {
 
@@ -339,8 +338,11 @@ public class CanvasView extends ViewPart {
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
 
-		tabFolder.setSelectionBackground(new Color[] { display.getSystemColor(SWT.COLOR_DARK_GREEN), display.getSystemColor(SWT.COLOR_DARK_GREEN) }, new int[] { 90 }, true);
-		tabFolder.setSelectionForeground(display.getSystemColor(SWT.COLOR_WHITE));
+		// tabFolder.setSelectionBackground(new Color[] {
+		// display.getSystemColor(SWT.COLOR_DARK_GREEN),
+		// display.getSystemColor(SWT.COLOR_DARK_GREEN) }, new int[] { 90 },
+		// true);
+		// tabFolder.setSelectionForeground(display.getSystemColor(SWT.COLOR_WHITE));
 
 		tabFolder.addCTabFolder2Listener(new CTabFolder2Listener() {
 
@@ -350,13 +352,23 @@ public class CanvasView extends ViewPart {
 				ImagePlus plu = (ImagePlus) ve.get(0);
 
 				final ImageWindow win = (ImageWindow) ve.get(1);
-				SwingUtilities.invokeLater(new Runnable() {
-					// !!
-					public void run() {
-						win.bio7TabClose();
+				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+				if (javaFXEmbedded) {
+					win.bio7TabClose();
+					CTabItem cTabItem = (CTabItem) event.item;
+					if (cTabItem.getControl().isDisposed() == false) {
+						cTabItem.getControl().dispose();
 					}
-				});
 
+				} else {
+					SwingUtilities.invokeLater(new Runnable() {
+						// !!
+						public void run() {
+							win.bio7TabClose();
+						}
+					});
+				}
 			}
 
 			public void maximize(CTabFolderEvent event) {
@@ -601,8 +613,6 @@ public class CanvasView extends ViewPart {
 			System.setProperty("awt.useSystemAAFontSettings", "on");
 			System.setProperty("swing.aatext", "true");
 		}
-
-		
 
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 

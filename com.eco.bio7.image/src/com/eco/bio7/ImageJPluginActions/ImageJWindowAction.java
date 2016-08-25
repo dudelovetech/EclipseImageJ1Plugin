@@ -176,7 +176,10 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 		menuItemFx.setText("Open in JavaFX Panel (exp.)");
 
-		if (selected == false) {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean openInFXPanel = store.getBoolean("JAVAFX_EMBEDDED");
+
+		if (openInFXPanel == false) {
 			menuItemFx.setSelection(false);
 		} else {
 			menuItemFx.setSelection(true);

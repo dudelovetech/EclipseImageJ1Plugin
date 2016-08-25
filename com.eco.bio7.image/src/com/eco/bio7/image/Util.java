@@ -9,6 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -19,6 +24,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+
+
 
 /**
  * A utility class for the ImageJ plugin.
@@ -231,5 +244,67 @@ public class Util {
 			display = Display.getDefault();
 		return display;
 	}
+
+	/**
+	 * Invokes a Runnable in JFX Thread and waits while it's finished. Like
+	 * SwingUtilities.invokeAndWait does for EDT.
+	 * 
+	 * @param run
+	 *            The Runnable that has to be called on JFX thread.
+	 * @throws InterruptedException
+	 *             f the execution is interrupted.
+	 * @throws ExecutionException
+	 *             If a exception is occurred in the run method of the Runnable
+	 */
+	/**
+	 * Simple helper class.
+	 * 
+	 * @author hendrikebbers
+	 * 
+	 */
+	private static class ThrowableWrapper {
+		Throwable t;
+}
+	public static void runAndWait(final Runnable run)
+			throws InterruptedException, ExecutionException {
+		if ( javafx.application.Platform.isFxApplicationThread()) {
+			try {
+				run.run();
+			} catch (Exception e) {
+				throw new ExecutionException(e);
+			}
+		} else {
+			final Lock lock = new ReentrantLock();
+			final Condition condition = lock.newCondition();
+			final ThrowableWrapper throwableWrapper = new ThrowableWrapper();
+			lock.lock();
+			try {
+				 javafx.application.Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						lock.lock();
+						try {
+							run.run();
+						} catch (Throwable e) {
+							throwableWrapper.t = e;
+						} finally {
+							try {
+								condition.signal();
+							} finally {
+								lock.unlock();
+							}
+						}
+					}
+				});
+				condition.await();
+				if (throwableWrapper.t != null) {
+					throw new ExecutionException(throwableWrapper.t);
+				}
+			} finally {
+				lock.unlock();
+			}
+		}
+}
 
 }
