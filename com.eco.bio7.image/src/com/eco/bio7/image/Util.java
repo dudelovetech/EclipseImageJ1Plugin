@@ -30,9 +30,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-
-
-
 /**
  * A utility class for the ImageJ plugin.
  * 
@@ -246,6 +243,7 @@ public class Util {
 	}
 
 	/**
+	 * Source from: http://www.guigarage.com/2013/01/invokeandwait-for-javafx/
 	 * Invokes a Runnable in JFX Thread and waits while it's finished. Like
 	 * SwingUtilities.invokeAndWait does for EDT.
 	 * 
@@ -264,10 +262,10 @@ public class Util {
 	 */
 	private static class ThrowableWrapper {
 		Throwable t;
-}
-	public static void runAndWait(final Runnable run)
-			throws InterruptedException, ExecutionException {
-		if ( javafx.application.Platform.isFxApplicationThread()) {
+	}
+
+	public static void runAndWait(final Runnable run) throws InterruptedException, ExecutionException {
+		if (javafx.application.Platform.isFxApplicationThread()) {
 			try {
 				run.run();
 			} catch (Exception e) {
@@ -279,7 +277,7 @@ public class Util {
 			final ThrowableWrapper throwableWrapper = new ThrowableWrapper();
 			lock.lock();
 			try {
-				 javafx.application.Platform.runLater(new Runnable() {
+				javafx.application.Platform.runLater(new Runnable() {
 
 					@Override
 					public void run() {
@@ -305,6 +303,6 @@ public class Util {
 				lock.unlock();
 			}
 		}
-}
+	}
 
 }
