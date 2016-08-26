@@ -23,6 +23,8 @@ import javax.swing.SwingUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
@@ -91,48 +93,61 @@ public class IJtoolbar extends ViewPart {
 		/*
 		 * On MacOSX the javaFX integration works fine and avoids some errors!
 		 */
-		/*if (Util.getOS().equals("Mac")) {
-			//
-
-			jpp = new JPanel();
-			jpp.setLayout(new GridLayout(2, 1));
-			jpp.add(IJ.getInstance().toolbar);
-			jpp.add(IJ.getInstance().statusBar);
-
-			SwingFxSwtView view = new SwingFxSwtView();
-			view.embedd(parent, jpp);
-		}*/
+		/*
+		 * if (Util.getOS().equals("Mac")) { //
+		 * 
+		 * jpp = new JPanel(); jpp.setLayout(new GridLayout(2, 1));
+		 * jpp.add(IJ.getInstance().toolbar);
+		 * jpp.add(IJ.getInstance().statusBar);
+		 * 
+		 * SwingFxSwtView view = new SwingFxSwtView(); view.embedd(parent, jpp);
+		 * }
+		 */
 		/*
 		 * On Windows and Linux we use the SWT_AWT bridge!
 		 */
-		//else {
-			Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
-			Frame frame = SWT_AWT.new_Frame(top);
-			/*
-			 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
-			 * ef.addWindowListener(new WindowAdapter() { public void
-			 * windowActivated(WindowEvent e) {
-			 * ef.synthesizeWindowActivation(true); } });
-			 */
-			SwtAwt.setSwtAwtFocus(frame, top);
-			Panel panel = new JApplet() {
-				public void update(java.awt.Graphics g) {
+		// else {
+		Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+		Frame frame = SWT_AWT.new_Frame(top);
+		/*
+		 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
+		 * ef.addWindowListener(new WindowAdapter() { public void
+		 * windowActivated(WindowEvent e) { ef.synthesizeWindowActivation(true);
+		 * } });
+		 */
+		SwtAwt.setSwtAwtFocus(frame, top);
+		Panel panel = new JApplet() {
+			public void update(java.awt.Graphics g) {
 
-					paint(g);
-				}
-			};
+				paint(g);
+			}
+		};
 
-			frame.add(panel);
-			JRootPane roote = new JRootPane();
-			panel.add(roote);
-			java.awt.Container contentPane = roote.getContentPane();
-			jpp = new JPanel();
-			jpp.setLayout(new GridLayout(2, 1));
+		frame.add(panel);
+		JRootPane roote = new JRootPane();
+		panel.add(roote);
+		java.awt.Container contentPane = roote.getContentPane();
+		jpp = new JPanel();
+		jpp.setLayout(new GridLayout(2, 1));
+		if (IJ.getInstance() != null) {
 			jpp.add(IJ.getInstance().toolbar);
 			jpp.add(IJ.getInstance().statusBar);
 
 			contentPane.add(jpp);
-		//}
+		} else {
+			Display display = Util.getDisplay();
+			display.syncExec(new Runnable() {
+				public void run() {
+					MessageBox messageBox = new MessageBox(Util.getShell(),
+
+							SWT.ICON_WARNING);
+					messageBox.setText("Info!");
+					messageBox.setMessage("The ImageJ-Canvas view has to be alive!");
+					messageBox.open();
+				}
+			});
+		}
+		// }
 	}
 
 	public void setFocus() {
