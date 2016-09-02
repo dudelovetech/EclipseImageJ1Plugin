@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.eco.bio7.albireo.feature_2.1.0.201608261502.jar" id="com.eco.bio7.albireo.feature" version="2.1.0.201608261502">
+      <category name="ImageJ"/>
+   </feature>
+   <feature url="features/com.eco.bio7.image.feature_1.51.613.201608261502.jar" id="com.eco.bio7.image.feature" version="1.51.613.201608261502">
+      <category name="ImageJ"/>
+   </feature>
+   <feature url="features/com.eco.bio7.imagej2.feature_1.0.2.201608261502.jar" id="com.eco.bio7.imagej2.feature" version="1.0.2.201608261502">
+      <category name="ImageJ"/>
+   </feature>
+   <category-def name="ImageJ" label="ImageJ">
+      <description>
+         The scientific image application ImageJ as an Eclipse plugin.
+      </description>
+   </category-def>
+</site>

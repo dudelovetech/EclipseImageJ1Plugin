@@ -1027,7 +1027,7 @@ public class Menus {
 		macrosPath = store.getString("MACROS_PATH") + File.separator;
 		/* Get the installation directory of the ImageJ plugin! */
 		String currentDir = Util.getImageJPath();
-		ImageJPath = Util.getImageJPath();
+		ImageJPath = Util.getImageJPath()+File.separator;
 
 		File f = pluginsPath != null ? new File(pluginsPath) : null;
 		if (f == null || !f.isDirectory()) {
