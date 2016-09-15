@@ -14,6 +14,9 @@ package com.eco.bio7.ImageJPluginActions;
 import java.awt.CheckboxMenuItem;
 import java.awt.MenuBar;
 import java.util.Stack;
+
+import javax.swing.SwingUtilities;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -159,7 +162,39 @@ public class ImageJSubmenu {
 								}
 							});
 
-						} else {
+						} 
+						/*else if(labelMenuItem.equals("Open...")){
+							MenuItem it = new MenuItem(currentSubMenu, SWT.PUSH);
+							String lab = mItem.getLabel();
+							if (mItem.getShortcut() != null) {
+								//System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey());
+								it.setAccelerator(mItem.getShortcut().getKey());
+								it.setText(lab+"\t"+mItem.getShortcut());
+							}
+							else{
+							it.setText(lab);
+							}
+							it.addSelectionListener(new SelectionListener() {
+
+								
+
+								public void widgetSelected(SelectionEvent e) {
+									SwingUtilities.invokeLater(new Runnable() {
+										public void run() {
+
+											IJ.getInstance().doCommand("Open...");
+										}
+									});
+
+								}
+
+								public void widgetDefaultSelected(SelectionEvent e) {
+
+								}
+							});
+						}*/
+						
+						else {
 
 							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
 							String lab = mItem.getLabel();

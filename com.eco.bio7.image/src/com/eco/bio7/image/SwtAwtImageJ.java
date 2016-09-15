@@ -124,7 +124,7 @@ public class SwtAwtImageJ {
 							CanvasView.tabFolder.showItem(ci);
 							CanvasView.tabFolder.setSelection(ci);
 							CanvasView.setCurrent(a);
-
+							CanvasView.getCurrent().doLayout();
 						}
 					});
 
@@ -186,6 +186,7 @@ public class SwtAwtImageJ {
 					CanvasView.tabFolder.showItem(ci);
 					CanvasView.tabFolder.setSelection(ci);
 					CanvasView.setCurrent(a);
+					CanvasView.getCurrent().doLayout();
 
 				}
 			});
