@@ -97,7 +97,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the
 	 * version string.
 	 */
-	public static final String VERSION = "1.51f";
+	public static final String VERSION = "1.51g";
 	public static final String BUILD = "";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
@@ -196,7 +196,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusBar = new JPanel();
 		statusBar.setLayout(new BorderLayout());
 		statusBar.setForeground(Color.black);
-		statusBar.setBackground(getSystemColour());//Changed for Bio7!
+		statusBar.setBackground(getSystemColour());// Changed for Bio7!
 		statusLine = new JLabel();
 		statusLine.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		statusLine.addKeyListener(this);

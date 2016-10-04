@@ -204,7 +204,7 @@ public class Prefs {
 		if (homeDir == null)
 			/* /*Changed for Bio7! */
 			homeDir = path;// System.getProperty("user.dir");
-		String userHome = path;// System.getProperty("user.home");
+		/*String userHome = path;// System.getProperty("user.home");
 		if (IJ.isWindows()) {
 			prefsDir = homeDir; // ImageJ folder on Windows
 			if (prefsDir.endsWith("Desktop"))
@@ -217,7 +217,7 @@ public class Prefs {
 				prefsDir = homeDir;
 			// else
 			// prefsDir += File.separator + ".imagej";
-		}
+		}*/
 		if (f == null) {
 			try {
 				f = new FileInputStream(homeDir + "/" + PROPS_NAME);
@@ -293,11 +293,19 @@ public class Prefs {
 			return path;
 	}
 
-	/**
-	 * Gets the path to the directory where the preferences file (IJPrefs.txt)
-	 * is saved.
-	 */
+	/** Returns the path to the directory where the 
+		preferences file (IJPrefs.txt) is saved. */
 	public static String getPrefsDir() {
+      /* Changed for Bio7! */		
+		String path = Util.getImageJPath();
+		if (prefsDir==null) {
+			
+			/*if (IJ.isMacOSX())
+				dir += "/Library/Preferences";
+			else
+				dir += File.separator+".imagej";*/
+			prefsDir = path;
+		}
 		return prefsDir;
 	}
 
@@ -391,7 +399,7 @@ public class Prefs {
 
 	/** Opens the IJ_Prefs.txt file. */
 	static void loadPreferences() {
-		String path = prefsDir + separator + PREFS_NAME;
+		String path = getPrefsDir()+separator+PREFS_NAME;
 		boolean ok = loadPrefs(path);
 		if (!ok) { // not found
 			if (IJ.isWindows())
@@ -447,6 +455,7 @@ public class Prefs {
 			ImportDialog.savePreferences(prefs);
 			PlotWindow.savePreferences(prefs);
 			NewImage.savePreferences(prefs);
+			String prefsDir = getPrefsDir();
 			path = prefsDir + separator + PREFS_NAME;
 			if (prefsDir.endsWith(".imagej")) {
 				File f = new File(prefsDir);

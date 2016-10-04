@@ -137,6 +137,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	}
 
 	private void setLocationAndSize(boolean updating) {
+		if (imp == null)
+			return;
 		int width = imp.getWidth();
 		int height = imp.getHeight();
 		Rectangle maxWindow = getMaxWindow(0, 0);
@@ -252,6 +254,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	 */
 	public Insets getInsets() {
 		Insets insets = super.getInsets();
+		if (imp == null)
+			return insets;
 		double mag = ic.getMagnification();
 		int extraWidth = (int) ((MIN_WIDTH - imp.getWidth() * mag) / 2.0);
 		if (extraWidth < 0)
@@ -265,6 +269,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 
 	/** Draws the subtitle. */
 	public void drawInfo(Graphics g) {
+		if (imp == null)
+			return;
 		if (textGap != 0) {
 			Insets insets = super.getInsets();
 			if (imp.isComposite()) {
@@ -284,6 +290,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	/** Creates the subtitle. */
 	public String createSubtitle() {
 		String s = "";
+		if (imp == null)
+			return s;
 		int nSlices = imp.getStackSize();
 		if (nSlices > 1) {
 			ImageStack stack = imp.getStack();
@@ -544,10 +552,13 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	}
 
 	public Rectangle getMaximumBounds() {
+		Rectangle maxWindow = GUI.getMaxWindowBounds();
+		if (imp == null)
+			return maxWindow;
 		double width = imp.getWidth();
 		double height = imp.getHeight();
 		double iAspectRatio = width / height;
-		Rectangle maxWindow = GUI.getMaxWindowBounds();
+
 		maxWindowBounds = maxWindow;
 		if (iAspectRatio / ((double) maxWindow.width / maxWindow.height) > 0.75) {
 			maxWindow.y += 22; // uncover ImageJ menu bar
@@ -817,8 +828,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				IJ.log("setMenuBar: " + time + "ms (" + Menus.setMenuBarCount + ")");
 			if (time > 2000L)
 				Prefs.setIJMenuBar = false;
-		} else {
-						//if (ij!=null) ij.toFront();
+
 		}
 		if (imp != null)
 			imp.setIJMenuBar(true);

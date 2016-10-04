@@ -664,15 +664,18 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (textArea1 != null)
 			return;
 		JPanel panel = new JPanel();
+		Font font = new Font("SansSerif", Font.PLAIN, 14);
 		textArea1 = new TextArea(text1, rows, columns, TextArea.SCROLLBARS_NONE);
 		if (IJ.isLinux())
 			textArea1.setBackground(Color.white);
+		textArea1.setFont(font);
 		textArea1.addTextListener(this);
 		panel.add(textArea1);
 		if (text2 != null) {
 			textArea2 = new TextArea(text2, rows, columns, TextArea.SCROLLBARS_NONE);
 			if (IJ.isLinux())
 				textArea2.setBackground(Color.white);
+			textArea2.setFont(font);
 			panel.add(textArea2);
 		}
 		c.gridx = 0;
@@ -1539,7 +1542,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		IJ.setKeyDown(keyCode);
-		if (keyCode == KeyEvent.VK_ENTER && textArea1 == null) {
+		if (keyCode==KeyEvent.VK_ENTER && textArea1==null && okay!=null && okay.isEnabled()) {
 			wasOKed = true;
 			if (IJ.isMacOSX())
 				accessTextFields();
