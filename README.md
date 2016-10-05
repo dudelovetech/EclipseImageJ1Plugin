@@ -1,7 +1,7 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.51f:
+### New in 1.51g:
 
 1. Updated ImageJ to 1.51f.
 
