@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2014 M. Austenfeld
+ * Copyright (c) 2005-2016 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -77,9 +77,9 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 		menuItem.setText("ImageJ-Toolbar");
 
-		MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
+		//MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
 
-		menuItem1.setText("Bio7-Toolbar");
+		//menuItem1.setText("Bio7-Toolbar");
 
 		menuItem.addSelectionListener(new SelectionListener() {
 
@@ -93,7 +93,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
-		menuItem1.addSelectionListener(new SelectionListener() {
+		/*menuItem1.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 
@@ -159,7 +159,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
-		});
+		});*/
 		new MenuItem(fMenu, SWT.SEPARATOR);
 		/*
 		 * Create the dynamic menu which is later disposed and recreated every

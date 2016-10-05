@@ -2,7 +2,7 @@
 <feature
       id="com.eco.bio7.albireo.feature"
       label="Bio7 Albireo Plugin"
-      version="2.1.0.qualifier"
+      version="2.1.1.qualifier"
       provider-name="Bio7">
 
    <description>
@@ -232,6 +232,6 @@ litigation.
          id="com.eco.bio7.albireo"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="2.1.1"/>
 
 </feature>
