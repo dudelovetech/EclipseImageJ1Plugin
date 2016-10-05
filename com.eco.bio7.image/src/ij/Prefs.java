@@ -286,11 +286,11 @@ public class Prefs {
 
 	/** Returns the path, ending in File.separator, to the ImageJ directory. */
 	public static String getImageJDir() {
-		String path = Menus.getImageJPath();
+		String path = Util.getImageJPath();
 		if (path == null)
 			return homeDir + File.separator;
 		else
-			return path;
+			return path+ File.separator;
 	}
 
 	/** Returns the path to the directory where the 
