@@ -286,6 +286,7 @@ public class Prefs {
 
 	/** Returns the path, ending in File.separator, to the ImageJ directory. */
 	public static String getImageJDir() {
+		/*Changed for Bio7!*/
 		String path = Util.getImageJPath();
 		if (path == null)
 			return homeDir + File.separator;
