@@ -300,7 +300,7 @@ public class ThumbnailsView extends ViewPart {
 				try {
 					throw new InterruptedException();
 				} catch (InterruptedException e) {
-					canceled = true;
+					canceled = true; 
 
 				}
 			}
