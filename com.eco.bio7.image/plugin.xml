@@ -7,27 +7,27 @@
             allowMultiple="true"
             category="com.eco.bio7.image.plugin"
             class="com.eco.bio7.image.CanvasView"
-            icon="bin/images/imagejview.png"
+            icon="pics/imagejview.png"
             id="com.eco.bio7.imagej"
             name="ImageJ-Canvas"/>
       <view
             category="com.eco.bio7.image.plugin.extra"
             class="com.eco.bio7.image.thumbs.ThumbnailsView"
-            icon="bin/images/thumbnails.png"
+            icon="pics/thumbnails.png"
             id="com.eco.bio7.thumbnails"
             name="Thumbnails"/>
       <view
             allowMultiple="true"
             category="com.eco.bio7.image.plugin"
             class="com.eco.bio7.image.IJtoolbar"
-            icon="bin/images/imagejview.png"
+            icon="pics/imagejview.png"
             id="com.eco.bio7.ijtoolbar"
             name="ImageJ-Toolbar"/>
       <view
             allowMultiple="true"
             category="com.eco.bio7.image.plugin.extra"
             class="com.eco.bio7.image.CustomDetachedImageJView"
-            icon="bin/images/imagejview.png"
+            icon="pics/imagejview.png"
             id="com.eco.bio7.image.detachedImage"
             name="Image"
             restorable="true">
