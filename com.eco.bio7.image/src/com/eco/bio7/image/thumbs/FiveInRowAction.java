@@ -25,9 +25,9 @@ public class FiveInRowAction extends Action {
 		setId("five");
 		setText("5->");
 
-		ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
+		/*ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
 				Display.getCurrent(), getClass().getResourceAsStream(
-						"/images/bild.gif")));
+						"/images/bild.gif")));*/
 
 	}
 

@@ -25,9 +25,9 @@ public class SmallThumbAction extends Action {
 		setId("small");
 		setText("Small");
 
-		ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
+		/*ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
 				Display.getCurrent(), getClass().getResourceAsStream(
-						"/images/bild.gif")));
+						"/images/bild.gif")));*/
 
 	}
 

@@ -25,9 +25,9 @@ public class MediumThumbAction extends Action {
 		setId("medium");
 		setText("Medium");
 
-		ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
+		/*ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(
 				Display.getCurrent(), getClass().getResourceAsStream(
-						"/images/bild.gif")));
+						"/images/bild.gif")));*/
 
 	}
 
