@@ -206,7 +206,7 @@ public class CanvasView extends ViewPart {
 
 		parent.addControlListener(new ControlAdapter() {
 			@Override
-			public void controlResized(final ControlEvent e) {
+			public synchronized void controlResized(final ControlEvent e) {
 				/*
 				 * Here we write the values in the com.eco.bio7 plugin
 				 * preferences with the help of scoped preferences!

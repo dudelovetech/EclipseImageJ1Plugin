@@ -230,9 +230,9 @@ public class ThumbnailsView extends ViewPart {
 
 	    Display.getCurrent().setData(data);
 
-	    /*Sleak sleak = new Sleak();
+	    Sleak sleak = new Sleak();
 
-	    sleak.open();*/
+	    sleak.open();
 
 		this.parent = parent;
 
