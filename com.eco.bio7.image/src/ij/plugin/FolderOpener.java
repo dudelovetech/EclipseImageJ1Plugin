@@ -3,9 +3,6 @@ import java.awt.*;
 import java.io.*;
 import java.awt.event.*;
 import java.awt.image.ColorModel;
-
-import javax.swing.JCheckBox;
-
 import ij.*;
 import ij.io.*;
 import ij.gui.*;
@@ -36,8 +33,17 @@ public class FolderOpener implements PlugIn {
 	/** Opens the images in the specified directory as a stack. Displays
 		directory chooser and options dialogs if the argument is null. */
 	public static ImagePlus open(String path) {
+		return open(path, null);
+	}
+
+	/** Opens the images in the specified directory as a stack. Opens
+		the images as a virtual stack if the 'options' string contains
+		"virtual". Displays directory chooser and options dialogs if the
+		the 'path' argument is null. */
+	public static ImagePlus open(String path, String options) {
 		FolderOpener fo = new FolderOpener();
 		fo.saveImage = true;
+		fo.openAsVirtualStack = options!=null && options.contains("virtual");
 		fo.run(path);
 		return fo.image;
 	}
@@ -215,7 +221,7 @@ public class FolderOpener implements PlugIn {
 					if (info!=null)
 						label += "\n" + info;
 				}
-				if (imp.getCalibration().pixelWidth!=cal.pixelWidth)
+				if (Math.abs(imp.getCalibration().pixelWidth-cal.pixelWidth)>0.0000000001)
 					allSameCalibration = false;
 				ImageStack inputStack = imp.getStack();
 				Overlay overlay2 = imp.getOverlay();
@@ -307,12 +313,6 @@ public class FolderOpener implements PlugIn {
 				}
 				if (cal.pixelWidth!=1.0 && cal.pixelDepth==1.0)
 					cal.pixelDepth = cal.pixelWidth;
-				if (cal.pixelWidth<=0.0001 && cal.getUnit().equals("cm")) {
-					cal.pixelWidth *= 10000.0;
-					cal.pixelHeight *= 10000.0;
-					cal.pixelDepth *= 10000.0;
-					cal.setUnit("um");
-				}
 				imp2.setCalibration(cal);
 			}
 			if (info1!=null && info1.lastIndexOf("7FE0,0010")>0) {
@@ -531,8 +531,8 @@ public class FolderOpener implements PlugIn {
 		}
 	
 		protected void setup() {
-			eightBits = ((JCheckBox)checkbox.elementAt(0)).isSelected();
-			rgb = ((JCheckBox)checkbox.elementAt(1)).isSelected();
+			eightBits = ((Checkbox)checkbox.elementAt(0)).getState();
+			rgb = ((Checkbox)checkbox.elementAt(1)).getState();
 			setStackInfo();
 		}
 		

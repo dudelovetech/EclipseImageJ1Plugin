@@ -274,7 +274,8 @@ public class PlotWindow extends ImageWindow implements ActionListener,	ItemListe
 
 	/** Releases the resources used by this PlotWindow */
 	public void dispose() {
-		plot.dispose();
+		if (plot!=null)
+					plot.dispose();
 		removeListeners();
 		plot = null;
 		plotMaker = null;
@@ -744,7 +745,7 @@ public class PlotWindow extends ImageWindow implements ActionListener,	ItemListe
 	public void run() {
 		while (true) {
 			IJ.wait(50);	//delay to make sure the roi has been updated
-			Plot plot = plotMaker.getPlot();
+			Plot plot = plotMaker!=null?plotMaker.getPlot():null;
 			if (doUpdate && plot!=null) {
 				plot.useTemplate(this.plot, this.plot.templateFlags);
 				plot.setPlotMaker(plotMaker);

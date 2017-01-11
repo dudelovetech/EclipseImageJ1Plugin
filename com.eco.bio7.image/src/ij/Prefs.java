@@ -50,14 +50,17 @@ public class Prefs {
 	public static final String THREADS = "threads";
 	public static final String KEY_PREFIX = ".";
 
-	private static final int USE_POINTER = 1 << 0, ANTIALIASING = 1 << 1, INTERPOLATE = 1 << 2, ONE_HUNDRED_PERCENT = 1 << 3, BLACK_BACKGROUND = 1 << 4, JFILE_CHOOSER = 1 << 5, UNUSED = 1 << 6, BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10, USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12, INTEL_BYTE_ORDER = 1 << 13, DOUBLE_BUFFER = 1 << 14,
-			NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18, NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20, ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25, DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27, NO_CLICK_TO_GC = 1 << 28,
-			AVOID_RESLICE_INTERPOLATION = 1 << 29, KEEP_UNDO_BUFFERS = 1 << 30;
+	private static final int USE_POINTER = 1 << 0, ANTIALIASING = 1 << 1, INTERPOLATE = 1 << 2, ONE_HUNDRED_PERCENT = 1 << 3, BLACK_BACKGROUND = 1 << 4, JFILE_CHOOSER = 1 << 5, UNUSED = 1 << 6,
+			BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10, USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12, INTEL_BYTE_ORDER = 1 << 13,
+			DOUBLE_BUFFER = 1 << 14, NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18, NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20,
+			ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25, DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27,
+			NO_CLICK_TO_GC = 1 << 28, AVOID_RESLICE_INTERPOLATION = 1 << 29, KEEP_UNDO_BUFFERS = 1 << 30;
 	public static final String OPTIONS = "prefs.options";
 
 	public static final String vistaHint = ""; // no longer used
 
-	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4, REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7;
+	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4,
+			REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7;
 	public static final String OPTIONS2 = "prefs.options2";
 
 	/** file.separator system property */
@@ -178,6 +181,9 @@ public class Prefs {
 	public static boolean setIJMenuBar = IJ.isMacOSX();
 	/** "ImageJ" window is always on top. */
 	public static boolean alwaysOnTop;
+	/** Automatically spline fit line selections */
+	public static boolean splineFitLines;
+
 	static Properties ijPrefs = new Properties();
 	static Properties props = new Properties(ijPrefs);
 	static String prefsDir;
@@ -195,7 +201,7 @@ public class Prefs {
 	 */
 	public static String load(Object ij, Applet applet) {
 		/* Changed for Bio7! */
-		
+
 		String path = Util.getImageJPath();
 
 		InputStream f = ij.getClass().getResourceAsStream(path + PROPS_NAME);
@@ -204,20 +210,15 @@ public class Prefs {
 		if (homeDir == null)
 			/* /*Changed for Bio7! */
 			homeDir = path;// System.getProperty("user.dir");
-		/*String userHome = path;// System.getProperty("user.home");
-		if (IJ.isWindows()) {
-			prefsDir = homeDir; // ImageJ folder on Windows
-			if (prefsDir.endsWith("Desktop"))
-				prefsDir = userHome;
-		} else {
-			prefsDir = homeDir;
-			// prefsDir = userHome; // Mac Preferences folder or Unix home dir
-			if (IJ.isMacOSX())
-				// prefsDir += "/Library/Preferences";
-				prefsDir = homeDir;
-			// else
-			// prefsDir += File.separator + ".imagej";
-		}*/
+		/*
+		 * String userHome = path;// System.getProperty("user.home"); if
+		 * (IJ.isWindows()) { prefsDir = homeDir; // ImageJ folder on Windows if
+		 * (prefsDir.endsWith("Desktop")) prefsDir = userHome; } else { prefsDir
+		 * = homeDir; // prefsDir = userHome; // Mac Preferences folder or Unix
+		 * home dir if (IJ.isMacOSX()) // prefsDir += "/Library/Preferences";
+		 * prefsDir = homeDir; // else // prefsDir += File.separator +
+		 * ".imagej"; }
+		 */
 		if (f == null) {
 			try {
 				f = new FileInputStream(homeDir + "/" + PROPS_NAME);
@@ -286,25 +287,27 @@ public class Prefs {
 
 	/** Returns the path, ending in File.separator, to the ImageJ directory. */
 	public static String getImageJDir() {
-		/*Changed for Bio7!*/
+		/* Changed for Bio7! */
 		String path = Util.getImageJPath();
 		if (path == null)
 			return homeDir + File.separator;
 		else
-			return path+ File.separator;
+			return path + File.separator;
 	}
 
-	/** Returns the path to the directory where the 
-		preferences file (IJPrefs.txt) is saved. */
+	/**
+	 * Returns the path to the directory where the preferences file
+	 * (IJPrefs.txt) is saved.
+	 */
 	public static String getPrefsDir() {
-      /* Changed for Bio7! */		
+		/* Changed for Bio7! */
 		String path = Util.getImageJPath();
-		if (prefsDir==null) {
-			
-			/*if (IJ.isMacOSX())
-				dir += "/Library/Preferences";
-			else
-				dir += File.separator+".imagej";*/
+		if (prefsDir == null) {
+
+			/*
+			 * if (IJ.isMacOSX()) dir += "/Library/Preferences"; else dir +=
+			 * File.separator+".imagej";
+			 */
 			prefsDir = path;
 		}
 		return prefsDir;
@@ -400,7 +403,7 @@ public class Prefs {
 
 	/** Opens the IJ_Prefs.txt file. */
 	static void loadPreferences() {
-		String path = getPrefsDir()+separator+PREFS_NAME;
+		String path = getPrefsDir() + separator + PREFS_NAME;
 		boolean ok = loadPrefs(path);
 		if (!ok) { // not found
 			if (IJ.isWindows())
@@ -535,13 +538,19 @@ public class Prefs {
 	}
 
 	static void saveOptions(Properties prefs) {
-		int options = (usePointerCursor ? USE_POINTER : 0) + (antialiasedText ? ANTIALIASING : 0) + (interpolateScaledImages ? INTERPOLATE : 0) + (open100Percent ? ONE_HUNDRED_PERCENT : 0) + (blackBackground ? BLACK_BACKGROUND : 0) + (useJFileChooser ? JFILE_CHOOSER : 0) + (blackCanvas ? BLACK_CANVAS : 0) + (weightedColor ? WEIGHTED : 0) + (requireControlKey ? REQUIRE_CONTROL : 0)
-				+ (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0) + (intelByteOrder ? INTEL_BYTE_ORDER : 0) + (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0) + (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0) + (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0)
-				+ (moveToMisc ? MOVE_TO_MISC : 0) + (runSocketListener ? RUN_SOCKET_LISTENER : 0) + (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0) + (dontSaveHeaders ? DONT_SAVE_HEADERS : 0) + (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0) + (noClickToGC ? NO_CLICK_TO_GC : 0) + (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0)
+		int options = (usePointerCursor ? USE_POINTER : 0) + (antialiasedText ? ANTIALIASING : 0) + (interpolateScaledImages ? INTERPOLATE : 0) + (open100Percent ? ONE_HUNDRED_PERCENT : 0)
+				+ (blackBackground ? BLACK_BACKGROUND : 0) + (useJFileChooser ? JFILE_CHOOSER : 0) + (blackCanvas ? BLACK_CANVAS : 0) + (weightedColor ? WEIGHTED : 0)
+				+ (requireControlKey ? REQUIRE_CONTROL : 0) + (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0) + (intelByteOrder ? INTEL_BYTE_ORDER : 0)
+				+ (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0) + (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0)
+				+ (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0) + (moveToMisc ? MOVE_TO_MISC : 0) + (runSocketListener ? RUN_SOCKET_LISTENER : 0)
+				+ (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0) + (dontSaveHeaders ? DONT_SAVE_HEADERS : 0)
+				+ (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0) + (noClickToGC ? NO_CLICK_TO_GC : 0) + (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0)
 				+ (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
 		prefs.put(OPTIONS, Integer.toString(options));
 
-		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0) + (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0) + (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0);
+		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0)
+				+ (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0)
+				+ (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0);
 		prefs.put(OPTIONS2, Integer.toString(options2));
 	}
 

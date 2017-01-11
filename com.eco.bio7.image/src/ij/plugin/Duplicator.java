@@ -2,7 +2,6 @@ package ij.plugin;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
-import javax.swing.JCheckBox;
 import ij.*;
 import ij.process.*;
 import ij.gui.*;
@@ -23,7 +22,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 	private static boolean staticDuplicateStack;
 	private boolean duplicateStack;
 	private int first, last;
-	private JCheckBox checkbox;
+	private Checkbox checkbox;
 	private TextField titleField, rangeField;
 	private TextField[] rangeFields;
 	private int firstC, lastC, firstZ, lastZ, firstT, lastT;
@@ -147,8 +146,12 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
  				overlay2.crop(imp.getCurrentSlice(), imp.getCurrentSlice());
  			imp2.setOverlay(overlay2);
  		}
-   		if (Recorder.record)
-   			Recorder.recordCall("imp2 = imp.crop();");
+   		if (Recorder.record) {
+   			if (imp.getStackSize()==1)
+   				Recorder.recordCall("imp2 = imp.duplicate();");
+   			else
+   				Recorder.recordCall("imp2 = imp.crop();");
+   		}
 		return imp2;
 	}
 	
@@ -266,7 +269,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			gd.setInsets(2, 30, 3);
 			gd.addStringField("Range:", "1-"+stackSize);
 			if (!isMacro) {
-				checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
+				checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
 				checkbox.addItemListener(this);
 				Vector v = gd.getStringFields();
 				titleField = (TextField)v.elementAt(0);
@@ -307,7 +310,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 		if (titleChanged)
 			return null;
 		String title = defaultTitle;
-		if (imp.getStackSize()>1 && !duplicateStack && !legacyMacro && (checkbox==null||!checkbox.isSelected())) {
+		if (imp.getStackSize()>1 && !duplicateStack && !legacyMacro && (checkbox==null||!checkbox.getState())) {
 			ImageStack stack = imp.getStack();
 			String label = stack.getShortSliceLabel(imp.getCurrentSlice());
 			if (label!=null && label.length()==0)
@@ -383,7 +386,7 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			nRangeFields++;
 		}
 		if (!isMacro) {
-			checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
+			checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
 			checkbox.addItemListener(this);
 			Vector v = gd.getStringFields();
 			rangeFields = new TextField[3];
@@ -468,11 +471,11 @@ public class Duplicator implements PlugIn, TextListener, ItemListener {
 			if (!titleField.getText().equals(getNewTitle()))
 				titleChanged = true;
 		} else
-			checkbox.setSelected(true);
+			checkbox.setState(true);
 	}
 	
 	public void itemStateChanged(ItemEvent e) {
-		duplicateStack = checkbox.isSelected();
+		duplicateStack = checkbox.getState();
 		if (titleField!=null) {
 			String title = getNewTitle();
 			if (title!=null && !title.equals(titleField.getText())) {

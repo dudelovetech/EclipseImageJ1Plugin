@@ -225,8 +225,12 @@ public class Compiler implements PlugIn, FilenameFilter {
 				errors = (Editor)IJ.runPlugIn("ij.plugin.frame.Editor", "");
 				errors.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			}
-			if (errors!=null)
+			if (errors!=null) {
+				ImageJ ij = IJ.getInstance();
+				if (ij!=null)
+					s = ij.getInfo()+"\n \n"+s;
 				errors.display("Errors", s);
+			}
 			IJ.showStatus("done (errors)");
 		}
 
@@ -302,7 +306,11 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	void validateTarget() {
-		if (target<TARGET16 || target>TARGET19)
+		if (target>TARGET19)
+			target = TARGET19;
+		if (target<TARGET15)
+			target = TARGET15;
+		if (target>TARGET15 && !(IJ.isJava16()||IJ.isJava17()||IJ.isJava18()||IJ.isJava19()))
 			target = TARGET16;
 		if (target>TARGET16 && !(IJ.isJava17()||IJ.isJava18()||IJ.isJava19()))
 			target = TARGET16;

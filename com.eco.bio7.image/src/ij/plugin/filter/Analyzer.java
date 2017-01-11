@@ -21,6 +21,7 @@ public class Analyzer implements PlugInFilter, Measurements {
 	private ResultsTable rt;
 	private int measurements;
 	private StringBuffer min,max,mean,sd;
+	private boolean disableReset;
 	
 	// Order must agree with order of checkboxes in Set Measurements dialog box
 	private static final int[] list = {AREA,MEAN,STD_DEV,MODE,MIN_MAX,
@@ -84,7 +85,8 @@ public class Analyzer implements PlugInFilter, Measurements {
 		else if (arg.equals("sum"))
 			{summarize(); return DONE;}
 		else if (arg.equals("clear")) {
-			if (IJ.macroRunning()) unsavedMeasurements = false;
+			if (IJ.macroRunning())
+				unsavedMeasurements = false;
 			resetCounter();
 			return DONE;
 		} else
@@ -281,7 +283,7 @@ public class Analyzer implements PlugInFilter, Measurements {
 	
 	boolean reset() {
 		boolean ok = true;
-		if (rt.size()>0)
+		if (rt.size()>0 && !disableReset)
 			ok = resetCounter();
 		if (ok && rt.getColumnHeading(ResultsTable.LAST_HEADING)==null)
 			rt.setDefaultHeadings();
@@ -372,10 +374,11 @@ public class Analyzer implements PlugInFilter, Measurements {
 		ImageStack stack = null;
 		if (imp2.getStackSize()>1)
 			stack = imp2.getStack();
+		PointRoi pointRoi = roi instanceof PointRoi?(PointRoi)roi:null;
 		for (int i=0; i<p.npoints; i++) {
 			int position = 0;
-			if (roi instanceof PointRoi)
-				position = ((PointRoi)roi).getPointPosition(i);
+			if (pointRoi!=null)
+				position = pointRoi.getPointPosition(i);
 			ImageProcessor ip = null;
 			if (stack!=null && position>0 && position<=stack.size())
 				ip = stack.getProcessor(position);
@@ -385,6 +388,17 @@ public class Analyzer implements PlugInFilter, Measurements {
 			ImageStatistics stats = ImageStatistics.getStatistics(ip, measurements, imp2.getCalibration());
 			PointRoi point = new PointRoi(p.xpoints[i], p.ypoints[i]);
 			point.setPosition(position);
+			if (pointRoi!=null) {
+				int[] counters = pointRoi.getCounters();
+				if (counters!=null && i<counters.length) {
+					int counter = counters[i]&0xff;
+					int count = pointRoi.getCount(counter);
+					int[] info = new int[2];
+					info[0] = counter;
+					info[1] = count;
+					point.setCounterInfo(info);
+				}
+			}
 			saveResults(stats, point);
 			if (i!=p.npoints-1) displayResults();
 		}
@@ -667,8 +681,8 @@ public class Analyzer implements PlugInFilter, Measurements {
 				double angle = ((PolygonRoi)roi).getAngle();
 				if (Prefs.reflexAngle) angle = 360.0-angle;
 				rt.addValue("Angle", angle);
-			} else if (roi.getType()==Roi.POINT)
-				savePoints(roi);
+			} else if (roi instanceof PointRoi)
+				savePoints((PointRoi)roi);
 		}
 		if ((measurements&LIMIT)!=0 && imp!=null && imp.getBitDepth()!=24) {
 			rt.addValue(ResultsTable.MIN_THRESHOLD, stats.lowerThreshold);
@@ -697,7 +711,7 @@ public class Analyzer implements PlugInFilter, Measurements {
 		return (Math.abs(carea/2.0));
 	}
 		
-	void savePoints(Roi roi) {
+	void savePoints(PointRoi roi) {
 		if (imp==null) {
 			rt.addValue("X", 0.0);
 			rt.addValue("Y", 0.0);
@@ -745,6 +759,11 @@ public class Analyzer implements PlugInFilter, Measurements {
 			if (position==0)
 				position = imp.getCurrentSlice();
 			rt.addValue("Slice", position);
+		}
+		int[] info = roi.getCounterInfo();
+		if (info!=null) {
+			rt.addValue("Counter", info[0]);
+			rt.addValue("Count", info[1]);
 		}
 		if (imp.getProperty("FHT")!=null) {
 			double center = imp.getWidth()/2.0;
@@ -825,7 +844,6 @@ public class Analyzer implements PlugInFilter, Measurements {
 	}
 		
 	void incrementCounter() {
-		//counter++;
 		if (rt==null) rt = systemRT;
 		rt.incrementCounter();
 		unsavedMeasurements = true;
@@ -1006,5 +1024,10 @@ public class Analyzer implements PlugInFilter, Measurements {
 		drawLabels = b;
 	}
 	
+	/** Used by RoiManager.multiMeasure() to suppress save as dialogs. */
+	public void disableReset(boolean b) {
+		disableReset = b;
+	}
+
 }
 	

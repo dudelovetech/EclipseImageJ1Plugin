@@ -73,7 +73,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	private boolean firstTime = true;
 	private int[] selectedIndexes;
 	private boolean appendResults;
-	private static ResultsTable mmResults;
+	private static ResultsTable mmResults, mmResults2;
 	private int imageID;
 	private boolean allowRecording;
 	private boolean recordShowAll = true;
@@ -89,8 +89,13 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			WindowManager.toFront(instance);
 			return;
 		}
-		if (IJ.isMacro() && Interpreter.getBatchModeRoiManager() != null)
-			return;
+		if (IJ.isMacro() && Interpreter.getBatchModeRoiManager()!=null) {
+						list = new JList();
+						listModel = new DefaultListModel();
+						list.setModel(listModel);
+			 			return;
+					}
+		
 		instance = this;
 		list = new JList();
 		/* Changed for Bio7! */
@@ -1024,77 +1029,79 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	 */
 	boolean multiMeasure(String cmd) {
 		ImagePlus imp = getImage();
-		if (imp == null)
-			return false;
+		if (imp==null) return false;
 		int[] indexes = getIndexes();
-		if (indexes.length == 0)
+		if (indexes.length==0)
 			return false;
 		int measurements = Analyzer.getMeasurements();
 
 		int nSlices = imp.getStackSize();
-		if (cmd != null)
-			appendResults = cmd.contains("append") ? true : false;
+		if (cmd!=null)
+			appendResults = cmd.contains("append")?true:false;
 		if (IJ.isMacro()) {
 			if (cmd.startsWith("multi-measure")) {
-				measureAll = cmd.contains(" measure") && nSlices > 1;
+				measureAll = cmd.contains(" measure") && nSlices>1;
 				onePerSlice = cmd.contains(" one");
 				appendResults = cmd.contains(" append");
 			} else {
-				if (nSlices > 1)
+				if (nSlices>1)
 					measureAll = true;
 				onePerSlice = true;
 			}
 		} else {
 			GenericDialog gd = new GenericDialog("Multi Measure");
-			if (nSlices > 1)
-				gd.addCheckbox("Measure all " + nSlices + " slices", measureAll);
+			if (nSlices>1)
+				gd.addCheckbox("Measure all "+nSlices+" slices", measureAll);
 			gd.addCheckbox("One row per slice", onePerSlice);
 			gd.addCheckbox("Append results", appendResults);
-			int columns = getColumnCount(imp, measurements) * indexes.length;
-			String str = nSlices == 1 ? "this option" : "both options";
+			int columns = getColumnCount(imp, measurements)*indexes.length;
+			String str = nSlices==1?"this option":"both options";
 			gd.setInsets(10, 25, 0);
-			gd.addMessage("Enabling " + str + " will result\n" + "in a table with " + columns + " columns.");
+			gd.addMessage(
+				"Enabling "+str+" will result\n"+
+				"in a table with "+columns+" columns."
+			);
 			gd.showDialog();
-			if (gd.wasCanceled())
-				return false;
-			if (nSlices > 1)
+			if (gd.wasCanceled()) return false;
+			if (nSlices>1)
 				measureAll = gd.getNextBoolean();
 			onePerSlice = gd.getNextBoolean();
 			appendResults = gd.getNextBoolean();
 		}
-		if (!measureAll)
-			nSlices = 1;
+		if (!measureAll) nSlices = 1;
 		int currentSlice = imp.getCurrentSlice();
-
+		
 		if (!onePerSlice) {
-			int measurements2 = nSlices > 1 ? measurements | Measurements.SLICE : measurements;
+			int measurements2 = nSlices>1?measurements|Measurements.SLICE:measurements;
 			ResultsTable rt = new ResultsTable();
+			if (appendResults && mmResults2!=null)
+				rt = mmResults2;
 			Analyzer analyzer = new Analyzer(imp, measurements2, rt);
-			for (int slice = 1; slice <= nSlices; slice++) {
-				if (nSlices > 1)
-					imp.setSliceWithoutUpdate(slice);
-				for (int i = 0; i < indexes.length; i++) {
+			analyzer.disableReset(true);
+			for (int slice=1; slice<=nSlices; slice++) {
+				if (nSlices>1) imp.setSliceWithoutUpdate(slice);
+				for (int i=0; i<indexes.length; i++) {
 					if (restoreWithoutUpdate(imp, indexes[i]))
 						analyzer.measure();
 					else
 						break;
 				}
 			}
+			mmResults2 = (ResultsTable)rt.clone();
 			rt.show("Results");
-			if (nSlices > 1)
+			if (nSlices>1)
 				imp.setSlice(currentSlice);
 		} else {
 			Roi[] rois = getSelectedRoisAsArray();
-			if ("".equals(cmd)) { // run More>>Multi Measure command in separate
-									// thread
+			if ("".equals(cmd)) { // run More>>Multi Measure command in separate thread
 				MultiMeasureRunner mmr = new MultiMeasureRunner();
 				mmr.multiMeasure(imp, rois, appendResults);
 			} else {
 				ResultsTable rtMulti = multiMeasure(imp, rois, appendResults);
-				mmResults = (ResultsTable) rtMulti.clone();
+				mmResults = (ResultsTable)rtMulti.clone();
 				rtMulti.show("Results");
 				imp.setSlice(currentSlice);
-				if (indexes.length > 1)
+				if (indexes.length>1)
 					IJ.run("Select None");
 			}
 		}
@@ -1103,7 +1110,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 				Recorder.recordCall("rt = rm.multiMeasure(imp);");
 				Recorder.recordCall("rt.show(\"Results\");");
 			} else {
-				if ((nSlices == 1 || measureAll) && onePerSlice && !appendResults)
+				if ((nSlices==1||measureAll) && onePerSlice && !appendResults)
 					Recorder.record("roiManager", "Multi Measure");
 				else {
 					String options = "";
@@ -1113,7 +1120,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 						options += " one";
 					if (appendResults)
 						options += " append";
-					Recorder.record("roiManager", "multi-measure" + options);
+					Recorder.record("roiManager", "multi-measure"+options);
 				}
 			}
 		}
@@ -1467,38 +1474,37 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 
 	private void combineRois(ImagePlus imp, Roi[] rois) {
 		IJ.resetEscape();
-		ShapeRoi s1 = null, s2 = null;
+		ShapeRoi s1=null, s2=null;
 		ImageProcessor ip = null;
-		for (int i = 0; i < rois.length; i++) {
-			IJ.showProgress(i, rois.length - 1);
+		for (int i=0; i<rois.length; i++) {
+			IJ.showProgress(i, rois.length-1);
 			if (IJ.escapePressed()) {
 				IJ.showProgress(1.0);
 				return;
 			}
 			Roi roi = rois[i];
 			if (!roi.isArea()) {
-				if (ip == null)
+				if (ip==null)
 					ip = new ByteProcessor(imp.getWidth(), imp.getHeight());
 				roi = convertLineToPolygon(roi, ip);
+				if (roi==null) continue;
 			}
-			if (s1 == null) {
+			if (s1==null) {
 				if (roi instanceof ShapeRoi)
-					s1 = (ShapeRoi) roi;
+					s1 = (ShapeRoi)roi;
 				else
 					s1 = new ShapeRoi(roi);
-				if (s1 == null)
-					return;
+				if (s1==null) return;
 			} else {
 				if (roi instanceof ShapeRoi)
-					s2 = (ShapeRoi) roi;
+					s2 = (ShapeRoi)roi;
 				else
 					s2 = new ShapeRoi(roi);
-				if (s2 == null)
-					continue;
+				if (s2==null) continue;
 				s1.or(s2);
 			}
 		}
-		if (s1 != null)
+		if (s1!=null)
 			imp.setRoi(s1);
 	}
 
@@ -1900,36 +1906,40 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			ignoreInterrupts = false;
 	}
 
-	/**
-	 * Returns a reference to the ROI Manager and opens the "ROI Manager" window
-	 * if it is not already open.
-	 */
-	public static RoiManager getRoiManager() {
-		if (instance != null)
-			return (RoiManager) instance;
-		else
-			return new RoiManager();
-	}
+	/** Returns a reference to the ROI Manager and opens
+	 the "ROI Manager" window if it is not already open. */
+public static RoiManager getRoiManager() {
+	if (instance!=null)
+		return (RoiManager)instance;
+	else
+		return new RoiManager();
+}
 
-	/**
-	 * Returns a reference to the ROI Manager, or null if it is not open.
-	 * 
-	 * @see #getRoiManager
-	 */
-	public static RoiManager getInstance() {
-		return (RoiManager) instance;
-	}
+/** Returns a reference to the ROI Manager, or null if it is not open
+* and a batch mode macro is not running. If the ROI Manager 
+* is not open and a batch mode macro is running, 
+* returns the hidden batch mode RoiManager.
+* @see #getRoiManager
+*/
+public static RoiManager getInstance() {
+	if (instance==null && IJ.isMacro())
+		return Interpreter.getBatchModeRoiManager();
+	else
+		return (RoiManager)instance;
+}
 
-	/**
-	 * Returns a reference to the ROI Manager window or to the macro batch mode
-	 * RoiManager, or null if neither exists.
-	 */
-	public static RoiManager getInstance2() {
-		RoiManager rm = getInstance();
-		if (rm == null && IJ.isMacro())
-			rm = Interpreter.getBatchModeRoiManager();
-		return rm;
-	}
+public static RoiManager getRawInstance() {
+	return (RoiManager)instance;
+}
+
+/** Returns a reference to the ROI Manager window or to the
+	macro batch mode RoiManager, or null if neither exists. */
+public static RoiManager getInstance2() {
+	RoiManager rm = getInstance();
+	if (rm==null && IJ.isMacro())
+		rm = Interpreter.getBatchModeRoiManager();
+	return rm;
+}
 
 	/**
 	 * Obsolete
@@ -1966,7 +1976,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 
 	/** Returns the ROI count. */
 	public int getCount() {
-		return listModel.getSize();
+		return listModel!=null?listModel.getSize():0;
 	}
 
 	/** Returns the index of the specified Roi, or -1 if it is not found. */
@@ -2394,7 +2404,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	public void close() {
 		super.close();
 		instance = null;
-		mmResults = null;
+		mmResults = mmResults2 = null;
 		Prefs.saveLocation(LOC_KEY, getLocation());
 		if (!showAllCheckbox.isSelected() || IJ.macroRunning())
 			return;

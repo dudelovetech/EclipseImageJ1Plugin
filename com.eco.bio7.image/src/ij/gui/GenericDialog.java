@@ -89,6 +89,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private String yesLabel, noLabel;
 	private boolean smartRecording;
 	private Vector imagePanels;
+	private static GenericDialog instance;
 
 	/**
 	 * Creates a new GenericDialog with the specified title. Uses the current
@@ -137,7 +138,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (font != null) {
 			setFont(Util.getOSFontToAwt());
 		}
-		//setBackground(Util.getSWTBackgroundToAWT());
+		// setBackground(Util.getSWTBackgroundToAWT());
 	}
 
 	// void showFields(String id) {
@@ -1349,6 +1350,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			add(buttons);
 			if (IJ.isMacintosh())
 				setResizable(false);
+			if (IJ.isMacOSX() && IJ.isJava18())
+				instance = this;
 			pack();
 			setup();
 			if (centerDialog)
@@ -1542,7 +1545,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		IJ.setKeyDown(keyCode);
-		if (keyCode==KeyEvent.VK_ENTER && textArea1==null && okay!=null && okay.isEnabled()) {
+		if (keyCode == KeyEvent.VK_ENTER && textArea1 == null && okay != null && okay.isEnabled()) {
 			wasOKed = true;
 			if (IJ.isMacOSX())
 				accessTextFields();
@@ -1686,6 +1689,15 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	protected boolean isMacro() {
 		return macro;
+	}
+
+	public static GenericDialog getInstance() {
+		return instance;
+	}
+
+	public void dispose() {
+		super.dispose();
+		instance = null;
 	}
 
 	public void windowActivated(WindowEvent e) {

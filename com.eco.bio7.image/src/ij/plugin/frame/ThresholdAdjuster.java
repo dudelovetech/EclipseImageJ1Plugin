@@ -74,14 +74,14 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		ImagePlus cimp = WindowManager.getCurrentImage();
 		if (cimp!=null && cimp.getBitDepth()==24) {
 			IJ.error("Threshold Adjuster",
-				"Image>Adjust>Threshold only works with grayscale images.\n"
-				+"What you can do:\n"
-				+"   Image>Type>8-bit (convert to grayscale)\n"
-				+"   Image>Type>RGB Stack (convert to RGB stack)\n"
-				+"   Image>Type>HSB Stack (convert to HSB stack)\n"
-				+"   Image>Color>Split Channels (convert to 3 grayscale images)\n"
-				+"   Image>Adjust>Color Threshold (do color thresholding)\n");
-			return;
+					"Image>Adjust>Threshold only works with grayscale images.\n \n"
+					+"You can:\n"
+					+"   Convert to grayscale: Image>Type>8-bit\n"
+					+"   Convert to RGB stack: Image>Type>RGB Stack\n"
+					+"   Convert to HSB stack: Image>Type>HSB Stack\n"
+					+"   Convert to 3 grayscale images: Image>Color>Split Channels\n"
+					+"   Do color thresholding: Image>Adjust>Color Threshold\n");
+				return;
 		}
 		if (instance!=null) {
 			instance.firstActivation = true;
@@ -908,9 +908,9 @@ class ThresholdPlot extends Canvas implements Measurements, MouseListener {
         return new Dimension(WIDTH+2, HEIGHT+2);
     }
 
-	ImageStatistics setHistogram(ImagePlus imp, boolean entireStack) {
+    ImageStatistics setHistogram(ImagePlus imp, boolean entireStack) {
 		if (IJ.debugMode) IJ.log("ThresholdAdjuster:setHistogram: "+entireStack+" "+entireStack2);
-		double mean = entireStack?imp.getProcessor().getStatistics().mean:0.0;
+		double mean = entireStack?imp.getProcessor().getStats().mean:0.0;
 		if (entireStack && stats!=null && imp.getID()==imageID2 
 		&& entireStack==entireStack2 && mean==mean2)
 			return stats;
@@ -953,7 +953,7 @@ class ThresholdPlot extends Canvas implements Measurements, MouseListener {
 		if (roi!=null && !roi.isArea()) roi = null;
 		ip.setRoi(roi);
 		if (stats==null)
-			stats = ImageStatistics.getStatistics(ip, AREA+MIN_MAX+MODE, null);
+			stats = ip.getStats();
 		if (IJ.debugMode) IJ.log("  stats: "+stats);
 		int maxCount2 = 0;
 		histogram = stats.histogram;
@@ -993,6 +993,8 @@ class ThresholdPlot extends Canvas implements Measurements, MouseListener {
 		entireStack2 = entireStack;
 		return stats;
 	}
+	
+	
 	
 	public void update(Graphics g) {
 		paint(g);
