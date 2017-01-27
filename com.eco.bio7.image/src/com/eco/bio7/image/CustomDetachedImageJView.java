@@ -174,7 +174,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	 * @param title
 	 *            the title of the tab.
 	 */
-	public void setPanel(final JPanel jpanel, final String id) {
+	public void setPanel(final JPanel jpanel, final String id, final String name) {
 		secId = id;
 		viewPanel = jpanel;
 		Display display = PlatformUI.getWorkbench().getDisplay();
@@ -195,7 +195,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 				}
 				if (activated instanceof CustomDetachedImageJView) {
 					customView = (CustomDetachedImageJView) activated;
-
+					customView.setPartName(name);
+					display.update();
 					FXSwtAwtCustom swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
 					ImageJ.setCustomView(customView);

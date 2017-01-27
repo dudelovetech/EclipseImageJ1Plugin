@@ -464,7 +464,7 @@ public class CanvasView extends ViewPart {
 						/* Create ImageJ view with unique ID! */
 						String id = UUID.randomUUID().toString();
 						// detachedSecViewIDs.add(id);
-						custom.setPanel(current, id);
+						custom.setPanel(current, id,plu.getTitle());
 						custom.setData(plu, win);
 						/*
 						 * Only hide the tab without to close the ImagePlus
