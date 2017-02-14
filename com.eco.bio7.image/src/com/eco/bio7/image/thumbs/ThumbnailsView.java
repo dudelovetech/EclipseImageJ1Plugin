@@ -246,12 +246,13 @@ public class ThumbnailsView extends ViewPart {
 
 		FigureCanvas canvas = new FigureCanvas(sashForm);
 
-		scalableLayer = new ScalableLayeredPane();
-		scalableLayer.setBackgroundColor( ColorConstants.white );
+		scalableLayer = new ScalableLayeredPane();		
 
 		layeredpane = new LayeredPane();
 
 		layeredpane.setLayoutManager(new XYLayout());
+		
+		layeredpane.setBackgroundColor(parent.getBackground());
 
 		scalableLayer.add(layeredpane);
 
@@ -259,11 +260,13 @@ public class ThumbnailsView extends ViewPart {
 
 		Canvas thumbCanvas = new Canvas(sashForm, SWT.BORDER);
 		
-		thumbCanvas.setBackground( ColorConstants.white );
+		thumbCanvas.setBackground( parent.getBackground() );
 
 		lws = new LightweightSystem(thumbCanvas);
 
 		thumbnail = new ScrollableThumbnail();
+		
+		thumbnail.setBackgroundColor(parent.getBackground() );
 
 		thumbnail.setViewport(canvas.getViewport());
 

@@ -22,12 +22,14 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
+import ij.ImageJ;
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 import ij.gui.ImageLayout;
 import ij.gui.ImageWindow;
 import ij.gui.ScrollbarWithLabel;
-import javafx.application.Platform;
+
 
 public class SwtAwtImageJ {
 
@@ -103,6 +105,7 @@ public class SwtAwtImageJ {
 							ci.setControl(top);
 
 							a = new JPanel();
+							a.setBackground(ImageJ.getSystemColour());
                            /*At this point we open and initialize the JavaFX toolkit by means of the JavaFX SWT panel!*/
 							
 							view.embedd(top, a);
@@ -168,6 +171,7 @@ public class SwtAwtImageJ {
 					contentPane = root.getContentPane();
 
 					a = new JPanel();
+					a.setBackground(ImageJ.getSystemColour());
 					contentPane.add(a);
 					a.add(im);// Add the Image canvas to the JPanel
 					a.setLayout(new ImageLayout(im));
