@@ -488,7 +488,7 @@ public class CanvasView extends ViewPart {
 
 	private void initializeToolBar() {
 		IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-
+       
 		tbm.add(file);
 		tbm.add(edit);
 		tbm.add(image);
