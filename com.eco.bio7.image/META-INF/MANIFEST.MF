@@ -17,7 +17,9 @@ Require-Bundle: org.eclipse.ui,
  com.eco.bio7.albireo,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.e4.ui.workbench,
- com.eco.bio7.jfxswt;bundle-version="2.0.0";resolution:=optional
+ com.eco.bio7.jfxswt;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.editors;bundle-version="3.10.1"
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
@@ -41,5 +43,4 @@ Export-Package: .,
  ij.process,
  ij.text,
  ij.util
-Import-Package: org.eclipse.ui.texteditor
 

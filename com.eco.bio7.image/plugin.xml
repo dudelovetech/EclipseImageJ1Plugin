@@ -57,5 +57,18 @@
             class="com.eco.bio7.image.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.eco.bio7.image.ImageJBio7OpenEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="true"
+            extensions="jpg,jpeg,tif,tiff,TIF,TIFF,png,bmp,gif,avi,pnm,dcm,roi,pgm,pbm"
+            icon="pics/imagefile.png"
+            id="com.eco.bio7.editors.imagej.editor"
+            name="ImageJ Editor"
+            symbolicFontName="com.eco.bio7.imagej.editor">
+      </editor>
+   </extension>
 
 </plugin>

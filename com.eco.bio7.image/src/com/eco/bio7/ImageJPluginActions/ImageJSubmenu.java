@@ -22,6 +22,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+
+import com.eco.bio7.image.IJTabs;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.Menus;
@@ -162,29 +165,19 @@ public class ImageJSubmenu {
 								}
 							});
 
-						} 
-						/*else if(labelMenuItem.equals("Open...")){
-							MenuItem it = new MenuItem(currentSubMenu, SWT.PUSH);
+						}
+
+						else if (labelMenuItem.equals("Close All")) {
+							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
 							String lab = mItem.getLabel();
-							if (mItem.getShortcut() != null) {
-								//System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey());
-								it.setAccelerator(mItem.getShortcut().getKey());
-								it.setText(lab+"\t"+mItem.getShortcut());
-							}
-							else{
+
 							it.setText(lab);
-							}
+
 							it.addSelectionListener(new SelectionListener() {
 
-								
-
 								public void widgetSelected(SelectionEvent e) {
-									SwingUtilities.invokeLater(new Runnable() {
-										public void run() {
-
-											IJ.getInstance().doCommand("Open...");
-										}
-									});
+									/* Close the tabs! */
+									IJTabs.deleteAllTabs();
 
 								}
 
@@ -192,20 +185,37 @@ public class ImageJSubmenu {
 
 								}
 							});
-						}*/
-						
+
+						}
+						/*
+						 * else if(labelMenuItem.equals("Open...")){ MenuItem it = new MenuItem(currentSubMenu, SWT.PUSH); String lab = mItem.getLabel(); if (mItem.getShortcut() != null) {
+						 * //System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey()); it.setAccelerator(mItem.getShortcut().getKey());
+						 * it.setText(lab+"\t"+mItem.getShortcut()); } else{ it.setText(lab); } it.addSelectionListener(new SelectionListener() {
+						 * 
+						 * 
+						 * 
+						 * public void widgetSelected(SelectionEvent e) { SwingUtilities.invokeLater(new Runnable() { public void run() {
+						 * 
+						 * IJ.getInstance().doCommand("Open..."); } });
+						 * 
+						 * }
+						 * 
+						 * public void widgetDefaultSelected(SelectionEvent e) {
+						 * 
+						 * } }); }
+						 */
+
 						else {
 
 							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
 							String lab = mItem.getLabel();
-							/*Create shortcuts if available!*/
+							/* Create shortcuts if available! */
 							if (mItem.getShortcut() != null) {
-								//System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey());
+								// System.out.println(mItem.getShortcut() + " : " + mItem.getShortcut().getKey());
 								it.setAccelerator(mItem.getShortcut().getKey());
-								it.setText(lab+"\t"+mItem.getShortcut());
-							}
-							else{
-							it.setText(lab);
+								it.setText(lab + "\t" + mItem.getShortcut());
+							} else {
+								it.setText(lab);
 							}
 
 							it.addSelectionListener(new SelectionListener() {
