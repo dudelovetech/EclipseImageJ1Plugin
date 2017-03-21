@@ -53,10 +53,11 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 
 	public static final int DOUBLE_CLICK_THRESHOLD = 650;
 
+	public static final int RECT_ROI = 0, ROUNDED_RECT_ROI = 1, ROTATED_RECT_ROI = 2;
+
 	public static final int OVAL_ROI = 0, ELLIPSE_ROI = 1, BRUSH_ROI = 2;
 
-	private static final String[] builtInTools = { "Arrow", "Brush", "Developer Menu", "Flood Filler", "LUT Menu", "Overlay Brush", "Pencil", "Pixel Inspector", "Selection Rotator", "Spray Can",
-			"Stacks Menu" };
+	private static final String[] builtInTools = { "Arrow", "Brush", "Developer Menu", "Flood Filler", "LUT Menu", "Overlay Brush", "Pencil", "Pixel Inspector", "Selection Rotator", "Spray Can", "Stacks Menu" };
 	private static final String[] builtInTools2 = { "Pixel Inspection Tool", "Paintbrush Tool", "Flood Fill Tool" };
 
 	private static final int NUM_TOOLS = 23;
@@ -93,7 +94,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	private String icon;
 	private int startupTime;
 	private PopupMenu rectPopup, ovalPopup, pointPopup, linePopup, switchPopup;
-	private CheckboxMenuItem rectItem, roundRectItem;
+	private CheckboxMenuItem rectItem, roundRectItem, rotatedRectItem;
 	private CheckboxMenuItem ovalItem, ellipseItem, brushItem;
 	private CheckboxMenuItem pointItem, multiPointItem;
 	private CheckboxMenuItem straightLineItem, polyLineItem, freeLineItem, arrowItem;
@@ -103,8 +104,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 
 	private static Color backgroundColor = Prefs.getColor(Prefs.BCOLOR, Color.black);
 	private static int ovalType = OVAL_ROI;
+	private static int rectType = RECT_ROI;
 	private static boolean multiPointMode = Prefs.multiPointMode;
-	private static boolean roundRectMode;
 	private static boolean arrowMode;
 	private static int brushSize = (int) Prefs.get(BRUSH_SIZE, 15);
 	private static int arcSize = (int) Prefs.get(CORNER_DIAMETER, 20);
@@ -126,7 +127,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		resetButtons();
 		down[0] = true;
 		setForeground(Color.black);
-		setBackground(ImageJ.getSystemColour());//Changed for Bio7!
+		setBackground(ImageJ.getSystemColour());// Changed for Bio7!
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		instance = this;
@@ -141,12 +142,15 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		rectPopup = new PopupMenu();
 		if (Menus.getFontSize() != 0)
 			rectPopup.setFont(Menus.getFont());
-		rectItem = new CheckboxMenuItem("Rectangle Tool", !roundRectMode);
+		rectItem = new CheckboxMenuItem("Rectangle", rectType == RECT_ROI);
 		rectItem.addItemListener(this);
 		rectPopup.add(rectItem);
-		roundRectItem = new CheckboxMenuItem("Rounded Rectangle Tool", roundRectMode);
+		roundRectItem = new CheckboxMenuItem("Rounded Rectangle", rectType == ROUNDED_RECT_ROI);
 		roundRectItem.addItemListener(this);
 		rectPopup.add(roundRectItem);
+		rotatedRectItem = new CheckboxMenuItem("Rotated Rectangle", rectType == ROTATED_RECT_ROI);
+		rotatedRectItem.addItemListener(this);
+		rectPopup.add(rotatedRectItem);
 		add(rectPopup);
 
 		ovalPopup = new PopupMenu();
@@ -198,8 +202,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Returns the ID of the current tool (Toolbar.RECTANGLE, Toolbar.OVAL,
-	 * etc.).
+	 * Returns the ID of the current tool (Toolbar.RECTANGLE, Toolbar.OVAL, etc.).
 	 */
 	public static int getToolId() {
 		int id = current;
@@ -213,9 +216,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Returns the ID of the tool whose name (the description displayed in the
-	 * status bar) starts with the specified string, or -1 if the tool is not
-	 * found.
+	 * Returns the ID of the tool whose name (the description displayed in the status bar) starts with the specified string, or -1 if the tool is not found.
 	 */
 	public int getToolId(String name) {
 		int tool = -1;
@@ -300,8 +301,10 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		case RECTANGLE:
 			xOffset = x;
 			yOffset = y;
-			if (roundRectMode)
+			if (rectType == ROUNDED_RECT_ROI)
 				g.drawRoundRect(x, y + 1, 23, 16, 8, 8);
+			else if (rectType == ROTATED_RECT_ROI)
+				polyline(0, 10, 7, 0, 15, 6, 8, 16, 0, 10);
 			else
 				g.drawRect(x, y + 1, 23, 16);
 			drawTriangle(19, 18);
@@ -314,8 +317,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				polyline(6, 4, 8, 2, 12, 1, 15, 2, 16, 4, 15, 7, 12, 8, 9, 11, 9, 14, 6, 16, 2, 16, 0, 13, 1, 10, 4, 9, 6, 7, 6, 4);
 			} else if (ovalType == ELLIPSE_ROI) {
 				yOffset = y + 1;
-				polyline(11, 0, 13, 0, 14, 1, 15, 1, 16, 2, 17, 3, 17, 7, 12, 12, 11, 12, 10, 13, 8, 13, 7, 14, 4, 14, 3, 13, 2, 13, 1, 12, 1, 11, 0, 10, 0, 9, 1, 8, 1, 7, 6, 2, 7, 2, 8, 1, 10, 1, 11,
-						0);
+				polyline(11, 0, 13, 0, 14, 1, 15, 1, 16, 2, 17, 3, 17, 7, 12, 12, 11, 12, 10, 13, 8, 13, 7, 14, 4, 14, 3, 13, 2, 13, 1, 12, 1, 11, 0, 10, 0, 9, 1, 8, 1, 7, 6, 2, 7, 2, 8, 1, 10, 1, 11, 0);
 			} else
 				g.drawOval(x, y + 1, 21, 15);
 			drawTriangle(19, 18);
@@ -666,10 +668,12 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		String hint2 = " (right click to switch; double click to configure)";
 		switch (tool) {
 		case RECTANGLE:
-			if (roundRectMode)
-				IJ.showStatus("Rectangular or *rounded rectangular* selections" + hint);
+			if (rectType == ROUNDED_RECT_ROI)
+				IJ.showStatus("Rectangle, *rounded rect* or rotated rect" + hint);
+			else if (rectType == ROTATED_RECT_ROI)
+				IJ.showStatus("Rectangle, rounded rect or *rotated rect*" + hint);
 			else
-				IJ.showStatus("*Rectangular* or rounded rectangular selections" + hint);
+				IJ.showStatus("*Rectangle*, rounded rect or rotated rect" + hint);
 			return;
 		case OVAL:
 			if (ovalType == BRUSH_ROI)
@@ -778,10 +782,13 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		name = name.toLowerCase(Locale.US);
 		boolean ok = true;
 		if (name.indexOf("round") != -1) {
-			roundRectMode = true;
+			rectType = ROUNDED_RECT_ROI;
+			setTool(RECTANGLE);
+		} else if (name.indexOf("rot") != -1) {
+			rectType = ROTATED_RECT_ROI;
 			setTool(RECTANGLE);
 		} else if (name.indexOf("rect") != -1) {
-			roundRectMode = false;
+			rectType = RECT_ROI;
 			setTool(RECTANGLE);
 		} else if (name.indexOf("oval") != -1) {
 			ovalType = OVAL_ROI;
@@ -843,7 +850,14 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	String getName(int id) {
 		switch (id) {
 		case RECTANGLE:
-			return roundRectMode ? "roundrect" : "rectangle";
+			switch (rectType) {
+			case RECT_ROI:
+				return "rectangle";
+			case ROUNDED_RECT_ROI:
+				return "roundrect";
+			case ROTATED_RECT_ROI:
+				return "rotrect";
+			}
 		case OVAL:
 			switch (ovalType) {
 			case OVAL_ROI:
@@ -927,8 +941,10 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		previous = current;
 		if (Recorder.record) {
 			String name = getName(current);
-			if (name != null)
+			if (name != null) {
+				IJ.wait(100); // workaround for OSX/Java 8 bug
 				Recorder.record("setTool", name);
+			}
 		}
 		if (legacyMode)
 			repaint();
@@ -1006,8 +1022,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Returns the size of the selection brush tool, or 0 if the brush tool is
-	 * not enabled.
+	 * Returns the size of the selection brush tool, or 0 if the brush tool is not enabled.
 	 */
 	public static int getBrushSize() {
 		if (ovalType == BRUSH_ROI)
@@ -1025,20 +1040,19 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Returns the rounded rectangle arc size, or 0 if the rounded rectangle
-	 * tool is not enabled.
+	 * Returns the rounded rectangle arc size, or 0 if the rounded rectangle tool is not enabled.
 	 */
 	public static int getRoundRectArcSize() {
-		if (!roundRectMode)
-			return 0;
-		else
+		if (rectType == ROUNDED_RECT_ROI)
 			return arcSize;
+		else
+			return 0;
 	}
 
 	/** Sets the rounded rectangle corner diameter (pixels). */
 	public static void setRoundRectArcSize(int size) {
 		if (size <= 0)
-			roundRectMode = false;
+			rectType = RECT_ROI;
 		else {
 			arcSize = size;
 			Prefs.set(CORNER_DIAMETER, arcSize);
@@ -1047,12 +1061,17 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		ImagePlus imp = WindowManager.getCurrentImage();
 		Roi roi = imp != null ? imp.getRoi() : null;
 		if (roi != null && roi.getType() == Roi.RECTANGLE)
-			roi.setCornerDiameter(roundRectMode ? arcSize : 0);
+			roi.setCornerDiameter(rectType == ROUNDED_RECT_ROI ? arcSize : 0);
 	}
 
 	/** Returns 'true' if the multi-point tool is enabled. */
 	public static boolean getMultiPointMode() {
 		return multiPointMode;
+	}
+
+	/** Returns the rectangle tool type (RECT_ROI, ROUNDED_RECT_ROI or ROTATED_RECT_ROI). */
+	public static int getRectToolType() {
+		return rectType;
 	}
 
 	/** Returns the oval tool type (OVAL_ROI, ELLIPSE_ROI or BRUSH_ROI). */
@@ -1201,8 +1220,9 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			setTool2(newTool);
 			boolean isRightClick = e.isPopupTrigger() || e.isMetaDown();
 			if (current == RECTANGLE && isRightClick) {
-				rectItem.setState(!roundRectMode);
-				roundRectItem.setState(roundRectMode);
+				rectItem.setState(rectType == RECT_ROI);
+				roundRectItem.setState(rectType == ROUNDED_RECT_ROI);
+				rotatedRectItem.setState(rectType == ROTATED_RECT_ROI);
 				if (IJ.isMacOSX())
 					IJ.wait(10);
 				rectPopup.show(e.getComponent(), x, y);
@@ -1255,7 +1275,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			ImagePlus imp = WindowManager.getCurrentImage();
 			switch (current) {
 			case RECTANGLE:
-				if (roundRectMode)
+				if (rectType == ROUNDED_RECT_ROI)
 					IJ.doCommand("Rounded Rect Tool...");
 				break;
 			case OVAL:
@@ -1448,14 +1468,19 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	public void itemStateChanged(ItemEvent e) {
 		CheckboxMenuItem item = (CheckboxMenuItem) e.getSource();
 		String previousName = getToolName();
-		if (item == rectItem || item == roundRectItem) {
-			roundRectMode = item == roundRectItem;
+		if (item == rectItem || item == roundRectItem || item == rotatedRectItem) {
+			if (item == roundRectItem)
+				rectType = ROUNDED_RECT_ROI;
+			else if (item == rotatedRectItem)
+				rectType = ROTATED_RECT_ROI;
+			else
+				rectType = RECT_ROI;
 			repaintTool(RECTANGLE);
 			showMessage(RECTANGLE);
 			ImagePlus imp = WindowManager.getCurrentImage();
 			Roi roi = imp != null ? imp.getRoi() : null;
 			if (roi != null && roi.getType() == Roi.RECTANGLE)
-				roi.setCornerDiameter(roundRectMode ? arcSize : 0);
+				roi.setCornerDiameter(rectType == ROUNDED_RECT_ROI ? arcSize : 0);
 			if (!previousName.equals(getToolName()))
 				IJ.notifyEventListeners(IJEventListener.TOOL_CHANGED);
 		} else if (item == ovalItem || item == ellipseItem || item == brushItem) {
@@ -1515,10 +1540,9 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				installStartupMacros();
 			} else if (label.equals("Help...")) {
 				IJ.showMessage("Tool Switcher and Loader",
-						"Use this drop down menu to switch to alternative\n" + "macro toolsets or to load additional plugin tools.\n" + "The toolsets listed in the menu are located\n"
-								+ "in the ImageJ/macros/toolsets folder and the\n" + "plugin tools are the ones installed in the\n" + "Plugins>Tools submenu.\n" + " \n"
-								+ "Hold the shift key down while selecting a\n" + "toolset to view its source code.\n" + " \n" + "More macro toolsets are available at\n" + "  <" + IJ.URL
-								+ "/macros/toolsets/>\n" + " \n" + "Plugin tools can be downloaded from\n" + "the Tools section of the Plugins page at\n" + "  <" + IJ.URL + "/plugins/>\n");
+						"Use this drop down menu to switch to alternative\n" + "macro toolsets or to load additional plugin tools.\n" + "The toolsets listed in the menu are located\n" + "in the ImageJ/macros/toolsets folder and the\n" + "plugin tools are the ones installed in the\n"
+								+ "Plugins>Tools submenu.\n" + " \n" + "Hold the shift key down while selecting a\n" + "toolset to view its source code.\n" + " \n" + "More macro toolsets are available at\n" + "  <" + IJ.URL + "/macros/toolsets/>\n" + " \n" + "Plugin tools can be downloaded from\n"
+								+ "the Tools section of the Plugins page at\n" + "  <" + IJ.URL + "/plugins/>\n");
 				return;
 			} else if (label.endsWith("*")) {
 				// load from ij.jar
@@ -1648,11 +1672,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Adds a tool to the toolbar. The 'toolTip' string is displayed in the
-	 * status bar when the mouse is over the tool icon. The 'toolTip' string may
-	 * include icon
-	 * (http://imagej.nih.gov/ij/developer/macro/macros.html#tools). Returns the
-	 * tool ID, or -1 if all tool slots are in use.
+	 * Adds a tool to the toolbar. The 'toolTip' string is displayed in the status bar when the mouse is over the tool icon. The 'toolTip' string may include icon
+	 * (http://imagej.nih.gov/ij/developer/macro/macros.html#tools). Returns the tool ID, or -1 if all tool slots are in use.
 	 */
 	public int addTool(String toolTip) {
 		int index = toolTip.indexOf('-');
@@ -1839,8 +1860,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	/**
-	 * Adds a plugin tool to the first available toolbar slot, or to the last
-	 * slot if the toolbar is full.
+	 * Adds a plugin tool to the first available toolbar slot, or to the last slot if the toolbar is full.
 	 */
 	public static void addPlugInTool(PlugInTool tool) {
 		if (instance == null)
@@ -1976,8 +1996,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				tool.run("");
 
 			/*
-			 * Changed for Bio7! Tools are not installed from *.jar!
-			 * (installFromJar())
+			 * Changed for Bio7! Tools are not installed from *.jar! (installFromJar())
 			 */
 		} else if (label.startsWith("Flood Fill")) {
 			(new MacroInstaller()).installFile(getBio7Path() + "/macros/FloodFillTool.txt");

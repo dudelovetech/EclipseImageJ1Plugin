@@ -2,9 +2,6 @@ package ij.process;
 
 import java.awt.*;
 import java.awt.image.*;
-
-import com.eco.bio7.image.IJTabs;
-
 import ij.*;
 import ij.gui.*;
 import ij.measure.*;
@@ -84,6 +81,8 @@ public class ImageConverter {
 
 	/** Converts this ImagePlus to RGB. */
 	public void convertToRGB() {
+		if (imp.getBitDepth()==24)
+			return;
 		if (imp.getStackSize()>1) {
 			new StackConverter(imp).convertToRGB();
 			return;
@@ -168,8 +167,6 @@ public class ImageConverter {
 		int width = imp.getWidth();
 		int height = imp.getHeight();
 		ImageStack stack = imp.getStack();
-		/*Changed for Bio7!*/
-		IJTabs.deleteActiveTab();
 		byte[] R = (byte[])stack.getPixels(1);
 		byte[] G = (byte[])stack.getPixels(2);
 		byte[] B;
@@ -193,8 +190,6 @@ public class ImageConverter {
 		if (imp.getStackSize()!=3)
 			throw new IllegalArgumentException("3-slice 8-bit stack required");
 		ImageStack stack = imp.getStack();
-		/*Changed for Bio7!*/
-		IJTabs.deleteActiveTab();
 		byte[] H = (byte[])stack.getPixels(1);
 		byte[] S = (byte[])stack.getPixels(2);
 		byte[] B = (byte[])stack.getPixels(3);
@@ -216,10 +211,7 @@ public class ImageConverter {
 		ColorSpaceConverter converter = new ColorSpaceConverter();
 		ImagePlus imp2 = converter.LabToRGB(imp);
 		imp2.setCalibration(imp.getCalibration());
-		/*Changed for Bio7!*/
-		IJTabs.deleteActiveTab();
-		//imp.setImage(imp2);
-		imp2.show();
+		imp.setImage(imp2);
 	}
 
 	/** Converts an RGB image to 8-bits indexed color. 'nColors' must

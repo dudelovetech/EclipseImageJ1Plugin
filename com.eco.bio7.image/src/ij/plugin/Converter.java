@@ -4,8 +4,6 @@ import ij.process.*;
 import ij.gui.*;
 import java.awt.*;
 
-import com.eco.bio7.image.IJTabs;
-
 /** Implements the conversion commands in the Image/Type submenu. */
 public class Converter implements PlugIn {
 
@@ -17,8 +15,12 @@ public class Converter implements PlugIn {
 		imp = WindowManager.getCurrentImage();
 		if (imp!=null) {
 			if (imp.isComposite() && arg.equals("RGB Color") && !imp.getStack().isRGB() && !imp.getStack().isHSB() && !imp.getStack().isLab()) {
-				(new RGBStackConverter()).run("");
-				imp.setTitle(imp.getTitle()); // updates size in Window menu
+				if (imp.getWindow()==null && !ij.macro.Interpreter.isBatchMode())
+					RGBStackConverter.convertToRGB(imp);
+				else {
+					(new RGBStackConverter()).run("");
+					imp.setTitle(imp.getTitle()); // updates size in Window menu
+				}
 			} else if (imp.lock()) {
 				convert(arg);
 				imp.unlock();
@@ -91,13 +93,9 @@ public class Converter implements PlugIn {
 				else if (item.equals("32-bit"))
 					ic.convertToGray32();
 				else if (item.equals("RGB Stack")) {
-					/*Changed for Bio7!*/
-					IJTabs.deleteActiveTab();
 			    	Undo.reset(); // Reversible; no need for Undo
 					ic.convertToRGBStack();
 		    	} else if (item.equals("HSB Stack")) {
-		    		/*Changed for Bio7!*/
-		    		IJTabs.deleteActiveTab();
 			    	Undo.reset();
 					ic.convertToHSB();
 		    	} else if (item.equals("Lab Stack")) {

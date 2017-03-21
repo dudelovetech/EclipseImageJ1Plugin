@@ -60,7 +60,8 @@ public class Prefs {
 	public static final String vistaHint = ""; // no longer used
 
 	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4,
-			REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7;
+			REVERSE_NEXT_PREVIOUS_ORDER=1<<5, AUTO_RUN_EXAMPLES=1<<6, SHOW_ALL_POINTS=1<<7,
+			DO_NOT_SAVE_WINDOW_LOCS=1<<8;
 	public static final String OPTIONS2 = "prefs.options2";
 
 	/** file.separator system property */
@@ -183,6 +184,9 @@ public class Prefs {
 	public static boolean alwaysOnTop;
 	/** Automatically spline fit line selections */
 	public static boolean splineFitLines;
+	/** Enable this option to workaround a bug with some Linux window
+	     managers that causes windows to wander down the screen. */
+	public static boolean doNotSaveWindowLocations = true;
 
 	static Properties ijPrefs = new Properties();
 	static Properties props = new Properties(ijPrefs);
@@ -535,6 +539,7 @@ public class Prefs {
 		reverseNextPreviousOrder = (options2 & REVERSE_NEXT_PREVIOUS_ORDER) != 0;
 		autoRunExamples = (options2 & AUTO_RUN_EXAMPLES) != 0;
 		showAllPoints = (options2 & SHOW_ALL_POINTS) != 0;
+		doNotSaveWindowLocations = (options2&DO_NOT_SAVE_WINDOW_LOCS)!=0;
 	}
 
 	static void saveOptions(Properties prefs) {
@@ -550,7 +555,8 @@ public class Prefs {
 
 		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0)
 				+ (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0)
-				+ (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0);
+				+ (autoRunExamples?AUTO_RUN_EXAMPLES:0) + (showAllPoints?SHOW_ALL_POINTS:0)
+				+ (doNotSaveWindowLocations?DO_NOT_SAVE_WINDOW_LOCS:0);
 		prefs.put(OPTIONS2, Integer.toString(options2));
 	}
 
@@ -646,7 +652,8 @@ public class Prefs {
 	 * using the keyword <code>key</code>.
 	 */
 	public static void saveLocation(String key, Point loc) {
-		set(key, loc.x + "," + loc.y);
+		if (!doNotSaveWindowLocations)
+			 set(key, loc.x+","+loc.y);
 	}
 
 	/**
