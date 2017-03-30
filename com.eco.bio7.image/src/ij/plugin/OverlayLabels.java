@@ -90,7 +90,7 @@ public class OverlayLabels implements PlugIn, DialogListener {
 			if ((showNames&&!showNames2) || colorChanged || sizeChanged) {
 				showLabels = true;
 				Vector checkboxes = gd.getCheckboxes();
-				((JCheckBox)checkboxes.elementAt(0)).setSelected(true);
+				((Checkbox)checkboxes.elementAt(0)).setState(true);
 			}
 			overlay.drawLabels(showLabels);
 			Analyzer.drawLabels(showLabels);
