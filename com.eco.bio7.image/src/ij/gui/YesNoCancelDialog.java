@@ -3,6 +3,8 @@ import ij.IJ;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.JPanel;
+
 /** A modal dialog box with a one line message and
 	"Yes", "No" and "Cancel" buttons. */
 public class YesNoCancelDialog extends Dialog implements ActionListener, KeyListener, WindowListener {
@@ -17,14 +19,14 @@ public class YesNoCancelDialog extends Dialog implements ActionListener, KeyList
 	public YesNoCancelDialog(Frame parent, String title, String msg, String yesLabel, String noLabel) {
 		super(parent, title, true);
 		setLayout(new BorderLayout());
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		MultiLineLabel message = new MultiLineLabel(msg);
 		message.setFont(new Font("Dialog", Font.PLAIN, 12));
 		panel.add(message);
 		add("North", panel);
 		
-		panel = new Panel();
+		panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 8));
 		if (IJ.isMacintosh() && msg.startsWith("Save")) {
 			yesB = new Button("  Save  ");

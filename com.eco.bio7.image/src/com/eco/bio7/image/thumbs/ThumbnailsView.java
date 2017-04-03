@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 M. Austenfeld
+ * Copyright (c) 2007-2017 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,7 +17,6 @@ import ij.ImageStack;
 import ij.io.Opener;
 import ij.plugin.AVI_Reader;
 import ij.process.ImageConverter;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
@@ -27,7 +26,6 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -71,7 +69,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-
 import com.eco.bio7.image.PlaceholderLabel;
 
 
@@ -230,9 +227,12 @@ public class ThumbnailsView extends ViewPart {
 
 	    Display.getCurrent().setData(data);
 
-	    Sleak sleak = new Sleak();
+	    /*
+	     * Enable Sleak for Debugging SWT resources!
+	     * Sleak sleak = new Sleak();
 
 	    sleak.open();
+	    */
 
 		this.parent = parent;
 
