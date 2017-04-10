@@ -1,9 +1,9 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.51g:
+### New in 1.51k:
 
-1. Updated ImageJ to 1.51g.
+1. Updated ImageJ to 1.51k.
 
 2. Reworked the ImageJ plugin view menus. Now all Imagej menus and nested submenus are displayed correctly!
 
