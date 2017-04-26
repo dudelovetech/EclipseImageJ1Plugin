@@ -26,7 +26,7 @@ public class Histogram implements PlugIn, TextListener {
 	private double xMin, xMax;
 	private String yMax = "Auto";
 	private boolean stackHistogram;
-	private JCheckBox checkbox;
+	private Checkbox checkbox;
 	private TextField minField, maxField;
 	private String defaultMin, defaultMax;
 
@@ -129,7 +129,7 @@ public class Histogram implements PlugIn, TextListener {
 			maxField = (TextField)numbers.elementAt(2);
 			maxField.addTextListener(this);
 		}
-		checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
+		checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return false;			
@@ -155,7 +155,7 @@ public class Histogram implements PlugIn, TextListener {
 		boolean rangeChanged = !defaultMin.equals(minField.getText())
 			|| !defaultMax.equals(maxField.getText());
 		if (rangeChanged)
-			checkbox.setSelected(false);
+			checkbox.setState(false);
 	}
 	
 	int setupDialog(ImagePlus imp, int flags) {
