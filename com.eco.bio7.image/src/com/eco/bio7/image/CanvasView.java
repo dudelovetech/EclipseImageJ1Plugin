@@ -208,8 +208,7 @@ public class CanvasView extends ViewPart {
 			@Override
 			public synchronized void controlResized(final ControlEvent e) {
 				/*
-				 * Here we write the values in the com.eco.bio7 plugin
-				 * preferences with the help of scoped preferences!
+				 * Here we write the values in the com.eco.bio7 plugin preferences with the help of scoped preferences!
 				 */
 				Rectangle rec = parent.getClientArea();
 
@@ -225,11 +224,9 @@ public class CanvasView extends ViewPart {
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
 
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = "
-								+ (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = "
-								+ (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
@@ -257,9 +254,7 @@ public class CanvasView extends ViewPart {
 						if (ve.size() > 0) {
 							final ImageWindow win = (ImageWindow) ve.get(1);
 							/*
-							 * Execute on the event dispatching thread!
-							 * Important for WorldWind which uses ImageJ! (else
-							 * deadlock situation occurs!!!)
+							 * Execute on the event dispatching thread! Important for WorldWind which uses ImageJ! (else deadlock situation occurs!!!)
 							 */
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -316,14 +311,19 @@ public class CanvasView extends ViewPart {
 						IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 						boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 						if (javaFXEmbedded) {
-							openFile(new File(fileList[x].toString()));
+							Display dis = CanvasView.getParent2().getDisplay();
+							dis.syncExec(new Runnable() {
+
+								public void run() {
+									openFile(new File(fileList[x].toString()));
+								}
+							});
 						} else {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 
 									/*
-									 * Opener o = new Opener();
-									 * o.open(fileList[x].toString());
+									 * Opener o = new Opener(); o.open(fileList[x].toString());
 									 */
 									openFile(new File(fileList[x].toString()));
 								}
@@ -419,9 +419,7 @@ public class CanvasView extends ViewPart {
 
 			{
 				/*
-				 * Important to select the correct image and window when
-				 * creating the new ImageJ view!The listener for the right-click
-				 * on the tabitem will care about that!
+				 * Important to select the correct image and window when creating the new ImageJ view!The listener for the right-click on the tabitem will care about that!
 				 */
 				if (mouseevent.count == 1) {
 
@@ -464,11 +462,10 @@ public class CanvasView extends ViewPart {
 						/* Create ImageJ view with unique ID! */
 						String id = UUID.randomUUID().toString();
 						// detachedSecViewIDs.add(id);
-						custom.setPanel(current, id,plu.getTitle());
+						custom.setPanel(current, id, plu.getTitle());
 						custom.setData(plu, win);
 						/*
-						 * Only hide the tab without to close the ImagePlus
-						 * object!
+						 * Only hide the tab without to close the ImagePlus object!
 						 */
 						IJTabs.hideTab();
 					}
@@ -488,7 +485,7 @@ public class CanvasView extends ViewPart {
 
 	private void initializeToolBar() {
 		IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-       
+
 		tbm.add(file);
 		tbm.add(edit);
 		tbm.add(image);
@@ -530,8 +527,7 @@ public class CanvasView extends ViewPart {
 	}
 
 	/**
-	 * Open a file. If it's a directory, ask to open all images as a sequence in
-	 * a stack or individually.
+	 * Open a file. If it's a directory, ask to open all images as a sequence in a stack or individually.
 	 */
 	private void openFile(File f) {
 		try {
@@ -602,8 +598,7 @@ public class CanvasView extends ViewPart {
 	}
 
 	/*
-	 * public ArrayList<String> getDetachedSecViewIDs() { return
-	 * detachedSecViewIDs; }
+	 * public ArrayList<String> getDetachedSecViewIDs() { return detachedSecViewIDs; }
 	 */
 	private void setComponentFont(Display dis) {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

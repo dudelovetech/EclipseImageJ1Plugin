@@ -4,6 +4,7 @@ import java.io.File;
 import javax.swing.SwingUtilities;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -19,7 +20,6 @@ import ij.IJ;
 import ij.io.OpenDialog;
 import ij.io.Opener;
 
-
 public class ImageJBio7OpenEditor extends EditorPart {
 
 	private IEditorSite site;
@@ -31,15 +31,20 @@ public class ImageJBio7OpenEditor extends EditorPart {
 		IFile file = ResourceUtil.getFile(input);
 
 		fi = file.getRawLocation().toString();
+		/* If JavaFX embeds the ImageJ canvas! */
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+		if (javaFXEmbedded) {
+			openFile(new File(fi));
+		} else {
+			// String dirPath = new File(fi).getParentFile().getPath().replace("\\", "/");
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
 
-		// String dirPath = new File(fi).getParentFile().getPath().replace("\\", "/");
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-
-				
-				openFile(new File(fi));
-			}
-		});
+					openFile(new File(fi));
+				}
+			});
+		}
 
 		openView("com.eco.bio7.imagej");
 
