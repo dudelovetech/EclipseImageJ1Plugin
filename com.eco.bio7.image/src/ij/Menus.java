@@ -26,11 +26,8 @@ import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.Util;
 
 /**
- * This class installs and updates ImageJ's menus. Note that menu labels, even
- * in submenus, must be unique. This is because ImageJ uses a single hash table
- * for all menu labels. If you look closely, you will see that
- * File->Import->Text Image... and File->Save As->Text Image... do not use the
- * same label. One of the labels has an extra space.
+ * This class installs and updates ImageJ's menus. Note that menu labels, even in submenus, must be unique. This is because ImageJ uses a single hash table for all menu labels. If you look closely,
+ * you will see that File->Import->Text Image... and File->Save As->Text Image... do not use the same label. One of the labels has an extra space.
  * 
  * @see ImageJ
  */
@@ -228,7 +225,7 @@ public class Menus {
 		getMenu("Analyze>Gels", true);
 		Menu toolsMenu = getMenu("Analyze>Tools", true);
 
-		// the plugins will be added later, with a separator
+		// the plugins will be added later, after a separator
 		addPluginsMenu();
 
 		Menu window = getMenu("Window");
@@ -547,10 +544,10 @@ public class Menus {
 	}
 
 	/**
-	 * Install plugins using "pluginxx=" keys in IJ_Prefs.txt. Plugins not
-	 * listed in IJ_Prefs are added to the end of the Plugins menu.
+	 * Install plugins using "pluginxx=" keys in IJ_Prefs.txt. Plugins not listed in IJ_Prefs are added to the end of the Plugins menu.
 	 */
 	void installPlugins() {
+		int nPlugins0 = nPlugins;
 		String value, className;
 		char menuCode;
 		Menu menu;
@@ -621,6 +618,10 @@ public class Menus {
 					installUserPlugin(pluginList[i]);
 			}
 		}
+		if ((nPlugins - nPlugins0) <= 1 && IJ.getDir("imagej") != null && IJ.getDir("imagej").startsWith("/private")) {
+			pluginsMenu.addSeparator();
+			addPlugInItem(pluginsMenu, "Why are Plugins Missing?", "ij.plugin.SimpleCommands(\"missing\")", 0, false);
+		}
 		installJarPlugins();
 		installMacros();
 	}
@@ -636,8 +637,7 @@ public class Menus {
 	}
 
 	/**
-	 * Installs a macro or script in the Plugins menu, or submenu, with with
-	 * underscores in the file name replaced by spaces.
+	 * Installs a macro or script in the Plugins menu, or submenu, with with underscores in the file name replaced by spaces.
 	 */
 	void installMacro(String name) {
 		Menu menu = pluginsMenu;
@@ -828,8 +828,7 @@ public class Menus {
 	}
 
 	/**
-	 * Returns the specified ImageJ menu (e.g., "File>New") or null if it is not
-	 * found.
+	 * Returns the specified ImageJ menu (e.g., "File>New") or null if it is not found.
 	 */
 	public static Menu getImageJMenu(String menuPath) {
 		if (menus.get(menuPath) != null)
@@ -933,8 +932,7 @@ public class Menus {
 	}
 
 	/**
-	 * Opens the configuration file ("plugins.config") from a JAR file and
-	 * returns it as an InputStream.
+	 * Opens the configuration file ("plugins.config") from a JAR file and returns it as an InputStream.
 	 */
 	InputStream getConfigurationFile(String jar) {
 		try {
@@ -1005,25 +1003,13 @@ public class Menus {
 
 	void setupPluginsAndMacrosPaths() {
 		/*
-		 * ImageJPath = pluginsPath = macrosPath = null; String currentDir =
-		 * Prefs.getHomeDir(); // "user.dir" if (currentDir==null) return; if
-		 * (currentDir.endsWith("plugins")) ImageJPath = pluginsPath =
-		 * currentDir+File.separator; else { String pluginsDir =
-		 * System.getProperty("plugins.dir"); if (pluginsDir!=null) { if
-		 * (pluginsDir.endsWith("/")||pluginsDir.endsWith("\\")) pluginsDir =
-		 * pluginsDir.substring(0, pluginsDir.length()-1); if
-		 * (pluginsDir.endsWith("/plugins")||pluginsDir.endsWith("\\plugins"))
-		 * pluginsDir = pluginsDir.substring(0, pluginsDir.length()-8); } if
-		 * (pluginsDir==null) pluginsDir = currentDir; else if
-		 * (pluginsDir.equals("user.home")) { pluginsDir =
-		 * System.getProperty("user.home"); if (!(new
-		 * File(pluginsDir+File.separator+"plugins")).isDirectory()) pluginsDir
-		 * = pluginsDir + File.separator + "ImageJ"; // needed to run plugins
-		 * when ImageJ launched using Java WebStart if (applet==null)
-		 * System.setSecurityManager(null); jnlp = true; } pluginsPath =
-		 * pluginsDir+File.separator+"plugins"+File.separator; macrosPath =
-		 * pluginsDir+File.separator+"macros"+File.separator; ImageJPath =
-		 * pluginsDir+File.separator; }
+		 * ImageJPath = pluginsPath = macrosPath = null; String currentDir = Prefs.getHomeDir(); // "user.dir" if (currentDir==null) return; if (currentDir.endsWith("plugins")) ImageJPath =
+		 * pluginsPath = currentDir+File.separator; else { String pluginsDir = System.getProperty("plugins.dir"); if (pluginsDir!=null) { if (pluginsDir.endsWith("/")||pluginsDir.endsWith("\\"))
+		 * pluginsDir = pluginsDir.substring(0, pluginsDir.length()-1); if (pluginsDir.endsWith("/plugins")||pluginsDir.endsWith("\\plugins")) pluginsDir = pluginsDir.substring(0,
+		 * pluginsDir.length()-8); } if (pluginsDir==null) pluginsDir = currentDir; else if (pluginsDir.equals("user.home")) { pluginsDir = System.getProperty("user.home"); if (!(new
+		 * File(pluginsDir+File.separator+"plugins")).isDirectory()) pluginsDir = pluginsDir + File.separator + "ImageJ"; // needed to run plugins when ImageJ launched using Java WebStart if
+		 * (applet==null) System.setSecurityManager(null); jnlp = true; } pluginsPath = pluginsDir+File.separator+"plugins"+File.separator; macrosPath =
+		 * pluginsDir+File.separator+"macros"+File.separator; ImageJPath = pluginsDir+File.separator; }
 		 */
 
 		/* Changed for Bio7! */
@@ -1035,7 +1021,7 @@ public class Menus {
 		macrosPath = store.getString("MACROS_PATH") + File.separator;
 		/* Get the installation directory of the ImageJ plugin! */
 		String currentDir = Util.getImageJPath();
-		ImageJPath = Util.getImageJPath()+File.separator;
+		ImageJPath = Util.getImageJPath() + File.separator;
 
 		File f = pluginsPath != null ? new File(pluginsPath) : null;
 		if (f == null || !f.isDirectory()) {
@@ -1112,8 +1098,7 @@ public class Menus {
 	}
 
 	/**
-	 * Looks for plugins and jar files in a subdirectory of the plugins
-	 * directory.
+	 * Looks for plugins and jar files in a subdirectory of the plugins directory.
 	 */
 	private static void checkSubdirectory(String path, String dir, Vector v) {
 		if (dir.endsWith(".java"))
@@ -1179,8 +1164,7 @@ public class Menus {
 	}
 
 	/**
-	 * Installs a plugin in the Plugins menu using the class name, with
-	 * underscores replaced by spaces, as the command.
+	 * Installs a plugin in the Plugins menu using the class name, with underscores replaced by spaces, as the command.
 	 */
 	void installUserPlugin(String className) {
 		installUserPlugin(className, false);
@@ -1357,16 +1341,14 @@ public class Menus {
 	}
 
 	/**
-	 * Returns the path to the user plugins directory or null if the plugins
-	 * directory was not found.
+	 * Returns the path to the user plugins directory or null if the plugins directory was not found.
 	 */
 	public static String getPlugInsPath() {
 		return pluginsPath;
 	}
 
 	/**
-	 * Returns the path to the macros directory or null if the macros directory
-	 * was not found.
+	 * Returns the path to the macros directory or null if the macros directory was not found.
 	 */
 	public static String getMacrosPath() {
 		return macrosPath;
@@ -1378,16 +1360,14 @@ public class Menus {
 	}
 
 	/**
-	 * Returns the hashtable that associates shortcuts with commands. The keys
-	 * in the hashtable are Integer keycodes, or keycode+200 for uppercase.
+	 * Returns the hashtable that associates shortcuts with commands. The keys in the hashtable are Integer keycodes, or keycode+200 for uppercase.
 	 */
 	public static Hashtable getShortcuts() {
 		return shortcuts;
 	}
 
 	/**
-	 * Returns the hashtable that associates keyboard shortcuts with macros. The
-	 * keys in the hashtable are Integer keycodes, or keycode+200 for uppercase.
+	 * Returns the hashtable that associates keyboard shortcuts with macros. The keys in the hashtable are Integer keycodes, or keycode+200 for uppercase.
 	 */
 	public static Hashtable getMacroShortcuts() {
 		if (macroShortcuts == null)
@@ -1726,8 +1706,7 @@ public class Menus {
 	}
 
 	/**
-	 * Set the size (in points) used for the fonts in ImageJ menus. Set the size
-	 * to 0 to use the Java default size.
+	 * Set the size (in points) used for the fonts in ImageJ menus. Set the size to 0 to use the Java default size.
 	 */
 	public static void setFontSize(int size) {
 		if (size < 9 && size != 0)
@@ -1738,8 +1717,7 @@ public class Menus {
 	}
 
 	/**
-	 * Returns the size (in points) used for the fonts in ImageJ menus. Returns
-	 * 0 if the default font size is being used or if this is a Macintosh.
+	 * Returns the size (in points) used for the fonts in ImageJ menus. Returns 0 if the default font size is being used or if this is a Macintosh.
 	 */
 	public static int getFontSize() {
 		return IJ.isMacintosh() ? 0 : fontSize;

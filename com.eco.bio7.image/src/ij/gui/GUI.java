@@ -145,9 +145,7 @@ public class GUI {
    /*Changed for Bio7!*/
 	/** Lightens overly dark scrollbar background on Windows 8. */
 	public static void fix(JScrollBar sb) {
-		if (isWindows8) {
-			sb.setBackground(lightGray);
-		}
+		
 	}
 
 	/** Lightens overly dark scrollbar background on Windows 8. */

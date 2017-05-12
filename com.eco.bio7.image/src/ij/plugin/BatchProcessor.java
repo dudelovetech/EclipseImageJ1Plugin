@@ -5,21 +5,17 @@ import ij.gui.*;
 import ij.util.Tools;
 import ij.io.*;
 import ij.macro.Interpreter;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /** This plugin implements the File/Batch/Macro and File/Batch/Virtual Stack commands. */
 	public class BatchProcessor implements PlugIn, ActionListener, ItemListener, Runnable {
 		private static final String MACRO_FILE_NAME = "BatchMacro.ijm";
 		private static final String[] formats = {"TIFF", "8-bit TIFF", "JPEG", "GIF", "PNG", "PGM", "BMP", "FITS", "Text Image", "ZIP", "Raw"};
 		private static String format = Prefs.get("batch.format", formats[0]);
+		
 		private static final String[] code = {
 			"[Select from list]",
 			"Add Border",
@@ -37,16 +33,33 @@ import javax.swing.JTextField;
 			"Show File Info",
 			"Unsharp Mask",
 		};
+		
+		private static final String help = "<html>"
+		+"<h1>Process&gt;Batch&gt;Virtual Stack</h1>"
+		+"<font size=+1>"
+		+"This command runs macro code on each image in a virtual stack.<br>"
+		+"The processed images are saved in the <i>Output</i> folder,<br>"
+		+"in the specified <i>Format</i>, allowing them to be opened as a<br>"
+		+"virtual stack. Make sure the <i>Output</i> folder is empty<br>"
+		+"before clicking on <i>Process</i>.<br>"
+		+"<br>"
+		+"In the macro code, the 'i' (index) and 'n' (stack size) variables<br>"
+		+"are predefined. Call <i>setOption('SaveBatchOutput',false)</i> to<br>"
+		+"prevent the image currently being processed from being saved,<br>"
+		+"effectively removing it from the output virtual stack.<br> <br>"
+		+"</font>";
+
 		private String macro = "";
 		private int testImage;
-		private JButton input, output, open, save, test;
-		private JTextField inputDir, outputDir;
+		private Button input, output, open, save, test;
+		private TextField inputDir, outputDir;
 		private GenericDialog gd;
 		private Thread thread;
 		private ImagePlus virtualStack;
 		private ImagePlus outputImage;
 		private boolean errorDisplayed;
 		private String filter;
+		private static boolean saveOutput = true;
 
 	public void run(String arg) {
 		if (arg.equals("stack")) {
@@ -110,9 +123,9 @@ import javax.swing.JTextField;
 		gd = new NonBlockingGenericDialog("Batch Process");
 		addPanels(gd);
 		gd.setInsets(15, 0, 5);
-		gd.addChoice("Output Format:", formats, format);
+		gd.addChoice("Output format:", formats, format);
 		gd.setInsets(0, 0, 5);
-		gd.addChoice("Add Macro Code:", code, code[0]);
+		gd.addChoice("Add macro code:", code, code[0]);
 		if (virtualStack==null)
 			gd.addStringField("File name contains:", "", 10);
 		gd.setInsets(15, 10, 0);
@@ -122,6 +135,8 @@ import javax.swing.JTextField;
 		gd.setOKLabel("Process");
 		Vector choices = gd.getChoices();
 		Choice choice = (Choice)choices.elementAt(1);
+		if (virtualStack!=null)
+			gd.addHelp(help);
 		choice.addItemListener(this);
 		gd.showDialog();
 		format = gd.getNextChoice();
@@ -140,12 +155,12 @@ import javax.swing.JTextField;
 			IJ.showProgress(i, n);
 			ImageProcessor ip = stack.getProcessor(i);
 			if (ip==null) return;
-			ImagePlus imp = new ImagePlus("", ip);
+			ImagePlus imp = new ImagePlus(i+"/"+stack.getSize(), ip);
 			if (!macro.equals("")) {
-				if (!runMacro("i="+(index++)+";"+macro, imp))
+				if (!runMacro("i="+(index++)+";"+"n="+stack.getSize()+";"+macro, imp))
 					break;
 			}
-			if (!outputPath.equals("")) {
+			if (saveOutput && !outputPath.equals("")) {
 				if (format.equals("8-bit TIFF") || format.equals("GIF")) {
 					if (imp.getBitDepth()==24)
 						IJ.run(imp, "8-bit Color", "number=256");
@@ -154,6 +169,7 @@ import javax.swing.JTextField;
 				}
 				IJ.saveAs(imp, format, outputPath+pad(i));
 			}
+			saveOutput = true;
 			imp.close();
 		}
 		if (outputPath!=null && !outputPath.equals(""))
@@ -200,7 +216,7 @@ import javax.swing.JTextField;
 				if (!runMacro("i="+(index++)+";"+macro, imp))
 					break;
 			}
-			if (!outputPath.equals("")) {
+			if (saveOutput && !outputPath.equals("")) {
 				if (format.equals("8-bit TIFF") || format.equals("GIF")) {
 					if (imp.getBitDepth()==24)
 						IJ.run(imp, "8-bit Color", "number=256");
@@ -212,6 +228,7 @@ import javax.swing.JTextField;
 				else
 					IJ.saveAs(imp, format, outputPath+list[i]);
 			}
+			saveOutput = true;
 			imp.close();
 		}
 	}
@@ -255,33 +272,33 @@ import javax.swing.JTextField;
 		Panel p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		if (virtualStack==null) {
-			input = new JButton("Input...");
+			input = new Button("Input...");
 			input.addActionListener(this);
 			p.add(input);
-			inputDir = new JTextField(Prefs.get("batch.input", ""), 45);
+			inputDir = new TextField(Prefs.get("batch.input", ""), 45);
 			p.add(inputDir);
 			gd.addPanel(p);
 		}
 		p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-		output = new JButton("Output...");
+		output = new Button("Output...");
 		output.addActionListener(this);
 		p.add(output);
-		outputDir = new JTextField(Prefs.get("batch.output", ""), 45);
+		outputDir = new TextField(Prefs.get("batch.output", ""), 45);
 		p.add(outputDir);
 		gd.addPanel(p);
 	}
 	
 	void addButtons(GenericDialog gd) {
-		JPanel p = new JPanel();
+		Panel p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-		test = new JButton("Test");
+		test = new Button("Test");
 		test.addActionListener(this);
 		p.add(test);
-		open = new JButton("Open...");
+		open = new Button("Open...");
 		open.addActionListener(this);
 		p.add(open);
-		save = new JButton("Save...");
+		save = new Button("Save...");
 		save.addActionListener(this);
 		p.add(save);
 		gd.addPanel(p);
@@ -459,6 +476,9 @@ import javax.swing.JTextField;
 		OpenDialog.setLastDirectory(f.getParent()+File.separator);
 		OpenDialog.setLastName(f.getName());
 	}
-
+	
+	public static void saveOutput(boolean b) {
+		saveOutput = b;
+	}
 
 }

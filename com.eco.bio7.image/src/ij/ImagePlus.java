@@ -41,6 +41,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/** 32-bit RGB color */
 	public static final int COLOR_RGB = 4;
+	
+	/** Title of image used by Flatten command */
+	public static final String flattenTitle = "flatten~canvas";
 
 	/** True if any changes have been made to this image. */
 	public boolean changes;
@@ -2637,6 +2640,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		if (IJ.debugMode)
 			IJ.log("flatten");
 		ImagePlus imp2 = createImagePlus();
+		imp2.setTitle(flattenTitle);
 		ImageCanvas ic2 = new ImageCanvas(imp2);
 		imp2.flatteningCanvas = ic2;
 		imp2.setRoi(getRoi());

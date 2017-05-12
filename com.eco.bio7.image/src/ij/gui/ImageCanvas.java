@@ -93,6 +93,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	private boolean scaleToFit;
 	private boolean painted;
 	private boolean hideZoomIndicator;
+	private boolean flattening;
 
 	public ImageCanvas(ImagePlus imp) {
 		this.imp = imp;
@@ -314,6 +315,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	private void drawOverlay(Overlay overlay, Graphics g) {
 		if (imp != null && imp.getHideOverlay() && overlay != showAllOverlay)
 			return;
+		flattening = imp!=null && ImagePlus.flattenTitle.equals(imp.getTitle());
 		if (imp != null && showAllOverlay != null && overlay != showAllOverlay)
 			overlay.drawLabels(false);
 		Color labelColor = overlay.getLabelColor();
@@ -501,9 +503,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				labelRects[index] = new Rectangle(x2 - crossSize2, y2 - crossSize2, crossSize, crossSize);
 			} else
 				labelRects[index] = new Rectangle(x - 3, y - h + 1, w + 4, h);
-		}
-		// if (IJ.debugMode && index==0) IJ.log("drawRoiLabel: "+drawingList+"
-		// "+label+" "+x+" "+y);
+		}		
+		//IJ.log("drawRoiLabel: "+" "+label+" "+x+" "+y+" "+flattening);
 		g.setColor(labelColor);
 		g.drawString(label, x + xoffset, y - 2 + yoffset);
 		g.setColor(defaultColor);

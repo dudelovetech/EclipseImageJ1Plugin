@@ -17,8 +17,7 @@ import ij.util.Tools;
 import ij.macro.*;
 
 /**
- * This class is a customizable modal dialog box. Here is an example
- * GenericDialog with one string field and two numeric fields:
+ * This class is a customizable modal dialog box. Here is an example GenericDialog with one string field and two numeric fields:
  * 
  * <pre>
  * public class Generic_Dialog_Example implements PlugIn {
@@ -41,14 +40,11 @@ import ij.macro.*;
  * }
  * </pre>
  * 
- * To work with macros, the first word of each component label must be unique.
- * If this is not the case, add underscores, which will be converted to spaces
- * when the dialog is displayed. For example, change the checkbox labels "Show
- * Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
+ * To work with macros, the first word of each component label must be unique. If this is not the case, add underscores, which will be converted to spaces when the dialog is displayed. For example,
+ * change the checkbox labels "Show Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
  */
 public class GenericDialog extends Dialog implements ActionListener, TextListener, FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener, ComponentListener {
 
-	public static final int MAX_SLIDERS = 25;
 	protected Vector numberField, stringField, checkbox, choice, slider, radioButtonGroups;
 	protected TextArea textArea1, textArea2;
 	protected Vector defaultValues, defaultText, defaultStrings, defaultChoiceIndexes;
@@ -72,8 +68,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private String macroOptions;
 	private int topInset, leftInset, bottomInset;
 	private boolean customInsets;
-	private int[] sliderIndexes;
-	private double[] sliderScales;
+	private Vector sliderIndexes;
+	private Vector sliderScales;
 	private Checkbox previewCheckbox; // the "Preview" Checkbox, if any
 	private Vector dialogListeners; // the Objects to notify on user input
 	private PlugInFilterRunner pfr; // the PlugInFilterRunner for automatic
@@ -92,10 +88,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private static GenericDialog instance;
 
 	/**
-	 * Creates a new GenericDialog with the specified title. Uses the current
-	 * image image window as the parent frame or the ImageJ frame if no image
-	 * windows are open. Dialog parameters are recorded by ImageJ's command
-	 * recorder but this requires that the first word of each label be unique.
+	 * Creates a new GenericDialog with the specified title. Uses the current image image window as the parent frame or the ImageJ frame if no image windows are open. Dialog parameters are recorded by
+	 * ImageJ's command recorder but this requires that the first word of each label be unique.
 	 */
 	public GenericDialog(String title) {
 		this(title, getParentFrame());
@@ -150,8 +144,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	// }
 
 	/**
-	 * Adds a numeric field. The first word of the label must be unique or
-	 * command recording will not work.
+	 * Adds a numeric field. The first word of the label must be unique or command recording will not work.
 	 * 
 	 * @param label
 	 *            the label
@@ -165,8 +158,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a numeric field. The first word of the label must be unique or
-	 * command recording will not work.
+	 * Adds a numeric field. The first word of the label must be unique or command recording will not work.
 	 * 
 	 * @param label
 	 *            the label
@@ -340,9 +332,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a checkbox; does not make it recordable if isPreview is true. With
-	 * isPreview true, the checkbox can be referred to as previewCheckbox from
-	 * hereon.
+	 * Adds a checkbox; does not make it recordable if isPreview is true. With isPreview true, the checkbox can be referred to as previewCheckbox from hereon.
 	 */
 	private void addCheckbox(String label, boolean defaultValue, boolean isPreview) {
 		String label2 = label;
@@ -374,20 +364,13 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a checkbox labelled "Preview" for "automatic" preview. The reference
-	 * to this checkbox can be retrieved by getPreviewCheckbox() and it provides
-	 * the additional method previewRunning for optical feedback while preview
-	 * is prepared. PlugInFilters can have their "run" method automatically
-	 * called for preview under the following conditions: - the PlugInFilter
-	 * must pass a reference to itself (i.e., "this") as an argument to the
-	 * AddPreviewCheckbox - it must implement the DialogListener interface and
-	 * set the filter parameters in the dialogItemChanged method. - it must have
-	 * DIALOG and PREVIEW set in its flags. A previewCheckbox is always off when
-	 * the filter is started and does not get recorded by the Macro Recorder.
+	 * Adds a checkbox labelled "Preview" for "automatic" preview. The reference to this checkbox can be retrieved by getPreviewCheckbox() and it provides the additional method previewRunning for
+	 * optical feedback while preview is prepared. PlugInFilters can have their "run" method automatically called for preview under the following conditions: - the PlugInFilter must pass a reference
+	 * to itself (i.e., "this") as an argument to the AddPreviewCheckbox - it must implement the DialogListener interface and set the filter parameters in the dialogItemChanged method. - it must have
+	 * DIALOG and PREVIEW set in its flags. A previewCheckbox is always off when the filter is started and does not get recorded by the Macro Recorder.
 	 *
 	 * @param pfr
-	 *            A reference to the PlugInFilterRunner calling the PlugInFilter
-	 *            if automatic preview is desired, null otherwise.
+	 *            A reference to the PlugInFilterRunner calling the PlugInFilter if automatic preview is desired, null otherwise.
 	 */
 	public void addPreviewCheckbox(PlugInFilterRunner pfr) {
 		if (previewCheckbox != null)
@@ -400,11 +383,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Add the preview checkbox with user-defined label; for details see the
-	 * addPreviewCheckbox method with standard "Preview" label. Adds the
-	 * checkbox when the current image is a CompositeImage in "Composite" mode,
-	 * unlike the one argument version. Note that a GenericDialog can have only
-	 * one PreviewCheckbox.
+	 * Add the preview checkbox with user-defined label; for details see the addPreviewCheckbox method with standard "Preview" label. Adds the checkbox when the current image is a CompositeImage in
+	 * "Composite" mode, unlike the one argument version. Note that a GenericDialog can have only one PreviewCheckbox.
 	 */
 	public void addPreviewCheckbox(PlugInFilterRunner pfr, String label) {
 		if (previewCheckbox != null)
@@ -446,8 +426,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * @param defaultValues
 	 *            the initial states
 	 * @param headings
-	 *            the column headings Example:
-	 *            http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
+	 *            the column headings Example: http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
 		JPanel panel = new JPanel();
@@ -615,16 +594,14 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a message consisting of one or more lines of text, which will be
-	 * displayed using the specified font.
+	 * Adds a message consisting of one or more lines of text, which will be displayed using the specified font.
 	 */
 	public void addMessage(String text, Font font) {
 		addMessage(text, font, null);
 	}
 
 	/**
-	 * Adds a message consisting of one or more lines of text, which will be
-	 * displayed using the specified font and color.
+	 * Adds a message consisting of one or more lines of text, which will be displayed using the specified font and color.
 	 */
 	public void addMessage(String text, Font font, Color color) {
 		theLabel = null;
@@ -690,9 +667,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a slider (scroll bar) to the dialog box. Floating point values will
-	 * be used if (maxValue-minValue)<=5.0 and either minValue or maxValue are
-	 * non-integer.
+	 * Adds a slider (scroll bar) to the dialog box. Floating point values will be used if (maxValue-minValue)<=5.0 and either minValue or maxValue are non-integer.
 	 * 
 	 * @param label
 	 *            the label
@@ -732,11 +707,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 		if (slider == null) {
 			slider = new Vector(5);
-			sliderIndexes = new int[MAX_SLIDERS];
-			sliderScales = new double[MAX_SLIDERS];
+			sliderIndexes = new Vector(5);
+			sliderScales = new Vector(5);
 		}
 		Scrollbar s = new Scrollbar(Scrollbar.HORIZONTAL, (int) defaultValue, 1, (int) minValue, (int) maxValue + 1);
-		// GUI.fix(s);
 		slider.addElement(s);
 		s.addAdjustmentListener(this);
 		s.setUnitIncrement(1);
@@ -758,8 +732,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		tf.addFocusListener(this);
 		tf.addKeyListener(this);
 		numberField.addElement(tf);
-		sliderIndexes[slider.size() - 1] = numberField.size() - 1;
-		sliderScales[slider.size() - 1] = scale;
+		sliderIndexes.add(new Integer(numberField.size() - 1));
+		sliderScales.add(new Double(scale));
 		defaultValues.addElement(new Double(defaultValue / scale));
 		defaultText.addElement(tf.getText());
 		tf.setEditable(true);
@@ -804,8 +778,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	/** Adds a Panel to the dialog. */
 	/*
-	 * public void addPanel(Panel panel) { addPanel(panel ,
-	 * GridBagConstraints.WEST, new Insets(5, 0, 0, 0)); }
+	 * public void addPanel(Panel panel) { addPanel(panel , GridBagConstraints.WEST, new Insets(5, 0, 0, 0)); }
 	 */
 	// extra method to avoid plugin mistake
 	public void addPanel(Panel panel) {
@@ -831,9 +804,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a Panel to the dialog with custom contraint and insets. The defaults
-	 * are GridBagConstraints.WEST (left justified) and "new Insets(5, 0, 0, 0)"
-	 * (5 pixels of padding at the top).
+	 * Adds a Panel to the dialog with custom contraint and insets. The defaults are GridBagConstraints.WEST (left justified) and "new Insets(5, 0, 0, 0)" (5 pixels of padding at the top).
 	 */
 	public void addPanel(JPanel panel, int constraints, Insets insets) {
 		c.gridx = 0;
@@ -856,8 +827,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Set the insets (margins), in pixels, that will be used for the next
-	 * component added to the dialog.
+	 * Set the insets (margins), in pixels, that will be used for the next component added to the dialog.
 	 * 
 	 * <pre>
 	 Default insets:
@@ -903,8 +873,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Make this a "Yes No Cancel" dialog with custom labels. Here is an
-	 * example:
+	 * Make this a "Yes No Cancel" dialog with custom labels. Here is an example:
 	 * 
 	 * <pre>
 	 * GenericDialog gd = new GenericDialog("YesNoCancel Demo");
@@ -939,13 +908,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Add an Object implementing the DialogListener interface. This object will
-	 * be notified by its dialogItemChanged method of input to the dialog. The
-	 * first DialogListener will be also called after the user has typed 'OK' or
-	 * if the dialog has been invoked by a macro; it should read all input
-	 * fields of the dialog. For other listeners, the OK button will not cause a
-	 * call to dialogItemChanged; the CANCEL button will never cause such a
-	 * call.
+	 * Add an Object implementing the DialogListener interface. This object will be notified by its dialogItemChanged method of input to the dialog. The first DialogListener will be also called after
+	 * the user has typed 'OK' or if the dialog has been invoked by a macro; it should read all input fields of the dialog. For other listeners, the OK button will not cause a call to
+	 * dialogItemChanged; the CANCEL button will never cause such a call.
 	 * 
 	 * @param dl
 	 *            the Object that wants to listen.
@@ -971,8 +936,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Returns the contents of the next numeric field, or NaN if the field does
-	 * not contain a number.
+	 * Returns the contents of the next numeric field, or NaN if the field does not contain a number.
 	 */
 	public double getNextNumber() {
 		if (numberField == null)
@@ -1008,8 +972,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 					errorMessage = "\"" + theText + "\" is an invalid number";
 					value = Double.NaN;
 					if (macro) {
-						IJ.error("Macro Error", "Numeric value expected in run() function\n \n" + "   Dialog box title: \"" + getTitle() + "\"\n" + "   Key: \"" + label.toLowerCase(Locale.US) + "\"\n"
-								+ "   Value or variable name: \"" + theText + "\"");
+						IJ.error("Macro Error", "Numeric value expected in run() function\n \n" + "   Dialog box title: \"" + getTitle() + "\"\n" + "   Key: \"" + label.toLowerCase(Locale.US) + "\"\n" + "   Value or variable name: \"" + theText + "\"");
 					}
 				}
 			}
@@ -1070,8 +1033,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Returns true if one or more of the numeric fields contained an invalid
-	 * number. Must be called after one or more calls to getNextNumber().
+	 * Returns true if one or more of the numeric fields contained an invalid number. Must be called after one or more calls to getNextNumber().
 	 */
 	public boolean invalidNumber() {
 		boolean wasInvalid = invalidNumber;
@@ -1080,8 +1042,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Returns an error message if getNextNumber was unable to convert a string
-	 * into a number, otherwise, returns null.
+	 * Returns an error message if getNextNumber was unable to convert a string into a number, otherwise, returns null.
 	 */
 	public String getErrorMessage() {
 		return errorMessage;
@@ -1361,8 +1322,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			IJ.wait(50);
 		}
 		/*
-		 * For plugins that read their input only via dialogItemChanged, call it
-		 * at least once
+		 * For plugins that read their input only via dialogItemChanged, call it at least once
 		 */
 		if (!wasCanceled && dialogListeners != null && dialogListeners.size() > 0) {
 			resetCounters();
@@ -1424,8 +1384,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Returns a reference to the Label or MultiLineLabel created by the last
-	 * addMessage() call, or null if addMessage() was not called.
+	 * Returns a reference to the Label or MultiLineLabel created by the last addMessage() call, or null if addMessage() was not called.
 	 */
 	public Component getMessage() {
 		return theLabel;
@@ -1444,8 +1403,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Returns references to the "OK" ("Yes"), "Cancel", and if present, "No"
-	 * buttons as an array.
+	 * Returns references to the "OK" ("Yes"), "Cancel", and if present, "No" buttons as an array.
 	 */
 	public Button[] getButtons() {
 		Button[] buttons = new Button[3];
@@ -1456,8 +1414,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Used by PlugInFilterRunner to provide visable feedback whether preview is
-	 * running or not by switching from "Preview" to "wait..."
+	 * Used by PlugInFilterRunner to provide visable feedback whether preview is running or not by switching from "Preview" to "wait..."
 	 */
 	public void previewRunning(boolean isRunning) {
 		if (previewCheckbox != null) {
@@ -1513,15 +1470,15 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			return;
 		Object source = e.getSource();
 		for (int i = 0; i < slider.size(); i++) {
-			int index = sliderIndexes[i];
+			int index = ((Integer) sliderIndexes.get(i)).intValue();
 			if (source == numberField.elementAt(index)) {
 				TextField tf = (TextField) numberField.elementAt(index);
 				double value = Tools.parseDouble(tf.getText());
 				if (!Double.isNaN(value)) {
 					Scrollbar sb = (Scrollbar) slider.elementAt(i);
-					sb.setValue((int) (value * sliderScales[i]));
+					double scale = ((Double) sliderScales.get(i)).doubleValue();
+					sb.setValue((int) (value * scale));
 				}
-				// IJ.log(i+" "+tf.getText());
 			}
 		}
 	}
@@ -1595,21 +1552,19 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		for (int i = 0; i < slider.size(); i++) {
 			if (source == slider.elementAt(i)) {
 				Scrollbar sb = (Scrollbar) source;
-				TextField tf = (TextField) numberField.elementAt(sliderIndexes[i]);
-				int digits = sliderScales[i] == 1.0 ? 0 : 2;
-				tf.setText("" + IJ.d2s(sb.getValue() / sliderScales[i], digits));
+				int index = ((Integer) sliderIndexes.get(i)).intValue();
+				TextField tf = (TextField) numberField.elementAt(index);
+				double scale = ((Double) sliderScales.get(i)).doubleValue();
+				int digits = scale == 1.0 ? 0 : 2;
+				tf.setText("" + IJ.d2s(sb.getValue() / scale, digits));
 			}
 		}
 	}
 
 	/**
-	 * Notify any DialogListeners of changes having occurred If a listener
-	 * returns false, do not call further listeners and disable the OK button
-	 * and preview Checkbox (if it exists). For PlugInFilters, this ensures that
-	 * the PlugInFilterRunner, which listens as the last one, is not called if
-	 * the PlugInFilter has detected invalid parameters. Thus, unnecessary
-	 * calling the run(ip) method of the PlugInFilter for preview is avoided in
-	 * that case.
+	 * Notify any DialogListeners of changes having occurred If a listener returns false, do not call further listeners and disable the OK button and preview Checkbox (if it exists). For
+	 * PlugInFilters, this ensures that the PlugInFilterRunner, which listens as the last one, is not called if the PlugInFilter has detected invalid parameters. Thus, unnecessary calling the run(ip)
+	 * method of the PlugInFilter for preview is avoided in that case.
 	 */
 	private void notifyListeners(AWTEvent e) {
 		if (dialogListeners == null)
@@ -1669,9 +1624,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/**
-	 * Adds a "Help" button that opens the specified URL in the default browser.
-	 * With v1.46b or later, displays an HTML formatted message if 'url' starts
-	 * with "<html>". There is an example at
+	 * Adds a "Help" button that opens the specified URL in the default browser. With v1.46b or later, displays an HTML formatted message if 'url' starts with "<html>". There is an example at
 	 * http://imagej.nih.gov/ij/macros/js/DialogWithHelp.js
 	 */
 	public void addHelp(String url) {

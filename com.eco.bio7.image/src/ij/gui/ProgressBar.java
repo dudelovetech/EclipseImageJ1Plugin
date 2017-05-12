@@ -15,7 +15,8 @@ import javax.swing.JPanel;
  * and update the progress bar.
  */
 public class ProgressBar extends JPanel {
-
+	public static final int WIDTH = 120;
+	public static final int HEIGHT = 20;
     private int canvasWidth, canvasHeight;
     private int x, y, width, height;
     private long lastTime = 0;

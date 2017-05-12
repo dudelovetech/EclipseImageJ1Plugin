@@ -61,7 +61,8 @@ public class CalibrationBar implements PlugIn {
 	int userPadding = 0;
 	int fontHeight = 0;
 	boolean boldText;
-	boolean flatten;
+	static boolean staticFlatten;
+	boolean flatten = staticFlatten;
 	Object backupPixels;
 	byte[] byteStorage;
 	int[] intStorage;
@@ -171,6 +172,8 @@ public class CalibrationBar implements PlugIn {
 		zoom = (double)gd.getNextNumber();
 		boldText = gd.getNextBoolean();
 		flatten = !gd.getNextBoolean();
+		if (!IJ.isMacro())
+			staticFlatten = flatten;
 		return true;
 	}
 

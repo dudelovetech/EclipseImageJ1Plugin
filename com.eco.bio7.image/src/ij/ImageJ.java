@@ -37,11 +37,8 @@ import com.eco.bio7.image.IJTabs;
 /**
  * This frame is the main ImageJ class.
  * <p>
- * ImageJ is a work of the United States Government. It is in the public domain
- * and open source. There is no copyright. You are free to do anything you want
- * with this source but I like to get credit for my work and I would like you to
- * offer your changes to me so I can possibly add them to the "official"
- * version.
+ * ImageJ is a work of the United States Government. It is in the public domain and open source. There is no copyright. You are free to do anything you want with this source but I like to get credit
+ * for my work and I would like you to offer your changes to me so I can possibly add them to the "official" version.
  * 
  * <pre>
  * The following command line options are recognized by ImageJ:
@@ -94,10 +91,9 @@ import com.eco.bio7.image.IJTabs;
 public class ImageJ extends Frame implements ActionListener, MouseListener, KeyListener, WindowListener, ItemListener, Runnable {
 
 	/**
-	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the
-	 * version string.
+	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version string.
 	 */
-	public static final String VERSION = "1.51m";
+	public static final String VERSION = "1.51n";
 	public static final String BUILD = "5";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
@@ -154,8 +150,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Creates a new ImageJ frame that runs as an application in the specified
-	 * mode.
+	 * Creates a new ImageJ frame that runs as an application in the specified mode.
 	 */
 	public ImageJ(int mode) {
 		this(null, mode);
@@ -167,9 +162,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * If 'applet' is not null, creates a new ImageJ frame that runs as an
-	 * applet. If 'mode' is ImageJ.EMBEDDED and 'applet is null, creates an
-	 * embedded (non-standalone) version of ImageJ.
+	 * If 'applet' is not null, creates a new ImageJ frame that runs as an applet. If 'mode' is ImageJ.EMBEDDED and 'applet is null, creates an embedded (non-standalone) version of ImageJ.
 	 */
 	public ImageJ(java.applet.Applet applet, int mode) {
 		super("ImageJ");
@@ -202,7 +195,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusLine.addKeyListener(this);
 		statusLine.addMouseListener(this);
 		statusBar.add("Center", statusLine);
-		progressBar = new ProgressBar(120, 30);
+		progressBar = new ProgressBar(ProgressBar.WIDTH, ProgressBar.HEIGHT);
 		progressBar.addKeyListener(this);
 		progressBar.addMouseListener(this);
 		statusBar.add("East", progressBar);
@@ -230,6 +223,9 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			pack();
 			/* Changed for Bio7! */
 			// setVisible(true);
+			/*
+			 * if (IJ.isMacOSX()) { Rectangle maxBounds = GUI.getMaxWindowBounds(); if (loc.x+getSize().width>maxBounds.x+maxBounds.width) setLocation(loc.x, loc.y); }
+			 */
 		}
 		if (err1 != null)
 			IJ.error(err1);
@@ -322,7 +318,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		Rectangle maxBounds = GUI.getMaxWindowBounds();
 		int ijX = Prefs.getInt(IJ_X, -99);
 		int ijY = Prefs.getInt(IJ_Y, -99);
-		//System.out.println("getPreferredLoc1: "+ijX+" "+ijY+" "+maxBounds);
+		// System.out.println("getPreferredLoc1: "+ijX+" "+ijY+" "+maxBounds);
 		if (ijX >= maxBounds.x && ijY >= maxBounds.y && ijX < (maxBounds.x + maxBounds.width - 75))
 			return new Point(ijX, ijY);
 		Dimension tbsize = toolbar.getPreferredSize();
@@ -628,7 +624,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				else if (zoomKey && keyCode == KeyEvent.VK_UP && !ignoreArrowKeys(imp) && Toolbar.getToolId() < Toolbar.SPARE6)
 					cmd = "In [+]";
 				else if (roi != null) {
-					if ((flags & KeyEvent.ALT_MASK) != 0)
+					if ((flags & KeyEvent.ALT_MASK) != 0 || (flags & KeyEvent.CTRL_MASK) != 0)
 						roi.nudgeCorner(keyCode);
 					else
 						roi.nudge(keyCode);
@@ -642,8 +638,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				if (full != null) {
 					tabsAfter = CanvasView.tabFolder.getItemCount();
 					/*
-					 * We have to calculate the right tab if new images were
-					 * created!
+					 * We have to calculate the right tab if new images were created!
 					 */
 					IJTabs.setActive(tabsAfter - tabsBefore + index);
 					full.exit();
@@ -807,8 +802,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Adds the specified class to a Vector to keep it from being garbage
-	 * collected, causing static fields to be reset.
+	 * Adds the specified class to a Vector to keep it from being garbage collected, causing static fields to be reset.
 	 */
 	public void register(Class c) {
 		if (!classes.contains(c))
@@ -830,8 +824,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Returns true if ImageJ is quitting as a result of a run("Quit") macro
-	 * call.
+	 * Returns true if ImageJ is quitting as a result of a run("Quit") macro call.
 	 */
 	public boolean quittingViaMacro() {
 		return quitting && quitMacro;
@@ -846,7 +839,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		}
 		prefs.put(IJ_X, Integer.toString(loc.x));
 		prefs.put(IJ_Y, Integer.toString(loc.y));
-		
+
 	}
 
 	public static void main(String args[]) {
@@ -939,8 +932,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Returns the port that ImageJ checks on startup to see if another instance
-	 * is running.
+	 * Returns the port that ImageJ checks on startup to see if another instance is running.
 	 * 
 	 * @see ij.OtherInstance
 	 */
@@ -1035,8 +1027,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/*
-	 * Changed for Bio7! Overrides the default Frame settings since Bio7 Gui
-	 * uses swt for the primary frame!
+	 * Changed for Bio7! Overrides the default Frame settings since Bio7 Gui uses swt for the primary frame!
 	 */
 	public Point getLocationOnScreen() {
 

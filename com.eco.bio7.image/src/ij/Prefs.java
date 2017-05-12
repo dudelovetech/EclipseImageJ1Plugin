@@ -497,7 +497,9 @@ public class Prefs {
 	}
 
 	static void loadOptions() {
-		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + (!IJ.isMacOSX() ? RUN_SOCKET_LISTENER : 0);
+		boolean windows10 = IJ.isWindows() && System.getProperty("os.name").contains("Windows 10");
+		//Changed for Bio7. On Win 10 we use the SWT file dialog by default. No need to switch to JFileChooser!
+		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + +(!IJ.isMacOSX()?RUN_SOCKET_LISTENER:0);//+(windows10?JFILE_CHOOSER:0);
 		int options = getInt(OPTIONS, defaultOptions);
 		usePointerCursor = (options & USE_POINTER) != 0;
 		// antialiasedText = (options&ANTIALIASING)!=0;
@@ -748,7 +750,7 @@ public class Prefs {
 	}
 
 	public static String defaultResultsExtension() {
-		return get("options.ext", ".xls");
+		return get("options.ext", ".csv");
 	}
 
 }
