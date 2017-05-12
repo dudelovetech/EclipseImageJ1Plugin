@@ -59,9 +59,12 @@ public class Converter implements PlugIn {
 					new ImageConverter(imp).convertRGBStackToRGB();
 					if (win!=null) new ImageWindow(imp, imp.getCanvas()); // replace StackWindow with ImageWindow
 		    	} else if (stack.isHSB() && item.equals("RGB Color")) {
+		    		/*Changed for Bio7!*/
+					IJTabs.deleteActiveTab();
 					new ImageConverter(imp).convertHSBToRGB();
 					if (win!=null) new ImageWindow(imp, imp.getCanvas());
 		    	} else if (stack.isLab() && item.equals("RGB Color")) {
+		    		/*Changed for Bio7 in class ij.process.ImageConverter!*/
 					new ImageConverter(imp).convertLabToRGB();
 					if (win!=null) new ImageWindow(imp, imp.getCanvas());
 				} else if (item.equals("8-bit"))

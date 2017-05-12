@@ -2,6 +2,9 @@ package ij.process;
 
 import java.awt.*;
 import java.awt.image.*;
+
+import com.eco.bio7.image.IJTabs;
+
 import ij.*;
 import ij.gui.*;
 import ij.measure.*;
@@ -210,8 +213,10 @@ public class ImageConverter {
 			throw new IllegalArgumentException("3-slice 32-bit stack required");
 		ColorSpaceConverter converter = new ColorSpaceConverter();
 		ImagePlus imp2 = converter.LabToRGB(imp);
-		imp2.setCalibration(imp.getCalibration());
+		imp2.setCalibration(imp.getCalibration());	
 		imp.setImage(imp2);
+		/*Changed for Bio7!*/
+		IJTabs.deleteActiveTab();
 	}
 
 	/** Converts an RGB image to 8-bits indexed color. 'nColors' must
