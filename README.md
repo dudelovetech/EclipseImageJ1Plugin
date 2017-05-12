@@ -1,6 +1,12 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51n:
+
+1. Updated ImageJ to 1.51k.
+2. Added a fake editor to register and open standard image files from the Navigator or Project Explorer, etc.
+3. Fixed several bugs to convert image types
+
 ### New in 1.51k:
 
 1. Updated ImageJ to 1.51k.
