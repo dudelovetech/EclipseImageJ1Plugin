@@ -7,6 +7,12 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 2. Added a fake editor to register and open standard image files from the Navigator or Project Explorer, etc.
 3. Fixed several bugs to convert image types
 
+Please note that the update site has changed (due to a cert. error on sourceforge) to:
+
+https://github.com/Bio7/EclipseImageJ1Plugin
+
+Uninstall the old plugins before you install from the new location!
+
 ### New in 1.51k:
 
 1. Updated ImageJ to 1.51k.
@@ -31,7 +37,7 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
 Add the following URL as update site: 
 
-**https://sourceforge.net/projects/bio7/files/imagej/**
+**https://github.com/Bio7/EclipseImageJ1Plugin**
 
 The important views to open are the ImageJ-Canvas which essentially implements the ImageJ interface and the toolbar. You find them in Eclipse under: Window->Show View->Other. First open the ImageJ-Canvas!
 
