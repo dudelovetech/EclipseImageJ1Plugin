@@ -766,7 +766,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	/** Returns true if this image is currently being displayed in a window. */
 	/*Changed for Bio7! There is now physical AWT frame which embedds the imagePlus object!*/
 	public boolean isVisible() {
-		return win != null; //&& win.isVisible();
+		return win != null;  //&& win.isVisible();
 	}
 
 	/** This method should only be called from an ImageWindow. */
