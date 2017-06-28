@@ -62,7 +62,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private boolean firstSlider = true;
 	private boolean invalidNumber;
 	private String errorMessage;
-	private boolean firstPaint = true;
 	private Hashtable labels;
 	private boolean macro;
 	private String macroOptions;
@@ -86,6 +85,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private boolean smartRecording;
 	private Vector imagePanels;
 	private static GenericDialog instance;
+	private boolean firstPaint = true;
 
 	/**
 	 * Creates a new GenericDialog with the specified title. Uses the current image image window as the parent frame or the ImageJ frame if no image windows are open. Dialog parameters are recorded by
@@ -116,8 +116,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			setForeground(SystemColor.controlText);
 			setBackground(SystemColor.control);
 		}
-		// if (IJ.isLinux())
-		// setBackground(new Color(238, 238, 238));
 		grid = new GridBagLayout();
 		c = new GridBagConstraints();
 		setLayout(grid);
@@ -134,14 +132,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		}
 		// setBackground(Util.getSWTBackgroundToAWT());
 	}
-
-	// void showFields(String id) {
-	// String s = id+": ";
-	// for (int i=0; i<maxItems; i++)
-	// if (numberField[i]!=null)
-	// s += i+"='"+numberField[i].getText()+"' ";
-	// IJ.write(s);
-	// }
 
 	/**
 	 * Adds a numeric field. The first word of the label must be unique or command recording will not work.
@@ -354,7 +344,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		cb.addKeyListener(this);
 		add(cb);
 		checkbox.addElement(cb);
-		// ij.IJ.write("addCheckbox: "+ y+" "+cbIndex);
 		if (!isPreview && (Recorder.record || macro)) // preview checkbox is not
 														// recordable
 			saveLabel(cb, label);
@@ -947,7 +936,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (macro) {
 			label = (String) labels.get((Object) tf);
 			theText = Macro.getValue(macroOptions, label, theText);
-			// IJ.write("getNextNumber: "+label+" "+theText);
 		}
 		String originalText = (String) defaultText.elementAt(nfIndex);
 		double defaultValue = ((Double) (defaultValues.elementAt(nfIndex))).doubleValue();
@@ -1309,8 +1297,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			c.insets = new Insets(15, 0, 0, 0);
 			grid.setConstraints(buttons, c);
 			add(buttons);
-			if (IJ.isMacintosh())
-				setResizable(false);
 			if (IJ.isMacOSX() && IJ.isJava18())
 				instance = this;
 			pack();
@@ -1319,8 +1305,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				GUI.center(this);
 			setVisible(true);
 			recorderOn = Recorder.record;
-			IJ.wait(50);
+			IJ.wait(25);
 		}
+
 		/*
 		 * For plugins that read their input only via dialogItemChanged, call it at least once
 		 */
@@ -1489,6 +1476,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	public void focusGained(FocusEvent e) {
 		Component c = e.getComponent();
+		// IJ.log("focusGained: "+c);
 		if (c instanceof TextField)
 			((TextField) c).selectAll();
 	}
@@ -1604,16 +1592,11 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (firstPaint) {
-			if (numberField != null && IJ.isMacOSX()) {
-				// work around for bug on Intel Macs that caused 1st field to be
-				// un-editable
-				TextField tf = (TextField) (numberField.elementAt(0));
-				tf.setEditable(false);
-				tf.setEditable(true);
-			}
-			if (numberField == null && stringField == null)
-				okay.requestFocus();
+		if (firstPaint && IJ.isMacOSX() && IJ.isJava18()) {
+			IJ.wait(25);
+			Dimension size = getSize();
+			if (size != null)
+				setSize(size.width + 2, size.height + 2);
 			firstPaint = false;
 		}
 	}

@@ -6,8 +6,6 @@ import ij.measure.Calibration;
 import java.awt.*;
 import java.awt.image.*;
 
-import com.eco.bio7.image.CanvasView;
-
 /** This plugin implements the Image/Transform/Bin command.
  * It reduces the size of an image or stack by binning groups of 
  * pixels of user-specified sizes. The resulting pixel can be 
@@ -36,8 +34,6 @@ public class Binner implements PlugIn {
 		imp.setCalibration(imp2.getCalibration());
 		if (zshrink>1)
 			imp.setSlice(1);
-		/*Changed for Bio7!*/
-		CanvasView.getCurrent().doLayout();
 	}
 
 	public ImagePlus shrink(ImagePlus imp, int xshrink, int yshrink, int zshrink, int method) {
@@ -69,7 +65,7 @@ public class Binner implements PlugIn {
 		}
 		if (zshrink>1 && !imp.isHyperStack())
 			stack2 = shrinkZ(stack2, zshrink);
-		ImagePlus imp2 = (ImagePlus)imp.clone();
+		ImagePlus imp2 = imp.createImagePlus();
 		imp2.setStack("Reduced "+imp.getShortTitle(), stack2);
 		Calibration cal2 = imp2.getCalibration();
 		if (cal2.scaled()) {

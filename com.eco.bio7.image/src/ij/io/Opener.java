@@ -9,29 +9,19 @@ import ij.text.TextWindow;
 import ij.util.Java2;
 import ij.measure.ResultsTable;
 import ij.macro.Interpreter;
-import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.zip.*;
-import java.util.Locale;
-
 import javax.swing.*;
-import javax.swing.filechooser.*;
-
 import java.awt.event.KeyEvent;
-
 import javax.imageio.ImageIO;
-
 import java.lang.reflect.Method;
 
 /**
- * Opens tiff (and tiff stacks), dicom, fits, pgm, jpeg, bmp or gif images, and
- * look-up tables, using a file open dialog or a path. Calls
- * HandleExtraFileTypes plugin if the file type is unrecognised.
+ * Opens tiff (and tiff stacks), dicom, fits, pgm, jpeg, bmp or gif images, and look-up tables, using a file open dialog or a path. Calls HandleExtraFileTypes plugin if the file type is unrecognised.
  */
 public class Opener {
 
@@ -63,11 +53,8 @@ public class Opener {
 	}
 
 	/**
-	 * Displays a file open dialog box and then opens the tiff, dicom, fits,
-	 * pgm, jpeg, bmp, gif, lut, roi, or text file selected by the user.
-	 * Displays an error message if the selected file is not in a supported
-	 * format. This is the method that ImageJ's File/Open command uses to open
-	 * files.
+	 * Displays a file open dialog box and then opens the tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text file selected by the user. Displays an error message if the selected file is not in
+	 * a supported format. This is the method that ImageJ's File/Open command uses to open files.
 	 * 
 	 * @see ij.IJ#open()
 	 * @see ij.IJ#open(String)
@@ -88,9 +75,7 @@ public class Opener {
 	}
 
 	/**
-	 * Opens and displays the specified tiff, dicom, fits, pgm, jpeg, bmp, gif,
-	 * lut, roi, or text file. Displays an error message if the file is not in a
-	 * supported format.
+	 * Opens and displays the specified tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text file. Displays an error message if the file is not in a supported format.
 	 * 
 	 * @see ij.IJ#open(String)
 	 * @see ij.IJ#openImage(String)
@@ -105,7 +90,7 @@ public class Opener {
 			(new PluginInstaller()).install(path);
 			return;
 		}
-		boolean fullPath = path.startsWith("/") || path.startsWith("\\") || path.indexOf(":\\")==1 || path.indexOf(":/")==1 || isURL;
+		boolean fullPath = path.startsWith("/") || path.startsWith("\\") || path.indexOf(":\\") == 1 || path.indexOf(":/") == 1 || isURL;
 		if (!fullPath) {
 			String defaultDir = OpenDialog.getDefaultDirectory();
 			if (defaultDir != null)
@@ -194,12 +179,8 @@ public class Opener {
 	}
 
 	/**
-	 * Displays a JFileChooser and then opens the tiff, dicom, fits, pgm, jpeg,
-	 * bmp, gif, lut, roi, or text files selected by the user. Displays error
-	 * messages if one or more of the selected files is not in one of the
-	 * supported formats. This is the method that ImageJ's File/Open command
-	 * uses to open files if "Open/Save Using JFileChooser" is checked in
-	 * EditOptions/Misc.
+	 * Displays a JFileChooser and then opens the tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text files selected by the user. Displays error messages if one or more of the selected files is
+	 * not in one of the supported formats. This is the method that ImageJ's File/Open command uses to open files if "Open/Save Using JFileChooser" is checked in EditOptions/Misc.
 	 */
 	public void openMultiple() {
 		Java2.setSystemLookAndFeel();
@@ -244,10 +225,8 @@ public class Opener {
 	}
 
 	/**
-	 * Opens, but does not display, the specified image file and returns an
-	 * ImagePlus object object if successful, or returns null if the file is not
-	 * in a supported format or is not found. Displays a file open dialog if
-	 * 'path' is null or an empty string.
+	 * Opens, but does not display, the specified image file and returns an ImagePlus object object if successful, or returns null if the file is not in a supported format or is not found. Displays a
+	 * file open dialog if 'path' is null or an empty string.
 	 * 
 	 * @see ij.IJ#openImage(String)
 	 * @see ij.IJ#openImage()
@@ -309,8 +288,7 @@ public class Opener {
 	}
 
 	/**
-	 * Opens the specified file and adds it to the File/Open Recent menu.
-	 * Returns true if the file was opened successfully.
+	 * Opens the specified file and adds it to the File/Open Recent menu. Returns true if the file was opened successfully.
 	 */
 	public boolean openAndAddToRecent(String path) {
 		open(path);
@@ -320,10 +298,8 @@ public class Opener {
 	}
 
 	/**
-	 * Attempts to open the specified file as a tiff, bmp, dicom, fits, pgm, gif
-	 * or jpeg image. Returns an ImagePlus object if successful. Modified by
-	 * Gregory Jefferis to call HandleExtraFileTypes plugin if the file type is
-	 * unrecognised.
+	 * Attempts to open the specified file as a tiff, bmp, dicom, fits, pgm, gif or jpeg image. Returns an ImagePlus object if successful. Modified by Gregory Jefferis to call HandleExtraFileTypes
+	 * plugin if the file type is unrecognised.
 	 * 
 	 * @see ij.IJ#openImage(String)
 	 */
@@ -443,16 +419,15 @@ public class Opener {
 	}
 
 	/**
-	 * Attempts to open the specified url as a tiff, zip compressed tiff, dicom,
-	 * gif or jpeg. Tiff file names must end in ".tif", ZIP file names must end
-	 * in ".zip" and dicom file names must end in ".dcm". Returns an ImagePlus
-	 * object if successful.
+	 * Attempts to open the specified url as a tiff, zip compressed tiff, dicom, gif or jpeg. Tiff file names must end in ".tif", ZIP file names must end in ".zip" and dicom file names must end in
+	 * ".dcm". Returns an ImagePlus object if successful.
 	 * 
 	 * @see ij.IJ#openImage(String)
 	 */
 	public ImagePlus openURL(String url) {
 		url = updateUrl(url);
-				if (IJ.debugMode) IJ.log("OpenURL: "+url);
+		if (IJ.debugMode)
+			IJ.log("OpenURL: " + url);
 		ImagePlus imp = openCachedImage(url);
 		if (imp != null)
 			return imp;
@@ -503,16 +478,16 @@ public class Opener {
 			return null;
 		}
 	}
-		/** Can't open imagej.nih.gov URLs due to encryption so redirect to mirror.nih.net. */
-		public static String updateUrl(String url) {
-			if (url==null || !url.contains("nih.gov"))
-				return url;
-			url = url.replace("imagej.nih.gov/ij", "mirror.imagej.net");
-			url = url.replace("rsb.info.nih.gov/ij", "mirror.imagej.net");
-			url = url.replace("rsbweb.nih.gov/ij", "mirror.imagej.net");
+
+	/** Can't open imagej.nih.gov URLs due to encryption so redirect to mirror.nih.net. */
+	public static String updateUrl(String url) {
+		if (url == null || !url.contains("nih.gov"))
 			return url;
-		}
-		
+		url = url.replace("imagej.nih.gov/ij", "mirror.imagej.net");
+		url = url.replace("rsb.info.nih.gov/ij", "mirror.imagej.net");
+		url = url.replace("rsbweb.nih.gov/ij", "mirror.imagej.net");
+		return url;
+	}
 
 	private ImagePlus openCachedImage(String url) {
 		if (url == null || !url.contains("/images"))
@@ -744,8 +719,7 @@ public class Opener {
 	}
 
 	/**
-	 * Converts the specified RGB image to 8-bits if the 3 channels are
-	 * identical.
+	 * Converts the specified RGB image to 8-bits if the 3 channels are identical.
 	 */
 	public static void convertGrayJpegTo8Bits(ImagePlus imp) {
 		ImageProcessor ip = imp.getProcessor();
@@ -775,8 +749,7 @@ public class Opener {
 	}
 
 	/**
-	 * Attemps to open a tiff file as a stack. Returns an ImagePlus object if
-	 * successful.
+	 * Attemps to open a tiff file as a stack. Returns an ImagePlus object if successful.
 	 */
 	public ImagePlus openTiffStack(FileInfo[] info) {
 		if (info.length > 1 && !allSameSizeAndType(info))
@@ -892,8 +865,7 @@ public class Opener {
 	}
 
 	/**
-	 * Attempts to open the specified file as a tiff. Returns an ImagePlus
-	 * object if successful.
+	 * Attempts to open the specified file as a tiff. Returns an ImagePlus object if successful.
 	 */
 	public ImagePlus openTiff(String directory, String name) {
 		TiffDecoder td = new TiffDecoder(directory, name);
@@ -965,8 +937,7 @@ public class Opener {
 	}
 
 	/**
-	 * Attempts to open the specified inputStream as a TIFF, returning an
-	 * ImagePlus object if successful.
+	 * Attempts to open the specified inputStream as a TIFF, returning an ImagePlus object if successful.
 	 */
 	public ImagePlus openTiff(InputStream in, String name) {
 		FileInfo[] info = null;
@@ -998,8 +969,7 @@ public class Opener {
 	}
 
 	/**
-	 * Opens a single TIFF or DICOM contained in a ZIP archive, or a ZIPed
-	 * collection of ".roi" files created by the ROI manager.
+	 * Opens a single TIFF or DICOM contained in a ZIP archive, or a ZIPed collection of ".roi" files created by the ROI manager.
 	 */
 	public ImagePlus openZip(String path) {
 		ImagePlus imp = null;
@@ -1050,8 +1020,7 @@ public class Opener {
 	}
 
 	/**
-	 * Deserialize a byte array that was serialized using the
-	 * FileSaver.serialize().
+	 * Deserialize a byte array that was serialized using the FileSaver.serialize().
 	 */
 	public ImagePlus deserialize(byte[] bytes) {
 		ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
@@ -1189,8 +1158,7 @@ public class Opener {
 	}
 
 	/**
-	 * Opens a lookup table (LUT) and returns it as a LUT object, or returns
-	 * null if there is an error.
+	 * Opens a lookup table (LUT) and returns it as a LUT object, or returns null if there is an error.
 	 * 
 	 * @see ij.ImagePlus#setLut
 	 */
@@ -1240,8 +1208,7 @@ public class Opener {
 	}
 
 	/**
-	 * Attempts to determine the image file type by looking for 'magic numbers'
-	 * and the file name extension.
+	 * Attempts to determine the image file type by looking for 'magic numbers' and the file name extension.
 	 */
 	public int getFileType(String path) {
 		if (openUsingPlugins && !path.endsWith(".txt") && !path.endsWith(".java"))
@@ -1327,7 +1294,7 @@ public class Opener {
 			return OJJ;
 
 		// Results table (tab-delimited or comma-separated tabular text)
-		if (name.endsWith(".xls") || name.endsWith(".csv") || name.endsWith(".tsv")) 
+		if (name.endsWith(".xls") || name.endsWith(".csv") || name.endsWith(".tsv"))
 			return TABLE;
 
 		// AVI
@@ -1398,8 +1365,7 @@ public class Opener {
 	}
 
 	/**
-	 * Open all images using HandleExtraFileTypes. Set from a macro using
-	 * setOption("openUsingPlugins", true).
+	 * Open all images using HandleExtraFileTypes. Set from a macro using setOption("openUsingPlugins", true).
 	 */
 	public static void setOpenUsingPlugins(boolean b) {
 		openUsingPlugins = b;

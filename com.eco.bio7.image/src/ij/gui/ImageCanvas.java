@@ -232,7 +232,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		if (roi != null || overlay != null || showAllOverlay != null || Prefs.paintDoubleBuffered) {
 			if (roi != null)
 				roi.updatePaste();
-			if (!IJ.isMacOSX() && imageWidth != 0) {
+			if (imageWidth!=0) {
 				paintDoubleBuffered(g);
 				setPaintPending(false);
 				return;
@@ -861,6 +861,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	public void zoomIn(int sx, int sy) {
 		if (magnification >= 32)
 			return;
+		scaleToFit = false;
 		boolean mouseMoved = sqr(sx - lastZoomSX) + sqr(sy - lastZoomSY) > MAX_MOUSEMOVE_ZOOM * MAX_MOUSEMOVE_ZOOM;
 		lastZoomSX = sx;
 		lastZoomSY = sy;
