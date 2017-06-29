@@ -14,7 +14,7 @@
         floodFill(x, y, floodType);
      }
 
-
+f725d2ab
 macro 'Scale Scanner Tool (set the scale for a scanned image) Options...' {
       var dpi=100;
       var unit="cm";

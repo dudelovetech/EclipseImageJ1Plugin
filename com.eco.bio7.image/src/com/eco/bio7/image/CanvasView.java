@@ -495,7 +495,7 @@ public class CanvasView extends ViewPart {
 		tbm.add(window);
 		tbm.add(help);
 		tbm.add(new PlaceholderLabel().getPlaceholderLabel());
-
+      
 	}
 
 	public void setFocus() {
