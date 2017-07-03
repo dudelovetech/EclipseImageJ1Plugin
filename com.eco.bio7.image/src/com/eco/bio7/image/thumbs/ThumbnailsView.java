@@ -632,8 +632,8 @@ public class ThumbnailsView extends ViewPart {
 		tbm.add(recursiveAction);
 		tbm.add(preview);
 		tbm.add(zo);
-		placeholderlabel = new PlaceholderLabel().getPlaceholderLabel();
-		tbm.add(placeholderlabel);
+		/*placeholderlabel = new PlaceholderLabel().getPlaceholderLabel();
+		tbm.add(placeholderlabel);*/
 
 	}
 

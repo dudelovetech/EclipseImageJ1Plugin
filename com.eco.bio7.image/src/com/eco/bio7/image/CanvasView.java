@@ -494,7 +494,7 @@ public class CanvasView extends ViewPart {
 		tbm.add(plugins);
 		tbm.add(window);
 		tbm.add(help);
-		tbm.add(new PlaceholderLabel().getPlaceholderLabel());
+		//tbm.add(new PlaceholderLabel().getPlaceholderLabel());
       
 	}
 
