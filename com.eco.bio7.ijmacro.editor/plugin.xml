@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   
+   
+   
+    <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.eco.bio7.ijmacro.editors.IJMacroEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="true"
+            extensions="ijm"
+            icon="icons/imagejmacrofile.png"
+            id="com.eco.bio7.editors.ijmacro.editor"
+            name="ImageJ Macro Editor"
+            symbolicFontName="com.eco.bio7.ijmacro.editor.textfont">
+      </editor>
+   </extension>
+   <extension
+         id="ExampleJavaDocumentSetupParticipant"
+         name="%documentSetupParticipantName"
+         point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            extensions="ijm"
+            class="com.eco.bio7.ijmacro.editors.ScriptDocumentSetupParticipant">
+      </participant>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            class="com.eco.bio7.ijmacro.editor.preferences.TemplatesPreferencePage"
+            id="org.eclipse.ui.examples.templateeditor.preferencepage"
+            name="%xml.editor.preferencePage.label">
+      </page>
+      <page
+            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            class="com.eco.bio7.ijmacro.editor.preferences.WorkbenchPreferencebsh"
+            id="prefijmacroeditor"
+            name="Preferences ImageJ Macro Editor"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <contextType
+            name="%xml.contextType.name"
+            class="com.eco.bio7.ijmacro.editor.preferences.template.BeanshellContextType"
+            id="bsh">
+      </contextType>
+     
+      <include
+      		file="templates/ant.xml"
+      		translations="$nl$/templates/ant.properties">
+      </include>
+   </extension>
+   <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="com.eco.bio7.ijmacro.editor.preferences.PreferenceInitializer">
+     </initializer>
+  </extension>
+  <extension
+     point="org.eclipse.ui.themes">
+  <fontDefinition
+        label="ImageJ Macro Editor Font"
+        defaultsTo="org.eclipse.jface.textfont"
+        categoryId="com.eco.bio7.ijmacro.editor.theme"
+        id="com.eco.bio7.ijmacro.editor.textfont">
+     
+  </fontDefinition>
+  <themeElementCategory
+        id="com.eco.bio7.ijmacro.editor.theme"
+        label="ImageJ Macro editor">
+  </themeElementCategory>
+ </extension>
+ <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.TextZoomInHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomIn">
+           
+      </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.TextZoomOutHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomOut">
+           
+      </handler>
+     
+   </extension>
+   <extension
+       id="com.eco.bio7.beanshelleditor.refactor.rename"
+       point="org.eclipse.ui.bindings">
+        <sequenceModifier
+  			find="CTRL"
+  			replace="COMMAND"
+  			platforms="cocoa,carbon" />
+     
+   
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomIn"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL++">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomOut"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+-">
+    </key>
+    <key
+            commandId="com.eco.bio7.interpret.ijmacro"
+            contextId="com.eco.bio7.ijmacro.editor.scope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+ALT+SHIFT+T">
+      </key>
+    </extension>
+   <extension 
+   point="org.eclipse.ui.commands">
+       <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Zoom in text, increase default font size for text editors"
+          id="com.eco.bio7.ijmacro.editor.actions.text.zoomIn"
+          name="Zoom In">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Zoom out text, decrease default font size for text editors"
+          id="com.eco.bio7.ijmacro.editor.actions.text.zoomOut"
+          name="Zoom Out">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Interpret ImageJ Macro"
+          id="com.eco.bio7.interpret.ijmacro"
+          name="Interpret ImageJ Macro Action">
+      </command>
+      
+     
+   </extension>
+   <extension point="org.eclipse.ui.contexts">
+          <context name="ImageJ Macro Editor Context"
+           description="ImageJ Macro Editor Context"
+           parentId="org.eclipse.ui.textEditorScope"
+           id="com.eco.bio7.ijmacro.editor.scope" />
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="com.eco.bio7.ijmacro.editor.interpret"
+               label="Editor Actions">
+            <command
+                  commandId="com.eco.bio7.interpret.ijmacro"
+                  disabledIcon="icons/imagejmacrointerpret.png"
+                  icon="icons/imagejmacrointerpret.png"
+                  id="toolbar.interpretmacro"
+                  label="Interpret ImageJ Macro"
+                  style="push">
+               <visibleWhen>
+                  <with
+                        variable="activePartId">
+                     <or>
+                        <equals
+                              value="com.eco.bio7.editors.ijmacro.editor">
+                        </equals>
+                     </or>
+                  </with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="com.eco.bio7.ImageJ"
+            class="com.eco.bio7.ijmacro.editor.wizards.ImageJMacroWizard"
+            icon="icons/imagejmacrofile.png"
+            id="com.eco.bio7.ijmacro"
+            name="ImageJ Macro File"
+            project="false">
+      </wizard>
+   </extension>
+</plugin>
