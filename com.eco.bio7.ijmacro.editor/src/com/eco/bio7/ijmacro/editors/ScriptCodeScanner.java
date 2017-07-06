@@ -38,9 +38,7 @@ import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
  */
 public class ScriptCodeScanner extends RuleBasedScanner {
 
-	private static String[] fgKeywords = { "abstract", "break", "case", "catch", "class", "continue", "default", "do", "else", "extends", "final", "finally", "for", "if",
-			"implements", "import", "instanceof", "interface", "native", "new", "package", "private", "protected", "public", "return", "static", "super", "switch", "synchronized",
-			"this", "throw", "throws", "transient", "try", "volatile", "while","def","assert","as","in","property"};
+	private static String[] fgKeywords = {  "function","var","macro","break", "do", "else", "for", "if","return", "switch", "while"};
 
 	private static String[] fgTypes = { "void", "boolean", "char", "byte", "short", "int", "long", "float", "double" };
 

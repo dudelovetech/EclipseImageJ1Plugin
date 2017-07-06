@@ -96,7 +96,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		super();
 
 		colorManager = new ColorManager();
-		setSourceViewerConfiguration(new BeanshellConfiguration(colorManager));
+		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager));
 
 	}
 

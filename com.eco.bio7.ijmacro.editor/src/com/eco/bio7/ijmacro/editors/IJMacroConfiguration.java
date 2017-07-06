@@ -28,16 +28,16 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
-import com.eco.bio7.ijmacro.editor.preferences.template.BeanshellCompletionProcessor;
+import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroCompletionProcessor;
 
-public class BeanshellConfiguration extends TextSourceViewerConfiguration {
+public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 
-	private BeanshellDoubleClickStrategy doubleClickStrategy;
+	private IJMacroDoubleClickStrategy doubleClickStrategy;
 
 	private ColorManager colorManager;
 	ScriptColorProvider provider;
 
-	public BeanshellConfiguration(ColorManager colorManager) {
+	public IJMacroConfiguration(ColorManager colorManager) {
 		this.colorManager = colorManager;
 
 	}
@@ -118,7 +118,7 @@ public class BeanshellConfiguration extends TextSourceViewerConfiguration {
 		assistant
 				.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
-		IContentAssistProcessor processor = new BeanshellCompletionProcessor();
+		IContentAssistProcessor processor = new IJMacroCompletionProcessor();
 		assistant.setContentAssistProcessor(processor,
 				IDocument.DEFAULT_CONTENT_TYPE);
 		assistant.enableAutoActivation(true);

@@ -17,13 +17,13 @@ import org.eclipse.jface.text.templates.GlobalTemplateVariables;
 /**
  * A very simple context type.
  */
-public class BeanshellContextType extends TemplateContextType {
+public class IJMacroContextType extends TemplateContextType {
 
 	/** This context's id */
-	public static final String XML_CONTEXT_TYPE= "bsh"; //$NON-NLS-1$
+	public static final String XML_CONTEXT_TYPE= "ijmacro"; //$NON-NLS-1$
 
 	
-	public BeanshellContextType() {
+	public IJMacroContextType() {
 		addGlobalResolvers();
 	}
 

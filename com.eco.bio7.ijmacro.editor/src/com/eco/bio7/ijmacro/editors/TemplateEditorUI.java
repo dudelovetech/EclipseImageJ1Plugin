@@ -28,7 +28,7 @@ import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
-import com.eco.bio7.ijmacro.editor.preferences.template.BeanshellContextType;
+import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroContextType;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -70,7 +70,7 @@ public class TemplateEditorUI  {
 			try {
 				fStore.load();
 			} catch (IOException e) {
-				IJMacroEditorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, "org.eclipse.ui.examples.javaeditor", IStatus.OK, "", e)); //$NON-NLS-1$ //$NON-NLS-2$
+				IJMacroEditorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, "ijmacroeditor", IStatus.OK, "", e)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		return fStore;
@@ -85,7 +85,7 @@ public class TemplateEditorUI  {
 		if (fRegistry == null) {
 			// create an configure the contexts available in the template editor
 			fRegistry= new ContributionContextTypeRegistry();
-			fRegistry.addContextType(BeanshellContextType.XML_CONTEXT_TYPE);
+			fRegistry.addContextType(IJMacroContextType.XML_CONTEXT_TYPE);
 		}
 		return fRegistry;
 	}

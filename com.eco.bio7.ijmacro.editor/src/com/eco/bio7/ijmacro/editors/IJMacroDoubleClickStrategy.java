@@ -12,7 +12,7 @@ package com.eco.bio7.ijmacro.editors;
 
 import org.eclipse.jface.text.*;
 
-public class BeanshellDoubleClickStrategy implements ITextDoubleClickStrategy {
+public class IJMacroDoubleClickStrategy implements ITextDoubleClickStrategy {
 	protected ITextViewer fText;
 
 	public void doubleClicked(ITextViewer part) {

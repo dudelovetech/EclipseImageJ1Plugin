@@ -38,7 +38,7 @@
       </page>
       <page
             category="com.eco.bio7.preferences.Bio7PreferencePage"
-            class="com.eco.bio7.ijmacro.editor.preferences.WorkbenchPreferencebsh"
+            class="com.eco.bio7.ijmacro.editor.preferences.WorkbenchPreferenceijmacro"
             id="prefijmacroeditor"
             name="Preferences ImageJ Macro Editor"/>
    </extension>
@@ -47,8 +47,8 @@
          point="org.eclipse.ui.editors.templates">
       <contextType
             name="%xml.contextType.name"
-            class="com.eco.bio7.ijmacro.editor.preferences.template.BeanshellContextType"
-            id="bsh">
+            class="com.eco.bio7.ijmacro.editor.preferences.template.IJMacroContextType"
+            id="ijmacro">
       </contextType>
      
       <include

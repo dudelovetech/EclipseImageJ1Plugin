@@ -70,7 +70,7 @@ public class ScriptPartitionScanner extends RuleBasedPartitionScanner {
 	public ScriptPartitionScanner() {
 		super();
 
-		IToken javaDoc= new Token(SCRIPT_DOC);
+		//IToken javaDoc= new Token(SCRIPT_DOC);
 		IToken comment= new Token(SCRIPT_MULTILINE_COMMENT);
 
 		List rules= new ArrayList();
@@ -88,7 +88,7 @@ public class ScriptPartitionScanner extends RuleBasedPartitionScanner {
 		rules.add(new WordPredicateRule(comment));
 
 		// Add rules for multi-line comments and javadoc.
-		rules.add(new MultiLineRule("/**", "*/", javaDoc, (char) 0, true)); //$NON-NLS-1$ //$NON-NLS-2$
+		//rules.add(new MultiLineRule("/**", "*/", javaDoc, (char) 0, true)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new MultiLineRule("/*", "*/", comment, (char) 0, true)); //$NON-NLS-1$ //$NON-NLS-2$
 
 		IPredicateRule[] result= new IPredicateRule[rules.size()];

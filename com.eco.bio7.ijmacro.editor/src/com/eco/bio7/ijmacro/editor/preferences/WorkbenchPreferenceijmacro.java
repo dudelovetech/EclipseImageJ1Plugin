@@ -28,10 +28,10 @@ import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 import com.eco.bio7.ijmacro.editors.ScriptCodeScanner;
 import com.eco.bio7.ijmacro.editors.ScriptColorProvider;
 
-public class WorkbenchPreferencebsh extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	private IPreferenceStore store;
 
-	public WorkbenchPreferencebsh() {
+	public WorkbenchPreferenceijmacro() {
 		super(GRID);
 		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 		setPreferenceStore(IJMacroEditorPlugin.getDefault().getPreferenceStore());

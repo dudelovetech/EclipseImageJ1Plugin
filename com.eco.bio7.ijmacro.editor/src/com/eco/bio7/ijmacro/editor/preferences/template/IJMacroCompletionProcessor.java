@@ -28,7 +28,7 @@ import org.eclipse.jface.text.templates.TemplateCompletionProcessor;
 /**
  * A completion processor for Java and BeanShell templates.
  */
-public class BeanshellCompletionProcessor extends TemplateCompletionProcessor {
+public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	private static final String DEFAULT_IMAGE= "$nl$/icons/template_obj.png"; //$NON-NLS-1$
 
 	/**
@@ -96,7 +96,7 @@ public class BeanshellCompletionProcessor extends TemplateCompletionProcessor {
 	 * @return the supported XML context type
 	 */
 	protected TemplateContextType getContextType(ITextViewer viewer, IRegion region) {
-		return TemplateEditorUI.getDefault().getContextTypeRegistry().getContextType(BeanshellContextType.XML_CONTEXT_TYPE);
+		return TemplateEditorUI.getDefault().getContextTypeRegistry().getContextType(IJMacroContextType.XML_CONTEXT_TYPE);
 	}
 
 	/**
