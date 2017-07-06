@@ -390,6 +390,16 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitFunctionBody(ImageJMacroParser.FunctionBodyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ImageJMacroParser#macroBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterMacroBody(ImageJMacroParser.MacroBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ImageJMacroParser#macroBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitMacroBody(ImageJMacroParser.MacroBodyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#arrayLiteral}.
 	 * @param ctx the parse tree
 	 */
@@ -837,6 +847,18 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPostIncrementExpression(ImageJMacroParser.PostIncrementExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MacroExpression}
+	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMacroExpression(ImageJMacroParser.MacroExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MacroExpression}
+	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMacroExpression(ImageJMacroParser.MacroExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BitNotExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.

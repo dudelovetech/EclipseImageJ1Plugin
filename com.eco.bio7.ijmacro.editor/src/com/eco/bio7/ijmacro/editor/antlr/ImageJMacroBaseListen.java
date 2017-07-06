@@ -6,6 +6,9 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroBodyContext;
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroExpressionContext;
+
 /**
  * This class provides an empty implementation of {@link ImageJMacroListener},
  * which can be extended to create a listener which only needs to handle a subset
@@ -1213,4 +1216,24 @@ public class ImageJMacroBaseListen implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
+	@Override
+	public void enterMacroExpression(MacroExpressionContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void exitMacroExpression(MacroExpressionContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void enterMacroBody(MacroBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void exitMacroBody(MacroBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
 }

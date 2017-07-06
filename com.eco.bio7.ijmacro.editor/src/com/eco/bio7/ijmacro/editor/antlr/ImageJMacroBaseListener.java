@@ -460,6 +460,18 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMacroBody(ImageJMacroParser.MacroBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMacroBody(ImageJMacroParser.MacroBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArrayLiteral(ImageJMacroParser.ArrayLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -923,6 +935,18 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPostIncrementExpression(ImageJMacroParser.PostIncrementExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMacroExpression(ImageJMacroParser.MacroExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMacroExpression(ImageJMacroParser.MacroExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

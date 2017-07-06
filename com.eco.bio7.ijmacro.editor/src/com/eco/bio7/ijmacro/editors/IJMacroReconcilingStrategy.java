@@ -61,7 +61,7 @@ public class IJMacroReconcilingStrategy implements IReconcilingStrategy, IReconc
 	public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
 		/*Parse parse=editor.getParser();
 		parse.parse();*/
-		System.out.println("reconcile");
+		//System.out.println("reconcile");
 	}
 
 	/*
@@ -96,7 +96,7 @@ public class IJMacroReconcilingStrategy implements IReconcilingStrategy, IReconc
 	public void initialReconcile() {
 		Parse parse=new Parse(editor);
 		parse.parse();
-		System.out.println("parsing finished!");
+		//System.out.println("parsing finished!");
 
 	}
 
