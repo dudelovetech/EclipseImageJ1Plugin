@@ -88,6 +88,12 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		super.createPartControl(parent);
 		//PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "com.eco.bio7.beanshell");
 	}
+	
+	public IWorkbenchPage getPage() {
+		IWorkbenchPage page = getSite().getPage();
+
+		return page;
+	}
 
 	/**
 	 * Creates a new BeanShell editor.
@@ -96,7 +102,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		super();
 
 		colorManager = new ColorManager();
-		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager));
+		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager,this));
 
 	}
 

@@ -20,6 +20,8 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.reconciler.IReconciler;
+import org.eclipse.jface.text.reconciler.MonoReconciler;
 import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
@@ -35,10 +37,12 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 	private IJMacroDoubleClickStrategy doubleClickStrategy;
 
 	private ColorManager colorManager;
-	ScriptColorProvider provider;
+	private ScriptColorProvider provider;
+	private IJMacroEditor editor;
 
-	public IJMacroConfiguration(ColorManager colorManager) {
+	public IJMacroConfiguration(ColorManager colorManager,IJMacroEditor editor) {
 		this.colorManager = colorManager;
+		this.editor=editor;
 
 	}
 
@@ -83,6 +87,15 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
 				ScriptPartitionScanner.SCRIPT_DOC,
 				ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT };
+	}
+	
+	public IReconciler getReconciler(ISourceViewer sourceViewer) {
+		IJMacroReconcilingStrategy strategy = new IJMacroReconcilingStrategy();
+		strategy.setEditor(editor);
+
+		MonoReconciler reconciler = new MonoReconciler(strategy, false);
+		reconciler.setDelay(200);
+		return reconciler;
 	}
 
 	public IPresentationReconciler getPresentationReconciler(
