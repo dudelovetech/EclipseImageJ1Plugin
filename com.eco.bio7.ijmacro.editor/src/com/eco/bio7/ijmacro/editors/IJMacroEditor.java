@@ -457,9 +457,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	}
 
 	private int getCurrentLine(IEditorPart rEditor) {
+		
 		ITextEditor editor = (ITextEditor) rEditor;
-		IDocumentProvider dp = editor.getDocumentProvider();
-		IDocument doc = dp.getDocument(editor.getEditorInput());
 
 		ISelectionProvider sp = editor.getSelectionProvider();
 
@@ -473,7 +472,6 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	private String getSelectedText(IEditorPart rEditor) {
 		ITextEditor editor = (ITextEditor) rEditor;
-		IDocumentProvider dp = editor.getDocumentProvider();
 
 		ISelectionProvider sp = editor.getSelectionProvider();
 
@@ -486,7 +484,6 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	private ITextSelection getTextSelection(IEditorPart rEditor) {
 		ITextEditor editor = (ITextEditor) rEditor;
-		IDocumentProvider dp = editor.getDocumentProvider();
 
 		ISelectionProvider sp = editor.getSelectionProvider();
 
@@ -523,37 +520,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	}
 
-	private String getTextAndForwardCursor(IEditorPart rEditor) {
-		ITextEditor editor = (ITextEditor) rEditor;
-		IDocumentProvider dp = editor.getDocumentProvider();
-		IDocument doc = dp.getDocument(editor.getEditorInput());
-
-		ISelectionProvider sp = editor.getSelectionProvider();
-
-		ISelection selectionsel = sp.getSelection();
-
-		ITextSelection selection = (ITextSelection) selectionsel;
-
-		int b = selection.getStartLine();
-		String inhalt = null;
-		IRegion reg = null;
-		try {
-			reg = doc.getLineInformation(b);
-		} catch (BadLocationException e1) {
-
-			e1.printStackTrace();
-		}
-
-		try {
-			inhalt = doc.get(reg.getOffset(), reg.getLength());
-		} catch (BadLocationException e) {
-
-			e.printStackTrace();
-		}
-
-		editor.selectAndReveal(reg.getOffset() + 1 + reg.getLength() + 1, 0);
-		return inhalt;
-	}
+	
 
 	public final void setDebugMode(int mode) {
 		step = true;
