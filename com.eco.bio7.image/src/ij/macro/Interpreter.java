@@ -44,14 +44,14 @@ public class Interpreter implements MacroConstants {
 	Functions func;
 	boolean inFunction;
 	String macroName;
-	String argument;
+	public String argument;
 	String returnValue;
 	boolean calledMacro; // macros envoked by eval() or runMacro()
 	boolean batchMacro; // macros envoked by Process/Batch commands
 	double[] rgbWeights;
 	boolean inPrint;
 	static String additionalFunctions;
-	Debugger debugger;
+	public Debugger debugger;
 	int debugMode = Debugger.NOT_DEBUGGING;
 	boolean showDebugFunctions;
 	static boolean showVariables;
@@ -1180,7 +1180,7 @@ public class Interpreter implements MacroConstants {
 		}
 	}
 
-	void error (String message) {
+	public void error (String message) {
 		boolean showMessage = !done;
 		String[] variables = showMessage?getVariables():null;
 		token = EOF;
