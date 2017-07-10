@@ -107,6 +107,17 @@ public class Parse {
 		// list.startStop.clear();
 		walker.walk(list, tree);
 		
+		fPositions.clear();
+
+		for (int i = 0; i < list.startStop.size(); i++) {
+
+			String pos = (String) list.startStop.get(i);
+			String[] val = pos.split(",");
+
+			fPositions.add(new Position(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
+
+		}
+		
 		/* Update the outline if no errors in the listener are counted! */
 		numberOfMainParseErrors = li.getNumberOfListenSyntaxErrors();
 		if (numberOfMainParseErrors == 0) {

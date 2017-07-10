@@ -1,6 +1,7 @@
 // Generated from ImageJMacro.g4 by ANTLR 4.4
 package com.eco.bio7.ijmacro.editor.antlr;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -25,6 +26,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 
 	private Stack<IJMacroEditorOutlineNode> methods = new Stack<IJMacroEditorOutlineNode>();
 	private IJMacroEditor editor;
+	public ArrayList<String> startStop = new ArrayList<String>();
 
 	public ImageJMacroBaseListen(IJMacroEditor editor) {
 		this.editor = editor;
@@ -46,7 +48,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		Token lastToken = ctx.getStop();
 		int lineStart = firstToken.getStartIndex();
 		String name = ctx.singleExpression(0).getText();
-        System.out.println(ctx.singleExpression(0).getParent().getClass());
+       // System.out.println(ctx.singleExpression(0).getParent().getClass());
 		// Add to the editor folding action if enabled in the preferences!
 
 		int line = calculateLine(lineStart);
@@ -71,6 +73,8 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		// Add to the editor folding action if enabled in the preferences!
 
 		int lineMethod = calculateLine(lineStart);
+		int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
+		startStop.add(lineStart + "," + lineEnd);
 
 		/* Here we create the outline nodes in the Outline view! */
 		if (methods.size() == 0) {
@@ -98,6 +102,8 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		// Add to the editor folding action if enabled in the preferences!
 
 		int lineMethod = calculateLine(lineStart);
+		int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
+		startStop.add(lineStart + "," + lineEnd);
 
 		/* Here we create the outline nodes in the Outline view! */
 		if (methods.size() == 0) {

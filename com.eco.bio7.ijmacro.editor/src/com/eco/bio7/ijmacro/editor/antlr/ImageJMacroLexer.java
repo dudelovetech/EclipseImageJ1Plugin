@@ -136,6 +136,87 @@ public class ImageJMacroLexer extends Lexer {
 	}
 
 
+	                 
+	    // A flag indicating if the lexer should operate in strict mode.
+	    // When set to true, FutureReservedWords are tokenized, when false,
+	    // an octal literal can be tokenized.
+	    private boolean strictMode = true;
+	    // The most recently produced token.
+	    private Token lastToken = null;
+	    /**
+	     * Returns {@code true} iff the lexer operates in strict mode.
+	     *
+	     * @return {@code true} iff the lexer operates in strict mode.
+	     */
+	    public boolean getStrictMode() {
+	        return this.strictMode;
+	    }
+
+	    /**
+	     * Sets whether the lexer operates in strict mode or not.
+	     *
+	     * @param strictMode
+	     *         the flag indicating the lexer operates in strict mode or not.
+	     */
+	    public void setStrictMode(boolean strictMode) {
+	        this.strictMode = strictMode;
+	    }
+
+	    /**
+	     * Return the next token from the character stream and records this last
+	     * token in case it resides on the default channel. This recorded token
+	     * is used to determine when the lexer could possibly match a regex
+	     * literal.
+	     *
+	     * @return the next token from the character stream.
+	     */
+	    @Override
+	    public Token nextToken() {
+	        
+	        // Get the next token.
+	        Token next = super.nextToken();
+	        
+	        if (next.getChannel() == Token.DEFAULT_CHANNEL) {
+	            // Keep track of the last token on the default channel.                                              
+	            this.lastToken = next;
+	        }
+	        
+	        return next;
+	    }
+
+	    /**
+	     * Returns {@code true} iff the lexer can match a regex literal.
+	     *
+	     * @return {@code true} iff the lexer can match a regex literal.
+	     */
+	    private boolean isRegexPossible() {
+	                                       
+	        if (this.lastToken == null) {
+	            // No token has been produced yet: at the start of the input,
+	            // no division is possible, so a regex literal _is_ possible.
+	            return true;
+	        }
+	        
+	        switch (this.lastToken.getType()) {
+	            case Identifier:
+	            case NullLiteral:
+	            case BooleanLiteral:
+	            case This:
+	            case CloseBracket:
+	            case CloseParen:
+	            case OctalIntegerLiteral:
+	            case DecimalLiteral:
+	            case HexIntegerLiteral:
+	            case StringLiteral:
+	                // After any of the tokens above, no regex literal can follow.
+	                return false;
+	            default:
+	                // In all other cases, a regex literal _is_ possible.
+	                return true;
+	        }
+	    }
+
+
 	public ImageJMacroLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
