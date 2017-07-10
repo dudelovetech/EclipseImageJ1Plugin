@@ -22,6 +22,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 
 /**
@@ -64,11 +65,9 @@ public class Parse {
 
 	public void parse() {
 
-		/*
-		 * Vector<REditorOutlineNode> editorOldNodes = editor.nodes; Create the category
-		 * base node for the outline! editor.createNodes(); Create all collected markers
-		 * in a job!
-		 */
+		Vector<IJMacroEditorOutlineNode> editorOldNodes = editor.nodes;
+		/* Create the category base node for the outline! */
+		editor.createNodes();
 		ErrorWarnMarkerDeletion deleteMarkerJob = new ErrorWarnMarkerDeletion("Delete Markers", editor);
 
 		deleteMarkerJob.addJobChangeListener(new JobChangeAdapter() {
@@ -103,10 +102,24 @@ public class Parse {
 
 		RuleContext tree = parser.program();
 		/* Create the listener to create the outline, etc. */
-		ImageJMacroBaseListen list = new ImageJMacroBaseListen();
+		ImageJMacroBaseListen list = new ImageJMacroBaseListen(editor);
 
 		// list.startStop.clear();
 		walker.walk(list, tree);
+		
+		/* Update the outline if no errors in the listener are counted! */
+		numberOfMainParseErrors = li.getNumberOfListenSyntaxErrors();
+		if (numberOfMainParseErrors == 0) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+
+					editor.updateFoldingStructure(fPositions);
+
+					editor.outlineInputChanged(editorOldNodes, editor.nodes);
+				}
+
+			});
+		}
 
 		
 		/* Create all collected markers in a job! */

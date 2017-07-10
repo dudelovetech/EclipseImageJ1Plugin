@@ -13,6 +13,11 @@
 package com.eco.bio7.ijmacro.editors;
 
 import java.awt.Window;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IAction;
@@ -25,22 +30,36 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
+import org.eclipse.jface.text.source.projection.ProjectionSupport;
+import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -51,7 +70,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
-
+import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction;
 import com.eco.bio7.ijmacro.editor.actions.OpenPreferences;
@@ -60,7 +80,9 @@ import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterAction;
 import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterSelectAction;
 import com.eco.bio7.ijmacro.editor.actions.SetComment;
 import com.eco.bio7.ijmacro.editor.actions.UnsetComment;
-
+import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
+import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
+import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
 import ij.IJ;
 import ij.WindowManager;
 import ij.macro.Debugger;
@@ -117,16 +139,56 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	private int previousLine;
 
+	private IContentOutlinePage contentOutlinePage;
+
+	public IJMacroEditorTreeContentProvider tcp;
+	private TreeViewer contentOutlineViewer;
+	public Vector<IJMacroEditorOutlineNode> nodes = new Vector<IJMacroEditorOutlineNode>();
+	public IJMacroEditorOutlineNode baseNode;// Function category!
+	// private RConfiguration rconf;
+	private Object[] expanded;
+	protected ArrayList<TreeItem> selectedItems;
+
+	public ProjectionViewer viewer;
+
+	private ProjectionSupport projectionSupport;
+
+	private ProjectionAnnotationModel annotationModel;
+
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,
 		// "com.eco.bio7.beanshell");
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
+		viewer = (ProjectionViewer) getSourceViewer();
+
+		projectionSupport = new ProjectionSupport(viewer, getAnnotationAccess(), getSharedColors());
+		projectionSupport.install();
+
+		// turn projection mode on
+		viewer.doOperation(ProjectionViewer.TOGGLE);
+
+		annotationModel = viewer.getProjectionAnnotationModel();
+	}
+
+	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(),
+				styles);
+
+		// ensure decoration support has been created and configured.
+		getSourceViewerDecorationSupport(viewer);
+
+		return viewer;
 	}
 
 	public IWorkbenchPage getPage() {
 		IWorkbenchPage page = getSite().getPage();
 
 		return page;
+	}
+
+	public ProjectionViewer getViewer() {
+		return viewer;
 	}
 
 	/**
@@ -538,7 +600,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		IRegion reg = getRegion();
 
-		/*We have to made a line selection for the evaluation!*/
+		/* We have to made a line selection for the evaluation! */
 		select(IJMacroEditor.this, reg.getOffset(), reg.getOffset() + reg.getLength());
 
 		int start = getSelectionStart();
@@ -640,6 +702,235 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		});
 		if (editor != page.getActiveEditor())
 			throw new RuntimeException("Editor couldn't activated");
+	}
+
+	private ISelectionListener listener = new ISelectionListener() {
+		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
+
+			// we ignore our own selections
+			if (sourcepart != IJMacroEditor.this) {
+				// showSelection(sourcepart, selection);
+
+				if (selection instanceof IStructuredSelection) {
+					IStructuredSelection strucSelection = (IStructuredSelection) selection;
+					Object selectedObj = strucSelection.getFirstElement();
+					if (selectedObj instanceof IJMacroEditorOutlineNode) {
+
+						IJMacroEditorOutlineNode cm = (IJMacroEditorOutlineNode) selectedObj;
+						if (cm != null) {
+
+							int lineNumber = cm.getLineNumber();
+							/*
+							 * If a line number exist - if a class member of type is available!
+							 */
+							if (lineNumber > 0) {
+								goToLine(IJMacroEditor.this, lineNumber);
+							}
+
+						}
+
+					}
+				}
+
+			}
+		}
+
+	};
+
+	private static void goToLine(IEditorPart editorPart, int toLine) {
+		if ((editorPart instanceof IJMacroEditor) || toLine <= 0) {
+
+			ITextEditor editor = (ITextEditor) editorPart;
+
+			IDocumentProvider prov = editor.getDocumentProvider();
+			IEditorInput inp = editor.getEditorInput();
+			if (prov != null) {
+				IDocument document = prov.getDocument(inp);
+				if (document != null) {
+					IRegion region = null;
+
+					try {
+
+						region = document.getLineInformation(toLine - 1);
+					} catch (BadLocationException e) {
+
+					}
+					if (region != null) {
+						editor.selectAndReveal(region.getOffset(), region.getLength());
+					}
+				}
+			}
+		}
+	}
+
+	public Object getAdapter(Class key) {
+		if (key.equals(IContentOutlinePage.class)) {
+
+			return getContentOutlinePage();
+
+		} else {
+			return super.getAdapter(key);
+		}
+	}
+
+	public void updateFoldingStructure(ArrayList positions) {
+		Annotation[] deletions = computeDifferences(annotationModel, positions);
+
+		Annotation[] annotations = new Annotation[positions.size()];
+
+		// this will hold the new annotations along
+		// with their corresponding positions
+		HashMap newAnnotations = new HashMap();
+
+		for (int i = 0; i < positions.size(); i++) {
+			ProjectionAnnotation annotation = new ProjectionAnnotation();
+
+			newAnnotations.put(annotation, positions.get(i));
+
+			annotations[i] = annotation;
+		}
+
+		annotationModel.modifyAnnotations(deletions, newAnnotations, null);
+
+		// oldAnnotations=annotations;
+	}
+
+	private Annotation[] computeDifferences(ProjectionAnnotationModel model, ArrayList additions) {
+		List deletions = new ArrayList();
+		for (Iterator iter = model.getAnnotationIterator(); iter.hasNext();) {
+			Object annotation = iter.next();
+			if (annotation instanceof ProjectionAnnotation) {
+				Position position = model.getPosition((Annotation) annotation);
+				if (additions.contains(position)) {
+					additions.remove(position);
+				} else {
+					deletions.add(annotation);
+				}
+			}
+		}
+		return (Annotation[]) deletions.toArray(new Annotation[deletions.size()]);
+	}
+
+	public void outlineInputChanged(Vector nodesALt, Vector nodesNew) {
+
+		if (contentOutlineViewer != null) {
+			/* Store temporary the old expanded elements! */
+			expanded = contentOutlineViewer.getExpandedElements();
+
+			TreeViewer viewer = contentOutlineViewer;
+
+			if (viewer != null) {
+
+				Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+
+					control.setRedraw(false);
+					/* Create default categories! */
+
+					/* Set the new tree nodes! */
+					viewer.setInput(nodesNew);
+					/* First item is the file! */
+					TreeItem treeItem = contentOutlineViewer.getTree().getItem(0);
+					/* Expand to get access to the subnodes! */
+					contentOutlineViewer.setExpandedState(treeItem.getData(), true);
+					walkTree(treeItem);
+					/* The default expand level! */
+					contentOutlineViewer.expandToLevel(2);
+					control.setRedraw(true);
+				}
+			}
+		}
+
+	}
+
+	/*
+	 * This method is recursively called to walk all subtrees and compare the names
+	 * of the nodes with the old ones!
+	 */
+
+	public void walkTree(TreeItem item) {
+
+		for (int i = 0; i < expanded.length; i++) {
+
+			for (int j = 0; j < item.getItemCount(); j++) {
+
+				TreeItem it = item.getItem(j);
+
+				if (((IJMacroEditorOutlineNode) it.getData()).getName()
+						.equals(((IJMacroEditorOutlineNode) expanded[i]).getName())) {
+					contentOutlineViewer.setExpandedState(it.getData(), true);
+					/* Recursive call of the method for subnodes! */
+					walkTree(it);
+					break;
+				}
+
+			}
+
+		}
+
+	}
+
+	public IContentOutlinePage getContentOutlinePage() {
+		if (contentOutlinePage == null) {
+			// The content outline is just a tree.
+			//
+
+			contentOutlinePage = new MyContentOutlinePage();
+
+		}
+
+		return contentOutlinePage;
+	}
+
+	public void createNodes() {
+		nodes.clear();
+		baseNode = new IJMacroEditorOutlineNode("File", 0, "base", null);
+		nodes.add(baseNode);
+
+	}
+
+	class MyContentOutlinePage extends ContentOutlinePage {
+
+		public void createControl(Composite parent) {
+			super.createControl(parent);
+
+			contentOutlineViewer = getTreeViewer();
+
+			contentOutlineViewer.addSelectionChangedListener(this);
+
+			// Set up the tree viewer.
+
+			tcp = new IJMacroEditorTreeContentProvider();
+			contentOutlineViewer.setContentProvider(new IJMacroEditorTreeContentProvider());
+			contentOutlineViewer.setInput(nodes);
+			contentOutlineViewer.setLabelProvider(new IJMacroEditorLabelProvider());
+
+			// Provide the input to the ContentProvider
+
+			getSite().setSelectionProvider(contentOutlineViewer);
+
+		}
+
+		public void traditional() {
+			for (int i = 0; nodes != null && i < nodes.size(); i++) {
+				IJMacroEditorOutlineNode node = (IJMacroEditorOutlineNode) nodes.elementAt(i);
+				addNode(null, node);
+			}
+		}
+
+		private void addNode(TreeItem parentItem, IJMacroEditorOutlineNode node) {
+			TreeItem item = null;
+			if (parentItem == null)
+				item = new TreeItem(getTreeViewer().getTree(), SWT.NONE);
+			else
+				item = new TreeItem(parentItem, SWT.NONE);
+
+			item.setText(node.getName());
+
+			Vector subs = node.getSubCategories();
+			for (int i = 0; subs != null && i < subs.size(); i++)
+				addNode(item, (IJMacroEditorOutlineNode) subs.elementAt(i));
+		}
 	}
 
 }
