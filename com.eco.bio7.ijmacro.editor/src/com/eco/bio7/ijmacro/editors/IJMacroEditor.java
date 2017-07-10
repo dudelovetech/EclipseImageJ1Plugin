@@ -438,6 +438,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			else
 				IJ.wait(150);
 		}
+
 		return 0;
 	}
 
@@ -457,7 +458,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	}
 
 	private int getCurrentLine(IEditorPart rEditor) {
-		
+
 		ITextEditor editor = (ITextEditor) rEditor;
 
 		ISelectionProvider sp = editor.getSelectionProvider();
@@ -466,7 +467,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		ITextSelection selection = (ITextSelection) selectionsel;
 
-		int b = selection.getStartLine();
+		int b = selection.getStartLine() + 1;
 		return b;
 	}
 
@@ -520,7 +521,52 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	}
 
-	
+	private IRegion getRegion() {
+		int b = getTextSelection(IJMacroEditor.this).getStartLine();
+
+		IRegion reg = null;
+		try {
+			reg = getDocument().getLineInformation(b);
+		} catch (BadLocationException e1) {
+
+			e1.printStackTrace();
+		}
+		return reg;
+	}
+
+	public void evaluateLine() {
+
+		IRegion reg = getRegion();
+
+		/*We have to made a line selection for the evaluation!*/
+		select(IJMacroEditor.this, reg.getOffset(), reg.getOffset() + reg.getLength());
+
+		int start = getSelectionStart();
+		int end = getSelectionEnd();
+		System.out.println(start + " " + end);
+		if (end > start) {
+			runMacro(false);
+			return;
+		}
+		String text = getText();
+		while (start > 0) {
+			start--;
+			if (text.charAt(start) == '\n') {
+				start++;
+				break;
+			}
+		}
+		while (end < text.length() - 1) {
+			end++;
+			if (text.charAt(end) == '\n')
+				break;
+		}
+		// setSelectionStart(start);
+		// setSelectionEnd(end);
+		System.out.println(start + " " + end);
+		select(IJMacroEditor.this, debugStart, debugEnd);
+		runMacro(false);
+	}
 
 	public final void setDebugMode(int mode) {
 		step = true;
@@ -554,12 +600,13 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		setText(text);
 	}
 
-	final void runToInsertionPoint() {
+	public final void runToInsertionPoint() {
 		Interpreter interp = Interpreter.getInstance();
 		if (interp == null)
 			IJ.beep();
 		else {
 			runToLine = getCurrentLine(IJMacroEditor.this);
+			System.out.println("current Line: " + runToLine);
 			setDebugMode(RUN_TO_CARET);
 		}
 	}
@@ -575,6 +622,24 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		if (display == null)
 			display = Display.getDefault();
 		return display;
+	}
+
+	/**
+	 * A method to activate the current editor.
+	 * 
+	 * @param editor
+	 */
+	public static void activateEditorPage(final IEditorPart editor) {
+		IEditorSite site = editor.getEditorSite();
+		final IWorkbenchPage page = site.getPage();
+		Display display = site.getShell().getDisplay();
+		display.syncExec(new Runnable() {
+			public void run() {
+				page.activate(editor);
+			}
+		});
+		if (editor != page.getActiveEditor())
+			throw new RuntimeException("Editor couldn't activated");
 	}
 
 }

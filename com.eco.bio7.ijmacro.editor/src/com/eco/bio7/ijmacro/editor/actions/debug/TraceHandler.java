@@ -1,4 +1,4 @@
-package com.eco.bio7.ijmacro.editor.actions;
+package com.eco.bio7.ijmacro.editor.actions.debug;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -11,9 +11,9 @@ import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 /**
  * @noreference This class is not intended to be referenced by clients.
  */
-final public class DebugStepHandler extends AbstractHandler {
+final public class TraceHandler extends AbstractHandler {
 
-	public DebugStepHandler() {
+	public TraceHandler() {
 
 	}
 
@@ -21,7 +21,7 @@ final public class DebugStepHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		IJMacroEditor editor = (IJMacroEditor) editore;
-		editor.setDebugMode(ij.macro.Debugger.STEP);
+		editor.setDebugMode(ij.macro.Debugger.TRACE);
 		return null;
 	}
 

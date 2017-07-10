@@ -79,18 +79,46 @@
  <extension
          point="org.eclipse.ui.handlers">
          <handler
-            class="com.eco.bio7.ijmacro.editor.actions.DebugHandler"
+            class="com.eco.bio7.ijmacro.editor.actions.debug.DebugHandler"
             commandId="com.eco.bio7.ijmacro.editor.actions.text.debug">
            
       </handler>
       <handler
-            class="com.eco.bio7.ijmacro.editor.actions.DebugAbortHandler"
+            class="com.eco.bio7.ijmacro.editor.actions.debug.DebugAbortHandler"
             commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.abort">
            
       </handler>
       <handler
-            class="com.eco.bio7.ijmacro.editor.actions.DebugStepHandler"
+            class="com.eco.bio7.ijmacro.editor.actions.debug.DebugStepHandler"
             commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.step">
+           
+      </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.debug.TraceHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.trace">
+           
+      </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.debug.FastTraceHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.fasttrace">
+           
+      </handler>
+      
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.debug.RunToInsertionPointHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runto">
+           
+      </handler>
+      
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.debug.RunToCompletionHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runtocompletion">
+           
+      </handler>
+      
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.debug.EvaluateLineHandler"
+            commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.evaluateline">
            
       </handler>
       <handler
@@ -132,6 +160,43 @@
           sequence="CTRL+E">
     </key>
     <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.trace"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+T">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.fasttrace"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+T">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runto"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+E">
+    </key>
+    
+     <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runtocompletion"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+X">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.evaluateline"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+Y">
+    </key>
+     <key
+            commandId="com.eco.bio7.interpret.ijmacro"
+            contextId="com.eco.bio7.ijmacro.editor.scope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+R">
+      </key>
+    <key
           commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomIn"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -143,12 +208,7 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+-">
     </key>
-    <key
-            commandId="com.eco.bio7.interpret.ijmacro"
-            contextId="com.eco.bio7.ijmacro.editor.scope"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+ALT+SHIFT+T">
-      </key>
+   
     </extension>
    <extension 
    point="org.eclipse.ui.commands">
@@ -169,6 +229,36 @@
           description="Debug step"
           id="com.eco.bio7.ijmacro.editor.actions.text.debug.step"
           name="Step">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Trace"
+          id="com.eco.bio7.ijmacro.editor.actions.text.debug.trace"
+          name="Trace">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Fast Trace"
+          id="com.eco.bio7.ijmacro.editor.actions.text.debug.fasttrace"
+          name="Fast Trace">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Run To Insertion Point (Caret)"
+          id="com.eco.bio7.ijmacro.editor.actions.text.debug.runto"
+          name="Run To Insertion Point">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Run"
+          id="com.eco.bio7.ijmacro.editor.actions.text.debug.runtocompletion"
+          name="Run">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Evaluate Line"
+          id="com.eco.bio7.ijmacro.editor.actions.text.debug.evaluateline"
+          name="Evaluate Line">
     </command>
        <command
           categoryId="org.eclipse.ui.category.textEditor"
