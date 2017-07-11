@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.ForStatementContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroBodyContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroExpressionContext;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
@@ -45,11 +47,18 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 
 	public void enterAssignmentExpression(ImageJMacroParser.AssignmentExpressionContext ctx) {
 		Token firstToken = ctx.getStart();
-		Token lastToken = ctx.getStop();
 		int lineStart = firstToken.getStartIndex();
 		String name = ctx.singleExpression(0).getText();
-       // System.out.println(ctx.singleExpression(0).getParent().getClass());
-		// Add to the editor folding action if enabled in the preferences!
+		/* Omit for loop variables! */
+		if (ctx.getParent() != null) {
+			ParserRuleContext par = ctx.getParent();
+			if (par.getParent() != null) {
+				ParserRuleContext par2 = par.getParent();
+				if (par2 instanceof ForStatementContext) {
+					return;
+				}
+			}
+		}
 
 		int line = calculateLine(lineStart);
 		if (methods.size() == 0) {
@@ -58,6 +67,25 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 
 		else {
 			new IJMacroEditorOutlineNode(name, line, "variable", methods.peek());
+		}
+	}
+
+	public void enterVariableDeclarationStatement(ImageJMacroParser.VariableDeclarationStatementContext ctx) {
+
+		Token firstToken = ctx.getStart();
+		int lineStart = firstToken.getStartIndex();
+
+		String name = ctx.Identifier().getText();
+		// System.out.println(ctx.singleExpression(0).getParent().getClass());
+		// Add to the editor folding action if enabled in the preferences!
+
+		int line = calculateLine(lineStart);
+		if (methods.size() == 0) {
+			new IJMacroEditorOutlineNode(name, line, "globalvariable", editor.baseNode);
+		}
+
+		else {
+			new IJMacroEditorOutlineNode(name, line, "globalvariable", methods.peek());
 		}
 	}
 
@@ -97,7 +125,12 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		Token firstToken = ctx.getStart();
 		Token lastToken = ctx.getStop();
 		int lineStart = firstToken.getStartIndex();
-		String name = ctx.StringLiteral().getText();
+		String name;
+		if (ctx.StringLiteral() != null) {
+			name = ctx.StringLiteral().getText();
+		} else {
+			return;
+		}
 
 		// Add to the editor folding action if enabled in the preferences!
 
@@ -120,6 +153,25 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		if (methods.empty() == false) {
 			methods.pop();
 		}
+	}
+
+	public void enterIterationStatements(ImageJMacroParser.IterationStatementsContext ctx) {
+		Token firstToken = ctx.getStart();
+		Token lastToken = ctx.getStop();
+		int lineStart = firstToken.getStartIndex();
+		if (lastToken != null) {
+			int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
+			startStop.add(lineStart + "," + lineEnd);
+		}
+
+	}
+
+	public void enterIfStatement(ImageJMacroParser.IfStatementContext ctx) {
+		Token firstToken = ctx.getStart();
+		Token lastToken = ctx.getStop();
+		int lineStart = firstToken.getStartIndex();
+		int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
+		startStop.add(lineStart + "," + lineEnd);
 	}
 
 	/* Calculates the line from the editor document! */

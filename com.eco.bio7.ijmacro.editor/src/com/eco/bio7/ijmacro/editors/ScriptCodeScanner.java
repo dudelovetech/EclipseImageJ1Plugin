@@ -37,12 +37,22 @@ import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
  * A Java code scanner.
  */
 public class ScriptCodeScanner extends RuleBasedScanner {
+	/*Keywords ImageJ macro:
+	 * MACRO, VAR, IF, ELSE, WHILE, DO, FOR, FUNCTION,
+	RETURN, TRUE, FALSE, PI, NaN, BREAK, CONTINUE
+	// Keywords ImageJ macro
+	static final String[] keywords = {"macro", "var", "if", "else", "while", "do", "for", "function",
+		"return", "true", "false", "PI", "NaN", "break", "continue"};
+	* Splitted for syntax highlightening!
+	*
+	*/
+   
+	private static String[] fgKeywords = {  "macro", "var", "if", "else", "while", "do", "for", "function",
+			"return", /*"true", "false", "PI", "NaN",*/ "break", "continue"};
 
-	private static String[] fgKeywords = {  "function","var","macro","break", "do", "else", "for", "if","return", "switch", "while"};
+	private static String[] fgTypes = { "NaN","PI" };
 
-	private static String[] fgTypes = { "void", "boolean", "char", "byte", "short", "int", "long", "float", "double" };
-
-	private static String[] fgConstants = { "false", "null", "true" };
+	private static String[] fgConstants = {"false", "true"};
 
 	public Token keyword;
 	public Token type;

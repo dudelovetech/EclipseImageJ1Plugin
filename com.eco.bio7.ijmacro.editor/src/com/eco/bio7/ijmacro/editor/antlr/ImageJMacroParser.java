@@ -383,62 +383,224 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
-		}
-		public VariableStatementContext variableStatement() {
-			return getRuleContext(VariableStatementContext.class,0);
-		}
-		public EmptyStatementContext emptyStatement() {
-			return getRuleContext(EmptyStatementContext.class,0);
-		}
-		public ExpressionStatementContext expressionStatement() {
-			return getRuleContext(ExpressionStatementContext.class,0);
-		}
-		public IfStatementContext ifStatement() {
-			return getRuleContext(IfStatementContext.class,0);
-		}
-		public IterationStatementContext iterationStatement() {
-			return getRuleContext(IterationStatementContext.class,0);
-		}
-		public ContinueStatementContext continueStatement() {
-			return getRuleContext(ContinueStatementContext.class,0);
-		}
-		public BreakStatementContext breakStatement() {
-			return getRuleContext(BreakStatementContext.class,0);
-		}
-		public ReturnStatementContext returnStatement() {
-			return getRuleContext(ReturnStatementContext.class,0);
-		}
-		public WithStatementContext withStatement() {
-			return getRuleContext(WithStatementContext.class,0);
-		}
-		public LabelledStatementContext labelledStatement() {
-			return getRuleContext(LabelledStatementContext.class,0);
-		}
-		public SwitchStatementContext switchStatement() {
-			return getRuleContext(SwitchStatementContext.class,0);
-		}
-		public ThrowStatementContext throwStatement() {
-			return getRuleContext(ThrowStatementContext.class,0);
-		}
-		public TryStatementContext tryStatement() {
-			return getRuleContext(TryStatementContext.class,0);
-		}
-		public DebuggerStatementContext debuggerStatement() {
-			return getRuleContext(DebuggerStatementContext.class,0);
-		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
+	 
+		public StatementContext() { }
+		public void copyFrom(StatementContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class IterationStatementsContext extends StatementContext {
+		public IterationStatementContext iterationStatement() {
+			return getRuleContext(IterationStatementContext.class,0);
+		}
+		public IterationStatementsContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterStatement(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterIterationStatements(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitStatement(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitIterationStatements(this);
+		}
+	}
+	public static class DebuggerStatementsContext extends StatementContext {
+		public DebuggerStatementContext debuggerStatement() {
+			return getRuleContext(DebuggerStatementContext.class,0);
+		}
+		public DebuggerStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterDebuggerStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitDebuggerStatements(this);
+		}
+	}
+	public static class VarStatementsContext extends StatementContext {
+		public VariableStatementContext variableStatement() {
+			return getRuleContext(VariableStatementContext.class,0);
+		}
+		public VarStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterVarStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitVarStatements(this);
+		}
+	}
+	public static class ExpressionStatementsContext extends StatementContext {
+		public ExpressionStatementContext expressionStatement() {
+			return getRuleContext(ExpressionStatementContext.class,0);
+		}
+		public ExpressionStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterExpressionStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitExpressionStatements(this);
+		}
+	}
+	public static class TryStatementsContext extends StatementContext {
+		public TryStatementContext tryStatement() {
+			return getRuleContext(TryStatementContext.class,0);
+		}
+		public TryStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterTryStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitTryStatements(this);
+		}
+	}
+	public static class LabelledStatementsContext extends StatementContext {
+		public LabelledStatementContext labelledStatement() {
+			return getRuleContext(LabelledStatementContext.class,0);
+		}
+		public LabelledStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterLabelledStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitLabelledStatements(this);
+		}
+	}
+	public static class SwitchStatementsContext extends StatementContext {
+		public SwitchStatementContext switchStatement() {
+			return getRuleContext(SwitchStatementContext.class,0);
+		}
+		public SwitchStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterSwitchStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitSwitchStatements(this);
+		}
+	}
+	public static class ContinueStatementsContext extends StatementContext {
+		public ContinueStatementContext continueStatement() {
+			return getRuleContext(ContinueStatementContext.class,0);
+		}
+		public ContinueStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterContinueStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitContinueStatements(this);
+		}
+	}
+	public static class ReturnStatementsContext extends StatementContext {
+		public ReturnStatementContext returnStatement() {
+			return getRuleContext(ReturnStatementContext.class,0);
+		}
+		public ReturnStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterReturnStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitReturnStatements(this);
+		}
+	}
+	public static class WithStatementsContext extends StatementContext {
+		public WithStatementContext withStatement() {
+			return getRuleContext(WithStatementContext.class,0);
+		}
+		public WithStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterWithStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitWithStatements(this);
+		}
+	}
+	public static class BlockStatementsContext extends StatementContext {
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
+		}
+		public BlockStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterBlockStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitBlockStatements(this);
+		}
+	}
+	public static class EmptyStatementsContext extends StatementContext {
+		public EmptyStatementContext emptyStatement() {
+			return getRuleContext(EmptyStatementContext.class,0);
+		}
+		public EmptyStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterEmptyStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitEmptyStatements(this);
+		}
+	}
+	public static class BreakStatementsContext extends StatementContext {
+		public BreakStatementContext breakStatement() {
+			return getRuleContext(BreakStatementContext.class,0);
+		}
+		public BreakStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterBreakStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitBreakStatements(this);
+		}
+	}
+	public static class IfStatementsContext extends StatementContext {
+		public IfStatementContext ifStatement() {
+			return getRuleContext(IfStatementContext.class,0);
+		}
+		public IfStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterIfStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitIfStatements(this);
+		}
+	}
+	public static class ThrowStatementsContext extends StatementContext {
+		public ThrowStatementContext throwStatement() {
+			return getRuleContext(ThrowStatementContext.class,0);
+		}
+		public ThrowStatementsContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterThrowStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitThrowStatements(this);
 		}
 	}
 
@@ -450,6 +612,7 @@ public class ImageJMacroParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				_localctx = new BlockStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(126);
@@ -457,6 +620,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new VarStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(127);
@@ -464,6 +628,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 3:
+				_localctx = new EmptyStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(128);
@@ -471,6 +636,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 4:
+				_localctx = new ExpressionStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(129);
@@ -478,6 +644,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 5:
+				_localctx = new IfStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(130);
@@ -485,6 +652,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 6:
+				_localctx = new IterationStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(131);
@@ -492,6 +660,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 7:
+				_localctx = new ContinueStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(132);
@@ -499,6 +668,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 8:
+				_localctx = new BreakStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(133);
@@ -506,6 +676,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 9:
+				_localctx = new ReturnStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(134);
@@ -513,6 +684,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 10:
+				_localctx = new WithStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(135);
@@ -520,6 +692,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 11:
+				_localctx = new LabelledStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
 				setState(136);
@@ -527,6 +700,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 12:
+				_localctx = new SwitchStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
 				setState(137);
@@ -534,6 +708,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 13:
+				_localctx = new ThrowStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 13);
 				{
 				setState(138);
@@ -541,6 +716,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 14:
+				_localctx = new TryStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 14);
 				{
 				setState(139);
@@ -548,6 +724,7 @@ public class ImageJMacroParser extends Parser {
 				}
 				break;
 			case 15:
+				_localctx = new DebuggerStatementsContext(_localctx);
 				enterOuterAlt(_localctx, 15);
 				{
 				setState(140);
@@ -680,6 +857,17 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class VariableStatementContext extends ParserRuleContext {
+		public VariableStatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_variableStatement; }
+	 
+		public VariableStatementContext() { }
+		public void copyFrom(VariableStatementContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class VarDeclarationStatementContext extends VariableStatementContext {
 		public TerminalNode Var() { return getToken(ImageJMacroParser.Var, 0); }
 		public VariableDeclarationListContext variableDeclarationList() {
 			return getRuleContext(VariableDeclarationListContext.class,0);
@@ -687,17 +875,14 @@ public class ImageJMacroParser extends Parser {
 		public EosContext eos() {
 			return getRuleContext(EosContext.class,0);
 		}
-		public VariableStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_variableStatement; }
+		public VarDeclarationStatementContext(VariableStatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterVariableStatement(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterVarDeclarationStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitVariableStatement(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitVarDeclarationStatement(this);
 		}
 	}
 
@@ -705,6 +890,7 @@ public class ImageJMacroParser extends Parser {
 		VariableStatementContext _localctx = new VariableStatementContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_variableStatement);
 		try {
+			_localctx = new VarDeclarationStatementContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(154);
@@ -788,21 +974,29 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class VariableDeclarationContext extends ParserRuleContext {
-		public TerminalNode Identifier() { return getToken(ImageJMacroParser.Identifier, 0); }
-		public InitialiserContext initialiser() {
-			return getRuleContext(InitialiserContext.class,0);
-		}
 		public VariableDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_variableDeclaration; }
+	 
+		public VariableDeclarationContext() { }
+		public void copyFrom(VariableDeclarationContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class VariableDeclarationStatementContext extends VariableDeclarationContext {
+		public TerminalNode Identifier() { return getToken(ImageJMacroParser.Identifier, 0); }
+		public InitialiserContext initialiser() {
+			return getRuleContext(InitialiserContext.class,0);
+		}
+		public VariableDeclarationStatementContext(VariableDeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterVariableDeclaration(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).enterVariableDeclarationStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitVariableDeclaration(this);
+			if ( listener instanceof ImageJMacroListener ) ((ImageJMacroListener)listener).exitVariableDeclarationStatement(this);
 		}
 	}
 
@@ -810,6 +1004,7 @@ public class ImageJMacroParser extends Parser {
 		VariableDeclarationContext _localctx = new VariableDeclarationContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_variableDeclaration);
 		try {
+			_localctx = new VariableDeclarationStatementContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(166);

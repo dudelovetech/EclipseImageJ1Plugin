@@ -605,7 +605,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		int start = getSelectionStart();
 		int end = getSelectionEnd();
-		System.out.println(start + " " + end);
+		//System.out.println(start + " " + end);
 		if (end > start) {
 			runMacro(false);
 			return;
@@ -625,7 +625,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		}
 		// setSelectionStart(start);
 		// setSelectionEnd(end);
-		System.out.println(start + " " + end);
+		//System.out.println(start + " " + end);
 		select(IJMacroEditor.this, debugStart, debugEnd);
 		runMacro(false);
 	}
@@ -668,7 +668,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			IJ.beep();
 		else {
 			runToLine = getCurrentLine(IJMacroEditor.this);
-			System.out.println("current Line: " + runToLine);
+			//System.out.println("current Line: " + runToLine);
 			setDebugMode(RUN_TO_CARET);
 		}
 	}

@@ -14,6 +14,9 @@ public class IJMacroEditorLabelProvider implements ILabelProvider {
 
 	private Image publicFieldIcon = IJMacroEditorPlugin.getImageDescriptor("/icons/field_public_obj.png").createImage();
 
+	private Image globalFieldIcon = IJMacroEditorPlugin.getImageDescriptor("/icons/field_private_obj.png")
+			.createImage();
+
 	private Image publicMacroIcon = IJMacroEditorPlugin.getImageDescriptor("/icons/brkp_obj.png").createImage();
 
 	// private Image publicFieldLoopIcon =
@@ -31,6 +34,8 @@ public class IJMacroEditorLabelProvider implements ILabelProvider {
 				im = publicMethodIcon;
 			} else if (cm.getType().equals("variable")) {
 				im = publicFieldIcon;
+			} else if (cm.getType().equals("globalvariable")) {
+				im = globalFieldIcon;
 			} else if (cm.getType().equals("macro")) {
 				im = publicMacroIcon;
 			}
@@ -48,6 +53,8 @@ public class IJMacroEditorLabelProvider implements ILabelProvider {
 		publicFieldIcon.dispose();
 
 		publicMethodIcon.dispose();
+
+		globalFieldIcon.dispose();
 
 		publicMacroIcon.dispose();
 

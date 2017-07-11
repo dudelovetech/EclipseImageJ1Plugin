@@ -14,15 +14,6 @@
 	${line_selection}${cursor}
 } while (${condition});</template>
 
-<template name="switch" description="%Templates.switch" id="org.eclipse.jdt.ui.templates.switch" context="ijmacro" enabled="true" autoinsert="false">switch (${key}) {
-	case ${value}:
-		${cursor}
-		break;
-
-	default:
-		break;
-}</template>
-
 <template name="if" description="%Templates.if" id="org.eclipse.jdt.ui.templates.if" context="ijmacro" enabled="true" autoinsert="false">if (${condition}) {
 	${line_selection}${cursor}
 }</template>
@@ -41,6 +32,10 @@
 
 
 <template name="function" description="%Templates.public_method" id="org.eclipse.jdt.ui.templates.public_method" context="ijmacro" enabled="true" autoinsert="false">function ${name}(${}) {
+	${cursor}
+}</template>
+
+<template name="macro" description="A macro definition" id="org.eclipse.jdt.ui.templates.ijmacro.macro" context="ijmacro" enabled="true" autoinsert="false">macro "${name}" {
 	${cursor}
 }</template>
 

@@ -216,21 +216,21 @@ sourceElement
 ///     TryStatement
 ///     DebuggerStatement
 statement
- : block
- | variableStatement
- | emptyStatement
- | expressionStatement
- | ifStatement
- | iterationStatement
- | continueStatement
- | breakStatement
- | returnStatement
- | withStatement
- | labelledStatement
- | switchStatement
- | throwStatement
- | tryStatement
- | debuggerStatement
+ : block				#blockStatements
+ | variableStatement	#varStatements
+ | emptyStatement		#emptyStatements
+ | expressionStatement	#expressionStatements
+ | ifStatement			#ifStatements
+ | iterationStatement	#iterationStatements
+ | continueStatement	#continueStatements
+ | breakStatement		#breakStatements
+ | returnStatement		#returnStatements
+ | withStatement		#withStatements
+ | labelledStatement	#labelledStatements
+ | switchStatement		#switchStatements
+ | throwStatement		#throwStatements
+ | tryStatement			#tryStatements
+ | debuggerStatement	#debuggerStatements
  ;
 
 /// Block :
@@ -249,7 +249,7 @@ statementList
 /// VariableStatement :
 ///     var VariableDeclarationList ;
 variableStatement
- : Var variableDeclarationList eos
+ : Var variableDeclarationList eos #varDeclarationStatement
  ;
 
 /// VariableDeclarationList :
@@ -262,7 +262,7 @@ variableDeclarationList
 /// VariableDeclaration :
 ///     Identifier Initialiser?
 variableDeclaration
- : Identifier initialiser?
+ : Identifier initialiser? #variableDeclarationStatement
  ;
 
 /// Initialiser :
