@@ -57,19 +57,24 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		}
 	}
 
+	/* Extend prefixes for macro functions with a dot, e.g. t.test() */
 	protected String extractPrefix(ITextViewer viewer, int offset) {
-		IDocument document = viewer.getDocument();
 		int i = offset;
+		IDocument document = viewer.getDocument();
 		if (i > document.getLength())
 			return "";
 
 		try {
 			while (i > 0) {
 				char ch = document.getChar(i - 1);
-				if (ch != '<' && !Character.isJavaIdentifierPart(ch))
+				/*
+				 * We need to extra include the '@' character for S4 class vars!
+				 */
+				if (!Character.isJavaIdentifierPart(ch) && (ch == '.') == false)
 					break;
 				i--;
 			}
+
 			return document.get(i, offset - i);
 		} catch (BadLocationException e) {
 			return "";
