@@ -90,11 +90,9 @@ public class Parse {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 
 		UnderlineListener li = new UnderlineListener();
-		
 
 		ImageJMacroParser parser = new ImageJMacroParser(tokens);
 
-		
 		parser.removeErrorListeners();
 		parser.addErrorListener(li);
 
@@ -106,18 +104,22 @@ public class Parse {
 
 		// list.startStop.clear();
 		walker.walk(list, tree);
-		
+
 		fPositions.clear();
 
 		for (int i = 0; i < list.startStop.size(); i++) {
 
 			String pos = (String) list.startStop.get(i);
 			String[] val = pos.split(",");
-
-			fPositions.add(new Position(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
+			int pos1 = Integer.parseInt(val[0]);
+			int pos2 = Integer.parseInt(val[1]);
+			if (pos1 >= 0 && pos2 >= 0) {
+				Position posit = new Position(pos1, pos2);
+				fPositions.add(posit);
+			}
 
 		}
-		
+
 		/* Update the outline if no errors in the listener are counted! */
 		numberOfMainParseErrors = li.getNumberOfListenSyntaxErrors();
 		if (numberOfMainParseErrors == 0) {
@@ -132,7 +134,6 @@ public class Parse {
 			});
 		}
 
-		
 		/* Create all collected markers in a job! */
 		ErrorWarnMarkerCreation markerJob = new ErrorWarnMarkerCreation("Create Markers", editor, li.getErrWarn());
 

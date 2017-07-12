@@ -196,7 +196,10 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	 */
 	public IJMacroEditor() {
 		super();
-
+		/*
+		 * Add a new key binding scope for this editor Don't forget to set the 'symbolicFontName' extension attribute in 'org.eclipse.ui.editors'!
+		 */
+		setKeyBindingScopes(new String[] { "com.eco.bio7.ijmacro.editor.scope" });
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager, this));
 
