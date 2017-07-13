@@ -44,7 +44,15 @@
 	${line_selection}${cursor}
 }</template>
 
-
+<template autoinsert="true" context="ijmacro" deleted="false" id="org.eclipse.jdt.ui.templates.roi_iteration" description="ROI Iteration Template" enabled="true" name="ROI Manager Iteration">n = roiManager("count");&#13;
+for (${index}=0; ${index}&lt;n; ${index}++) {&#13;
+      roiManager("select", ${index});&#13;
+      getStatistics(area, mean);&#13;
+      setResult("Area",  ${index}, area);&#13;
+      setResult("Mean", ${index}, mean);&#13;
+}&#13;
+updateResults();
+</template>
 </templates>
 
 

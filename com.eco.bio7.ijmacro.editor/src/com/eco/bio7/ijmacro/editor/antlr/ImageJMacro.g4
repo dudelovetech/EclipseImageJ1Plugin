@@ -150,31 +150,33 @@ grammar ImageJMacro;
      * @return {@code true} iff the lexer can match a regex literal.
      */
     private boolean isRegexPossible() {
-                                       
-        if (this.lastToken == null) {
-            // No token has been produced yet: at the start of the input,
-            // no division is possible, so a regex literal _is_ possible.
-            return true;
-        }
-        
-        switch (this.lastToken.getType()) {
-            case Identifier:
-            case NullLiteral:
-            case BooleanLiteral:
-            case This:
-            case CloseBracket:
-            case CloseParen:
-            case OctalIntegerLiteral:
-            case DecimalLiteral:
-            case HexIntegerLiteral:
-            case StringLiteral:
-                // After any of the tokens above, no regex literal can follow.
-                return false;
-            default:
-                // In all other cases, a regex literal _is_ possible.
-                return true;
-        }
+
+    if (this.lastToken == null) {
+        // No token has been produced yet: at the start of the input,
+        // no division is possible, so a regex literal _is_ possible.
+        return true;
     }
+
+    switch (this.lastToken.getType()) {
+        case Identifier:
+        case NullLiteral:
+        case BooleanLiteral:
+        case This:
+        case CloseBracket:
+        case CloseParen:
+        case OctalIntegerLiteral:
+        case DecimalLiteral:
+        case HexIntegerLiteral:
+        case StringLiteral:
+        case PlusPlus:               
+        case MinusMinus:                
+            // After any of the tokens above, no regex literal can follow.
+            return false;
+        default:
+            // In all other cases, a regex literal _is_ possible.
+            return true;
+    }
+  }
 }
 
 
@@ -632,13 +634,13 @@ singleExpression
  | singleExpression '.' identifierName                                    # MemberDotExpression
  | singleExpression arguments                                             # ArgumentsExpression
  | New singleExpression arguments?                                        # NewExpression
- | singleExpression {!here(LineTerminator)}? '++'                         # PostIncrementExpression
- | singleExpression {!here(LineTerminator)}? '--'                         # PostDecreaseExpression
+ | singleExpression {!here(LineTerminator)}? PlusPlus                     # PostIncrementExpression
+ | singleExpression {!here(LineTerminator)}? MinusMinus                   # PostDecreaseExpression
  | Delete singleExpression                                                # DeleteExpression
  | Void singleExpression                                                  # VoidExpression
  | Typeof singleExpression                                                # TypeofExpression
- | '++' singleExpression                                                  # PreIncrementExpression
- | '--' singleExpression                                                  # PreDecreaseExpression
+ | PlusPlus singleExpression                                              # PreIncrementExpression
+ | MinusMinus singleExpression                                            # PreDecreaseExpression
  | '+' singleExpression                                                   # UnaryPlusExpression
  | '-' singleExpression                                                   # UnaryMinusExpression
  | '~' singleExpression                                                   # BitNotExpression
@@ -788,6 +790,7 @@ RegularExpressionLiteral
 LineTerminator
  : [\r\n\u2028\u2029] -> channel(HIDDEN)
  ;
+ 
 
 OpenBracket                : '[';
 CloseBracket               : ']';

@@ -190,31 +190,33 @@ public class ImageJMacroLexer extends Lexer {
 	     * @return {@code true} iff the lexer can match a regex literal.
 	     */
 	    private boolean isRegexPossible() {
-	                                       
-	        if (this.lastToken == null) {
-	            // No token has been produced yet: at the start of the input,
-	            // no division is possible, so a regex literal _is_ possible.
-	            return true;
-	        }
-	        
-	        switch (this.lastToken.getType()) {
-	            case Identifier:
-	            case NullLiteral:
-	            case BooleanLiteral:
-	            case This:
-	            case CloseBracket:
-	            case CloseParen:
-	            case OctalIntegerLiteral:
-	            case DecimalLiteral:
-	            case HexIntegerLiteral:
-	            case StringLiteral:
-	                // After any of the tokens above, no regex literal can follow.
-	                return false;
-	            default:
-	                // In all other cases, a regex literal _is_ possible.
-	                return true;
-	        }
+
+	    if (this.lastToken == null) {
+	        // No token has been produced yet: at the start of the input,
+	        // no division is possible, so a regex literal _is_ possible.
+	        return true;
 	    }
+
+	    switch (this.lastToken.getType()) {
+	        case Identifier:
+	        case NullLiteral:
+	        case BooleanLiteral:
+	        case This:
+	        case CloseBracket:
+	        case CloseParen:
+	        case OctalIntegerLiteral:
+	        case DecimalLiteral:
+	        case HexIntegerLiteral:
+	        case StringLiteral:
+	        case PlusPlus:               // <-- NEW
+	        case MinusMinus:                 // <-- NEW
+	            // After any of the tokens above, no regex literal can follow.
+	            return false;
+	        default:
+	            // In all other cases, a regex literal _is_ possible.
+	            return true;
+	    }
+	  }
 
 
 	public ImageJMacroLexer(CharStream input) {

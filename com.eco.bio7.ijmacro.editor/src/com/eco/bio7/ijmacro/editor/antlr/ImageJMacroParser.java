@@ -3435,6 +3435,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class PreIncrementExpressionContext extends SingleExpressionContext {
+		public TerminalNode PlusPlus() { return getToken(ImageJMacroParser.PlusPlus, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -3512,6 +3513,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class PreDecreaseExpressionContext extends SingleExpressionContext {
+		public TerminalNode MinusMinus() { return getToken(ImageJMacroParser.MinusMinus, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -3608,6 +3610,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
+		public TerminalNode MinusMinus() { return getToken(ImageJMacroParser.MinusMinus, 0); }
 		public PostDecreaseExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3800,6 +3803,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
+		public TerminalNode PlusPlus() { return getToken(ImageJMacroParser.PlusPlus, 0); }
 		public PostIncrementExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {

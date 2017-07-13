@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.internal.text.html.BrowserInformationControl;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -23,11 +24,14 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
+
+import com.eco.bio7.ijmacro.editor.actions.OpenHelpBrowserAction;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 
 public class IJMacroEditorTextHover implements ITextHover, ITextHoverExtension, ITextHoverExtension2 {
@@ -130,7 +134,7 @@ public class IJMacroEditorTextHover implements ITextHover, ITextHoverExtension, 
 		}
 		
 
-		return "https://imagej.nih.gov/ij/developer/macro/functions.html#"+htmlHelpText;
+		return htmlHelpText;
 
 	}
 
@@ -180,11 +184,14 @@ public class IJMacroEditorTextHover implements ITextHover, ITextHoverExtension, 
 	/* Displays the hover popup with a toolbar! */
 	public IInformationControlCreator getHoverControlCreator() {
 		return new IInformationControlCreator() {
+			/*
+			 * @see org.eclipse.jface.text.IInformationControlCreator#
+			 * createInformationControl(org.eclipse.swt.widgets.Shell)
+			 */
 			public IInformationControl createInformationControl(Shell parent) {
-
 				
-					return new com.eco.bio7.ijmacro.editor.hoover.BrowserInformationControl (parent,"Arial",true);
 				
+				return new RDefaultInformationControl(parent);
 			}
 		};
 	}
