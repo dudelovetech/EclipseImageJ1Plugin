@@ -124,18 +124,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterContinueStatements(ImageJMacroParser.ContinueStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContinueStatements(ImageJMacroParser.ContinueStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBreakStatements(ImageJMacroParser.BreakStatementsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -160,18 +148,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWithStatements(ImageJMacroParser.WithStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitWithStatements(ImageJMacroParser.WithStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLabelledStatements(ImageJMacroParser.LabelledStatementsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -179,54 +155,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLabelledStatements(ImageJMacroParser.LabelledStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchStatements(ImageJMacroParser.SwitchStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchStatements(ImageJMacroParser.SwitchStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterThrowStatements(ImageJMacroParser.ThrowStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitThrowStatements(ImageJMacroParser.ThrowStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTryStatements(ImageJMacroParser.TryStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTryStatements(ImageJMacroParser.TryStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDebuggerStatements(ImageJMacroParser.DebuggerStatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDebuggerStatements(ImageJMacroParser.DebuggerStatementsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -388,42 +316,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForInStatement(ImageJMacroParser.ForInStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitForInStatement(ImageJMacroParser.ForInStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterForVarInStatement(ImageJMacroParser.ForVarInStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitForVarInStatement(ImageJMacroParser.ForVarInStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContinueStatement(ImageJMacroParser.ContinueStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContinueStatement(ImageJMacroParser.ContinueStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBreakStatement(ImageJMacroParser.BreakStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -448,78 +340,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWithStatement(ImageJMacroParser.WithStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitWithStatement(ImageJMacroParser.WithStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchStatement(ImageJMacroParser.SwitchStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchStatement(ImageJMacroParser.SwitchStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCaseBlock(ImageJMacroParser.CaseBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCaseBlock(ImageJMacroParser.CaseBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCaseClauses(ImageJMacroParser.CaseClausesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCaseClauses(ImageJMacroParser.CaseClausesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCaseClause(ImageJMacroParser.CaseClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCaseClause(ImageJMacroParser.CaseClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDefaultClause(ImageJMacroParser.DefaultClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDefaultClause(ImageJMacroParser.DefaultClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLabelledStatement(ImageJMacroParser.LabelledStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -527,66 +347,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLabelledStatement(ImageJMacroParser.LabelledStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterThrowStatement(ImageJMacroParser.ThrowStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitThrowStatement(ImageJMacroParser.ThrowStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTryStatement(ImageJMacroParser.TryStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTryStatement(ImageJMacroParser.TryStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCatchProduction(ImageJMacroParser.CatchProductionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCatchProduction(ImageJMacroParser.CatchProductionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFinallyProduction(ImageJMacroParser.FinallyProductionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFinallyProduction(ImageJMacroParser.FinallyProductionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDebuggerStatement(ImageJMacroParser.DebuggerStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDebuggerStatement(ImageJMacroParser.DebuggerStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -676,78 +436,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectLiteral(ImageJMacroParser.ObjectLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitObjectLiteral(ImageJMacroParser.ObjectLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyNameAndValueList(ImageJMacroParser.PropertyNameAndValueListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyNameAndValueList(ImageJMacroParser.PropertyNameAndValueListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyExpressionAssignment(ImageJMacroParser.PropertyExpressionAssignmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyExpressionAssignment(ImageJMacroParser.PropertyExpressionAssignmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyGetter(ImageJMacroParser.PropertyGetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyGetter(ImageJMacroParser.PropertyGetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertySetter(ImageJMacroParser.PropertySetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertySetter(ImageJMacroParser.PropertySetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyName(ImageJMacroParser.PropertyNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyName(ImageJMacroParser.PropertyNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPropertySetParameterList(ImageJMacroParser.PropertySetParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -832,30 +520,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectLiteralExpression(ImageJMacroParser.ObjectLiteralExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitObjectLiteralExpression(ImageJMacroParser.ObjectLiteralExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInExpression(ImageJMacroParser.InExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInExpression(ImageJMacroParser.InExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLogicalOrExpression(ImageJMacroParser.LogicalOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -899,18 +563,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArgumentsExpression(ImageJMacroParser.ArgumentsExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterThisExpression(ImageJMacroParser.ThisExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitThisExpression(ImageJMacroParser.ThisExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -964,30 +616,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeofExpression(ImageJMacroParser.TypeofExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypeofExpression(ImageJMacroParser.TypeofExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInstanceofExpression(ImageJMacroParser.InstanceofExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInstanceofExpression(ImageJMacroParser.InstanceofExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterUnaryPlusExpression(ImageJMacroParser.UnaryPlusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -995,18 +623,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnaryPlusExpression(ImageJMacroParser.UnaryPlusExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeleteExpression(ImageJMacroParser.DeleteExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeleteExpression(ImageJMacroParser.DeleteExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1132,18 +748,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNewExpression(ImageJMacroParser.NewExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNewExpression(ImageJMacroParser.NewExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLiteralExpression(ImageJMacroParser.LiteralExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1240,18 +844,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVoidExpression(ImageJMacroParser.VoidExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVoidExpression(ImageJMacroParser.VoidExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAssignmentOperator(ImageJMacroParser.AssignmentOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1319,42 +911,6 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitKeyword(ImageJMacroParser.KeywordContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFutureReservedWord(ImageJMacroParser.FutureReservedWordContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFutureReservedWord(ImageJMacroParser.FutureReservedWordContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGetter(ImageJMacroParser.GetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGetter(ImageJMacroParser.GetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSetter(ImageJMacroParser.SetterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSetter(ImageJMacroParser.SetterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

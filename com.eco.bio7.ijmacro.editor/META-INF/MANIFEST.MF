@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.12.0",
  com.eco.bio7.image
 Eclipse-LazyStart: true
-Import-Package: org.eclipse.ui.views.contentoutline
+Import-Package: com.eco.bio7.reditor.antlr,
+ org.eclipse.ui.views.contentoutline
 Export-Package: com.eco.bio7.ijmacro.editor,
  com.eco.bio7.ijmacro.editor.actions,
  com.eco.bio7.ijmacro.editor.preferences,

@@ -1,5 +1,7 @@
 /*
- * ImageJ Macro grammar derived from ECMA grammar (see License information below).
+ * ImageJ Macro grammar derived from the ECMA grammar by Bart Kiers (see License information below).
+ * Author: Marcel Austenfeld
+ * Year: 2017
  * 
  * The MIT License (MIT)
  *
@@ -159,9 +161,7 @@ grammar ImageJMacro;
 
     switch (this.lastToken.getType()) {
         case Identifier:
-        case NullLiteral:
         case BooleanLiteral:
-        case This:
         case CloseBracket:
         case CloseParen:
         case OctalIntegerLiteral:
@@ -224,15 +224,9 @@ statement
  | expressionStatement	#expressionStatements
  | ifStatement			#ifStatements
  | iterationStatement	#iterationStatements
- | continueStatement	#continueStatements
  | breakStatement		#breakStatements
  | returnStatement		#returnStatements
- | withStatement		#withStatements
  | labelledStatement	#labelledStatements
- | switchStatement		#switchStatements
- | throwStatement		#throwStatements
- | tryStatement			#tryStatements
- | debuggerStatement	#debuggerStatements
  ;
 
 /// Block :
@@ -304,16 +298,8 @@ iterationStatement
  | While '(' expressionSequence ')' statement                                                        # WhileStatement
  | For '(' expressionSequence? ';' expressionSequence? ';' expressionSequence? ')' statement         # ForStatement
  | For '(' Var variableDeclarationList ';' expressionSequence? ';' expressionSequence? ')' statement # ForVarStatement
- | For '(' singleExpression In expressionSequence ')' statement                                      # ForInStatement
- | For '(' Var variableDeclaration In expressionSequence ')' statement                               # ForVarInStatement
  ;
 
-/// ContinueStatement :
-///     continue ;
-///     continue [no LineTerminator here] Identifier ;
-continueStatement
- : Continue ({!here(LineTerminator)}? Identifier)? eos
- ;
 
 /// BreakStatement :
 ///     break ;
@@ -329,43 +315,7 @@ returnStatement
  : Return ({!here(LineTerminator)}? expressionSequence)? eos
  ;
 
-/// WithStatement :
-///     with ( Expression ) Statement
-withStatement
- : With '(' expressionSequence ')' statement
- ;
 
-/// SwitchStatement :
-///     switch ( Expression ) CaseBlock
-switchStatement
- : Switch '(' expressionSequence ')' caseBlock
- ;
-
-/// CaseBlock :
-///     { CaseClauses? }
-///     { CaseClauses? DefaultClause CaseClauses? }
-caseBlock
- : '{' caseClauses? ( defaultClause caseClauses? )? '}'
- ;
-
-/// CaseClauses :
-///     CaseClause
-///     CaseClauses CaseClause
-caseClauses
- : caseClause+
- ;
-
-/// CaseClause :
-///     case Expression ':' StatementList?
-caseClause
- : Case expressionSequence ':' statementList?
- ;
-
-/// DefaultClause :
-///     default ':' StatementList?
-defaultClause
- : Default ':' statementList?
- ;
 
 /// LabelledStatement :
 ///     Identifier ':' Statement
@@ -373,39 +323,6 @@ labelledStatement
  : Identifier ':' statement
  ;
 
-/// ThrowStatement :
-///     throw [no LineTerminator here] Expression ;
-throwStatement
- : Throw {!here(LineTerminator)}? expressionSequence eos
- ;
-
-/// TryStatement :
-///     try Block Catch
-///     try Block Finally
-///     try Block Catch Finally
-tryStatement
- : Try block catchProduction
- | Try block finallyProduction
- | Try block catchProduction finallyProduction
- ;
-
-/// Catch :
-///     catch ( Identifier ) Block
-catchProduction
- : Catch '(' Identifier ')' block
- ;
-
-/// Finally :
-///     finally Block
-finallyProduction
- : Finally block
- ;
-
-/// DebuggerStatement :
-///     debugger ;
-debuggerStatement
- : Debugger eos
- ;
 
 /// FunctionDeclaration :
 ///     function Identifier ( FormalParameterList? ) { FunctionBody }
@@ -452,41 +369,6 @@ elision
  : ','+
  ;
 
-/// ObjectLiteral :
-///     { }
-///     { PropertyNameAndValueList }
-///     { PropertyNameAndValueList , }
-objectLiteral
- : '{' '}'
- | '{' propertyNameAndValueList ','? '}'
- ;
-
-/// PropertyNameAndValueList :
-///     PropertyAssignment
-///     PropertyNameAndValueList , PropertyAssignment
-propertyNameAndValueList
- : propertyAssignment ( ',' propertyAssignment )*
- ;
-    
-/// PropertyAssignment :
-///     PropertyName : AssignmentExpression
-///     get PropertyName ( ) { FunctionBody }
-///     set PropertyName ( PropertySetParameterList ) { FunctionBody }
-propertyAssignment
- : propertyName ':' singleExpression                            # PropertyExpressionAssignment
- | getter '(' ')' '{' functionBody '}'                          # PropertyGetter
- | setter '(' propertySetParameterList ')' '{' functionBody '}' # PropertySetter
- ;           
-    
-/// PropertyName :
-///     IdentifierName
-///     StringLiteral
-///     NumericLiteral
-propertyName
- : identifierName
- | StringLiteral
- | numericLiteral
- ;
     
 /// PropertySetParameterList :
 ///     Identifier
@@ -633,12 +515,8 @@ singleExpression
  | singleExpression '[' expressionSequence ']'                            # MemberIndexExpression
  | singleExpression '.' identifierName                                    # MemberDotExpression
  | singleExpression arguments                                             # ArgumentsExpression
- | New singleExpression arguments?                                        # NewExpression
  | singleExpression {!here(LineTerminator)}? PlusPlus                     # PostIncrementExpression
  | singleExpression {!here(LineTerminator)}? MinusMinus                   # PostDecreaseExpression
- | Delete singleExpression                                                # DeleteExpression
- | Void singleExpression                                                  # VoidExpression
- | Typeof singleExpression                                                # TypeofExpression
  | PlusPlus singleExpression                                              # PreIncrementExpression
  | MinusMinus singleExpression                                            # PreDecreaseExpression
  | '+' singleExpression                                                   # UnaryPlusExpression
@@ -647,11 +525,9 @@ singleExpression
  | '!' singleExpression                                                   # NotExpression
  | singleExpression ( '*' | '/' | '%' ) singleExpression                  # MultiplicativeExpression
  | singleExpression ( '+' | '-' ) singleExpression                        # AdditiveExpression
- | singleExpression ( '<<' | '>>' | '>>>' ) singleExpression              # BitShiftExpression
+ | singleExpression ( '<<' | '>>') singleExpression                       # BitShiftExpression
  | singleExpression ( '<' | '>' | '<=' | '>=' ) singleExpression          # RelationalExpression
- | singleExpression Instanceof singleExpression                           # InstanceofExpression
- | singleExpression In singleExpression                                   # InExpression
- | singleExpression ( '==' | '!=' | '===' | '!==' ) singleExpression      # EqualityExpression
+ | singleExpression ( '==' | '!=' | '!==' ) singleExpression              # EqualityExpression
  | singleExpression '&' singleExpression                                  # BitAndExpression
  | singleExpression '^' singleExpression                                  # BitXOrExpression
  | singleExpression '|' singleExpression                                  # BitOrExpression
@@ -660,11 +536,9 @@ singleExpression
  | singleExpression '?' singleExpression ':' singleExpression             # TernaryExpression
  | singleExpression '=' singleExpression                                  # AssignmentExpression
  | singleExpression assignmentOperator singleExpression                   # AssignmentOperatorExpression
- | This                                                                   # ThisExpression
  | Identifier                                                             # IdentifierExpression
  | literal                                                                # LiteralExpression
  | arrayLiteral                                                           # ArrayLiteralExpression
- | objectLiteral                                                          # ObjectLiteralExpression
  | '(' expressionSequence ')'                                             # ParenthesizedExpression
  ;
 
@@ -672,21 +546,13 @@ singleExpression
 ///     *=	/=	%=	+=	-=	<<=	>>=	>>>=	&=	^=	|=
 assignmentOperator
  : '*=' 
- | '/=' 
- | '%=' 
+ | '/='  
  | '+=' 
  | '-=' 
- | '<<=' 
- | '>>=' 
- | '>>>=' 
- | '&=' 
- | '^=' 
- | '|='
  ;
 
 literal
- : ( NullLiteral 
-   | BooleanLiteral
+ : (BooleanLiteral
    | StringLiteral
    | RegularExpressionLiteral
    )
@@ -706,68 +572,28 @@ identifierName
 
 reservedWord
  : keyword
- | futureReservedWord
- | ( NullLiteral
-   | BooleanLiteral
-   )
+ | BooleanLiteral
  ;
 
 keyword
  : Break
  | Do
- | Instanceof
- | Typeof
- | Case
  | Else
- | New
  | Var
  | Macro
- | Catch
- | Finally
  | Return
- | Void
  | Continue
  | For
- | Switch
  | While
- | Debugger
  | Function
- | This
- | With
- | Default
  | If
- | Throw
- | Delete
- | In
- | Try
+// | True	   
+// | False		
+ //| Pi			
+ //| Nan
  ;
 
-futureReservedWord
- : Class
- | Enum
- | Extends
- | Super
- | Const
- | Export
- | Import
- | Implements
- | Let
- | Private
- | Public
- | Interface
- | Package
- | Protected
- | Static
- | Yield
- ;
 
-getter
- : {_input.LT(1).getText().equals("get")}? Identifier propertyName
- ;
-
-setter
- : {_input.LT(1).getText().equals("set")}? Identifier propertyName
- ;
 
 eos
  : SemiColon
@@ -802,7 +628,6 @@ SemiColon                  : ';';
 Comma                      : ',';
 Assign                     : '=';
 QuestionMark               : '?';
-Colon                      : ':';
 Dot                        : '.';
 PlusPlus                   : '++';
 MinusMinus                 : '--';
@@ -815,36 +640,23 @@ Divide                     : '/';
 Modulus                    : '%';
 RightShiftArithmetic       : '>>';
 LeftShiftArithmetic        : '<<';
-RightShiftLogical          : '>>>';
 LessThan                   : '<';
 MoreThan                   : '>';
 LessThanEquals             : '<=';
 GreaterThanEquals          : '>=';
 Equals                     : '==';
 NotEquals                  : '!=';
-IdentityEquals             : '===';
-IdentityNotEquals          : '!==';
 BitAnd                     : '&';
 BitXOr                     : '^';
 BitOr                      : '|';
 And                        : '&&';
 Or                         : '||';
 MultiplyAssign             : '*=';
-DivideAssign               : '/='; 
-ModulusAssign              : '%='; 
+DivideAssign               : '/=';  
 PlusAssign                 : '+='; 
 MinusAssign                : '-='; 
-LeftShiftArithmeticAssign  : '<<='; 
-RightShiftArithmeticAssign : '>>='; 
-RightShiftLogicalAssign    : '>>>='; 
-BitAndAssign               : '&='; 
-BitXorAssign               : '^='; 
-BitOrAssign                : '|=';
 
-/// 7.8.1 Null Literals
-NullLiteral
- : 'null'
- ;
+
 
 /// 7.8.2 Boolean Literals
 BooleanLiteral
@@ -872,51 +684,21 @@ OctalIntegerLiteral
 Macro      : 'macro';
 Break      : 'break';
 Do         : 'do';
-Instanceof : 'instanceof';
-Typeof     : 'typeof';
-Case       : 'case';
 Else       : 'else';
-New        : 'new';
 Var        : 'var';
-Catch      : 'catch';
-Finally    : 'finally';
 Return     : 'return';
-Void       : 'void';
 Continue   : 'continue';
 For        : 'for';
-Switch     : 'switch';
 While      : 'while';
-Debugger   : 'debugger';
 Function   : 'function';
-This       : 'this';
 With       : 'with';
-Default    : 'default';
 If         : 'if';
-Throw      : 'throw';
-Delete     : 'delete';
-In         : 'in';
-Try        : 'try';
+//True	   : 'true';
+//False	   : 'false';
+//Pi	       : 'PI';
+//Nan	       : 'NaN';
 
-/// 7.6.1.2 Future Reserved Words
-Class   : 'class';
-Enum    : 'enum';
-Extends : 'extends';
-Super   : 'super';
-Const   : 'const';
-Export  : 'export';
-Import  : 'import';
 
-/// The following tokens are also considered to be FutureReservedWords 
-/// when parsing strict mode  
-Implements : {strictMode}? 'implements';
-Let        : {strictMode}? 'let';
-Private    : {strictMode}? 'private';
-Public     : {strictMode}? 'public';
-Interface  : {strictMode}? 'interface';
-Package    : {strictMode}? 'package';
-Protected  : {strictMode}? 'protected';
-Static     : {strictMode}? 'static';
-Yield      : {strictMode}? 'yield';
 
 /// 7.6 Identifier Names and Identifiers
 Identifier

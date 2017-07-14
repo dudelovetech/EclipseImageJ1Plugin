@@ -77,6 +77,42 @@
   </themeElementCategory>
  </extension>
  <extension
+    id="com.eco.bio7.ijmacroeditor.wordmarker"
+    name="IJ Macro Editor Word"
+    point="org.eclipse.core.resources.markers">
+  <super
+    type="org.eclipse.core.resources.textmarker">
+  </super>
+</extension>
+ <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="com.eco.bio7.ijmacroeditor.wordmarker"
+            name="com.eco.bio7.ijmacroeditor.wordmarker">
+      </type>
+   </extension>
+ <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="com.eco.bio7.ijmacroeditor.wordmarker"
+            colorPreferenceKey="com.eco.bio7.ijmacroeditor.wordmarker.color"
+            colorPreferenceValue="212,212,212"
+            contributesToHeader="false"
+            highlightPreferenceKey="com.eco.bio7.ijmacroeditor.wordmarker.highlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="IJ Macro Editor Word Marker"
+            overviewRulerPreferenceKey="com.eco.bio7.ijmacroeditor.wordmarker.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="com.eco.bio7.ijmacroeditor.wordmarker.text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="com.eco.bio7.ijmacroeditor.wordmarker.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+ <extension
          point="org.eclipse.ui.handlers">
          <handler
             class="com.eco.bio7.ijmacro.editor.actions.debug.DebugHandler"

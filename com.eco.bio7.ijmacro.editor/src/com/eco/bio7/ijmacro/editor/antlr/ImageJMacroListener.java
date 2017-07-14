@@ -110,18 +110,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitIterationStatements(ImageJMacroParser.IterationStatementsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code continueStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterContinueStatements(ImageJMacroParser.ContinueStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code continueStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitContinueStatements(ImageJMacroParser.ContinueStatementsContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code breakStatements}
 	 * labeled alternative in {@link ImageJMacroParser#statement}.
 	 * @param ctx the parse tree
@@ -146,18 +134,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitReturnStatements(ImageJMacroParser.ReturnStatementsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code withStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterWithStatements(ImageJMacroParser.WithStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code withStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitWithStatements(ImageJMacroParser.WithStatementsContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code labelledStatements}
 	 * labeled alternative in {@link ImageJMacroParser#statement}.
 	 * @param ctx the parse tree
@@ -169,54 +145,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLabelledStatements(ImageJMacroParser.LabelledStatementsContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code switchStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterSwitchStatements(ImageJMacroParser.SwitchStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code switchStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitSwitchStatements(ImageJMacroParser.SwitchStatementsContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code throwStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterThrowStatements(ImageJMacroParser.ThrowStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code throwStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitThrowStatements(ImageJMacroParser.ThrowStatementsContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code tryStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterTryStatements(ImageJMacroParser.TryStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code tryStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitTryStatements(ImageJMacroParser.TryStatementsContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code debuggerStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterDebuggerStatements(ImageJMacroParser.DebuggerStatementsContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code debuggerStatements}
-	 * labeled alternative in {@link ImageJMacroParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitDebuggerStatements(ImageJMacroParser.DebuggerStatementsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#block}.
 	 * @param ctx the parse tree
@@ -360,40 +288,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitForVarStatement(ImageJMacroParser.ForVarStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ForInStatement}
-	 * labeled alternative in {@link ImageJMacroParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterForInStatement(ImageJMacroParser.ForInStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ForInStatement}
-	 * labeled alternative in {@link ImageJMacroParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitForInStatement(ImageJMacroParser.ForInStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ForVarInStatement}
-	 * labeled alternative in {@link ImageJMacroParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterForVarInStatement(ImageJMacroParser.ForVarInStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ForVarInStatement}
-	 * labeled alternative in {@link ImageJMacroParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitForVarInStatement(ImageJMacroParser.ForVarInStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#continueStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterContinueStatement(ImageJMacroParser.ContinueStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#continueStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitContinueStatement(ImageJMacroParser.ContinueStatementContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#breakStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -414,66 +308,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitReturnStatement(ImageJMacroParser.ReturnStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#withStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterWithStatement(ImageJMacroParser.WithStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#withStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitWithStatement(ImageJMacroParser.WithStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#switchStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterSwitchStatement(ImageJMacroParser.SwitchStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#switchStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitSwitchStatement(ImageJMacroParser.SwitchStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#caseBlock}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaseBlock(ImageJMacroParser.CaseBlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#caseBlock}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaseBlock(ImageJMacroParser.CaseBlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#caseClauses}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaseClauses(ImageJMacroParser.CaseClausesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#caseClauses}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaseClauses(ImageJMacroParser.CaseClausesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#caseClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaseClause(ImageJMacroParser.CaseClauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#caseClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaseClause(ImageJMacroParser.CaseClauseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#defaultClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterDefaultClause(ImageJMacroParser.DefaultClauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#defaultClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitDefaultClause(ImageJMacroParser.DefaultClauseContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#labelledStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -483,56 +317,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLabelledStatement(ImageJMacroParser.LabelledStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#throwStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterThrowStatement(ImageJMacroParser.ThrowStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#throwStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitThrowStatement(ImageJMacroParser.ThrowStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#tryStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterTryStatement(ImageJMacroParser.TryStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#tryStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitTryStatement(ImageJMacroParser.TryStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#catchProduction}.
-	 * @param ctx the parse tree
-	 */
-	void enterCatchProduction(ImageJMacroParser.CatchProductionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#catchProduction}.
-	 * @param ctx the parse tree
-	 */
-	void exitCatchProduction(ImageJMacroParser.CatchProductionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#finallyProduction}.
-	 * @param ctx the parse tree
-	 */
-	void enterFinallyProduction(ImageJMacroParser.FinallyProductionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#finallyProduction}.
-	 * @param ctx the parse tree
-	 */
-	void exitFinallyProduction(ImageJMacroParser.FinallyProductionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#debuggerStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterDebuggerStatement(ImageJMacroParser.DebuggerStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#debuggerStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitDebuggerStatement(ImageJMacroParser.DebuggerStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#functionDeclaration}.
 	 * @param ctx the parse tree
@@ -603,72 +387,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitElision(ImageJMacroParser.ElisionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#objectLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void enterObjectLiteral(ImageJMacroParser.ObjectLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#objectLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void exitObjectLiteral(ImageJMacroParser.ObjectLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#propertyNameAndValueList}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertyNameAndValueList(ImageJMacroParser.PropertyNameAndValueListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#propertyNameAndValueList}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertyNameAndValueList(ImageJMacroParser.PropertyNameAndValueListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code PropertyExpressionAssignment}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertyExpressionAssignment(ImageJMacroParser.PropertyExpressionAssignmentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code PropertyExpressionAssignment}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertyExpressionAssignment(ImageJMacroParser.PropertyExpressionAssignmentContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code PropertyGetter}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertyGetter(ImageJMacroParser.PropertyGetterContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code PropertyGetter}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertyGetter(ImageJMacroParser.PropertyGetterContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code PropertySetter}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertySetter(ImageJMacroParser.PropertySetterContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code PropertySetter}
-	 * labeled alternative in {@link ImageJMacroParser#propertyAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertySetter(ImageJMacroParser.PropertySetterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#propertyName}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertyName(ImageJMacroParser.PropertyNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#propertyName}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertyName(ImageJMacroParser.PropertyNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#propertySetParameterList}.
 	 * @param ctx the parse tree
@@ -746,30 +464,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitPreIncrementExpression(ImageJMacroParser.PreIncrementExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ObjectLiteralExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterObjectLiteralExpression(ImageJMacroParser.ObjectLiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ObjectLiteralExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitObjectLiteralExpression(ImageJMacroParser.ObjectLiteralExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code InExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInExpression(ImageJMacroParser.InExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code InExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInExpression(ImageJMacroParser.InExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code LogicalOrExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
 	 * @param ctx the parse tree
@@ -817,18 +511,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArgumentsExpression(ImageJMacroParser.ArgumentsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterThisExpression(ImageJMacroParser.ThisExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitThisExpression(ImageJMacroParser.ThisExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FunctionExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
@@ -878,30 +560,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitPostDecreaseExpression(ImageJMacroParser.PostDecreaseExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code TypeofExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterTypeofExpression(ImageJMacroParser.TypeofExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code TypeofExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitTypeofExpression(ImageJMacroParser.TypeofExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code InstanceofExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInstanceofExpression(ImageJMacroParser.InstanceofExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code InstanceofExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInstanceofExpression(ImageJMacroParser.InstanceofExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code UnaryPlusExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
 	 * @param ctx the parse tree
@@ -913,18 +571,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryPlusExpression(ImageJMacroParser.UnaryPlusExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DeleteExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeleteExpression(ImageJMacroParser.DeleteExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DeleteExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeleteExpression(ImageJMacroParser.DeleteExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EqualityExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
@@ -1046,18 +692,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitBitNotExpression(ImageJMacroParser.BitNotExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NewExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNewExpression(ImageJMacroParser.NewExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NewExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNewExpression(ImageJMacroParser.NewExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code LiteralExpression}
 	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
 	 * @param ctx the parse tree
@@ -1154,18 +788,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitAssignmentOperatorExpression(ImageJMacroParser.AssignmentOperatorExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VoidExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterVoidExpression(ImageJMacroParser.VoidExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code VoidExpression}
-	 * labeled alternative in {@link ImageJMacroParser#singleExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitVoidExpression(ImageJMacroParser.VoidExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#assignmentOperator}.
 	 * @param ctx the parse tree
 	 */
@@ -1225,36 +847,6 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitKeyword(ImageJMacroParser.KeywordContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#futureReservedWord}.
-	 * @param ctx the parse tree
-	 */
-	void enterFutureReservedWord(ImageJMacroParser.FutureReservedWordContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#futureReservedWord}.
-	 * @param ctx the parse tree
-	 */
-	void exitFutureReservedWord(ImageJMacroParser.FutureReservedWordContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#getter}.
-	 * @param ctx the parse tree
-	 */
-	void enterGetter(ImageJMacroParser.GetterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#getter}.
-	 * @param ctx the parse tree
-	 */
-	void exitGetter(ImageJMacroParser.GetterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImageJMacroParser#setter}.
-	 * @param ctx the parse tree
-	 */
-	void enterSetter(ImageJMacroParser.SetterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImageJMacroParser#setter}.
-	 * @param ctx the parse tree
-	 */
-	void exitSetter(ImageJMacroParser.SetterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#eos}.
 	 * @param ctx the parse tree

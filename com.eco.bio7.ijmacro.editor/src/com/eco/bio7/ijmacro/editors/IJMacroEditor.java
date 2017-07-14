@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -29,6 +30,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextAttribute;
@@ -48,6 +50,10 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
@@ -80,6 +86,7 @@ import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterAction;
 import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterSelectAction;
 import com.eco.bio7.ijmacro.editor.actions.SetComment;
 import com.eco.bio7.ijmacro.editor.actions.UnsetComment;
+import com.eco.bio7.ijmacro.editor.antlr.WordMarkerCreation;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
@@ -169,6 +176,46 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		viewer.doOperation(ProjectionViewer.TOGGLE);
 
 		annotationModel = viewer.getProjectionAnnotationModel();
+		IEditorPart editor = this;
+		final ITextEditor textEditor = (ITextEditor) editor;
+		if (editor instanceof IJMacroEditor) {
+
+			((StyledText) editor.getAdapter(Control.class)).addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+
+				}
+
+				@Override
+				public void mouseDown(MouseEvent e) {
+					IDocumentProvider prov = textEditor.getDocumentProvider();
+					IEditorInput inp = editor.getEditorInput();
+					if (prov != null) {
+						IDocument document = prov.getDocument(inp);
+						if (document != null) {
+
+							ITextSelection textSelection = (ITextSelection) editor.getSite().getSelectionProvider()
+									.getSelection();
+							int offset = textSelection.getOffset();
+							// if (store.getBoolean("MARK_WORDS")) {
+							markWords(offset, document, editor);
+							// }
+
+						}
+
+					}
+
+				}
+
+				@Override
+				public void mouseUp(MouseEvent e) {
+
+				}
+
+			});
+
+		}
 	}
 
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
@@ -197,11 +244,34 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	public IJMacroEditor() {
 		super();
 		/*
-		 * Add a new key binding scope for this editor Don't forget to set the 'symbolicFontName' extension attribute in 'org.eclipse.ui.editors'!
+		 * Add a new key binding scope for this editor Don't forget to set the
+		 * 'symbolicFontName' extension attribute in 'org.eclipse.ui.editors'!
 		 */
 		setKeyBindingScopes(new String[] { "com.eco.bio7.ijmacro.editor.scope" });
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager, this));
+
+	}
+
+	/*
+	 * Here we search for similar words of a selected word in the editor. The
+	 * results will be marked!
+	 */
+	public void markWords(int offset, IDocument doc, IEditorPart editor) {
+
+		WordMarkerCreation markerJob = new WordMarkerCreation(offset, editor, doc);
+
+		markerJob.addJobChangeListener(new JobChangeAdapter() {
+			public void done(IJobChangeEvent event) {
+				if (event.getResult().isOK()) {
+
+				} else {
+
+				}
+			}
+		});
+		markerJob.setUser(true);
+		markerJob.schedule();
 
 	}
 
@@ -608,7 +678,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		int start = getSelectionStart();
 		int end = getSelectionEnd();
-		//System.out.println(start + " " + end);
+		// System.out.println(start + " " + end);
 		if (end > start) {
 			runMacro(false);
 			return;
@@ -628,7 +698,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		}
 		// setSelectionStart(start);
 		// setSelectionEnd(end);
-		//System.out.println(start + " " + end);
+		// System.out.println(start + " " + end);
 		select(IJMacroEditor.this, debugStart, debugEnd);
 		runMacro(false);
 	}
@@ -671,7 +741,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			IJ.beep();
 		else {
 			runToLine = getCurrentLine(IJMacroEditor.this);
-			//System.out.println("current Line: " + runToLine);
+			// System.out.println("current Line: " + runToLine);
 			setDebugMode(RUN_TO_CARET);
 		}
 	}
