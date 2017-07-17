@@ -28,5 +28,21 @@ public class JSBeautifierOptions {
 	public boolean keep_array_indentation = false;
 	public boolean space_before_conditional = true;
 	public boolean unescape_strings = false;
+	
+   /*Added for the ImageJ macro preferences!*/
+	public void setValues(String options) {
+		String[] opts = options.split(",");
+		brace_style = Integer.parseInt(opts[0]);
+		indent_size = Integer.parseInt(opts[1]);
+		indent_char = opts[2];
+		preserve_newlines = Boolean.parseBoolean(opts[3]);
+		break_chained_methods = Boolean.parseBoolean(opts[4]);
+		max_preserve_newlines = Integer.parseInt(opts[5]);
+		jslint_happy = Boolean.parseBoolean(opts[6]);
+		keep_array_indentation = Boolean.parseBoolean(opts[7]);
+		space_before_conditional = Boolean.parseBoolean(opts[8]);
+		unescape_strings = Boolean.parseBoolean(opts[9]);
+
+	}
 
 }

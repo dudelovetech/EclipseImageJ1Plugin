@@ -34,13 +34,19 @@
             category="com.eco.bio7.preferences.Bio7PreferencePage"
             class="com.eco.bio7.ijmacro.editor.preferences.TemplatesPreferencePage"
             id="org.eclipse.ui.examples.templateeditor.preferencepage"
-            name="%xml.editor.preferencePage.label">
+            name="Preferences ImageJ Macro Editor Templates">
       </page>
       <page
             category="com.eco.bio7.preferences.Bio7PreferencePage"
             class="com.eco.bio7.ijmacro.editor.preferences.WorkbenchPreferenceijmacro"
             id="prefijmacroeditor"
             name="Preferences ImageJ Macro Editor"/>
+      <page
+            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            class="com.eco.bio7.ijmacro.editor.preferences.PreferencesCode"
+            id="com.eco.bio7.ijmacro.editor.code"
+            name="Preferences ImageJ Macro Code">
+      </page>
    </extension>
 
    <extension

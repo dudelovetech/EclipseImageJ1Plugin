@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.eco.bio7.ijmacro.editors;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
@@ -26,7 +27,6 @@ import org.eclipse.jface.text.reconciler.MonoReconciler;
 import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
-import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
@@ -40,10 +40,12 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 	private ColorManager colorManager;
 	private ScriptColorProvider provider;
 	private IJMacroEditor editor;
+	private IPreferenceStore store;
 
-	public IJMacroConfiguration(ColorManager colorManager,IJMacroEditor editor) {
+	public IJMacroConfiguration(ColorManager colorManager, IJMacroEditor editor) {
 		this.colorManager = colorManager;
-		this.editor=editor;
+		this.editor = editor;
+		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 
 	}
 
@@ -53,8 +55,7 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		}
 	}
 
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-			ISourceViewer sourceViewer, String contentType) {
+	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer, String contentType) {
 		return new ScriptDoubleClickSelector();
 	}
 
@@ -63,7 +64,9 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 	 * closing a brace!
 	 */
 	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-		IAutoEditStrategy strategy = (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new IJMacroEditorEditStrategy() : new DefaultIndentLineAutoEditStrategy());
+		IAutoEditStrategy strategy = (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType)
+				? new IJMacroEditorEditStrategy()
+				: new DefaultIndentLineAutoEditStrategy());
 		return new IAutoEditStrategy[] { strategy };
 	}
 
@@ -71,8 +74,7 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		return IJMacroEditorPlugin.SCRIPT_PARTITIONING;
 	}
 
-	public String[] getIndentPrefixes(ISourceViewer sourceViewer,
-			String contentType) {
+	public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
 		return new String[] { "\t", "    " }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -80,17 +82,15 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		return 4;
 	}
 
-	public String getDefaultPrefix(ISourceViewer sourceViewer,
-			String contentType) {
+	public String getDefaultPrefix(ISourceViewer sourceViewer, String contentType) {
 		return (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? "//" : null); //$NON-NLS-1$
 	}
 
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
-				ScriptPartitionScanner.SCRIPT_DOC,
+		return new String[] { IDocument.DEFAULT_CONTENT_TYPE, ScriptPartitionScanner.SCRIPT_DOC,
 				ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT };
 	}
-	
+
 	public IReconciler getReconciler(ISourceViewer sourceViewer) {
 		IJMacroReconcilingStrategy strategy = new IJMacroReconcilingStrategy();
 		strategy.setEditor(editor);
@@ -100,27 +100,21 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		return reconciler;
 	}
 
-	public IPresentationReconciler getPresentationReconciler(
-			ISourceViewer sourceViewer) {
-		ScriptColorProvider provider = IJMacroEditorPlugin.getDefault()
-				.getScriptColorProvider();
+	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+		ScriptColorProvider provider = IJMacroEditorPlugin.getDefault().getScriptColorProvider();
 		PresentationReconciler reconciler = new PresentationReconciler();
-		reconciler
-				.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+		reconciler.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(
-				IJMacroEditorPlugin.getDefault().getScriptCodeScanner());
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(IJMacroEditorPlugin.getDefault().getScriptCodeScanner());
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
-		dr = new DefaultDamagerRepairer(IJMacroEditorPlugin.getDefault()
-				.getScriptPartitionScanner());
+		dr = new DefaultDamagerRepairer(IJMacroEditorPlugin.getDefault().getScriptPartitionScanner());
 		reconciler.setDamager(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 
-		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
-				new TextAttribute(provider
-						.getColor(ScriptColorProvider.MULTI_LINE_COMMENT))));
+		dr = new DefaultDamagerRepairer(
+				new SingleTokenScanner(new TextAttribute(provider.getColor(ScriptColorProvider.MULTI_LINE_COMMENT))));
 
 		reconciler.setDamager(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
@@ -130,29 +124,28 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 
 	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 		ContentAssistant assistant = new ContentAssistant();
-		assistant
-				.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+		assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
 		IContentAssistProcessor processor = new IJMacroCompletionProcessor();
-		assistant.setContentAssistProcessor(processor,
-				IDocument.DEFAULT_CONTENT_TYPE);
+		assistant.setContentAssistProcessor(processor, IDocument.DEFAULT_CONTENT_TYPE);
 		assistant.enableAutoActivation(true);
-		assistant.setAutoActivationDelay(500);
+		assistant.setAutoActivationDelay(200);
 
-		assistant
-				.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
-		assistant
-				.setInformationControlCreator(getInformationControlCreator(sourceViewer));
+		assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+		assistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
 
 		return assistant;
 	}
-	
+
 	@Override
 	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+		if (store.getBoolean("SHOW_INFOPOPUP")) {
 
-		
 			return new IJMacroEditorTextHover(editor);
-		
+		} else {
+			return null;
+		}
+
 	}
 
 }

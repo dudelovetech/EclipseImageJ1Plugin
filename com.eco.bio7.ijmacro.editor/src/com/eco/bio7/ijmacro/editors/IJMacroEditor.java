@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -73,7 +72,6 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction;
 import com.eco.bio7.ijmacro.editor.actions.OpenPreferences;
@@ -153,10 +151,13 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	private ProjectionAnnotationModel annotationModel;
 
+	private IPreferenceStore store;
+
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,
 		// "com.eco.bio7.beanshell");
+		 store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 		viewer = (ProjectionViewer) getSourceViewer();
 
@@ -189,9 +190,9 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 							ITextSelection textSelection = (ITextSelection) editor.getSite().getSelectionProvider()
 									.getSelection();
 							int offset = textSelection.getOffset();
-							// if (store.getBoolean("MARK_WORDS")) {
+							if (store.getBoolean("MARK_WORDS")) {
 							markWords(offset, document, editor);
-							// }
+							}
 
 						}
 

@@ -11,11 +11,15 @@
 package com.eco.bio7.ijmacro.editor.preferences.template;
 
 import org.eclipse.swt.graphics.Image;
+
+import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editors.TemplateEditorUI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.BadLocationException;
@@ -41,6 +45,12 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	private static String[] splitted = IJMacroFunctions.functions.split(System.lineSeparator());
 	private int count = 0;// Variable to count the listed template.
 	private int defaultTemplatesLength;
+	private IPreferenceStore store;
+
+	public IJMacroCompletionProcessor() {
+		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+
+	}
 
 	/**
 	 * We watch for angular brackets since those are often part of XML templates.
@@ -150,7 +160,6 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 
 		}
 
-
 		Collections.sort(matches, fgProposalComparator);
 
 		ICompletionProposal[] pro = (ICompletionProposal[]) matches.toArray(new ICompletionProposal[matches.size()]);
@@ -164,11 +173,22 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	protected Template[] getTemplates(String contextTypeId) {
 		return TemplateEditorUI.getDefault().getTemplateStore().getTemplates();
 	}
-	// add the chars for Completion here !!!
-	/*
-	 * public char[] getCompletionProposalAutoActivationCharacters() { return new
-	 * char[] { 'f','g' }; }
-	 */
+
+	// Add the chars for Completion here !!!
+	public char[] getCompletionProposalAutoActivationCharacters() {
+
+		if (store.getBoolean("TYPED_CODE_COMPLETION")) {
+			String ac = store.getString("ACTIVATION_CHARS");
+			if (ac == null || ac.isEmpty()) {
+
+				return null;
+			}
+			return ac.toCharArray();
+		}
+
+		return null;
+
+	}
 
 	/**
 	 * Return the XML context type that is supported by this plug-in.

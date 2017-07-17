@@ -1,11 +1,13 @@
 package com.eco.bio7.ijmacro.editors;
 
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextUtilities;
+import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 
 public class IJMacroEditorEditStrategy implements IAutoEditStrategy {
 
@@ -13,8 +15,8 @@ public class IJMacroEditorEditStrategy implements IAutoEditStrategy {
 
 	{
 		String indent;
-		//IPreferenceStore store = Bio7REditorPlugin.getDefault().getPreferenceStore();
-		if (true){
+		IPreferenceStore store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+		if (store.getBoolean("IJMACRO_EDITOR_EDIT_INDENT")) {
 			if (command.length == 0 && command.text != null && endsWithDelimiter(document, command.text)) {
 				smartIndentAfterNewLine(document, command);
 			} else if ("}".equals(command.text)) { //$NON-NLS-1$
@@ -24,9 +26,9 @@ public class IJMacroEditorEditStrategy implements IAutoEditStrategy {
 		switch (command.text) {
 
 		case "{":
-			if (true) {
+			if (store.getBoolean("CLOSE_BRACES")) {
 				indent = getOffsetAndIdent(document, command);
-				if (true) {
+				if (store.getBoolean("CLOSE_BRACES_LINEBREAK")) {
 					command.text = "{" + "\r\n" + indent + "}";
 				} else {
 					command.text = "{" + "}";
@@ -35,28 +37,28 @@ public class IJMacroEditorEditStrategy implements IAutoEditStrategy {
 			}
 			break;
 		case "\"":
-			if (true) {
+			if (store.getBoolean("CLOSE_DOUBLE_QUOTE")) {
 				indent = getOffsetAndIdent(document, command);
 				command.text = "\"\"";
 				configureCommand(command);
 			}
 			break;
 		case "'":
-			if (true) {
+			if (store.getBoolean("CLOSE_SINGLEQUOTE")) {
 				indent = getOffsetAndIdent(document, command);
 				command.text = "''";
 				configureCommand(command);
 			}
 			break;
 		case "[":
-			if (true) {
+			if (store.getBoolean("CLOSE_BRACKETS")) {
 				indent = getOffsetAndIdent(document, command);
 				command.text = "[]";
 				configureCommand(command);
 			}
 			break;
 		case "(":
-			if (true) {
+			if (store.getBoolean("CLOSE_PARENTHESES")) {
 				indent = getOffsetAndIdent(document, command);
 				command.text = "()";
 				configureCommand(command);
