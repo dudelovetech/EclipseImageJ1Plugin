@@ -19,7 +19,8 @@ public class ScriptFormatterAction extends Action {
 
 	public ScriptFormatterAction() {
 		super("format");
-		setId("com.eco.bio7.Java_format");
+		setId("com.eco.bio7.ijmacro.format");
+		setActionDefinitionId("com.eco.bio7.interpret.ijmacro.format");
 
 		setText("Format Source");
 	}

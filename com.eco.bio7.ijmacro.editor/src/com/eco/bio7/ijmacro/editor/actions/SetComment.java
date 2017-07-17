@@ -23,7 +23,7 @@ public class SetComment extends Action {
 	public SetComment(String text, IWorkbenchWindow window) {
 		super(text);
 		this.window = window;
-
+		setActionDefinitionId("com.eco.bio7.ijmacro.editor.setblockcomment");
 	}
 
 	public void run() {

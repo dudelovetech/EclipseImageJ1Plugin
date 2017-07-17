@@ -250,6 +250,30 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+-">
     </key>
+    <key
+          commandId="com.eco.bio7.interpret.ijmacro.format"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="SHIFT+F">
+    </key>
+    <key
+          commandId="com.eco.bio7.interpret.ijmacro.select.format"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+F">
+    </key>
+     <key
+          commandId="com.eco.bio7.ijmacro.editor.setblockcomment"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="SHIFT+B">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.unsetblockcomment"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+B">
+    </key>
    
     </extension>
    <extension 
@@ -313,6 +337,31 @@
           description="Zoom out text, decrease default font size for text editors"
           id="com.eco.bio7.ijmacro.editor.actions.text.zoomOut"
           name="Zoom Out">
+    </command>
+    
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Format source"
+          id="com.eco.bio7.interpret.ijmacro.format"
+          name="Format source">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Format selected source"
+          id="com.eco.bio7.interpret.ijmacro.select.format"
+          name="Format selected source">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Add block comment"
+          id="com.eco.bio7.ijmacro.editor.setblockcomment"
+          name="Add block comment">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Remove block comment"
+          id="com.eco.bio7.ijmacro.editor.unsetblockcomment"
+          name="Remove block comment">
     </command>
     <command
           categoryId="org.eclipse.ui.category.textEditor"

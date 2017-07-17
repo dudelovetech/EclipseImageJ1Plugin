@@ -11,7 +11,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifier;
 import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifierOptions;
@@ -20,8 +19,8 @@ public class ScriptFormatterSelectAction extends Action {
 
 	public ScriptFormatterSelectAction() {
 		super("format");
-		setId("com.eco.bio7.Java_format_selected");
-
+		setId("com.eco.bio7.ijmacro.format.selected");
+		setActionDefinitionId("com.eco.bio7.interpret.ijmacro.select.format");
 		setText("Format Selected Source");
 	}
 

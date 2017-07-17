@@ -121,6 +121,25 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 
 		return reconciler;
 	}
+	
+	/*RGB rgbkey2 = PreferenceConverter.getColor(store, "colourkey2");	
+	We create the special token with a default style from the preferences!
+	single = new SingleTokenScanner(new TextAttribute(new Color(Display.getDefault(), rgbkey2), null, isBold("BOLD_COLOURKEY2")));
+	DefaultDamagerRepairer ndr = new DefaultDamagerRepairer(single);
+	reconciler.setDamager(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
+	reconciler.setRepairer(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
+
+	return reconciler;
+}*/
+private int isBold(String string2) {
+	int style = 0;
+	IPreferenceStore store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+	if (store.getBoolean(string2)) {
+		style = 1;
+	}
+
+	return style;
+}
 
 	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 		ContentAssistant assistant = new ContentAssistant();
