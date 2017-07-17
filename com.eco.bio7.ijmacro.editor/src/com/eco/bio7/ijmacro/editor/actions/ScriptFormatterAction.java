@@ -3,6 +3,9 @@ package com.eco.bio7.ijmacro.editor.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -22,41 +25,20 @@ public class ScriptFormatterAction extends Action {
 		IEditorPart editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		IDocument doc = ((ITextEditor) editor).getDocumentProvider().getDocument(editor.getEditorInput());
-
+		ITextEditor editor2 = (ITextEditor) editor;
+		ISelectionProvider sp = editor2.getSelectionProvider();
+		ISelection selectionsel = sp.getSelection();
+		ITextSelection selection = (ITextSelection) selectionsel;
+		int offset = selection.getOffset();
 		String code = doc.get();
-
-		/*
-		 * String formattedString = null;
-		 * 
-		 * ICodeFormatter formatter = ToolFactory.createCodeFormatter();
-		 * 
-		 * 
-		 * ScriptEngineManager manager = new ScriptEngineManager(); ScriptEngine engine
-		 * = manager.getEngineByName("JavaScript"); // read script file try {
-		 * engine.eval(Files.newBufferedReader(Paths.get(
-		 * "C:\\Users\\elk\\git\\EclipseImageJ1Plugin\\com.eco.bio7.ijmacro.editor\\js\\beautify.js"
-		 * ), StandardCharsets.UTF_8)); } catch (ScriptException | IOException e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); }
-		 * 
-		 * String script = "function js_beautify_bridge(text) {var arg=" +
-		 * "{\"indent_size\": 4}" + ";return js_beautify(text, arg);}"; try {
-		 * engine.eval(script); } catch (ScriptException e) { // TODO Auto-generated
-		 * catch block e.printStackTrace(); } // Compilable compilable = (Compilable)
-		 * scriptEngine; // CompiledScript compiledScript = compilable.compile(script);
-		 * // compiledScript.eval(); Invocable inv = (Invocable) engine; Object result =
-		 * null; try { result = inv.invokeFunction("js_beautify_bridge", code); } catch
-		 * (NoSuchMethodException | ScriptException e) { // TODO Auto-generated catch
-		 * block e.printStackTrace(); } if (result instanceof String) { String string2 =
-		 * (String) result; doc.set(string2); }
-		 */
-
-		// formattedString = formatter.format(code, 0, null, null);
 
 		/* Code from: https://github.com/sebz/eclipse-javascript-formatter */
 		JSBeautifierOptions opts = new JSBeautifierOptions();
 		String result = new JSBeautifier().js_beautify(code, opts);
 
 		doc.set(result);
+		/* Scroll to the selection! */
+		editor2.selectAndReveal(offset, 0);
 	}
 
 	public void dispose() {

@@ -1,7 +1,5 @@
 package com.eco.bio7.ijmacro.editor.actions;
 
-import org.eclipse.jdt.core.ICodeFormatter;
-import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -12,7 +10,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-
 import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifier;
 import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifierOptions;
 
@@ -41,23 +38,18 @@ public class ScriptFormatterSelectAction extends Action {
 		int length = selection.getLength();
 
 		String code = selection.getText();
-
-		//String formattedString = null;
-
-		//ICodeFormatter formatter = ToolFactory.createCodeFormatter();
-
-		//formattedString = formatter.format(code, 0, null, null);
 		
 		JSBeautifierOptions opts = new JSBeautifierOptions();
 		String formattedString = new JSBeautifier().js_beautify(code, opts);
 
-		// doc.set(formattedString);
 		try {
 			doc.replace(offset, length, formattedString);
 		} catch (BadLocationException e) {
 
 			e.printStackTrace();
 		}
+		/* Scroll to the selection! */
+		editor2.selectAndReveal(offset, 0);
 
 	}
 

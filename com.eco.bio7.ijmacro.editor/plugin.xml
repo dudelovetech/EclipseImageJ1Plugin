@@ -371,4 +371,13 @@
             parentId="org.eclipse.ui.textEditorScope">
       </context>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.eco.bio7.ijmacro.editor.perspectives.ImageJEditPerspective"
+            icon="icons/ijeditorperspective.png"
+            id="com.eco.bio7.ijmacro.editor.perspectives.ImageJEditPerspective"
+            name="ImageJ Edit">
+      </perspective>
+   </extension>
 </plugin>
