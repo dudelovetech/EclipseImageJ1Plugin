@@ -1,4 +1,4 @@
-package com.eco.bio7.ijmacro.editor.actions;
+/*package com.eco.bio7.ijmacro.editor.actions;
 
 import org.eclipse.jdt.core.ICodeFormatter;
 import org.eclipse.jdt.core.ToolFactory;
@@ -62,4 +62,4 @@ public class RSourceConverter extends Action {
 
 	}
 
-}
+}*/

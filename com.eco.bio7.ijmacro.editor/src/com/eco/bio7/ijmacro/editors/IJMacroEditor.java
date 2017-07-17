@@ -12,12 +12,12 @@
  *******************************************************************************/
 package com.eco.bio7.ijmacro.editors;
 
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -30,10 +30,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
@@ -53,10 +51,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -78,10 +73,10 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction;
 import com.eco.bio7.ijmacro.editor.actions.OpenPreferences;
-import com.eco.bio7.ijmacro.editor.actions.RSourceConverter;
 import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterAction;
 import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterSelectAction;
 import com.eco.bio7.ijmacro.editor.actions.SetComment;
@@ -91,10 +86,8 @@ import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
 import ij.IJ;
-import ij.WindowManager;
 import ij.macro.Debugger;
 import ij.macro.Interpreter;
-import ij.macro.MacroRunner;
 import ij.plugin.Macro_Runner;
 import ij.text.TextWindow;
 
@@ -116,8 +109,6 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	private ScriptFormatterAction javaFormat;
 
 	private ScriptFormatterSelectAction javaSelectFormat;
-
-	private RSourceConverter rsourceConverter;
 
 	private OpenPreferences preferences;
 
@@ -434,9 +425,6 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		javaSelectFormat = new com.eco.bio7.ijmacro.editor.actions.ScriptFormatterSelectAction();
 		setAction("Format Selected Source", javaSelectFormat);
-
-		rsourceConverter = new com.eco.bio7.ijmacro.editor.actions.RSourceConverter();
-		setAction("Convert R Code", rsourceConverter);
 
 		preferences = new com.eco.bio7.ijmacro.editor.actions.OpenPreferences();
 		setAction("Editor Preferences", preferences);

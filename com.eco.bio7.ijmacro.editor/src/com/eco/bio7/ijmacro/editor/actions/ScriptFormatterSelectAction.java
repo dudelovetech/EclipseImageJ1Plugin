@@ -13,6 +13,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifier;
+import com.eco.bio7.ijmacro.editor.beautifier.JSBeautifierOptions;
+
 public class ScriptFormatterSelectAction extends Action {
 
 	public ScriptFormatterSelectAction() {
@@ -39,11 +42,14 @@ public class ScriptFormatterSelectAction extends Action {
 
 		String code = selection.getText();
 
-		String formattedString = null;
+		//String formattedString = null;
 
-		ICodeFormatter formatter = ToolFactory.createCodeFormatter();
+		//ICodeFormatter formatter = ToolFactory.createCodeFormatter();
 
-		formattedString = formatter.format(code, 0, null, null);
+		//formattedString = formatter.format(code, 0, null, null);
+		
+		JSBeautifierOptions opts = new JSBeautifierOptions();
+		String formattedString = new JSBeautifier().js_beautify(code, opts);
 
 		// doc.set(formattedString);
 		try {
