@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.eco.bio7.albireo.feature_2.1.1.201707181445.jar" id="com.eco.bio7.albireo.feature" version="2.1.1.201707181445">
+   <feature url="features/com.eco.bio7.albireo.feature_2.1.1.qualifier.jar" id="com.eco.bio7.albireo.feature" version="2.1.1.qualifier">
       <category name="ImageJ"/>
    </feature>
-   <feature url="features/com.eco.bio7.ijmacroedit.feature_1.0.0.201707181445.jar" id="com.eco.bio7.ijmacroedit.feature" version="1.0.0.201707181445">
+   <feature url="features/com.eco.bio7.ijmacroedit.feature_1.0.0.qualifier.jar" id="com.eco.bio7.ijmacroedit.feature" version="1.0.0.qualifier">
       <category name="ImageJ"/>
    </feature>
-   <feature url="features/com.eco.bio7.image.feature_1.51.14.201707181445.jar" id="com.eco.bio7.image.feature" version="1.51.14.201707181445">
+   <feature url="features/com.eco.bio7.image.feature_1.51.14.qualifier.jar" id="com.eco.bio7.image.feature" version="1.51.14.qualifier">
       <category name="ImageJ"/>
    </feature>
-   <feature url="features/com.eco.bio7.imagej2.feature_1.0.4.201707181445.jar" id="com.eco.bio7.imagej2.feature" version="1.0.4.201707181445">
+   <feature url="features/com.eco.bio7.imagej2.feature_1.0.4.qualifier.jar" id="com.eco.bio7.imagej2.feature" version="1.0.4.qualifier">
       <category name="ImageJ"/>
    </feature>
    <category-def name="ImageJ" label="ImageJ">
