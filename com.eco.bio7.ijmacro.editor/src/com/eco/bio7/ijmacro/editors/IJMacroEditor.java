@@ -153,6 +153,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 	private IPreferenceStore store;
 
+	private IJMacroConfiguration ijMacroConfig;
+
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,
@@ -241,8 +243,13 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		 */
 		setKeyBindingScopes(new String[] { "com.eco.bio7.ijmacro.editor.scope" });
 		colorManager = new ColorManager();
-		setSourceViewerConfiguration(new IJMacroConfiguration(colorManager, this));
+		ijMacroConfig=new IJMacroConfiguration(colorManager, this);
+		setSourceViewerConfiguration(ijMacroConfig);
 
+	}
+
+	public IJMacroConfiguration getIjMacroConfig() {
+		return ijMacroConfig;
 	}
 
 	/*
@@ -312,6 +319,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		FontData f5 = PreferenceConverter.getFontData(store, "colourkeyfont5");
 		FontData f6 = PreferenceConverter.getFontData(store, "colourkeyfont6");
 		FontData f7 = PreferenceConverter.getFontData(store, "colourkeyfont7");
+		FontData f8 = PreferenceConverter.getFontData(store, "colourkeyfont8");
 		// FontData f8 = PreferenceConverter.getFontData(store,
 		// "colourkeyfont8");
 
@@ -332,6 +340,9 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			return;
 		} else if (f7.getHeight() + Math.round(fontSize) < 2) {
 			return;
+		}
+			else if (f8.getHeight() + Math.round(fontSize) < 2) {
+				return;
 		} /*
 			 * else if (f8.getHeight() + Math.round(fontSize) < 2) { return; }
 			 */
@@ -344,7 +355,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		f5.setHeight(f5.getHeight() + Math.round(fontSize));
 		f6.setHeight(f6.getHeight() + Math.round(fontSize));
 		f7.setHeight(f7.getHeight() + Math.round(fontSize));
-		// f8.setHeight(f8.getHeight() + Math.round(fontSize));
+		f8.setHeight(f8.getHeight() + Math.round(fontSize));
 
 		// Method from:
 		// https://github.com/gkorland/Eclipse-Fonts/blob/master/Fonts/src/main/java/fonts/FontsControler.java
@@ -367,6 +378,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		PreferenceConverter.setValue(store, "colourkeyfont5", f5);
 		PreferenceConverter.setValue(store, "colourkeyfont6", f6);
 		PreferenceConverter.setValue(store, "colourkeyfont7", f7);
+		PreferenceConverter.setValue(store, "colourkeyfont8", f8);
 
 		invalidateText();
 

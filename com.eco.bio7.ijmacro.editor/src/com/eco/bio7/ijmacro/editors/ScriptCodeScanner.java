@@ -81,6 +81,7 @@ public class ScriptCodeScanner extends RuleBasedScanner {
 		RGB rgbkey5 = PreferenceConverter.getColor(store, "colourkey5");
 		RGB rgbkey6 = PreferenceConverter.getColor(store, "colourkey6");
 		RGB rgbkey7 = PreferenceConverter.getColor(store, "colourkey7");
+		RGB rgbkey8 = PreferenceConverter.getColor(store, "colourkey8");
 		
 	
 		
@@ -94,12 +95,13 @@ public class ScriptCodeScanner extends RuleBasedScanner {
 		//string = new Token(new TextAttribute(provider.getColor(rgbkey2), null, isBold("BOLD_COLOURKEY2")));
 		//comment = new Token(new TextAttribute(provider.getColor(rgbkey3), null, isBold("BOLD_COLOURKEY3")));
 
-		string = new Token(new TextAttribute(provider.getColor(rgbkey2), null, isBold("BOLD_COLOURKEY4")));
-		comment = new Token(new TextAttribute(provider.getColor(rgbkey3), null, isBold("BOLD_COLOURKEY5")));
-		other = new Token(new TextAttribute(provider.getColor(rgbkey4), null, isBold("BOLD_COLOURKEY6")));
-		operators = new Token(new TextAttribute(provider.getColor(rgbkey5), null, isBold("BOLD_COLOURKEY7")));
-		braces = new Token(new TextAttribute(provider.getColor(rgbkey6), null, isBold("BOLD_COLOURKEY8")));
-		numbers = new Token(new TextAttribute(provider.getColor(rgbkey7), null, isBold("BOLD_COLOURKEY8")));
+		string = new Token(new TextAttribute(provider.getColor(rgbkey2), null, isBold("BOLD_COLOURKEY2")));
+		comment = new Token(new TextAttribute(provider.getColor(rgbkey3), null, isBold("BOLD_COLOURKEY3")));
+		other = new Token(new TextAttribute(provider.getColor(rgbkey4), null, isBold("BOLD_COLOURKEY4")));
+		operators = new Token(new TextAttribute(provider.getColor(rgbkey5), null, isBold("BOLD_COLOURKEY5")));
+		braces = new Token(new TextAttribute(provider.getColor(rgbkey6), null, isBold("BOLD_COLOURKEY6")));
+		numbers = new Token(new TextAttribute(provider.getColor(rgbkey7), null, isBold("BOLD_COLOURKEY7")));
+		multiLineComment = new Token(new TextAttribute(provider.getColor(rgbkey8), null, isBold("BOLD_COLOURKEY8")));
 
 		/*keyword = new Token(new TextAttribute(provider.getColor(rgbkey), null, 1,new Font(Display.getCurrent(),f)));
 		type = new Token(new TextAttribute(provider.getColor(rgbkey1), null, 1,new Font(Display.getCurrent(),f1)));

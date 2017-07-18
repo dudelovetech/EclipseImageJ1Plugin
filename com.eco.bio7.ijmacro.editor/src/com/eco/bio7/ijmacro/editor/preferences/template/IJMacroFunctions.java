@@ -26,7 +26,8 @@ public class IJMacroFunctions {
 			"charCodeAt(string, index)####Returns the Unicode value of the character at the specified index in string. Index values can range from 0 to lengthOf(string). Use the fromCharCode() function to convert one or more Unicode characters to a string.\r\n" + 
 			"close()####Closes the active image. This function has the advantage of not closing the \"Log\" or \"Results\" window when you meant to close the active image.\r\n" + 
 			"cos(angle)####Returns the cosine of an angle (in radians).####\r\n" + 
-			"d2s(n, decimalPlaces)####Converts the number n into a string using the specified number of decimal places. Note that d2s stands for \"double to string\". This function will probably be replaced by one with a better name.\r\n" + 
+			"d2s(n, decimalPlaces)####Converts the number n into a string using the specified number of decimal places. Note that d2s stands for \"double to string\". This function will probably be replaced by one with a better name.\r\n" +
+			"Dialog.create(\"Title\")####Creates a dialog box with the specified title. Call Dialog.addString(), Dialog.addNumber(), etc. to add components to the dialog. Call Dialog.show() to display the dialog and Dialog.getString(), Dialog.getNumber(), etc. to retrieve the values entered by the user. Refer to the DialogDemo macro for an example.\r\n"+
 			"Dialog.addMessage(string)####Adds a message to the dialog. The message can be broken into multiple lines by inserting new line characters (\"\\n\") into the string.\r\n" + 
 			"Dialog.addString(\"Label\", \"Initial text\")####Adds a text field to the dialog, using the specified label and initial text.\r\n" + 
 			"Dialog.addString(\"Label\", \"Initial text\", columns)####Adds a text field to the dialog, where columns specifies the field width in characters.\r\n" + 
@@ -104,6 +105,7 @@ public class IJMacroFunctions {
 			"getCursorLoc(x, y, z, modifiers)####Returns the cursor location in pixels and the mouse event modifier flags. The z coordinate is zero for 2D images. For stacks, it is one less than the slice number. For examples, see the GetCursorLocDemo and the GetCursorLocDemoTool macros.\r\n" + 
 			"getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec)####Returns the current date and time. For an example, refer to the GetDateAndTime macro. See also: getTime.\r\n" + 
 			"getDimensions(width, height, channels, slices, frames)####Returns the dimensions of the current image. Requires 1.38s.\r\n" + 
+			"getDirectory(string)####Displays a \"choose directory\" dialog and returns the selected directory, or returns the path to a specified directory, such as \"plugins\", \"home\", etc. The returned path ends with a file separator, either \"\\\" (Windows) or \"/\". Returns an empty string if the specified directory is not found or aborts the macro if the user cancels the \"choose directory\" dialog box. For examples, see the GetDirectoryDemo and ListFilesRecursively macros. See also: getFileList and the File functions.\r\n"+
 			"getDirectory(\"Choose a Directory\")####Displays a file open dialog, using the argument as a title, and returns the path to the directory selected by the user.\r\n" + 
 			"getDirectory(\"plugins\")####Returns the path to the plugins directory.\r\n" + 
 			"getDirectory(\"macros\")####Returns the path to the macros directory.\r\n" + 

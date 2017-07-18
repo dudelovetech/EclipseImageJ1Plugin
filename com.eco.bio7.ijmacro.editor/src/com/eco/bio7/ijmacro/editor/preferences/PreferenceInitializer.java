@@ -30,6 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkey5", new RGB(0, 0, 0));
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkey6", new RGB(0, 0, 0));
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkey7", new RGB(0, 0, 0));
+		PreferenceConverter.setDefault(storeMacroEditor, "colourkey8", new RGB(63,127,95));
 		// PreferenceConverter.setDefault(storeBsh, "colourkey8", new RGB(50,
 		// 150, 150));
 
@@ -41,6 +42,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont5", f);
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont6", f);
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont7", f);
+		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont8", f);
 		
 		storeMacroEditor.setDefault("SHOW_INFOPOPUP",true);
 		storeMacroEditor.setDefault("MARK_WORDS", true);

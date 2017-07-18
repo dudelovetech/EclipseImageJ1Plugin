@@ -77,6 +77,9 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 
 		addField(new ColorFieldEditor("colourkey7", "Numbers:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("BOLD_COLOURKEY7", "Bold", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
+		
+		addField(new ColorFieldEditor("colourkey8", "Multiline Comment:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor("BOLD_COLOURKEY8", "Bold", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
 
 	}
 
@@ -91,6 +94,7 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 		PreferenceConverter.setDefault(store, "colourkey5", new RGB(0, 0, 0));
 		PreferenceConverter.setDefault(store, "colourkey6", new RGB(0, 0, 0));
 		PreferenceConverter.setDefault(store, "colourkey7", new RGB(0, 0, 0));
+		PreferenceConverter.setDefault(store, "colourkey8", new RGB(63,127,95));
 
 	}
 
@@ -101,7 +105,7 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 		ScopedPreferenceStore storeWorkbench = new ScopedPreferenceStore(new InstanceScope(), "org.eclipse.ui.workbench");
 		IEditorPart editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null && editor instanceof IJMacroEditor) {
-			IJMacroEditor beanShellEditor = (IJMacroEditor) editor;
+			IJMacroEditor ijMacroEditorEditor = (IJMacroEditor) editor;
 			IJMacroEditorPlugin fginstance = IJMacroEditorPlugin.getDefault();
 			ScriptCodeScanner scanner = (ScriptCodeScanner) fginstance.getScriptCodeScanner();
 			ScriptColorProvider provider = IJMacroEditorPlugin.getDefault().getScriptColorProvider();
@@ -117,7 +121,8 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 			scanner.operators.setData(new TextAttribute(provider.getColor(PreferenceConverter.getDefaultColor(store, "colourkey5")), null, 0));
 			scanner.braces.setData(new TextAttribute(provider.getColor(PreferenceConverter.getDefaultColor(store, "colourkey6")), null, 0));
 			scanner.numbers.setData(new TextAttribute(provider.getColor(PreferenceConverter.getDefaultColor(store, "colourkey7")), null, 0));
-			beanShellEditor.invalidateText();
+			ijMacroEditorEditor.getIjMacroConfig().multiLineComment.att.setData(new TextAttribute(provider.getColor(PreferenceConverter.getDefaultColor(store, "colourkey8")), null, 0));
+			ijMacroEditorEditor.invalidateText();
 		}
 		super.performOk();
 	}
@@ -126,7 +131,7 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 		super.propertyChange(event);
 		IEditorPart editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null && editor instanceof IJMacroEditor) {
-			IJMacroEditor beanshellEditor = (IJMacroEditor) editor;
+			IJMacroEditor ijMacroEditor = (IJMacroEditor) editor;
 			IPreferenceStore store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 
 			if (event.getSource() instanceof ColorFieldEditor) {
@@ -161,6 +166,9 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 					break;
 				case "colourkey7":
 					scanner.numbers.setData(new TextAttribute(provider.getColor(rgb), null, isBold("BOLD_COLOURKEY7")));
+					break;
+				case "colourkey8":
+					ijMacroEditor.getIjMacroConfig().multiLineComment.att.setData(new TextAttribute(provider.getColor(rgb), null, isBold("BOLD_COLOURKEY8")));
 					break;
 				default:
 					break;
@@ -240,6 +248,13 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 						scanner.numbers.setData(new TextAttribute(provider.getColor(PreferenceConverter.getColor(store, "colourkey7")), null, SWT.NORMAL));
 					}
 					break;
+				case "BOLD_COLOURKEY8":
+					if (fontData) {
+						ijMacroEditor.getIjMacroConfig().multiLineComment.att.setData(new TextAttribute(provider.getColor(PreferenceConverter.getColor(store, "colourkey8")), null, SWT.BOLD));
+					} else {
+						ijMacroEditor.getIjMacroConfig().multiLineComment.att.setData(new TextAttribute(provider.getColor(PreferenceConverter.getColor(store, "colourkey8")), null, SWT.NORMAL));
+					}
+					break;
 
 				default:
 					break;
@@ -247,7 +262,7 @@ public class WorkbenchPreferenceijmacro extends FieldEditorPreferencePage implem
 
 			}
 
-			beanshellEditor.invalidateText();
+			ijMacroEditor.invalidateText();
 		}
 		super.performOk();
 

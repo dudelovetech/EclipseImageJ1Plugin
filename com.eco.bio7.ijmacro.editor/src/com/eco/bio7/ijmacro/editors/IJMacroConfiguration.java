@@ -11,6 +11,7 @@
 package com.eco.bio7.ijmacro.editors;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
@@ -28,6 +29,9 @@ import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.hoover.IJMacroEditorTextHover;
@@ -42,18 +46,36 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 	private IJMacroEditor editor;
 	private IPreferenceStore store;
 
+	public SingleTokenScanner multiLineComment;
+
 	public IJMacroConfiguration(ColorManager colorManager, IJMacroEditor editor) {
 		this.colorManager = colorManager;
 		this.editor = editor;
 		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 
 	}
+	
+	public  class SingleTokenScanner extends BufferedRuleBasedScanner {
+		public Token att;
 
-	public static class SingleTokenScanner extends BufferedRuleBasedScanner {
+		public SingleTokenScanner(TextAttribute attribute) {
+			att = new Token(attribute);
+
+			setDefaultReturnToken(att);
+
+		}
+
+		public Token getToken() {
+			return att;
+		}
+
+	}
+
+	/*public static class SingleTokenScanner extends BufferedRuleBasedScanner {
 		public SingleTokenScanner(TextAttribute attribute) {
 			setDefaultReturnToken(new Token(attribute));
 		}
-	}
+	}*/
 
 	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer, String contentType) {
 		return new ScriptDoubleClickSelector();
@@ -113,18 +135,25 @@ public class IJMacroConfiguration extends TextSourceViewerConfiguration {
 		reconciler.setDamager(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 
-		dr = new DefaultDamagerRepairer(
+		/*dr = new DefaultDamagerRepairer(
 				new SingleTokenScanner(new TextAttribute(provider.getColor(ScriptColorProvider.MULTI_LINE_COMMENT))));
 
 		reconciler.setDamager(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
-		reconciler.setRepairer(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
+		reconciler.setRepairer(dr, ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);*/
+		RGB rgbkey8 = PreferenceConverter.getColor(store, "colourkey8");	
+		//We create the special token with a default style from the preferences!
+		multiLineComment = new SingleTokenScanner(new TextAttribute(new Color(Display.getDefault(), rgbkey8), null, isBold("BOLD_COLOURKEY8")));
+		DefaultDamagerRepairer ndr = new DefaultDamagerRepairer(multiLineComment);
+		reconciler.setDamager(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
+		reconciler.setRepairer(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
+
 
 		return reconciler;
 	}
 	
-	/*RGB rgbkey2 = PreferenceConverter.getColor(store, "colourkey2");	
+	/*RGB rgbkey8 = PreferenceConverter.getColor(store, "colourkey8");	
 	We create the special token with a default style from the preferences!
-	single = new SingleTokenScanner(new TextAttribute(new Color(Display.getDefault(), rgbkey2), null, isBold("BOLD_COLOURKEY2")));
+	single = new SingleTokenScanner(new TextAttribute(new Color(Display.getDefault(), rgbkey2), null, isBold("BOLD_COLOURKEY8")));
 	DefaultDamagerRepairer ndr = new DefaultDamagerRepairer(single);
 	reconciler.setDamager(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
 	reconciler.setRepairer(ndr,  ScriptPartitionScanner.SCRIPT_MULTILINE_COMMENT);
