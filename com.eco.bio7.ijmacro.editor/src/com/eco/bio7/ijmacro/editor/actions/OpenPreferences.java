@@ -13,7 +13,7 @@ public class OpenPreferences extends Action {
 
 	public OpenPreferences() {
 		super("Preferences");
-		setId("com.eco.bio7.ijmacro.editor.preferences");
+		setActionDefinitionId("com.eco.bio7.ijmacro.editor.preferences");
 
 		setText("ImageJ Macro Preferences");
 

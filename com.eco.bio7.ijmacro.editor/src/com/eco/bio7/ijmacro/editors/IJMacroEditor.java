@@ -73,6 +73,7 @@ import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
+import com.eco.bio7.ijmacro.editor.actions.ImageJForumCopy;
 import com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction;
 import com.eco.bio7.ijmacro.editor.actions.OpenPreferences;
 import com.eco.bio7.ijmacro.editor.actions.ScriptFormatterAction;
@@ -154,6 +155,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	private IPreferenceStore store;
 
 	private IJMacroConfiguration ijMacroConfig;
+
+	private ImageJForumCopy imagejForumCopy;
 
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
@@ -397,6 +400,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		addAction(menu, "Add Block Comment");
 		addAction(menu, "Remove Block Comment");
 		menu.add(new Separator());
+		addAction(menu,"ImageJForum");
+		menu.add(new Separator());
 		addAction(menu, "Format Source");
 		addAction(menu, "Format Selected Source");
 		menu.add(new Separator());
@@ -444,6 +449,9 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		interpretImageJMacroAction = new com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction("");
 		setAction("Interpret Macro", interpretImageJMacroAction);
+		
+		imagejForumCopy = new com.eco.bio7.ijmacro.editor.actions.ImageJForumCopy();
+		setAction("ImageJForum", imagejForumCopy);
 
 	}
 

@@ -254,13 +254,13 @@
           commandId="com.eco.bio7.interpret.ijmacro.format"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="SHIFT+F">
+          sequence="CTRL+SHIFT+F">
     </key>
     <key
           commandId="com.eco.bio7.interpret.ijmacro.select.format"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="CTRL+SHIFT+F">
+          sequence="CTRL+ALT+SHIFT+F">
     </key>
      <key
           commandId="com.eco.bio7.ijmacro.editor.setblockcomment"
@@ -273,6 +273,18 @@
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+SHIFT+B">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.copy.imagej.forum"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+C">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.preferences"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+P">
     </key>
    
     </extension>
@@ -365,10 +377,22 @@
     </command>
     <command
           categoryId="org.eclipse.ui.category.textEditor"
+          description="Copy code to ImageJ forum"
+          id="com.eco.bio7.ijmacro.editor.copy.imagej.forum"
+          name="Copy code to ImageJ forum">
+    </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
           description="Interpret ImageJ Macro"
           id="com.eco.bio7.interpret.ijmacro"
           name="Interpret ImageJ Macro Action">
-      </command>
+      </command>    
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Open the ImageJ editor preferences"
+          id="com.eco.bio7.ijmacro.editor.preferences"
+          name="Open ImageJ editor preferences">
+    </command>
       
      
    </extension>
