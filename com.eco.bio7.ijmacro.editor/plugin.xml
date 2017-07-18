@@ -440,6 +440,10 @@
             name="ImageJ Macro File"
             project="false">
       </wizard>
+      <category
+            id="com.eco.bio7.ImageJ"
+            name="ImageJ">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.contexts">

@@ -66,7 +66,7 @@
             extensions="jpg,jpeg,tif,tiff,TIF,TIFF,png,bmp,gif,avi,pnm,dcm,roi,pgm,pbm"
             icon="pics/imagefile.png"
             id="com.eco.bio7.editors.imagej.editor"
-            name="ImageJ Editor"
+            name="ImageJ Image Editor"
             symbolicFontName="com.eco.bio7.imagej.editor">
       </editor>
    </extension>
