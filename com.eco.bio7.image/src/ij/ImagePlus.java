@@ -4,6 +4,12 @@ import java.awt.*;
 import java.awt.image.*;
 import java.net.URL;
 import java.util.*;
+
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+
+import com.eco.bio7.image.CanvasView;
+
 import ij.process.*;
 import ij.io.*;
 import ij.gui.*;
@@ -41,7 +47,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/** 32-bit RGB color */
 	public static final int COLOR_RGB = 4;
-	
+
 	/** Title of image used by Flatten command */
 	public static final String flattenTitle = "flatten~canvas";
 
@@ -102,8 +108,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Constructs an ImagePlus from an Image or BufferedImage. The first argument will be used as the title of the window that displays the image. Throws an IllegalStateException if an error occurs
-	 * while loading the image.
+	 * Constructs an ImagePlus from an Image or BufferedImage. The first argument will be used as the title of the window that displays the image. Throws an IllegalStateException if an error occurs while
+	 * loading the image.
 	 */
 	public ImagePlus(String title, Image img) {
 		this.title = title;
@@ -158,8 +164,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Locks the image so other threads can test to see if it is in use. Returns true if the image was successfully locked. Beeps, displays a message in the status bar, and returns false if the image
-	 * is already locked.
+	 * Locks the image so other threads can test to see if it is in use. Returns true if the image was successfully locked. Beeps, displays a message in the status bar, and returns false if the image is
+	 * already locked.
 	 */
 	public synchronized boolean lock() {
 		if (locked) {
@@ -296,8 +302,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Controls which channels in a composite color image are displayed, where 'channels' is a list of ones and zeros that specify the channels to display. For example, "101" causes channels 1 and 3
-	 * to be displayed.
+	 * Controls which channels in a composite color image are displayed, where 'channels' is a list of ones and zeros that specify the channels to display. For example, "101" causes channels 1 and 3 to be
+	 * displayed.
 	 */
 	public void setActiveChannels(String channels) {
 		if (!(this instanceof CompositeImage))
@@ -357,8 +363,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Calls updateAndDraw to update from the pixel data and draw the image, and also repaints the image window to force the information displayed above the image (dimension, type, size) to be
-	 * updated.
+	 * Calls updateAndDraw to update from the pixel data and draw the image, and also repaints the image window to force the information displayed above the image (dimension, type, size) to be updated.
 	 */
 	public void updateAndRepaintWindow() {
 		if (win != null) {
@@ -587,8 +592,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Replaces the ImageProcessor with the one specified and updates the display. With stacks, the ImageProcessor must be the same type as the other images in the stack and it must be the same width
-	 * and height.
+	 * Replaces the ImageProcessor with the one specified and updates the display. With stacks, the ImageProcessor must be the same type as the other images in the stack and it must be the same width and
+	 * height.
 	 */
 	public void setProcessor(ImageProcessor ip) {
 		setProcessor(null, ip);
@@ -764,9 +769,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/** Returns true if this image is currently being displayed in a window. */
-	/*Changed for Bio7! There is now physical AWT frame which embedds the imagePlus object!*/
+	/* Changed for Bio7! There is now physical AWT frame which embedds the imagePlus object! */
 	public boolean isVisible() {
-		return win != null;  //&& win.isVisible();
+		return win != null; // && win.isVisible();
 	}
 
 	/** This method should only be called from an ImageWindow. */
@@ -806,8 +811,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns a reference to the current ImageProcessor. If there is no ImageProcessor, it creates one. Returns null if this ImagePlus contains no ImageProcessor and no AWT Image. Sets the line width
-	 * to the current line width and sets the calibration table if the image is density calibrated.
+	 * Returns a reference to the current ImageProcessor. If there is no ImageProcessor, it creates one. Returns null if this ImagePlus contains no ImageProcessor and no AWT Image. Sets the line width to
+	 * the current line width and sets the calibration table if the image is density calibrated.
 	 */
 	public ImageProcessor getProcessor() {
 		if (ip == null && img == null)
@@ -865,8 +870,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Get calibrated statistics for this image or ROI, including histogram, area, mean, min and max, standard deviation and mode. This code demonstrates how to get the area, mean max and median of
-	 * the current image or selection:
+	 * Get calibrated statistics for this image or ROI, including histogram, area, mean, min and max, standard deviation and mode. This code demonstrates how to get the area, mean max and median of the
+	 * current image or selection:
 	 * 
 	 * <pre>
 	 * imp = IJ.getImage();
@@ -923,8 +928,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an ImageStatistics object generated using the specified measurement options, histogram bin count and histogram range. Note: for 8-bit and RGB images, the number of bins is fixed at 256
-	 * and the histogram range is always 0-255.
+	 * Returns an ImageStatistics object generated using the specified measurement options, histogram bin count and histogram range. Note: for 8-bit and RGB images, the number of bins is fixed at 256 and
+	 * the histogram range is always 0-255.
 	 */
 	public ImageStatistics getStatistics(int mOptions, int nBins, double histMin, double histMax) {
 		setupProcessor();
@@ -984,6 +989,19 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				scale = " (" + IJ.d2s(percent, digits) + "%)";
 			}
 			win.setTitle(title + virtual + global + scale);
+			/* Changed for Bio7! */
+
+			Display display = PlatformUI.getWorkbench().getDisplay();
+			display.syncExec(new Runnable() {
+
+				public void run() {
+					if (CanvasView.tabFolder.getItemCount() > 0) {
+
+						CanvasView.tabFolder.getSelection().setText(title);
+
+					}
+				}
+			});
 		}
 		boolean titleChanged = !title.equals(this.title);
 		this.title = title;
@@ -1355,8 +1373,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private int[] pvalue = new int[4];
 
 	/**
-	 * Returns the pixel value at (x,y) as a 4 element array. Grayscale values are retuned in the first element. RGB values are returned in the first 3 elements. For indexed color images, the RGB
-	 * values are returned in the first 3 three elements and the index (0-255) is returned in the last.
+	 * Returns the pixel value at (x,y) as a 4 element array. Grayscale values are retuned in the first element. RGB values are returned in the first 3 elements. For indexed color images, the RGB values
+	 * are returned in the first 3 three elements and the index (0-255) is returned in the last.
 	 */
 	public int[] getPixel(int x, int y) {
 		pvalue[0] = pvalue[1] = pvalue[2] = pvalue[3] = 0;
@@ -1662,9 +1680,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				overlay2 = ip2.getOverlay();
 				if (overlay2 != null)
 					setOverlay(overlay2);
-				Properties props = ((VirtualStack)stack).getProperties();
-								if (props!=null)
-									setProperty("FHT", props.get("FHT"));
+				Properties props = ((VirtualStack) stack).getProperties();
+				if (props != null)
+					setProperty("FHT", props.get("FHT"));
 				pixels = ip2.getPixels();
 			} else
 				pixels = stack.getPixels(currentSlice);
@@ -1773,8 +1791,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Starts the process of creating a new selection, where sx and sy are the starting screen coordinates. The selection type is determined by which tool in the tool bar is active. The user
-	 * interactively sets the selection size and shape.
+	 * Starts the process of creating a new selection, where sx and sy are the starting screen coordinates. The selection type is determined by which tool in the tool bar is active. The user interactively
+	 * sets the selection size and shape.
 	 */
 	public void createNewRoi(int sx, int sy) {
 		deleteRoi();
@@ -1854,11 +1872,11 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				if (rm != null)
 					rm.deselect(roi);
 			}
-			if (roi!=null) {
-								roi.notifyListeners(RoiListener.DELETED);
-								if (roi instanceof PointRoi)
-									((PointRoi)roi).resetCounters();
-							}
+			if (roi != null) {
+				roi.notifyListeners(RoiListener.DELETED);
+				if (roi instanceof PointRoi)
+					((PointRoi) roi).resetCounters();
+			}
 			roi = null;
 			if (ip != null)
 				ip.resetRoi();
@@ -2454,8 +2472,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Inserts the contents of the internal clipboard into the active image. If there is a selection the same size as the image on the clipboard, the image is inserted into that selection, otherwise
-	 * the selection is inserted into the center of the image.
+	 * Inserts the contents of the internal clipboard into the active image. If there is a selection the same size as the image on the clipboard, the image is inserted into that selection, otherwise the
+	 * selection is inserted into the center of the image.
 	 */
 	public void paste() {
 		if (clipboard == null)
@@ -2598,8 +2616,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the display range of specified channels in an RGB image, where 4=red, 2=green, 1=blue, 6=red+green, etc. With non-RGB images, this method is identical to setDisplayRange(min, max). This
-	 * method is used by the Image/Adjust/Color Balance tool .
+	 * Sets the display range of specified channels in an RGB image, where 4=red, 2=green, 1=blue, 6=red+green, etc. With non-RGB images, this method is identical to setDisplayRange(min, max). This method
+	 * is used by the Image/Adjust/Color Balance tool .
 	 */
 	public void setDisplayRange(double min, double max, int channels) {
 		if (ip instanceof ColorProcessor)

@@ -22,7 +22,6 @@ public class ImageJEditPerspective implements IPerspectiveFactory {
 			
 		}
 		layout.addView("com.eco.bio7.imagej", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
-		layout.addView("com.eco.bio7.ijtoolbar", IPageLayout.TOP, 0.1f, "com.eco.bio7.imagej");
 	}
 
 	/**

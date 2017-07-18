@@ -112,6 +112,7 @@ public class SimpleCommands implements PlugIn {
 			return;
 		/* Changed for Bio7! */
 		else {
+			/* Changed for Bio7! */
 			final String title = gd.getNextString();
 			imp.setTitle(title);
 			Display display = PlatformUI.getWorkbench().getDisplay();

@@ -77,10 +77,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 		menuItem.setText("ImageJ-Toolbar");
 
-		MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
-
-		menuItem1.setText("Bio7-Toolbar");
-
 		menuItem.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -93,6 +89,9 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
+		/*MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
+
+		menuItem1.setText("Bio7-Toolbar");
 		menuItem1.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -159,11 +158,10 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
-		});
+		});*/
 		new MenuItem(fMenu, SWT.SEPARATOR);
 		/*
-		 * Create the dynamic menu which is later disposed and recreated every
-		 * time the menu is shown!
+		 * Create the dynamic menu which is later disposed and recreated every time the menu is shown!
 		 */
 		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
 

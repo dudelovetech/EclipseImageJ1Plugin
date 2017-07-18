@@ -20,19 +20,22 @@ public class PreferencesCode extends FieldEditorPreferencePage implements IWorkb
 	}
 
 	public void createFieldEditors() {
-		addField(new LabelFieldEditor("Code context:", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Code context:", getFieldEditorParent()));
+		
 		addField(
-				new BooleanFieldEditor("SHOW_INFOPOPUP", "Show Info Popup (Restart to apply)", getFieldEditorParent()));
-
+				new BooleanFieldEditor("SHOW_INFOPOPUP", "Show info popup (restart to apply!)", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Code completion/templates:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("TYPED_CODE_COMPLETION", "Open code completion/templates when typing",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor("ACTIVATION_CHARS", "Activation chars", -1,
 				StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent()));
-		addField(new BooleanFieldEditor("MARK_WORDS", "Mark selected words", getFieldEditorParent()));
-		addField(new LabelFieldEditor("Automatic close:", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Source:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor("MARK_WORDS", "Mark selected words", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Automatic close:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("CLOSE_BRACES", "{Braces}", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("CLOSE_PARENTHESES", "(Parentheses)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("CLOSE_BRACKETS", "[Brackets]", getFieldEditorParent()));
@@ -43,9 +46,10 @@ public class PreferencesCode extends FieldEditorPreferencePage implements IWorkb
 		addField(new BooleanFieldEditor("IJMACRO_EDITOR_EDIT_INDENT", "Automatically indent", getFieldEditorParent()));
 		addField(new BooleanFieldEditor("CLOSE_BRACES_LINEBREAK", "{Braces - with linebreak}", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		mult_1 = new StringFieldEditor("IJMACRO_EDITOR_FORMAT_OPTIONS", "ImageJ Macro Editor Formatter Options", -1,
+		addField(new LabelFieldEditor("Formatter:", getFieldEditorParent()));
+		mult_1 = new StringFieldEditor("IJMACRO_EDITOR_FORMAT_OPTIONS", "ImageJ Macro editor formatter options", -1,
 				StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent());
-		mult_1.setLabelText("ImageJ Macro Editor Formatter Options");
+		mult_1.setLabelText("Options");
 		addField(mult_1);
 	}
 

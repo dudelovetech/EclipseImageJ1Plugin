@@ -31,18 +31,18 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            category="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
             class="com.eco.bio7.ijmacro.editor.preferences.TemplatesPreferencePage"
             id="org.eclipse.ui.examples.templateeditor.preferencepage"
             name="Preferences ImageJ Macro Editor Templates">
       </page>
       <page
-            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            category="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
             class="com.eco.bio7.ijmacro.editor.preferences.WorkbenchPreferenceijmacro"
             id="prefijmacroeditor"
             name="Preferences ImageJ Macro Editor"/>
       <page
-            category="com.eco.bio7.preferences.Bio7PreferencePage"
+            category="com.eco.bio7.image.preferences.Bio7ImageJPreferences"
             class="com.eco.bio7.ijmacro.editor.preferences.PreferencesCode"
             id="com.eco.bio7.ijmacro.editor.code"
             name="Preferences ImageJ Macro Code">
