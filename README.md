@@ -85,7 +85,7 @@ Fullscreen in default SWT_AWT mode is supported for the primary monitor (Press F
 
 Drag and drop of images and plugins should work, too (Drag them on the view or the ImageJ toolbar to open or install!)
 
-###First start: 
+### First start: 
 
 Open the ImageJ perspective (Window->Perspective->Open perspective->Other->ImageJ Edit - or use the toolbar action).
 
