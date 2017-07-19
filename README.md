@@ -1,6 +1,28 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51p (new macro editor available!):
+
+In this relase a macro editor and ImageJ perspective have been added to the ImageJ plugin. The editor has the following features:
+
+1. Dynamic error detection (grammar derived from the ECMA grammar by Bart Kiers)
+2. Toolbar action to execute ImageJ macros
+3. Syntax highlightening
+4. Debugging support (reusing and implementing interfaces and methods from @Wayne - same keyboard shortcuts - see animation below)
+5. Code completion (with browser help)
+6. Code templates (add you own templates)
+7. Info popups (text hoover)
+8. Outline view (var variables, variables, methods and macros)
+9. Automatic closing of braces, parentheses and strings
+Automatic indention of functions,loops, etc.
+10. Code folding
+11. Code formatting (based on the Eclipse-javascript-formatter by Sebastian Moran)
+12. Resize fonts functions (with Ctrl++ or CMD++, CTRL+- or CMD +-)
+13. Font preferences
+14. Mark occurences (scope independant)
+15. A copy function for this forum
+
+
 ### New in 1.51n:
 
 1. Updated ImageJ to 1.51k.
@@ -47,7 +69,7 @@ The important views to open are the ImageJ-Canvas which essentially implements t
 
 The ImageJ toolbar can also be opened in the ImageJ-Canvas (ImageJ 'Window' menu).
 
-There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (“Thumbnails”):
+There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (â€œThumbnailsâ€�):
 
 ***Window->Show View->Other->ImageJ Extra->Thumbnails***
 
