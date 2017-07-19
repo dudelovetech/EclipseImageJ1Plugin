@@ -87,7 +87,7 @@ Drag and drop of images and plugins should work, too (Drag them on the view or t
 
 ### First start: 
 
-Open the ImageJ perspective (Window->Perspective->Open perspective->Other->ImageJ Edit - or use the toolbar action).
+Open the ImageJ perspective (***Window->Perspective->Open perspective->Other->ImageJ Edit*** - or use the toolbar action).
 
 To create an ImageJ macro first create a general eclipse project (***File->New->Project->General Project*** - Other Project types are allowed, too!) and then create an ImageJ macro in the project folder (***New->Other->ImageJ->ImageJ Macro File***).
 
