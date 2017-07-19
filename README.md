@@ -69,7 +69,7 @@ The important views to open are the ImageJ-Canvas which essentially implements t
 
 The ImageJ toolbar can also be opened in the ImageJ-Canvas (ImageJ 'Window' menu).
 
-There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (â€œThumbnailsâ€�):
+There is also a self-created thumbnails browser (not speed optimized) for ImageJ default formats included (Thumbnails):
 
 ***Window->Show View->Other->ImageJ Extra->Thumbnails***
 
