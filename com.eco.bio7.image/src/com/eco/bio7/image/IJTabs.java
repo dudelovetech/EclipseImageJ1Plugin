@@ -90,23 +90,24 @@ public class IJTabs {
 
 		for (int i = 0; i < items.length; i++) {
 			final int tabcount = i;
-
-			Display dis = CanvasView.getParent2().getDisplay();
-			dis.syncExec(new Runnable() {
-
-				public void run() {
-					if (javaFXEmbedded) {
-						if (items[tabcount].getControl().isDisposed() == false) {
-							items[tabcount].getControl().dispose();
-						}
-						items[tabcount].dispose();
-					}
-
-					else {
-						items[tabcount].dispose();
-					}
+			if (javaFXEmbedded) {
+				if (items[tabcount].getControl().isDisposed() == false) {
+					items[tabcount].getControl().dispose();
+					items[tabcount].dispose();
 				}
-			});
+				
+			} else {
+
+				Display dis = CanvasView.getParent2().getDisplay();
+				dis.syncExec(new Runnable() {
+
+					public void run() {
+
+						items[tabcount].dispose();
+
+					}
+				});
+			}
 
 		}
 		SwingUtilities.invokeLater(new Runnable() {
@@ -147,8 +148,9 @@ public class IJTabs {
 					});
 					if (items[nrdel].getControl().isDisposed() == false) {
 						items[nrdel].getControl().dispose();
+						items[nrdel].dispose();
 					}
-					items[nrdel].dispose();
+					
 
 				} else {
 
@@ -223,18 +225,16 @@ public class IJTabs {
 				public void run() {
 					Vector ve = (Vector) item.getData();
 					if (javaFXEmbedded) {
-						SwingUtilities.invokeLater(new Runnable() {
-							// !!
-							public void run() {
-								final ImageWindow win = (ImageWindow) ve.get(1);
 
-								win.bio7TabClose();
-								if (item.getControl().isDisposed() == false) {
-									item.getControl().dispose();
-								}
-							}
-						});
-						item.dispose();
+						final ImageWindow win = (ImageWindow) ve.get(1);
+
+						win.bio7TabClose();
+						if (item.getControl().isDisposed() == false) {
+							item.getControl().dispose();
+							item.dispose();
+						}
+
+						
 					} else {
 						SwingUtilities.invokeLater(new Runnable() {
 							// !!
@@ -347,8 +347,7 @@ public class IJTabs {
 							final ImagePlus plus = (ImagePlus) ve.get(0);
 
 							/*
-							 * Search for the tab which embeds this ImagePlus
-							 * instance!
+							 * Search for the tab which embeds this ImagePlus instance!
 							 */
 							if (plus == imagePlus) {
 								// calls bio7Tabclose!

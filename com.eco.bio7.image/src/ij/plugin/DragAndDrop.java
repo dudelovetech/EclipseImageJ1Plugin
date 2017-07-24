@@ -28,8 +28,9 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 		ImageJ ij = IJ.getInstance();
 		ij.setDropTarget(null);
 		new DropTarget(ij, this);
-		new DropTarget(Toolbar.getInstance(), this);
-		new DropTarget(ij.getStatusBar(), this);
+		/*Changed for Bio7! Deadlock from Navigator view!*/
+		//new DropTarget(Toolbar.getInstance(), this);
+		//new DropTarget(ij.getStatusBar(), this);
 	}  
 	    
 	public void drop(DropTargetDropEvent dtde)  {
