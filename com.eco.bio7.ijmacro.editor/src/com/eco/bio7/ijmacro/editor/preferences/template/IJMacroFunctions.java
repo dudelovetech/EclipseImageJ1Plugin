@@ -211,34 +211,63 @@ public class IJMacroFunctions {
 			"open(path)####Opens and displays a tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text file. Displays an error message and aborts the macro if the specified file is not in one of the supported formats, or if the file is not found. Displays a file open dialog box if path is an empty string or if there is no argument. Use the File>Open command with the command recorder running to generate calls to this function. With 1.41k or later, opens images specified by a URL, for example open(\"http://rsb.info.nih.gov/ij/images/clown.gif\").\r\n" + 
 			"parseFloat(string)####Converts the string argument to a number and returns it. Returns NaN (Not a Number) if the string cannot be converted into a number. Use the isNaN() function to test for NaN. For examples, see ParseFloatIntExamples.\r\n" + 
 			"Overlay.moveTo(x, y)####Sets the current drawing location.\r\n" + 
-			"Overlay.lineTo(x, y)####Draws a line from the current location to (x,y).\r\n" + 
+			"Overlay.lineTo(x, y)####Draws a line from the current location to (x,y) .\r\n" + 
 			"Overlay.drawLine(x1, y1, x2, y2)####Draws a line between (x1,y1) and (x2,y2)).\r\n" + 
 			"Overlay.add####Adds the drawing created by Overlay.lineTo(), Overlay.drawLine(), etc. to the overlay without updating the display.\r\n" + 
-			"Overlay.setPosition(n)####Sets the stack position (slice number) of the last item added to the overlay (example). Requires 1.45d.\r\n" + 
-			"Overlay.drawRect(x, y, width, height)####Draws a rectangle, where (x,y) specifies the upper left corner. Requires 1.44f.\r\n" + 
-			"Overlay.drawEllipse(x, y, width, height)####Draws an ellipse, where (x,y) specifies the upper left corner of the bounding rectangle. Requires 1.44f.\r\n" + 
+			"Overlay.setPosition(n)####Sets the stack position (slice number) of the last item added to the overlay (example).\r\n" + 
+			"Overlay.setPosition(c, z, t)####Sets the hyperstack position (channel, slice, frame) of the last item added to the overlay.\r\n" + 
+			"Overlay.drawRect(x, y, width, height)####Draws a rectangle, where (x,y) specifies the upper left corner.\r\n" + 
+			"Overlay.drawEllipse(x, y, width, height)####Draws an ellipse, where (x,y) specifies the upper left corner of the bounding rectangle.\r\n" + 
 			"Overlay.drawString(\"text\", x, y)####Draws text at the specified location and adds it to the overlay. Use setFont() to specify the font and setColor to set specify the color (example).\r\n" + 
+			"Overlay.drawString(\"text\", x, y, angle)####Draws text at the specified location and angle and adds it to the overlay (example).\r\n" + 
 			"Overlay.show####Displays the current overlay.\r\n" + 
 			"Overlay.hide####Hides the current overlay.\r\n" + 
-			"Overlay.hidden####Returns true if the active image has an overlay and it is hidden. Requires 1.46a.\r\n" + 
+			"Overlay.hidden####Returns true if the active image has an overlay and it is hidden.\r\n" + 
 			"Overlay.remove####Removes the current overlay.\r\n" + 
+			"Overlay.clear####Resets the overlay without updating the display.\r\n" + 
 			"Overlay.size####Returns the size (selection count) of the current overlay. Returns zero if the image does not have an overlay.\r\n" + 
+			"Overlay.addSelection####Adds the current selection to the overlay.\r\n" + 
+			"Overlay.addSelection(strokeColor)####Sets the stroke color (\"red\", \"green\", \"ff8800\", etc.) of the current selection and adds it to the overlay.\r\n" + 
+			"Overlay.addSelection(strokeColor, strokeWidth)####Sets the stroke color (\"blue\", \"yellow\", \"ffaa77\" etc.) and stroke width of the current selection and adds it to the overlay.\r\n" + 
+			"Overlay.addSelection(\"\", 0, fillColor)####Sets the fill color (\"red\", \"green\", etc.) of the current selection and adds it to the overlay.\r\n" + 
+			"Overlay.activateSelection(index)####Activates the specified overlay selection.\r\n" + 
+			"Overlay.moveSelection(index, x, y)####Moves the specified selection to the specified location.\r\n" + 
 			"Overlay.removeSelection(index)####Removes the specified selection from the overlay.\r\n" + 
-			"Overlay.copy####Copies the overlay on the current image to the overlay clipboard. Requires 1.45e.\r\n" + 
-			"Overlay.paste####Copies the overlay on the overlay clipboard to the current image. Requires 1.45e.\r\n"+
+			"Overlay.copy####Copies the overlay on the current image to the overlay clipboard.\r\n" + 
+			"Overlay.paste####Copies the overlay on the overlay clipboard to the current image.\r\n" + 
+			"Overlay.drawLabels(boolean)####Enables/disables overlay labels.\r\n" + 
+			"Overlay.measure####Measures all the selections in the current overlay.\r\n"+
 			"parseInt(string)####Converts string to an integer and returns it. Returns NaN if the string cannot be converted into a integer.\r\n" + 
 			"parseInt(string, radix)####Converts string to an integer and returns it. The optional second argument (radix) specifies the base of the number contained in the string. The radix must be an integer between 2 and 36. For radixes above 10, the letters of the alphabet indicate numerals greater than 9. Set radix to 16 to parse hexadecimal numbers. Returns NaN if the string cannot be converted into a integer. For examples, see ParseFloatIntExamples.\r\n" + 
-			"Plot.create(\"Title\", \"X-axis Label\", \"Y-axis Label\", xValues, yValues)####Generates a plot using the specified title, axis labels and X and Y coordinate arrays. If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. It is also permissible to specify no arrays and use Plot.setLimits() and Plot.add() to generate the plot. Use\r\n" + 
-			"Plot.show()####to display the plot in a window or it will be displayed automatically when the macro exits. For examples, check out the ExamplePlots macro file.\r\n" + 
-			"Plot.setLimits(xMin, xMax, yMin, yMax)####Sets the range of the x-axis and y-axis of plots created using Plot.create(). Must be called immediately after Plot.create().\r\n" + 
+			"PI####Returns the constant π (3.14159265), the ratio of the circumference to the diameter of a circle.\r\n"+
+			"Plot.create(\"Title\", \"X-axis Label\", \"Y-axis Label\", xValues, yValues)####Generates a plot using the specified title, axis labels and X and Y coordinate arrays. If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. It is also permissible to specify no arrays and use Plot.setLimits() and Plot.add() to generate the plot. Use Plot.show() to display the plot in a window, or it will be displayed automatically when the macro exits.\r\n" + 
+			"Plot.add(type, xValues, yValues)####Adds a curve, set of points or error bars to a plot created using Plot.create(). If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. The first argument (type) can be \"line\", \"circles\", \"boxes\", \"triangles\", \"crosses\", \"dots\", \"x\", \"connected\" (requires 1.49t), \"error bars\" (in y direction) or \"xerror bars\". In 1.49t or later, error bars apply to the last dataset provided by Plot.create or Plot.add.\r\n" + 
+			"Plot.drawVectors(xStarts, yStarts, xEnds, yEnds)####Draws arrows from the starting to ending coordinates contained in the arrays.\r\n" + 
+			"Plot.drawLine(x1, y1, x2, y2)####Draws a line between x1,y1 and x2,y2, using the coordinate system defined by Plot.setLimits().\r\n" + 
+			"Plot.drawNormalizedLine(x1, y1, x2, y2)####Draws a line using a normalized 0-1, 0-1 coordinate system, with (0,0) at the top left and (1,1) at the lower right corner.\r\n" + 
+			"Plot.addText(\"A line of text\", x, y)####Adds text to the plot at the specified location, where (0,0) is the upper left corner of the the plot frame and (1,1) is the lower right corner. Call Plot.setJustification() to have the text centered or right justified. Plot.setLimits(xMin, xMax, yMin, yMax)\r\n" + 
+			"Plot.setLimits(xMin, xMax, yMin, yMax)####Sets the range of the x-axis and y-axis of plots. With version 1.50g and later, when 'NaN' is used as a limit, the range is calculated automatically from the plots that have been added so far.\r\n" + 
+			"Plot.getLimits(xMin, xMax, yMin, yMax)####Returns the current axis limits. Note that min>max if the axis is reversed. Requires 1.49t.\r\n" + 
+			"Plot.setLimitsToFit()####Sets the range of the x and y axes to fit all data. Requires 1.49t.\r\n" + 
+			"Plot.setColor(color)####Specifies the color used in subsequent calls to Plot.add() or Plot.addText(). The argument can be \"black\", \"blue\", \"cyan\", \"darkGray\", \"gray\", \"green\", \"lightGray\", \"magenta\", \"orange\", \"pink\", \"red\", \"white\", \"yellow\", or a hex value like \"#ff00ff\". Note that the curve specified in Plot.create() is drawn last.\r\n" + 
+			"Plot.setColor(color1, color2)####This is a two argument version of Plot.setColor, where the second argument is used for filling symbols or as the line color for connected points. Requires 1.49t.\r\n" + 
+			"Plot.setBackgroundColor(color)####Sets the background color of the plot frame (example). Requires 1.49h.\r\n" + 
 			"Plot.setLineWidth(width)####Specifies the width of the line used to draw a curve. Points (circle, box, etc.) are also drawn larger if a line width greater than one is specified. Note that the curve specified in Plot.create() is the last one drawn before the plot is dispayed or updated.\r\n" + 
-			"Plot.setColor(\"red\")####Specifies the color used in subsequent calls to Plot.add() or Plot.addText(). The argument can be \"black\", \"blue\", \"cyan\", \"darkGray\", \"gray\", \"green\", \"lightGray\", \"magenta\", \"orange\", \"pink\", \"red\", \"white\" or \"yellow\". Note that the curve specified in Plot.create() is drawn last.\r\n" + 
-			"Plot.add(\"circles\", xValues, yValues)####Adds a curve, set of points or error bars to a plot created using Plot.create(). If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. The first argument can be \"line\", \"circles\", \"boxes\", \"triangles\", \"crosses\", \"dots\", \"x\" or \"error bars\".\r\n" + 
-			"Plot.addText(\"A line of text\", x, y)####Adds text to the plot at the specified location, where (0,0) is the upper left corner of the the plot frame and (1,1) is the lower right corner. Call Plot.setJustification() to have the text centered or right justified.\r\n" + 
 			"Plot.setJustification(\"center\")####Specifies the justification used by Plot.addText(). The argument can be \"left\", \"right\" or \"center\". The default is \"left\".\r\n" + 
+			"Plot.setLegend(\"label1\\tlabel2...\", \"options\")####Creates a legend for each of the data sets added with Plot.create and Plot.add. In the first argument, the labels for the data sets should be separated with tab or newline characters. The optional second argument can contain the legend position (\"top-left\", \"top-right\", \"bottom-left\", \"bottom-right\"; default is automatic positioning), \"bottom-to-top\" for reversed sequence of the labels, and \"transparent\" to make the legend background transparent. Requires 1.49t.\r\n" + 
+			"Plot.setFrameSize(width, height)####Sets the plot frame size in pixels, overriding the default size defined in the Edit>Options>Profile Plot Options dialog box.\r\n" + 
+			"Plot.setLogScaleX(boolean)####Sets the x axis scale to Logarithmic, or back to linear if the optional boolean argument is false. In versions up to 1.49s, it must be called immediately after Plot.create and before Plot.setLimits. See the LogLogPlot macro for an example.\r\n" + 
+			"Plot.setLogScaleY(boolean)####Sets the y axis scale to Logarithmic, or back to linear if the optional boolean argument is false.\r\n" + 
+			"Plot.setXYLabels(\"x Label\", \"y Label\")####Sets the axis labels. Requires 1.49t.\r\n" + 
+			"Plot.setFontSize(size, \"options\")####Sets the default font size in the plot (otherwise specified in Profile Plot Options), used e.g. for axes labels. Can be also called prior to Plot.addText. The optional second argument can include \"bold\" and/or \"italic\". Requires 1.49t.\r\n" + 
+			"Plot.setAxisLabelSize(size, \"options\")####Sets the fort size of the axis labels. The optional second argument can include \"bold\" and/or \"italic\". Requires 1.49t. Plot.setFormatFlags(\"11001100001111\")\r\n" + 
+			"Plot.setFormatFlags(\"11001100001111\")####Controls whether to draw axes labels, grid lines and ticks (major/minor/ticks for log axes). Use the macro recorder and More>>Axis Options in any plot window to determine the binary code. Requires 1.49t.\r\n" + 
+			"Plot.useTemplate(\"plot name\" or id)####Transfers the formatting of an open plot window to the current plot. Requires 1.49t.\r\n" + 
+			"Plot.makeHighResolution(factor)####Creates a high-resolution image of the plot enlarged by factor. Add the second argument \"disable\" to avoid antialiased text. Requires 1.49t. Plot.show()\r\n" + 
 			"Plot.show()####Displays the plot generated by Plot.create(), Plot.add(), etc. in a window. This function is automatically called when a macro exits.\r\n" + 
-			"Plot.update()####Draws the plot generated by Plot.create(), Plot.add(), etc. in an existing plot window. Equivalent to Plot.show() if no plot window is open.\r\n" + 
-			"Plot.getValues(xpoints, ypoints)####Returns the values displayed by clicking on \"List\" in a plot or histogram window (example). Requires 1.41k.\r\n" + 
+			"Plot.update()####Draws the plot generated by Plot.create(), Plot.add(), etc. in an existing plot window. Equivalent to Plot.show if no plot window is open.\r\n" + 
+			"Plot.getValues(xpoints, ypoints)####Returns the values displayed by clicking on \"List\" in a plot or histogram window (example).\r\n" + 
+			"Plot.showValues()####Displays the plot values in the Results window. Must be preceded by Plot.show.\r\n" + 
 			"pow(base, exponent)####Returns the value of base raised to the power of exponent.\r\n" + 
 			"print(string)####Outputs a string to the \"Log\" window. Numeric arguments are automatically converted to strings. Starting with ImageJ v1.34b, print() accepts multiple arguments. For example, you can use print(x,y,width, height) instead of print(x+\" \"+y+\" \"+width+\" \"+height). If the first argument is a file handle returned by File.open(path), then the second is saved in the refered file (see SaveTextFileDemo). Numeric expressions are automatically converted to strings using four decimal places, or use the d2s function to specify the decimal places. For example, print(2/3) outputs \"0.6667\" but print(d2s(2/3,1)) outputs \"0.7\". Starting with ImageJ 1.37j, print() accepts commands such as \"\\\\Clear\", \"\\\\Update:<text>\" and \"\\\\Update<n>:<text>\" (for n<26) that clear the \"Log\" window and update its contents. For example, print(\"\\\\Clear\") erases the Log window, print(\"\\\\Update:new text\") replaces the last line with \"new text\" and print(\"\\\\Update8:new 8th line\") replaces the 8th line with \"new 8th line\". Refer to the LogWindowTricks macro for an example. Starting with ImageJ 1.38m, the second argument to print(arg1, arg2) is appended to a text window or table if the first argument is a window title in brackets, for example print(\"[My Window]\", \"Hello, world\"). With text windows, newline characters (\"\\n\") are not automatically appended and text that starts with \"\\\\Update:\" replaces the entire contents of the window. Refer to the PrintToTextWindow, Clock and ProgressBar macros for examples. The second argument to print(arg1, arg2) is appended to a table (e.g., ResultsTable) if the first argument is the title of the table in brackets. Use the Plugins>New command to open a blank table. Any command that can be sent to the \"Log\" window (\"\\\\Clear\", \"\\\\Update:<text>\" , etc.) can also be sent to a table. Refer to the SineCosineTable and TableTricks macros for examples.\r\n" + 
 			"random####Returns a random number between 0 and 1.\r\n" + 
@@ -249,12 +278,60 @@ public class IJMacroFunctions {
 			"resetMinAndMax####With 16-bit and 32-bit images, resets the minimum and maximum displayed pixel values (display range) to be the same as the current image's minimum and maximum pixel values. With 8-bit images, sets the display range to 0-255. With RGB images, does nothing. See the DisplayRangeMacros for examples.\r\n" + 
 			"resetThreshold####Disables thresholding. See also: setThreshold, setAutoThreshold, getThreshold.\r\n" + 
 			"restorePreviousTool####Switches back to the previously selected tool. Useful for creating a tool macro that performs an action, such as opening a file, when the user clicks on the tool icon.\r\n" + 
-			"restoreSettings####Restores Edit/Options submenu settings saved by the saveSettings() function.\r\n" + 
-			"roiManager(cmd)####Runs an ROI Manager command, where cmd must be \"Add\", \"Add & Draw\", \"Update\", \"Delete\", \"Deselect\", \"Measure\", \"Draw\", \"Fill\", \"Label\", \"Combine\", \"Split\", \"Sort\", \"Reset\" or \"Multi Measure\". The ROI Manager is opened if it is not already open. Use roiManager(\"reset\") to delete all items on the list. Use setOption(\"Show All\", boolean) to enable/disable \"Show All\" mode. For examples, refer to the RoiManagerMacros, RoiManagerAddParticles and ROI Manager Stack Demo macros.\r\n" + 
-			"roiManager(cmd, name)####Runs an ROI Manager I/O command, where cmd is \"Open\", \"Save or \"Rename\", and name is a file path or name. The \"Save\" option ignores selections and saves all the ROIs as a ZIP archive. With ImageJ 1.38o and later, it displays a file save dialog if name is \"\". The \"Rename\" option requires v1.37h or later. With v1.37i or later, you can get the selection name using call(\"ij.plugin.frame.RoiManager.getName\", index). The ROI Manager is opened if it is not already open.\r\n" + 
-			"roiManager(\"count\")####Returns the number of items in the ROI Manager list.\r\n" + 
-			"roiManager(\"index\")####Returns the index of the currently selected item on the ROI Manager list, or -1 if the list is empty, no items are selected, or more than one item is selected.\r\n" + 
-			"roiManager(\"select\", index)####Selects an item in the ROI Manager list, where index must be greater than or equal zero and less than the value returned by roiManager(\"count\"). Use roiManager(\"deselect\") to deselect all items on the list. For an example, refer to the ROI Manager Stack Demo macro.\r\n" + 
+			"restoreSettings####Restores Edit/Options submenu settings saved by the saveSettings() function.\r\n" +
+			"Roi.contains(x, y)####Returns \"1\" if the point x,y is inside the current selection or \"0\" if it is not. Aborts the macro if there is no selection. Requires 1.49h. See also: selectionContains.\r\n" + 
+			"Roi.getBounds(x, y, width, height)####Returns the location and size of the selection's bounding rectangle.\r\n" + 
+			"Roi.getCoordinates(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates that define this selection.\r\n" + 
+			"Roi.getDefaultColor####Returns the current default selection color.\r\n" + 
+			"Roi.getStrokeColor####Returns the selection stroke color.\r\n" + 
+			"Roi.getFillColor####Returns the selection fill color.\r\n" + 
+			"Roi.getName####Returns the selection name or an empty string if the selection does not have a name.\r\n" + 
+			"Roi.getProperty(key)####Returns the value (a string) associated with the specified key or an empty string if the key is not found.\r\n" + 
+			"Roi.setProperty(key, value)####Adds the specified key and value pair to the selection properties. Assumes a value of \"1\" (true) if there is only one argument.\r\n" + 
+			"Roi.getProperties####Returns all selection properties or an empty string if the selection does not have properties.\r\n" + 
+			"Roi.getSplineAnchors(x, y)####Returns the x and y coordinates of the anchor points of a spline fitted selection (example).\r\n" + 
+			"Roi.setPolygonSplineAnchors(x, y)####Creates or updates a spline fitted polygon selection (example).\r\n" + 
+			"Roi.setPolylineSplineAnchors(x, y)####Creates or updates a spline fitted polyline selection (example).\r\n" + 
+			"Roi.getType####Returns, as a string, the type of the current selection.\r\n" + 
+			"Roi.move(x, y)####Moves the selection to the specified location.\r\n" + 
+			"Roi.setStrokeColor(color)####Sets the selection stroke color (\"red\", \"5500ff00\". etc.).\r\n" + 
+			"Roi.setStrokeColor(red, green, blue)####Sets the selection stroke color, where 'red', 'green' and 'blue' are integers (0-255).\r\n" + 
+			"Roi.setStrokeColor(rgb)####Sets the selection stroke color, where 'rgb' is an integer.\r\n" + 
+			"Roi.setFillColor(color)####Sets the selection fill color (\"red\", \"5500ff00\". etc.).\r\n" + 
+			"Roi.setFillColor(red, green, blue)####Sets the selection fill color, where 'red', 'green' and 'blue' are integers (0-255).\r\n" + 
+			"Roi.setFillColor(rgb)####Sets the selection fill color, where 'rgb' is an integer.\r\n" + 
+			"Roi.setName(name)####Sets the selection name.\r\n" + 
+			"Roi.setStrokeWidth(width)####Sets the selection stroke width."+
+			"roiManager(\"and\")####Uses the conjunction operator on the selected ROIs, or all ROIs if none are selected, to create a composite selection.\r\n" + 			
+			"roiManager(\"add\")####Adds the current selection to the ROI Manager.\r\n" + 			
+			"roiManager(\"add & draw\")####Outlines the current selection and adds it to the ROI Manager.\r\n" + 
+ 			"roiManager(\"combine\")####Uses the union operator on the selected ROIs to create a composite selection. Combines all ROIs if none are selected.\r\n" + 
+ 			"roiManager(\"count\")####Returns the number of ROIs in the ROI Manager list.\r\n" + 
+			"roiManager(\"delete\")####Deletes the selected ROIs from the list, or deletes all ROIs if none are selected.\r\n" + 
+			"roiManager(\"deselect\")####Deselects all ROIs in the list. When ROIs are deselected, subsequent ROI Manager commands are applied to all ROIs.\r\n" + 
+			"roiManager(\"draw\")####Draws the selected ROIs, or all ROIs if none are selected, using the equivalent of the Edit>Draw command.\r\n" + 
+			"roiManager(\"fill\")####Fills the selected ROIs, or all ROIs if none are selected, using the equivalent of the Edit>Fill command.\r\n" + 
+			"roiManager(\"index\")####Returns the index of the currently selected ROI on the list, or -1 if the list is empty or no ROIs are selected. Returns the index of the first selected ROI if more than one is selected\r\n" + 
+			"roiManager(\"measure\")####Measures the selected ROIs, or if none is selected, all ROIs on the list.\r\n" +  
+			"roiManager(\"multi measure\")####Measures all the ROIs on all slices in the stack, creating a Results Table with one row per slice.\r\n" + 
+			"roiManager(\"multi-measure append\")####Measures all the ROIs on all slices in the stack, appending the measurements to the Results Table, with one row per slice.\r\n" + 
+			"roiManager(\"multi-measure one\")####Measures all the ROIs on all slices in the stack, creating a Results Table with one row per measurement.\r\n" + 
+			"roiManager(\"multi plot\")####Plots the selected ROIs, or all ROIs if none are selected, on a single graph.\r\n" + 
+			"roiManager(\"open\", file-path)####Opens a .roi file and adds it to the list or opens a ZIP archive (.zip file) and adds all the selections contained in it to the list.\r\n" + 
+			"roiManager(\"remove slice info\")####Removes the information in the ROI names that associates them with particular stack slices.\r\n" + 
+			"roiManager(\"rename\", name)####Renames the selected ROI. You can get the name of an ROI on the list using call(\"ij.plugin.frame.RoiManager.getName\", index).\r\n" + 
+			"roiManager(\"reset\")####Deletes all ROIs on the list.\r\n" + 
+			"roiManager(\"save, file-path)####Saves all the ROIs on the list in a ZIP archive.\r\n" + 
+			"roiManager(\"save selected\", file-path)####Saves the selected ROI as a .roi file.\r\n" + 
+			"roiManager(\"select\", index)####Selects an item in the ROI Manager list, where index must be greater than or equal zero and less than the value returned by roiManager(\"count\"). Note that macros that use this function sometimes run orders of magnitude faster in batch mode. Use roiManager(\"deselect\") to deselect all items on the list. For an example, refer to the ROI Manager Stack Demo macro.\r\n" + 
+			"roiManager(\"select\", indexes)####Selects multiple items in the ROI Manager list, where indexes is an array of integers, each of which must be greater than or equal to 0 and less than the value returned by roiManager(\"count\"). The selected ROIs are not highlighted in the ROI Manager list and are no longer selected after the next ROI Manager command is executed.\r\n" + 
+			"roiManager(\"show all\")####Displays all the ROIs as an overlay.\r\n" + 
+			"roiManager(\"show all with labels\")####Displays all the ROIs as an overlay, with labels.\r\n" +  
+			"roiManager(\"show all without labels\")####Displays all the ROIs as an overlay, without labels.\r\n" +  
+			"roiManager(\"show none\")####Removes the ROI Manager overlay.\r\n" +  
+			"roiManager(\"sort\")####Sorts the ROI list in alphanumeric order.\r\n" + 
+			"roiManager(\"split\")####Splits the current selection (it must be a composite selection) into its component parts and adds them to the ROI Manager.\r\n" +  
+			"roiManager(\"update\")####Replaces the selected ROI on the list with the current selection."+
 			"round(n)####Returns the closest integer to n. See also: floor.\r\n" + 
 			"run(\"command\"[, \"options\"])####Executes an ImageJ menu command. The optional second argument contains values that are automatically entered into dialog boxes (must be GenericDialog or OpenDialog). Use the Command Recorder (Plugins>Macros>Record) to generate run() function calls. Use string concatentation to pass a variable as an argument. For examples, see the ArgumentPassingDemo macro.\r\n" + 
 			"runMacro(name)####Runs the specified macro file, which is assumed to be in the Image macros folder. A full file path may also be used. The \".txt\" extension is optional. Returns any string argument returned by the macro. May have an optional second string argument that is passed to macro. For an example, see the CalculateMean macro. See also: eval and getArgument.\r\n" + 
@@ -284,7 +361,7 @@ public class IJMacroFunctions {
 			"setMetadata(\"Label\", string)####Sets string as the label of the current image or stack slice. The first 60 characters, or up to the first newline, of the label are displayed as part of the image subtitle. The labels are saved as part of the TIFF header. See also: getMetadata. Requires v1.40b.\r\n" + 
 			"setMinAndMax(min, max)####Sets the minimum and maximum displayed pixel values (display range). See the DisplayRangeMacros for examples.\r\n" + 
 			"setMinAndMax(min, max, channels)####Sets the display range of specified channels in an RGB image, where 4=red, 2=green, 1=blue, 6=red+green, etc. Note that the pixel data is altered since RGB images, unlike composite color images, do not have a LUT for each channel. Requires v1.42d.\r\n" + 
-			"setOption(option, boolean)####Enables or disables an ImageJ option, where option is one of the following options and boolean is either true or false. \"DisablePopupMenu\" enables/disables the the menu displayed when you right click on an image. \"Show All\" enables/disables the ROI Manager's \"Show All\" mode. \"Changes\" sets/resets the 'changes' flag of the current image. Set \"DebugMode\" true to put ImageJ in debug mode. \"OpenUsingPlugins\", added in v1.38f, controls whether standard file types (TIFF, JPEG, GIF, etc.) are opened by external plugins or by ImageJ (example). \"QueueMacros\", added in v1.38g, controls whether macros invoked using keyboard shortcuts run sequentially on the event dispatch thread (EDT) or in separate, possibly concurrent, threads (example). In \"QueueMacros\" mode, screen updates, which also run on the EDT, are delayed until the macro finishes. Note that \"QueueMacros\" does not work with macros using function key shortcuts in ImageJ 1.41g and earlier. \"DisableUndo\", added in v1.38h, enables/disables the Edit>Undo command. Note that a setOption(\"DisableUndo\",true) call without a corresponding setOption(\"DisableUndo\",false) will cause Edit>Undo to not work as expected until ImageJ is restarted. \"Display Label\", \"Limit to Threshold\", \"Area\", \"Mean\" and \"Std\", added in v1.41, enable/disable the corresponding Analyze>Set Measurements options.\r\n" + 
+			"setOption(option, boolean)####Enables or disables an ImageJ option, where option is one of the following options and boolean is either true or false. \"AutoContrast\" enables/disables the Edit>Options>Appearance \"Auto contrast stacks\" option. You can also have newly displayed stack slices contrast enhanced by holding the shift key down when navigating stacks. \"Bicubic\" provides a way to force commands like Edit>Selection>Straighten, that normally use bilinear interpolation, to use bicubic interpolation. \"BlackBackground\" enables/disables the Process>Binary>Options \"Black background\" option. \"Changes\" sets/resets the 'changes' flag of the current image. Set this option false to avoid \"Save Changes?\" dialog boxes when closing images. \"DebugMode\" enables/disables the ImageJ debug mode. ImageJ displays information, such as TIFF tag values, when it is in debug mode. \"DisablePopupMenu\" enables/disables the the menu displayed when you right click on an image. \"DisableUndo\" enables/disables the Edit>Undo command. Note that a setOption(\"DisableUndo\",true) call without a corresponding setOption(\"DisableUndo\",false) will cause Edit>Undo to not work as expected until ImageJ is restarted. \"Display label\", \"Limit to threshold\", \"Area\", \"Mean\" and \"Std\", \"Perimeter\", \"Stack position\" and \"Add to overlay\" enable/disable the corresponding Analyze>Set Measurements options. \"ExpandableArrays\" enables/disables support for auto-expanding arrays (example). Note that macros that use auto-expanding arrays will not be compatible with Image 2.0. \"JFileChooser\" enables/disables use of the Java JFileChooser to open and save files instead of the native OS file chooser. \"Loop\" enables/disables the Image>Stacks>Tools>Animation Options \"Loop back and forth\" option. \"OpenUsingPlugins\" controls whether standard file types (TIFF, JPEG, GIF, etc.) are opened by external plugins or by ImageJ (example). \"QueueMacros\" controls whether macros invoked using keyboard shortcuts run sequentially on the event dispatch thread (EDT) or in separate, possibly concurrent, threads (example). In \"QueueMacros\" mode, screen updates, which also run on the EDT, are delayed until the macro finishes. \"Show All\" enables/disables the the \"Show All\" mode in the ROI Manager. \"ShowAngle\" determines whether or not the \"Angle\" value is displayed in the Results window when measuring straight line lengths. Requires 1.49c. \"ShowMin\" determines whether or not the \"Min\" value is displayed in the Results window when \"Min & Max Gray Value\" is enabled in the Analyze>Set Measurements dialog box. \"ShowRowNumbers\" enables/disables display of Results table row numbers (example). \"AntialiasedText\" controls the \"Antialiased text\" option in the Edit>Options>Fonts dialog. Requires v1.51h. "+
 			"setPasteMode(mode)####Sets the transfer mode used by the Edit>Paste command, where 'mode' is \"Copy\", \"Blend\", \"Average\", \"Difference\", \"Transparent\", \"AND\", \"OR\", \"XOR\", \"Add\", \"Subtract\", \"Multiply\", or \"Divide\". In v1.37a or later, 'mode' can also be \"Min\" or \"Max\".\r\n" + 
 			"setPixel(x, y, value)####Stores value at location (x,y) of the current image. The screen is updated when the macro exits or call updateDisplay() to have it updated immediately.\r\n" + 
 			"setResult(\"Column\", row, value)####Adds an entry to the ImageJ results table or modifies an existing entry. The first argument specifies a column in the table. If the specified column does not exist, it is added. The second argument specifies the row, where 0<=row<=nResults. (nResults is a predefined variable.) A row is added to the table if row=nResults. The third argument is the value to be added or modified. Call setResult(\"Label\", row, string) to set the row label. Call updateResults() to display the updated table in the \"Results\" window. For examples, see the SineCosineTable and ConvexitySolidarity macros.\r\n" + 
@@ -316,23 +393,29 @@ public class IJMacroFunctions {
 			"Stack.setPosition(channel, slice, frame)####Sets the position.\r\n" + 
 			"Stack.getFrameRate()####Returns the frame rate (FPS).\r\n" + 
 			"Stack.setFrameRate(fps)####Sets the frame rate.\r\n" + 
-			"Stack.getFrameInterval()####Returns the frame interval in time (T) units. Requires v1.45h.\r\n" + 
-			"Stack.setFrameInterval(interval)####Sets the frame interval in time (T) units. Requires v1.45h.\r\n" + 
-			"Stack.getUnits(X, Y, Z, Time, Value)####Returns the x, y, z, time and value units. Requires v1.45h.\r\n" + 
+			"Stack.getFrameInterval()####Returns the frame interval in time (T) units.\r\n" + 
+			"Stack.setFrameInterval(interval)####Sets the frame interval in time (T) units.\r\n" + 
+			"Stack.getUnits(X, Y, Z, Time, Value)####Returns the x, y, z, time and value units.\r\n" + 
 			"Stack.setTUnit(string)####Sets the time unit.\r\n" + 
 			"Stack.setZUnit(string)####Sets the Z-dimension unit.\r\n" + 
 			"Stack.setDisplayMode(mode)####Sets the display mode, where mode is \"composite\", \"color\" or \"grayscale\". Requires a multi-channel stack and v1.40a or later.\r\n" + 
 			"Stack.getDisplayMode(mode)####Sets the string mode to the current display mode.\r\n" + 
-			"Stack.setActiveChannels(string)####Sets the active channels in a composite color image, where string is a list of ones and zeros that specify the channels to activate. For example, \"101\" activates channels 1 and 3.\r\n" + 
-			"Stack.getActiveChannels(string)####Returns a string that represents the state of the channels in a composite color image, where '1' indicates an active channel and '0' indicates an inactive channel. Requires v1.43d.\r\n" + 
+			"Stack.setActiveChannels(string)####Controls which channels in a composite color image are displayed, where string is a list of ones and zeros that specify the channels to display. For example, \"101\" causes channels 1 and 3 to be displayed.\r\n" + 
+			"Stack.getActiveChannels(string)####Returns a string that represents the state of the channels in a composite color image, where '1' indicates a displayed channel and '0' indicates an inactive channel.\r\n" + 
 			"Stack.swap(n1, n2)####Swaps the two specified stack images, where n1 and n2 are integers greater than 0 and less than or equal to nSlices.\r\n" + 
 			"Stack.getStatistics(voxelCount, mean, min, max, stdDev)####Calculates and returns stack statistics.\r\n" + 
+			"Stack.setOrthoViews(x, y, z)####If an Orthogonal Views is active, its crosspoint is set to x, y, z (example).\r\n" + 
+			"Stack.getOrthoViewsID####Returns the image ID of the current Orthogonal Views, or zero if none is active.\r\n" + 
+			"Stack.stopOrthoViews####Stops the current Orthogonal Views and closes the \"YZ\" and \"XZ\" windows.\r\n"+
 			"String.resetBuffer####Resets (clears) the buffer.\r\n" + 
 			"String.append(str)####Appends str to the buffer.\r\n" + 
 			"String.buffer####Returns the contents of the buffer.\r\n" + 
 			"String.copy(str)####Copies str to the clipboard.\r\n" + 
-			"String.copyResults####Copies the Results table to the clipboard.\r\n" + 
+			"String.copyResults####Copies the Results table to the clipboard.\r\n" +
+			"String.getResultsHeadings####Returns the Results window headers.\r\n"+
 			"String.paste####Returns the contents of the clipboard.\r\n" + 
+			"String.show(str)####Displays str in a text window.\r\n" + 
+			"String.show(title, str)####Displays str in a text window using title as the title.\r\n"+
 			"substring(string, index1, index2)####Returns a new string that is a substring of string. The substring begins at index1 and extends to the character at index2 - 1. See also: indexOf, startsWith, endsWith, replace.\r\n" + 
 			"substring(string, index)####Returns a substring of string that begins at index and extends to the end of string. Requires v1.41i.\r\n" + 
 			"tan(angle)####Returns the tangent of an angle (in radians).\r\n" + 
