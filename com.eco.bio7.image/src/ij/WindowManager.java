@@ -87,8 +87,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Makes the specified image temporarily the active image for this thread.
-	 * Call again with a null argument to revert to the previous active image.
+	 * Makes the specified image temporarily the active image for this thread. Call again with a null argument to revert to the previous active image.
 	 */
 	public static void setTempCurrentImage(ImagePlus img) {
 		// IJ.log("setTempImage: "+(img!=null?img.getTitle():"null")+"
@@ -162,8 +161,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Returns a list of the IDs of open images. Returns null if no image
-	 * windows are open.
+	 * Returns a list of the IDs of open images. Returns null if no image windows are open.
 	 */
 	public synchronized static int[] getIDList() {
 		int nWindows = imageList.size();
@@ -239,10 +237,8 @@ public class WindowManager {
 	}
 
 	/**
-	 * For IDs less than zero, returns the ImagePlus with the specified ID.
-	 * Returns null if no open window has a matching ID or no images are open.
-	 * For IDs greater than zero, returns the Nth ImagePlus. Returns null if the
-	 * ID is zero.
+	 * For IDs less than zero, returns the ImagePlus with the specified ID. Returns null if no open window has a matching ID or no images are open. For IDs greater than zero, returns the Nth ImagePlus.
+	 * Returns null if the ID is zero.
 	 */
 	public synchronized static ImagePlus getImage(int imageID) {
 		// if (IJ.debugMode) IJ.write("ImageWindow.getImage");
@@ -269,8 +265,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Returns the ID of the Nth open image. Returns zero if n<=0 or n greater
-	 * than the number of open image windows.
+	 * Returns the ID of the Nth open image. Returns zero if n<=0 or n greater than the number of open image windows.
 	 */
 	public synchronized static int getNthImageID(int n) {
 		if (n <= 0)
@@ -293,8 +288,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Returns the first image that has the specified title or null if it is not
-	 * found.
+	 * Returns the first image that has the specified title or null if it is not found.
 	 */
 	public synchronized static ImagePlus getImage(String title) {
 		int[] wList = getIDList();
@@ -358,8 +352,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Returns a unique name by adding, before the extension, -1, -2, etc. as
-	 * needed.
+	 * Returns a unique name by adding, before the extension, -1, -2, etc. as needed.
 	 */
 	public static String getUniqueName(String name) {
 		String name2 = name;
@@ -435,27 +428,28 @@ public class WindowManager {
 
 	/** The specified Window becomes the front window. */
 	public static void setWindow(Window win) {
-		/* Changed for Bio7! */
-		/*
-		 * frontWindow = win; if (win instanceof Frame) frontFrame = (Frame)win;
-		 */
+		/* Changed for Bio7? - Eventually not necessary! */
+
+		frontWindow = win;
+		if (win instanceof Frame)
+			frontFrame = (Frame) win;
+
 	}
 
 	/**
-	 * The specified frame becomes the front window, the one returnd by
-	 * getFrontWindow().
+	 * The specified frame becomes the front window, the one returnd by getFrontWindow().
 	 */
 	public static void setWindow(Frame win) {
-		/* Changed for Bio7! */
-		/*
-		 * frontWindow = win; frontFrame = win;
-		 */
+		/* Changed for Bio7? - Eventually not necessary! */
+
+		frontWindow = win;
+		frontFrame = win;
+
 		// IJ.log("Set window: "+(win!=null?win.getTitle():"null"));
 	}
 
 	/**
-	 * Closes all windows. Stops and returns false if an image or Editor
-	 * "save changes" dialog is canceled.
+	 * Closes all windows. Stops and returns false if an image or Editor "save changes" dialog is canceled.
 	 */
 	public synchronized static boolean closeAllWindows() {
 		while (imageList.size() > 0) {
@@ -528,8 +522,7 @@ public class WindowManager {
 	}
 
 	/**
-	 * Returns the window (a Frame or a Dialog) with the specified title, or
-	 * null if a window with that title is not found.
+	 * Returns the window (a Frame or a Dialog) with the specified title, or null if a window with that title is not found.
 	 */
 	public static Window getWindow(String title) {
 		for (int i = 0; i < nonImageList.size(); i++) {
