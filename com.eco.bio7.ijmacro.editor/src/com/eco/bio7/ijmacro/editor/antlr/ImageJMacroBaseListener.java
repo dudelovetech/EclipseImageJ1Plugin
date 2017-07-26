@@ -160,6 +160,18 @@ public class ImageJMacroBaseListener implements ImageJMacroListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFuncStatements(ImageJMacroParser.FuncStatementsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncStatements(ImageJMacroParser.FuncStatementsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(ImageJMacroParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

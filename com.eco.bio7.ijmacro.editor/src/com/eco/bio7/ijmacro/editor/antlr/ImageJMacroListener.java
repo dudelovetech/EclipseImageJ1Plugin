@@ -146,6 +146,18 @@ public interface ImageJMacroListener extends ParseTreeListener {
 	 */
 	void exitLabelledStatements(ImageJMacroParser.LabelledStatementsContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code funcStatements}
+	 * labeled alternative in {@link ImageJMacroParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncStatements(ImageJMacroParser.FuncStatementsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code funcStatements}
+	 * labeled alternative in {@link ImageJMacroParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncStatements(ImageJMacroParser.FuncStatementsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ImageJMacroParser#block}.
 	 * @param ctx the parse tree
 	 */

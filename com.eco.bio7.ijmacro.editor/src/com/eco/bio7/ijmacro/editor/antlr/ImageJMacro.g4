@@ -227,6 +227,7 @@ statement
  | breakStatement		#breakStatements
  | returnStatement		#returnStatements
  | labelledStatement	#labelledStatements
+ | functionDeclaration  #funcStatements
  ;
 
 /// Block :
