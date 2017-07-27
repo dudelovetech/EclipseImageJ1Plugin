@@ -22,6 +22,10 @@ Automatic indention of functions,loops, etc.
 14. Mark occurences (scope independant)
 15. A copy function for this forum
 
+### New in 1.51n33:
+1. Improved grammar for nested functions in loop and if statements
+2. Added more code completion templates
+3. Added a new action to insert text of the macro recorder (CTRL+SHIFT+R or CMD+SHIFT+R)
 
 ### New in 1.51n:
 
@@ -95,4 +99,18 @@ The ImageJ toolbar can be opened in the ImageJ-Canvas view menu (***Window->Imag
 
 Images can be dropped in a folder of Eclipse and can be opened from within Eclipse (special image icon available when image extension is detected) in the Eclipse ImageJ view. Unknown image formats (default extensions are used only) can be opened with (***Open with->Other->ImageJ Image Editor***) or simply by a drag and
 drop action.
+
+#### Key Commands (not visible in menu):
+
+1. Insert text at selected line from Macro Recorder: (CTRL+SHIFT+R or CMD+SHIFT+R)
+2. Debug (CTRL+D or CMD+D)
+3. Debug Abort (CTRL+X or CMD+X)
+4. Debug Step  (CTRL+E or CMD+E)
+5. Debug Trace (CTRL+T or CMD+T)
+6. Debug Run To (CTRL+SHIFT+E or CMD+SHIFT+E)
+7. Debug Run TO Completion (CTRL+SHIFT+X or CMD+SHIFT+X)
+8. Evaluate Line(CTRL+Y or CMD+Y)
+
+
+
 
