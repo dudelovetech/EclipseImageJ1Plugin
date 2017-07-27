@@ -26,11 +26,11 @@ public class GetMacroRecorderText extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
-		ITextEditor editor2 = (ITextEditor) editor;
-		IDocumentProvider dp = editor2.getDocumentProvider();
+		ITextEditor textEditor = (ITextEditor) editor;
+		IDocumentProvider dp = textEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(editor.getEditorInput());
 
-		ISelectionProvider sp = editor2.getSelectionProvider();
+		ISelectionProvider sp = textEditor.getSelectionProvider();
 
 		ISelection selectionsel = sp.getSelection();
 
@@ -64,7 +64,7 @@ public class GetMacroRecorderText extends AbstractHandler {
 			e.printStackTrace();
 		}
 
-		editor2.selectAndReveal(offset + reg.getLength(), 0);
+		textEditor.selectAndReveal(offset + reg.getLength(), 0);
 
 		return null;
 	}
