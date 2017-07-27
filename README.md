@@ -1,6 +1,11 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51p3:
+1. Improved grammar for nested functions in loop and if statements
+2. Added more code completion templates
+3. Added a new action to insert text of the macro recorder (CTRL+SHIFT+R or CMD+SHIFT+R)
+
 ### New in 1.51p (new macro editor available!):
 
 In this relase a macro editor and ImageJ perspective have been added to the ImageJ plugin. The editor has the following features:
@@ -21,11 +26,6 @@ Automatic indention of functions,loops, etc.
 13. Font preferences
 14. Mark occurences (scope independant)
 15. A copy function for this forum
-
-### New in 1.51n3:
-1. Improved grammar for nested functions in loop and if statements
-2. Added more code completion templates
-3. Added a new action to insert text of the macro recorder (CTRL+SHIFT+R or CMD+SHIFT+R)
 
 ### New in 1.51n:
 
