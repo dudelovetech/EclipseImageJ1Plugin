@@ -22,7 +22,7 @@ Automatic indention of functions,loops, etc.
 14. Mark occurences (scope independant)
 15. A copy function for this forum
 
-### New in 1.51n33:
+### New in 1.51n3:
 1. Improved grammar for nested functions in loop and if statements
 2. Added more code completion templates
 3. Added a new action to insert text of the macro recorder (CTRL+SHIFT+R or CMD+SHIFT+R)
