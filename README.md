@@ -108,8 +108,8 @@ drop action.
 4. Debug Step  (CTRL+E or CMD+E)
 5. Debug Trace (CTRL+T or CMD+T)
 6. Debug Run To (CTRL+SHIFT+E or CMD+SHIFT+E)
-7. Debug Run TO Completion (CTRL+SHIFT+X or CMD+SHIFT+X)
-8. Evaluate Line(CTRL+Y or CMD+Y)
+7. Debug Run To Completion (CTRL+SHIFT+X or CMD+SHIFT+X)
+8. Evaluate Line (CTRL+Y or CMD+Y)
 
 
 
