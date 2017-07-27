@@ -173,6 +173,11 @@
             commandId="com.eco.bio7.ijmacro.editor.actions.text.zoomOut">
            
       </handler>
+       <handler
+            class="com.eco.bio7.ijmacro.editor.actions.GetMacroRecorderText"
+            commandId="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext">
+           
+      </handler>
      
    </extension>
    <extension
@@ -286,6 +291,14 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+SHIFT+P">
     </key>
+     <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+R">
+    </key>
+    
+    
    
     </extension>
    <extension 
@@ -392,6 +405,12 @@
           description="Open the ImageJ editor preferences"
           id="com.eco.bio7.ijmacro.editor.preferences"
           name="Open ImageJ editor preferences">
+    </command>
+     <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Get Macro Recorder Text"
+          id="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext"
+          name="Get Macro Recorder Text">
     </command>
       
      
