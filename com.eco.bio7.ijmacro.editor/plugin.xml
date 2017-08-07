@@ -271,13 +271,13 @@
           commandId="com.eco.bio7.ijmacro.editor.setblockcomment"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="SHIFT+B">
+          sequence="CTRL+SHIFT+B">
     </key>
     <key
           commandId="com.eco.bio7.ijmacro.editor.unsetblockcomment"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="CTRL+SHIFT+B">
+          sequence="CTRL+ALT+SHIFT+B">
     </key>
     <key
           commandId="com.eco.bio7.ijmacro.editor.copy.imagej.forum"
