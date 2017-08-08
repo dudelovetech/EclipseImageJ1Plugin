@@ -2,7 +2,7 @@
 <feature
       id="com.eco.bio7.ijmacroedit.feature"
       label="ImageJ Macro Editor"
-      version="1.0.2.qualifier">
+      version="1.0.3.qualifier">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -35,7 +35,7 @@
          id="com.eco.bio7.ijmacro.editor"
          download-size="0"
          install-size="0"
-         version="2.0.2"
+         version="2.0.3"
          unpack="false"/>
 
 </feature>
