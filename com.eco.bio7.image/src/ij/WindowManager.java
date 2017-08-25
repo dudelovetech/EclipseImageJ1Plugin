@@ -428,7 +428,7 @@ public class WindowManager {
 
 	/** The specified Window becomes the front window. */
 	public static void setWindow(Window win) {
-		/* Changed for Bio7? - Eventually not necessary! */
+		/* Changed for Bio7? - Probably not necessary! */
 
 		frontWindow = win;
 		if (win instanceof Frame)
@@ -440,7 +440,7 @@ public class WindowManager {
 	 * The specified frame becomes the front window, the one returnd by getFrontWindow().
 	 */
 	public static void setWindow(Frame win) {
-		/* Changed for Bio7? - Eventually not necessary! */
+		/* Changed for Bio7? - Probably not necessary! */
 
 		frontWindow = win;
 		frontFrame = win;

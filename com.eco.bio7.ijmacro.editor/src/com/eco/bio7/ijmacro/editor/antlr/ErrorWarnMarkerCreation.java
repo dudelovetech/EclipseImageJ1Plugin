@@ -52,7 +52,7 @@ public class ErrorWarnMarkerCreation extends WorkspaceJob {
 	}
 
 	/*
-	 * At the moment we split the ANTLR message (String) into up to three components. The error or warn number, the description and eventually the replacement (solution)! Warn and error 17,19 are
+	 * At the moment we split the ANTLR message (String) into up to three components. The error or warn number, the description and probably the replacement (solution)! Warn and error 17,19 are
 	 * implemented as empty QuickFixes for a later use maybe. Null text comes from the ANTLR error listener which is not custom produced as in the RBaseListen and RRefPhaseListen class! See class
 	 * RAssistProcessor for the final icon creation if QuickFix is available or not!
 	 */
