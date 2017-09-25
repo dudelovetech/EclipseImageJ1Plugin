@@ -443,6 +443,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			// if (compositeImage) stackSize /= nChannels;
 			if (stackSize > 1)
 				win = new StackWindow(this);
+			else if (getProperty(Plot.PROPERTY_KEY) != null)
+				win = new PlotWindow(this, (Plot) (getProperty(Plot.PROPERTY_KEY)));
 			else
 				win = new ImageWindow(this);
 			if (roi != null)
@@ -571,6 +573,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 * Replaces this image with the specified ImagePlus. May not work as expected if 'imp' is a CompositeImage and this image is not.
 	 */
 	public void setImage(ImagePlus imp) {
+		Properties newProperties = imp.getProperties();
+		if (newProperties != null)
+			newProperties = (Properties) (newProperties.clone());
 		if (imp.getWindow() != null)
 			imp = imp.duplicate();
 		ImageStack stack2 = imp.getStack();
@@ -588,7 +593,12 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			updateAndDraw();
 		}
 		setCalibration(imp.getCalibration());
-		setProperty("Info", imp.getProperty("Info"));
+		properties = newProperties;
+		if (getProperty(Plot.PROPERTY_KEY) != null && win instanceof PlotWindow) {
+			Plot plot = (Plot) (getProperty(Plot.PROPERTY_KEY));
+			((PlotWindow) win).setPlot(plot);
+			plot.setImagePlus(this);
+		}
 	}
 
 	/**
@@ -625,9 +635,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			setTitle(title);
 		if (ip == null)
 			return;
+		this.ip = ip;
 		if (this.ip != null && getWindow() != null)
 			notifyListeners(UPDATED);
-		this.ip = ip;
 		if (ij != null)
 			ip.setProgressBar(ij.getProgressBar());
 		int stackSize = 1;
@@ -1680,9 +1690,11 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				overlay2 = ip2.getOverlay();
 				if (overlay2 != null)
 					setOverlay(overlay2);
-				Properties props = ((VirtualStack) stack).getProperties();
-				if (props != null)
-					setProperty("FHT", props.get("FHT"));
+				if (stack instanceof VirtualStack) {
+					Properties props = ((VirtualStack) stack).getProperties();
+					if (props != null)
+						setProperty("FHT", props.get("FHT"));
+				}
 				pixels = ip2.getPixels();
 			} else
 				pixels = stack.getPixels(currentSlice);
@@ -1777,7 +1789,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		roi.setImage(this);
 		if (updateDisplay)
 			draw();
-		// roi.notifyListeners(RoiListener.CREATED);
+		roi.notifyListeners(RoiListener.CREATED);
 	}
 
 	/** Creates a rectangular selection. */
@@ -1859,6 +1871,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			}
 			break;
 		}
+		if (roi != null)
+			roi.notifyListeners(RoiListener.CREATED);
 	}
 
 	/**
@@ -2231,12 +2245,12 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			setCalibration(imp.getCalibration());
 	}
 
-	/** Copies attributes (name, ID, calibration, path) of the specified image to this image. */
+	/** Copies attributes (name, ID, calibration, path, plot) of the specified image to this image. */
 	public void copyAttributes(ImagePlus imp) {
 		if (IJ.debugMode)
 			IJ.log("copyAttributes: " + imp.getID() + "  " + this.getID() + " " + imp + "   " + this);
 		if (imp == null || imp.getWindow() != null)
-			throw new IllegalArgumentException("Souce image is null or displayed");
+			throw new IllegalArgumentException("Source image is null or displayed");
 		ID = imp.getID();
 		setTitle(imp.getTitle());
 		setCalibration(imp.getCalibration());
@@ -2246,6 +2260,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		Object info = imp.getProperty("Info");
 		if (info != null)
 			setProperty("Info", imp.getProperty("Info"));
+		Object plot = imp.getProperty(Plot.PROPERTY_KEY);
+		if (plot != null)
+			setProperty(Plot.PROPERTY_KEY, plot);
 	}
 
 	/**
@@ -2663,7 +2680,6 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	public ImagePlus flatten() {
 		if (IJ.debugMode)
 			IJ.log("flatten");
-		IJ.wait(50); // wait for screen to be refreshed
 		ImagePlus imp2 = createImagePlus();
 		imp2.setTitle(flattenTitle);
 		ImageCanvas ic2 = new ImageCanvas(imp2);
@@ -2681,6 +2697,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		Overlay overlay2 = getOverlay();
 		if (overlay2 != null && imp2.getRoi() != null)
 			imp2.deleteRoi();
+		setPointScale(imp2.getRoi(), overlay2);
 		ic2.setOverlay(overlay2);
 		ImageCanvas ic = getCanvas();
 		if (ic != null)
@@ -2789,6 +2806,24 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		imp1.setOverlay(overlay);
 		ImagePlus imp2 = imp1.flatten();
 		stack.setPixels(imp2.getProcessor().getPixels(), slice);
+	}
+
+	private void setPointScale(Roi roi2, Overlay overlay2) {
+		ImageCanvas ic = getCanvas();
+		if (ic == null)
+			return;
+		double scale = 1.0 / ic.getMagnification();
+		if (scale == 1.0)
+			return;
+		if (roi2 != null && (roi2 instanceof PointRoi))
+			roi2.setFlattenScale(scale);
+		if (overlay2 != null) {
+			for (int i = 0; i < overlay2.size(); i++) {
+				roi2 = overlay2.get(i);
+				if (roi2 != null && (roi2 instanceof PointRoi))
+					roi2.setFlattenScale(scale);
+			}
+		}
 	}
 
 	/**

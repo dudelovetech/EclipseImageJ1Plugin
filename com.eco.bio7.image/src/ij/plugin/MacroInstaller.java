@@ -27,10 +27,10 @@ import org.osgi.framework.Bundle;
 import com.eco.bio7.image.Util;
 
 /**
- * This plugin implements the Plugins/Macros/Install Macros command. It is also
- * used by the Editor class to install macro in menus and by the ImageJ class to
- * install macros at startup.
+ * This plugin implements the Plugins/Macros/Install Macros command. It is also used by the Editor class to install macro in menus and by the ImageJ class to install macros in menus and by the ImageJ
+ * class to install macros at startup.
  */
+
 public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 
 	public static final int MAX_SIZE = 28000, MAX_MACROS = 100, XINC = 10, YINC = 18;
@@ -400,8 +400,7 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 	}
 
 	/*
-	 * Changed for Bio7! ImageJ resources are not wrapped in a *.jar. So we
-	 * calculate and return the paths!
+	 * Changed for Bio7! ImageJ resources are not wrapped in a *.jar. So we calculate and return the paths!
 	 */
 	/** Returns a text file contained in ij.jar. */
 	public String openFromIJJar(String path) {
@@ -410,18 +409,12 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 		path = pathDir + path;
 
 		/*
-		 * String currentDir = path; // System.out.println(path); pluginsPath =
-		 * path + "plugins/";// plugins dir; macrosPath = path + "macros/";//
-		 * macros dir; ImageJPath = path;
+		 * String currentDir = path; // System.out.println(path); pluginsPath = path + "plugins/";// plugins dir; macrosPath = path + "macros/";// macros dir; ImageJPath = path;
 		 */
 
 		/*
-		 * String text = null; try { InputStream is =
-		 * this.getClass().getResourceAsStream(path); //IJ.log(is+"	"+path); if
-		 * (is==null) return null; InputStreamReader isr = new
-		 * InputStreamReader(is); StringBuffer sb = new StringBuffer(); char []
-		 * b = new char [8192]; int n; while ((n = isr.read(b)) > 0)
-		 * sb.append(b,0, n); text = sb.toString(); } catch (IOException e) {}
+		 * String text = null; try { InputStream is = this.getClass().getResourceAsStream(path); //IJ.log(is+"	"+path); if (is==null) return null; InputStreamReader isr = new InputStreamReader(is);
+		 * StringBuffer sb = new StringBuffer(); char [] b = new char [8192]; int n; while ((n = isr.read(b)) > 0) sb.append(b,0, n); text = sb.toString(); } catch (IOException e) {}
 		 */
 		/* Open the calculated file with the ApacheIO lib! */
 		File file = new File(path);

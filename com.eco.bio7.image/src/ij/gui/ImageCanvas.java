@@ -57,13 +57,11 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	private boolean overOverlayLabel;
 
 	/**
-	 * If the mouse moves less than this in screen pixels, successive zoom
-	 * operations are on the same image pixel
+	 * If the mouse moves less than this in screen pixels, successive zoom operations are on the same image pixel
 	 */
 	protected final static int MAX_MOUSEMOVE_ZOOM = 10;
 	/**
-	 * Screen coordinates where the last zoom operation was done (initialized to
-	 * impossible value)
+	 * Screen coordinates where the last zoom operation was done (initialized to impossible value)
 	 */
 	protected int lastZoomSX = -9999999;
 	protected int lastZoomSY = -9999999;
@@ -126,8 +124,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Update this ImageCanvas to have the same zoom and scale settings as the
-	 * one specified.
+	 * Update this ImageCanvas to have the same zoom and scale settings as the one specified.
 	 */
 	void update(ImageCanvas ic) {
 		if (ic == null || ic == this || ic.imp == null)
@@ -144,8 +141,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		if (r == null)
 			return;
 		r = new Rectangle(r.x, r.y, r.width, r.height);
-				imageWidth = imp.getWidth();
-				imageHeight = imp.getHeight();
+		imageWidth = imp.getWidth();
+		imageHeight = imp.getHeight();
 		if (r.x < 0)
 			r.x = 0;
 		if (r.y < 0)
@@ -203,8 +200,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * ImagePlus.updateAndDraw calls this method to force the paint() method to
-	 * update the image from the ImageProcessor.
+	 * ImagePlus.updateAndDraw calls this method to force the paint() method to update the image from the ImageProcessor.
 	 */
 	public void setImageUpdated() {
 		imageUpdated = true;
@@ -232,7 +228,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		if (roi != null || overlay != null || showAllOverlay != null || Prefs.paintDoubleBuffered) {
 			if (roi != null)
 				roi.updatePaste();
-			if (imageWidth!=0) {
+			if (imageWidth != 0) {
 				paintDoubleBuffered(g);
 				setPaintPending(false);
 				return;
@@ -315,7 +311,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	private void drawOverlay(Overlay overlay, Graphics g) {
 		if (imp != null && imp.getHideOverlay() && overlay != showAllOverlay)
 			return;
-		flattening = imp!=null && ImagePlus.flattenTitle.equals(imp.getTitle());
+		flattening = imp != null && ImagePlus.flattenTitle.equals(imp.getTitle());
 		if (imp != null && showAllOverlay != null && overlay != showAllOverlay)
 			overlay.drawLabels(false);
 		Color labelColor = overlay.getLabelColor();
@@ -503,8 +499,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				labelRects[index] = new Rectangle(x2 - crossSize2, y2 - crossSize2, crossSize, crossSize);
 			} else
 				labelRects[index] = new Rectangle(x - 3, y - h + 1, w + 4, h);
-		}		
-		//IJ.log("drawRoiLabel: "+" "+label+" "+x+" "+y+" "+flattening);
+		}
+		// IJ.log("drawRoiLabel: "+" "+label+" "+x+" "+y+" "+flattening);
 		g.setColor(labelColor);
 		g.drawString(label, x + xoffset, y - 2 + yoffset);
 		g.setColor(defaultColor);
@@ -658,7 +654,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 					setCursor(crosshairCursor);
 			} else if (roi != null && roi.getState() != roi.CONSTRUCTING && roi.isHandle(sx, sy) >= 0) {
 				setCursor(handCursor);
-			} else if ((overlay != null || showAllOverlay != null) && overOverlayLabel(sx, sy, ox, oy)) {
+			} else if ((overlay != null || showAllOverlay != null) && overOverlayLabel(sx, sy, ox, oy) && (roi == null || roi.getState() != roi.CONSTRUCTING)) {
 				overOverlayLabel = true;
 				setCursor(handCursor);
 			} else if (Prefs.usePointerCursor || (roi != null && roi.getState() != roi.CONSTRUCTING && roi.contains(ox, oy)))
@@ -697,16 +693,14 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Converts a screen x-coordinate to a floating-point offscreen
-	 * x-coordinate.
+	 * Converts a screen x-coordinate to a floating-point offscreen x-coordinate.
 	 */
 	public double offScreenXD(int sx) {
 		return srcRect.x + sx / magnification;
 	}
 
 	/**
-	 * Converts a screen y-coordinate to a floating-point offscreen
-	 * y-coordinate.
+	 * Converts a screen y-coordinate to a floating-point offscreen y-coordinate.
 	 */
 	public double offScreenYD(int sy) {
 		return srcRect.y + sy / magnification;
@@ -724,16 +718,14 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Converts a floating-point offscreen x-coordinate to a screen
-	 * x-coordinate.
+	 * Converts a floating-point offscreen x-coordinate to a screen x-coordinate.
 	 */
 	public int screenXD(double ox) {
 		return (int) ((ox - srcRect.x) * magnification);
 	}
 
 	/**
-	 * Converts a floating-point offscreen x-coordinate to a screen
-	 * x-coordinate.
+	 * Converts a floating-point offscreen x-coordinate to a screen x-coordinate.
 	 */
 	public int screenYD(double oy) {
 		return (int) ((oy - srcRect.y) * magnification);
@@ -853,10 +845,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Zooms in by making the window bigger. If it can't be made bigger, then
-	 * makes the source rectangle (srcRect) smaller and centers it on the
-	 * position in the image where the cursor was when zooming has started. Note
-	 * that sx and sy are screen coordinates.
+	 * Zooms in by making the window bigger. If it can't be made bigger, then makes the source rectangle (srcRect) smaller and centers it on the position in the image where the cursor was when zooming has
+	 * started. Note that sx and sy are screen coordinates.
 	 */
 	public void zoomIn(int sx, int sy) {
 		if (magnification >= 32)
@@ -902,8 +892,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		// CanvasView.getCurrent().validate();
 		// adjustSourceRect(newMag, sx, sy);
 		/*
-		 * if (srcRect.width<imageWidth || srcRect.height<imageHeight)
-		 * resetMaxBounds();
+		 * if (srcRect.width<imageWidth || srcRect.height<imageHeight) resetMaxBounds();
 		 */
 	}
 
@@ -931,9 +920,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Returns the size to which the window can be enlarged, or null if it can't
-	 * be enlarged. <code>newWidth, newHeight</code> is the size needed for
-	 * showing the full image at the magnification needed
+	 * Returns the size to which the window can be enlarged, or null if it can't be enlarged. <code>newWidth, newHeight</code> is the size needed for showing the full image at the magnification needed
 	 */
 	protected Dimension canEnlarge(int newWidth, int newHeight) {
 		if (IJ.altKeyDown())
@@ -969,9 +956,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Zooms out by making the source rectangle (srcRect) larger and centering
-	 * it on (x,y). If we can't make it larger, then make the window smaller.
-	 * Note that sx and sy are screen coordinates.
+	 * Zooms out by making the source rectangle (srcRect) larger and centering it on (x,y). If we can't make it larger, then make the window smaller. Note that sx and sy are screen coordinates.
 	 */
 	public void zoomOut(int sx, int sy) {
 		if (magnification <= zoomLevels[0])
@@ -1147,8 +1132,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Sets the foreground drawing color (or background color if 'setBackground'
-	 * is true) to the color of the pixel at (ox,oy).
+	 * Sets the foreground drawing color (or background color if 'setBackground' is true) to the color of the pixel at (ox,oy).
 	 */
 	public void setDrawingColor(int ox, int oy, boolean setBackground) {
 		// IJ.log("setDrawingColor: "+setBackground+this);
@@ -1316,6 +1300,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			}
 			setRoiModState(e, roi, -1);
 			String mode = WandToolOptions.getMode();
+			if (Prefs.smoothWand)
+				mode = mode + " smooth";
 			int npoints = IJ.doWand(ox, oy, tolerance, mode);
 			if (Recorder.record && npoints > 0) {
 				if (Recorder.scriptMode())
@@ -1611,8 +1597,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Allows plugins (e.g., Orthogonal_Views) to create a custom ROI using a
-	 * display list.
+	 * Allows plugins (e.g., Orthogonal_Views) to create a custom ROI using a display list.
 	 */
 	public void setCustomRoi(boolean customRoi) {
 		this.customRoi = customRoi;
@@ -1623,8 +1608,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	}
 
 	/**
-	 * Called by IJ.showStatus() to prevent status bar text from being
-	 * overwritten until the cursor moves at least 12 pixels.
+	 * Called by IJ.showStatus() to prevent status bar text from being overwritten until the cursor moves at least 12 pixels.
 	 */
 	public void setShowCursorStatus(boolean status) {
 		showCursorStatus = status;

@@ -106,11 +106,14 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	}
 
 	/**
-	 * Starts recording a command. Does nothing if the recorder is not open or
-	 * the command being recorded has called IJ.run().
+	 * Starts recording a command. Does nothing if the recorder is not open or the command being recorded has called IJ.run().
 	 */
 	public static void setCommand(String command) {
-		boolean isMacro = Thread.currentThread().getName().startsWith("Run$_");
+		String threadName = Thread.currentThread().getName();
+		boolean isMacro = threadName.startsWith("Run$_");
+		if (threadName.contains("Popup Menu") || threadName.contains("Developer Menu"))
+			isMacro = false;
+		// IJ.log("setCommand: "+command+" "+threadName+" "+isMacro);
 		if (textArea == null || (isMacro && !recordInMacros))
 			return;
 		commandName = command;
@@ -443,8 +446,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		if (commandOptions != null && commandName != null && commandOptions.indexOf(key) != -1 && (value.equals("") || commandOptions.indexOf(value) == -1)) {
 			if (key.endsWith("="))
 				key = key.substring(0, key.length() - 1);
-			IJ.showMessage("Recorder", "Duplicate keyword:\n \n" + "    Command: " + "\"" + commandName + "\"\n" + "    Keyword: " + "\"" + key + "\"\n" + "    Value: " + value + "\n \n"
-					+ "Add an underscore to the corresponding label\n" + "in the dialog to make the first word unique.");
+			IJ.showMessage("Recorder", "Duplicate keyword:\n \n" + "    Command: " + "\"" + commandName + "\"\n" + "    Keyword: " + "\"" + key + "\"\n" + "    Value: " + value + "\n \n" + "Add an underscore to the corresponding label\n" + "in the dialog to make the first word unique.");
 		}
 	}
 
@@ -587,9 +589,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	}
 
 	static boolean isSaveAs() {
-		return commandName.equals("Tiff...") || commandName.equals("Gif...") || commandName.equals("Jpeg...") || commandName.equals("Text Image...") || commandName.equals("ZIP...")
-				|| commandName.equals("Raw Data...") || commandName.equals("BMP...") || commandName.equals("PNG...") || commandName.equals("PGM...") || commandName.equals("FITS...")
-				|| commandName.equals("LUT...") || commandName.equals("Selection...") || commandName.equals("XY Coordinates...")
+		return commandName.equals("Tiff...") || commandName.equals("Gif...") || commandName.equals("Jpeg...") || commandName.equals("Text Image...") || commandName.equals("ZIP...") || commandName.equals("Raw Data...") || commandName.equals("BMP...") || commandName.equals("PNG...")
+				|| commandName.equals("PGM...") || commandName.equals("FITS...") || commandName.equals("LUT...") || commandName.equals("Selection...") || commandName.equals("XY Coordinates...")
 				// || commandName.equals("Results...")
 				|| commandName.equals("Text... ");
 	}
@@ -671,8 +672,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 			}
 			if (text.contains("overlay.add"))
 				text = (java ? "Overlay " : "") + "overlay = new Overlay();\n" + text;
-			if ((text.contains("imp.") || text.contains("(imp") || text.contains("overlay.add")) && !text.contains("IJ.openImage") && !text.contains("IJ.openVirtual")
-					&& !text.contains("IJ.createImage"))
+			if ((text.contains("imp.") || text.contains("(imp") || text.contains("overlay.add")) && !text.contains("IJ.openImage") && !text.contains("IJ.openVirtual") && !text.contains("IJ.createImage"))
 				text = (java ? "ImagePlus " : "") + "imp = IJ.getImage();\n" + text;
 			if (text.contains("overlay.add"))
 				text = text + "imp.setOverlay(overlay);\n";
@@ -777,10 +777,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	}
 
 	void showHelp() {
-		IJ.showMessage("Recorder",
-				"Click \"Create\" to open recorded commands\n" + "as a macro in an editor window.\n" + " \n" + "In the editor:\n" + " \n" + "    Type ctrl+R (Macros>Run Macro) to\n"
-						+ "    run the macro.\n" + " \n" + "    Use File>Save As to save it and\n" + "    ImageJ's Open command to open it.\n" + " \n"
-						+ "    To create a command, save in the plugins\n" + "    folder and run Help>Refresh Menus.\n");
+		IJ.showMessage("Recorder", "Click \"Create\" to open recorded commands\n" + "as a macro in an editor window.\n" + " \n" + "In the editor:\n" + " \n" + "    Type ctrl+R (Macros>Run Macro) to\n" + "    run the macro.\n" + " \n" + "    Use File>Save As to save it and\n"
+				+ "    ImageJ's Open command to open it.\n" + " \n" + "    To create a command, save in the plugins\n" + "    folder and run Help>Refresh Menus.\n");
 	}
 
 	public void close() {

@@ -199,30 +199,31 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		synchronized (this) {
+		synchronized(this) {
 			int rotation = e.getWheelRotation();
-			boolean ctrl = (e.getModifiers() & Event.CTRL_MASK) != 0;
-			if ((ctrl || IJ.shiftKeyDown()) && ic != null) {
-				int ox = ic.offScreenX(e.getX());
-				int oy = ic.offScreenY(e.getX());
-				if (rotation < 0)
-					ic.zoomIn(ox, oy);
+			boolean ctrl = (e.getModifiers()&Event.CTRL_MASK)!=0;
+			if ((ctrl||IJ.shiftKeyDown()) && ic!=null) {
+				Point loc = ic.getCursorLoc();
+				int x = ic.screenX(loc.x);
+				int y = ic.screenY(loc.y);
+				if (rotation<0)
+					ic.zoomIn(x,y);
 				else
-					ic.zoomOut(ox, oy);
+					ic.zoomOut(x,y);
 				return;
 			}
 			if (hyperStack) {
-				if (rotation > 0)
+				if (rotation>0)
 					IJ.run(imp, "Next Slice [>]", "");
-				else if (rotation < 0)
+				else if (rotation<0)
 					IJ.run(imp, "Previous Slice [<]", "");
 			} else {
 				int slice = imp.getCurrentSlice() + rotation;
-				if (slice < 1)
+				if (slice<1)
 					slice = 1;
-				else if (slice > imp.getStack().getSize())
+				else if (slice>imp.getStack().getSize())
 					slice = imp.getStack().getSize();
-				setSlice(imp, slice);
+				setSlice(imp,slice);
 				imp.updateStatusbarValue();
 				SyncWindows.setZ(this, slice);
 			}
