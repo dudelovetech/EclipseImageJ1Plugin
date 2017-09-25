@@ -7,6 +7,8 @@ import java.awt.datatransfer.*;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import ij.*;
 import ij.process.*;
@@ -79,7 +81,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	private Button list, save, more, live;
 	private PopupMenu popupMenu;
 	private MenuItem[] menuItems;
-	private Label coordinates;
+	private JLabel coordinates;
 	private static String defaultDirectory = null;
 	private static int options;
 	private int defaultDigits = -1;
@@ -221,7 +223,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 
 	/** Displays the plot. */
 	public void draw() {
-		Panel bottomPanel = new Panel();
+		JPanel bottomPanel = new JPanel();
 		int hgap = IJ.isMacOSX()?1:5;
 
 		list = new Button(" List ");
@@ -239,7 +241,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 			live.addActionListener(this);
 			bottomPanel.add(live);
 		}
-		coordinates = new Label(blankLabel);
+		coordinates = new JLabel(blankLabel);
 		coordinates.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		coordinates.setBackground(new Color(220, 220, 220));
 		bottomPanel.add(coordinates);
