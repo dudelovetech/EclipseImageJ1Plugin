@@ -348,7 +348,9 @@ import java.util.Vector;
 		Class c = ij!=null?ij.getClass():(new ImageStack()).getClass();
 		String macro = null;
         try {
-			InputStream is = c .getResourceAsStream("/macros/"+name);
+        	/*Changed for Bio7! The macros folder is not in the class folder!*/
+        	InputStream is = c .getResourceAsStream("../../macros/"+name);
+			//InputStream is = c .getResourceAsStream("/macros/"+name);
 			if (is==null) return null;
             InputStreamReader isr = new InputStreamReader(is);
             StringBuffer sb = new StringBuffer();
