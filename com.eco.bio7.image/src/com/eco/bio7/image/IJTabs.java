@@ -91,11 +91,13 @@ public class IJTabs {
 		for (int i = 0; i < items.length; i++) {
 			final int tabcount = i;
 			if (javaFXEmbedded) {
-				if (items[tabcount].getControl().isDisposed() == false) {
-					items[tabcount].getControl().dispose();
-					items[tabcount].dispose();
+				if (items[tabcount].isDisposed() == false) {
+					if (items[tabcount].getControl().isDisposed() == false) {
+						items[tabcount].getControl().dispose();
+						items[tabcount].dispose();
+					}
 				}
-				
+
 			} else {
 
 				Display dis = CanvasView.getParent2().getDisplay();
@@ -150,7 +152,6 @@ public class IJTabs {
 						items[nrdel].getControl().dispose();
 						items[nrdel].dispose();
 					}
-					
 
 				} else {
 
@@ -234,7 +235,6 @@ public class IJTabs {
 							item.dispose();
 						}
 
-						
 					} else {
 						SwingUtilities.invokeLater(new Runnable() {
 							// !!
