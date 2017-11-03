@@ -15,6 +15,8 @@ import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
@@ -32,9 +34,11 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.hoover.IJMacroEditorTextHover;
+import com.eco.bio7.ijmacro.editor.hoover.IJMacroSimpleDefaultInformationControl;
 import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroCompletionProcessor;
 
 public class IJMacroConfiguration extends TextSourceViewerConfiguration {
@@ -183,6 +187,19 @@ private int isBold(String string2) {
 		assistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
 
 		return assistant;
+	}
+	/* Displays the code completion popup without a toolbar! */
+	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
+		return new IInformationControlCreator() {
+			public IInformationControl createInformationControl(Shell parent) {
+
+				/*
+				 * SeeRHoverInformationControl for HTML implementation! ToolBar
+				 * is added in the InformationControl!
+				 */
+				return new IJMacroSimpleDefaultInformationControl(parent);
+			}
+		};
 	}
 
 	@Override

@@ -191,7 +191,7 @@ public class IJMacroEditorTextHover implements ITextHover, ITextHoverExtension, 
 			public IInformationControl createInformationControl(Shell parent) {
 				
 				
-				return new RDefaultInformationControl(parent);
+				return new IJMacroDefaultInformationControl(parent);
 			}
 		};
 	}

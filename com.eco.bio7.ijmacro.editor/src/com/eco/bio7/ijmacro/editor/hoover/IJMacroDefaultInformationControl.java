@@ -38,7 +38,7 @@ import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroFunctions;
  *
  * @since 2.0
  */
-public class RDefaultInformationControl extends AbstractInformationControl implements DisposeListener {
+public class IJMacroDefaultInformationControl extends AbstractInformationControl implements DisposeListener {
 
 	Image publicMethodIcon = IJMacroEditorPlugin.getImageDescriptor("/icons/methpub_obj.png").createImage();
 
@@ -71,7 +71,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 		 *
 		 * @return the manipulated information
 		 * @deprecated As of 3.2, replaced by
-		 *             {@link RDefaultInformationControl.IInformationPresenterExtension#updatePresentation(Drawable, String, TextPresentation, int, int)}
+		 *             {@link IJMacroDefaultInformationControl.IInformationPresenterExtension#updatePresentation(Drawable, String, TextPresentation, int, int)}
 		 */
 		String updatePresentation(Display display, String hoverInfo, TextPresentation presentation, int maxWidth,
 				int maxHeight);
@@ -93,7 +93,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 		 * information.
 		 * <p>
 		 * Replaces
-		 * {@link RDefaultInformationControl.IInformationPresenter#updatePresentation(Display, String, TextPresentation, int, int)}
+		 * {@link IJMacroDefaultInformationControl.IInformationPresenter#updatePresentation(Display, String, TextPresentation, int, int)}
 		 * Implementations should use the font of the given <code>drawable</code> to
 		 * calculate the size of the text to be presented.
 		 * </p>
@@ -186,7 +186,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 *            should be used
 	 * @since 3.4
 	 */
-	public RDefaultInformationControl(Shell parent, String statusFieldText, IInformationPresenter presenter) {
+	public IJMacroDefaultInformationControl(Shell parent, String statusFieldText, IInformationPresenter presenter) {
 		super(parent, statusFieldText);
 		fAdditionalTextStyles = SWT.NONE;
 		fPresenter = presenter;
@@ -219,7 +219,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 *            should be used
 	 * @since 3.4
 	 */
-	public RDefaultInformationControl(Shell parent, ToolBarManager toolBarManager, IInformationPresenter presenter) {
+	public IJMacroDefaultInformationControl(Shell parent, ToolBarManager toolBarManager, IInformationPresenter presenter) {
 		super(parent, toolBarManager);
 		this.toolBarManager = toolBarManager;
 		fAdditionalTextStyles = SWT.V_SCROLL | SWT.H_SCROLL;
@@ -234,7 +234,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 * @param parent
 	 *            the parent shell
 	 */
-	public RDefaultInformationControl(Shell parent) {
+	public IJMacroDefaultInformationControl(Shell parent) {
 		this(parent, (String) null, null);
 	}
 
@@ -248,7 +248,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 * @param presenter
 	 *            the presenter to be used
 	 */
-	public RDefaultInformationControl(Shell parent, IInformationPresenter presenter) {
+	public IJMacroDefaultInformationControl(Shell parent, IInformationPresenter presenter) {
 		this(parent, (String) null, presenter);
 	}
 
@@ -300,9 +300,9 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 * @param presenter
 	 *            the presenter to be used
 	 * @deprecated As of 3.4, replaced by
-	 *             {@link #DefaultInformationControl(Shell, RDefaultInformationControl.IInformationPresenter)}
+	 *             {@link #DefaultInformationControl(Shell, IJMacroDefaultInformationControl.IInformationPresenter)}
 	 */
-	public RDefaultInformationControl(Shell parent, int textStyles, IInformationPresenter presenter) {
+	public IJMacroDefaultInformationControl(Shell parent, int textStyles, IInformationPresenter presenter) {
 		this(parent, textStyles, presenter, null);
 	}
 
@@ -322,9 +322,9 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 	 *            hide the status field
 	 * @since 3.0
 	 * @deprecated As of 3.4, replaced by
-	 *             {@link #DefaultInformationControl(Shell, String, RDefaultInformationControl.IInformationPresenter)}
+	 *             {@link #DefaultInformationControl(Shell, String, IJMacroDefaultInformationControl.IInformationPresenter)}
 	 */
-	public RDefaultInformationControl(Shell parent, int textStyles, IInformationPresenter presenter,
+	public IJMacroDefaultInformationControl(Shell parent, int textStyles, IInformationPresenter presenter,
 			String statusFieldText) {
 		super(parent, statusFieldText);
 		fAdditionalTextStyles = textStyles;
@@ -602,7 +602,7 @@ public class RDefaultInformationControl extends AbstractInformationControl imple
 						"https://imagej.nih.gov/ij/developer/macro/functions.html#" + contentFromHoover);
 				tbm.add(localBrowserHelp);
 				tbm.update(true);
-				return new RDefaultInformationControl(parent, (ToolBarManager) tbm, fPresenter);
+				return new IJMacroDefaultInformationControl(parent, (ToolBarManager) tbm, fPresenter);
 			}
 		};
 	}
