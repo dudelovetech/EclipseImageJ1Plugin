@@ -30,8 +30,9 @@ public class ImageJMacroWorkspaceJob extends WorkspaceJob implements IJobChangeL
 
 	public IStatus runInWorkspace(IProgressMonitor monitor) {
 		monitor.beginTask("ImageJ macro is running.....", IProgressMonitor.UNKNOWN);
-
+       
 		IJ.runMacro(content);
+		
 		if (monitor.isCanceled()) {
 			try {
 				throw new InterruptedException();

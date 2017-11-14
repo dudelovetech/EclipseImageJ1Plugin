@@ -50,6 +50,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		Token firstToken = ctx.getStart();
 		int lineStart = firstToken.getStartIndex();
 		String name = ctx.singleExpression(0).getText();
+		/*Omit array assignments (x[i]=5;!*/
 		if(ctx.singleExpression(0) instanceof MemberIndexExpressionContext){
 			return;
 		}
