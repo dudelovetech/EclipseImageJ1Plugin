@@ -103,7 +103,8 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	 *         <code>prefix</code>
 	 */
 	protected int getRelevance(Template template, String prefix) {
-		if (template.getName().toLowerCase().startsWith(prefix))
+		//if (template.getName().toLowerCase().startsWith(prefix))
+		if (template.getName().startsWith(prefix))
 			return 90;
 		return 0;
 	}

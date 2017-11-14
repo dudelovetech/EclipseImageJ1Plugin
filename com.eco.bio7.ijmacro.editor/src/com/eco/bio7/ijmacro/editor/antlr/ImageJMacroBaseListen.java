@@ -16,6 +16,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.ForStatementContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroBodyContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroExpressionContext;
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MemberIndexExpressionContext;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 
@@ -49,6 +50,9 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		Token firstToken = ctx.getStart();
 		int lineStart = firstToken.getStartIndex();
 		String name = ctx.singleExpression(0).getText();
+		if(ctx.singleExpression(0) instanceof MemberIndexExpressionContext){
+			return;
+		}
 		/* Omit for loop variables! */
 		if (ctx.getParent() != null) {
 			ParserRuleContext par = ctx.getParent();
