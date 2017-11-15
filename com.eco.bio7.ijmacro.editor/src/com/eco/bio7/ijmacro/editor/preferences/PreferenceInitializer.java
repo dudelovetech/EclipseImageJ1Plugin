@@ -44,6 +44,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont7", f);
 		PreferenceConverter.setDefault(storeMacroEditor, "colourkeyfont8", f);
 		
+		storeMacroEditor.setDefault("EVALUATE_EXTERNAL",false);
 		storeMacroEditor.setDefault("SHOW_INFOPOPUP",true);
 		storeMacroEditor.setDefault("MARK_WORDS", true);
 		

@@ -7,6 +7,7 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
+import org.eclipse.jface.preference.FileFieldEditor;
 
 public class PreferencesCode extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	private IPreferenceStore store;
@@ -20,7 +21,10 @@ public class PreferencesCode extends FieldEditorPreferencePage implements IWorkb
 	}
 
 	public void createFieldEditors() {
+		addField(new BooleanFieldEditor("EVALUATE_EXTERNAL", "Evaluate external (ImageJ launcher - separate Java process)", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new FileFieldEditor("LOCATION_EXTERNAL", "Location ImageJ launcher", getFieldEditorParent()));
+		addField(new StringFieldEditor("OPTIONS_EXTERNAL", "ImageJ launcher options", -1, StringFieldEditor.VALIDATE_ON_KEY_STROKE, getFieldEditorParent()));
 		addField(new LabelFieldEditor("Code context:", getFieldEditorParent()));
 		
 		addField(

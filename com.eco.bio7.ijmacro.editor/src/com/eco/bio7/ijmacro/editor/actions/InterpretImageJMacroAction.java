@@ -45,12 +45,13 @@ public class InterpretImageJMacroAction extends Action {
 			file = ((IFileEditorInput) editor.getEditorInput()).getFile();
 		}
 
+		String path = file.getRawLocation().toOSString();
 		
 
 		 if (file.getFileExtension().equals("ijm") || file.getFileExtension().equals("txt")) {
 			String content = doc.get();
 
-			ImageJMacroWorkspaceJob job = new ImageJMacroWorkspaceJob(content);
+			ImageJMacroWorkspaceJob job = new ImageJMacroWorkspaceJob(content,path);
 
 			job.addJobChangeListener(new JobChangeAdapter() {
 				public void done(IJobChangeEvent event) {
