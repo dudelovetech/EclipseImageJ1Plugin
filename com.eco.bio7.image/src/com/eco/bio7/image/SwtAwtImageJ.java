@@ -133,11 +133,7 @@ public class SwtAwtImageJ {
 							//CanvasView.getCurrent().doLayout();
 							a.doLayout();
 							plus.setActivated(); // notify ImagePlus that image has been activated
-							Roi roi = plus.getRoi();
-							if (roi != null && (roi instanceof PointRoi))
-								PointToolOptions.update();
-							if (plus.isComposite())
-								Channels.updateChannels();
+							
 						}
 					});
 					
@@ -204,11 +200,7 @@ public class SwtAwtImageJ {
 					//CanvasView.getCurrent().doLayout();
 					a.doLayout();
 					plus.setActivated(); // notify ImagePlus that image has been activated
-					Roi roi = plus.getRoi();
-					if (roi != null && (roi instanceof PointRoi))
-						PointToolOptions.update();
-					if (plus.isComposite())
-						Channels.updateChannels();
+					
 				}
 			});
 		}

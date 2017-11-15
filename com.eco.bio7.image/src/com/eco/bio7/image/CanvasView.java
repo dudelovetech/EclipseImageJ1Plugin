@@ -71,15 +71,11 @@ import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
-import ij.gui.PointRoi;
-import ij.gui.Roi;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.io.Opener;
 import ij.plugin.DragAndDrop;
 import ij.plugin.FolderOpener;
-import ij.plugin.PointToolOptions;
-import ij.plugin.frame.Channels;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;
@@ -413,12 +409,6 @@ public class CanvasView extends ViewPart {
 				/* import to set current Panel! */
 				current = (JPanel) ve.get(2);
 				// current.requestFocus();
-				plu.setActivated(); // notify ImagePlus that image has been activated
-				Roi roi = plu.getRoi();
-				if (roi != null && (roi instanceof PointRoi))
-					PointToolOptions.update();
-				if (plu.isComposite())
-					Channels.updateChannels();
 
 			}
 
@@ -445,12 +435,6 @@ public class CanvasView extends ViewPart {
 
 						// important to set current Panel!
 						current = (JPanel) ve.get(2); // current.requestFocus();
-						plu.setActivated(); // notify ImagePlus that image has been activated
-						Roi roi = plu.getRoi();
-						if (roi != null && (roi instanceof PointRoi))
-							PointToolOptions.update();
-						if (plu.isComposite())
-							Channels.updateChannels();
 					}
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {
