@@ -27,7 +27,11 @@ import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 import ij.gui.ImageLayout;
 import ij.gui.ImageWindow;
+import ij.gui.PointRoi;
+import ij.gui.Roi;
 import ij.gui.ScrollbarWithLabel;
+import ij.plugin.PointToolOptions;
+import ij.plugin.frame.Channels;
 
 
 public class SwtAwtImageJ {
@@ -128,8 +132,15 @@ public class SwtAwtImageJ {
 							CanvasView.setCurrent(a);
 							//CanvasView.getCurrent().doLayout();
 							a.doLayout();
+							plus.setActivated(); // notify ImagePlus that image has been activated
+							Roi roi = plus.getRoi();
+							if (roi != null && (roi instanceof PointRoi))
+								PointToolOptions.update();
+							if (plus.isComposite())
+								Channels.updateChannels();
 						}
 					});
+					
 
 		} else {
 			/* Add SWT_AWT to embed the ImageJ canvas! */
@@ -192,7 +203,12 @@ public class SwtAwtImageJ {
 					CanvasView.setCurrent(a);
 					//CanvasView.getCurrent().doLayout();
 					a.doLayout();
-
+					plus.setActivated(); // notify ImagePlus that image has been activated
+					Roi roi = plus.getRoi();
+					if (roi != null && (roi instanceof PointRoi))
+						PointToolOptions.update();
+					if (plus.isComposite())
+						Channels.updateChannels();
 				}
 			});
 		}

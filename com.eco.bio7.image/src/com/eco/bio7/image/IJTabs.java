@@ -20,6 +20,10 @@ import org.eclipse.swt.widgets.Display;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.ImageWindow;
+import ij.gui.PointRoi;
+import ij.gui.Roi;
+import ij.plugin.PointToolOptions;
+import ij.plugin.frame.Channels;
 
 /**
  * A class for the control of the ImageJ tabs.
@@ -58,6 +62,12 @@ public class IJTabs {
 							WindowManager.setTempCurrentImage(plu);
 							WindowManager.setCurrentWindow(win);
 							CanvasView.setCurrent((JPanel) ve.get(2));
+							plu.setActivated(); // notify ImagePlus that image has been activated
+							Roi roi = plu.getRoi();
+							if (roi != null && (roi instanceof PointRoi))
+								PointToolOptions.update();
+							if (plu.isComposite())
+								Channels.updateChannels();
 						}
 					});
 
