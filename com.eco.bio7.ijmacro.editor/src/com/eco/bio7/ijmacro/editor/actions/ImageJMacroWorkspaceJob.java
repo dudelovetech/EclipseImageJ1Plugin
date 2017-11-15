@@ -49,9 +49,7 @@ public class ImageJMacroWorkspaceJob extends WorkspaceJob implements IJobChangeL
 		if (evalExt) {
 
 			try {
-				process = new ProcessBuilder(ijpath,javaArgs,path).start();
-
-				
+				process = new ProcessBuilder(ijpath, javaArgs, path).start();
 
 				// get the error stream of the process and print it
 				InputStream error = process.getErrorStream();
@@ -61,12 +59,11 @@ public class ImageJMacroWorkspaceJob extends WorkspaceJob implements IJobChangeL
 
 				try {
 					while (!process.waitFor(1, TimeUnit.SECONDS)) {
-					    // process is still running
-					    // check if the operation has been canceled
-					    if (monitor.isCanceled()) {
-					        process.destroy();
-					        return Status.CANCEL_STATUS;
-					    }
+						// check for cancelling!
+						if (monitor.isCanceled()) {
+							process.destroy();
+							return Status.CANCEL_STATUS;
+						}
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
