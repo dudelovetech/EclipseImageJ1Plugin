@@ -227,12 +227,12 @@ public class ThumbnailsView extends ViewPart {
 
 	    Display.getCurrent().setData(data);
 
-	    /*
-	     * Enable Sleak for Debugging SWT resources!
-	     * Sleak sleak = new Sleak();
+	    
+	     //Enable Sleak for Debugging SWT resources!
+	     Sleak sleak = new Sleak();
 
 	    sleak.open();
-	    */
+	   
 
 		this.parent = parent;
 

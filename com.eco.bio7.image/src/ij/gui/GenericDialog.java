@@ -914,7 +914,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	/** Returns true if the user clicked on "Cancel". */
 	public boolean wasCanceled() {
-		if (wasCanceled)
+		if (wasCanceled && !Thread.currentThread().getName().endsWith("Script_Macro$"))
 			Macro.abort();
 		return wasCanceled;
 	}

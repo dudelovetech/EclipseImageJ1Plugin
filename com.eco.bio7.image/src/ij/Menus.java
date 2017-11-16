@@ -1679,7 +1679,7 @@ public class Menus {
 			MacroInstaller mi = new MacroInstaller();
 			if (isLibrary)
 				mi.installLibrary(libraryPath);
-			mi.installFile(path);
+			mi.installStartupMacros(path);
 			nMacros += mi.getMacroCount();
 		} catch (Exception e) {
 		}

@@ -1416,7 +1416,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		if (multiPointMode) {
 			double oxd = offScreenXD(sx);
 			double oyd = offScreenYD(sy);
-			if (e.isShiftDown()) {
+			if (e.isShiftDown() && !IJ.isMacro()) {
 				FloatPolygon points = roi.getFloatPolygon();
 				if (points.npoints > 0) {
 					double x0 = points.xpoints[0];

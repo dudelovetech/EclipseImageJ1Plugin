@@ -196,7 +196,7 @@ public class Prefs {
 	public static boolean smoothWand;
 	/** "Close All" command running */
 	public static boolean closingAll;
-
+	static boolean commandLineMacro;
 	static Properties ijPrefs = new Properties();
 	static Properties props = new Properties(ijPrefs);
 	static String prefsDir;
@@ -204,7 +204,6 @@ public class Prefs {
 	static String homeDir; // ImageJ folder
 	static int threads;
 	static int transparentIndex = -1;
-	static boolean commandLineMacro;
 	private static boolean resetPreferences;
 
 	/**

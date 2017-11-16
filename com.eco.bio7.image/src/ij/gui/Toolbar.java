@@ -1332,7 +1332,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	void showSwitchPopupMenu(MouseEvent e) {
-		String path = IJ.getDirectory("macros") + "toolsets/";
+		String path = IJ.getDir("macros")+"toolsets/";
 		if (path == null)
 			return;
 		boolean applet = IJ.getApplet() != null;
@@ -1345,8 +1345,12 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		} else
 			list = new String[0];
 		switchPopup.removeAll();
-		path = IJ.getDirectory("macros") + "StartupMacros.txt";
+		path = IJ.getDir("macros") + "StartupMacros.txt";
 		f = new File(path);
+		if (!f.exists()) {
+						path = IJ.getDir("macros") + "StartupMacros.ijm";
+						f = new File(path);
+					}
 		if (!applet && f.exists())
 			addItem("Startup Macros");
 		else
@@ -1575,9 +1579,9 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 					installStartupMacros();
 					return;
 				} else if (label.endsWith(" "))
-					path = IJ.getDirectory("macros") + "toolsets" + File.separator + label.substring(0, label.length() - 1) + ".ijm";
+					  path = IJ.getDir("macros")+"toolsets"+File.separator+label.substring(0, label.length()-1)+".ijm"; 
 				else
-					path = IJ.getDirectory("macros") + "toolsets" + File.separator + label + ".txt";
+					path = IJ.getDir("macros")+"toolsets"+File.separator+label+".txt";
 				try {
 					if (IJ.shiftKeyDown()) {
 						IJ.open(path);
@@ -1625,16 +1629,19 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 
 	private void installStartupMacros() {
 		resetTools();
-		String path = IJ.getDirectory("macros") + "StartupMacros.txt";
+		String path = IJ.getDir("macros")+"StartupMacros.txt";
 		File f = new File(path);
 		if (!f.exists()) {
-			String path2 = IJ.getDirectory("macros") + "StartupMacros.fiji.ijm";
-			f = new File(path2);
-			if (!f.exists()) {
-				IJ.error("StartupMacros not found:\n \n" + path);
-				return;
-			} else
-				path = path2;
+			path = IJ.getDir("macros")+"StartupMacros.ijm";
+						f = new File(path);
+					}
+					if (!f.exists()) {
+						path = IJ.getDir("macros")+"StartupMacros.fiji.ijm";
+						f = new File(path);
+					}
+					if (!f.exists()) {
+						IJ.error("StartupMacros not found in\n \n"+IJ.getDir("macros"));
+						return;
 		}
 		if (IJ.shiftKeyDown()) {
 			IJ.open(path);
@@ -1963,10 +1970,10 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 
 	// install tool from ImageJ/macros/toolsets
 	private boolean installToolsetTool(String name) {
-		String path = IJ.getDirectory("macros") + "toolsets" + File.separator + name + ".ijm";
+		String path = IJ.getDir("macros")+"toolsets"+File.separator+name+".ijm";
 		if (!((new File(path)).exists())) {
 			name = name.replaceAll(" ", "_");
-			path = IJ.getDirectory("macros") + "toolsets" + File.separator + name + ".ijm";
+			path = IJ.getDir("macros")+"toolsets"+File.separator+name+".ijm";
 		}
 		String text = IJ.openAsString(path);
 		if (text == null || text.startsWith("Error"))

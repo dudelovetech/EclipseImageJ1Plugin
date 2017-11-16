@@ -81,6 +81,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	/**
 	 * Opens the "ROI Manager" window, or activates it if it is already open.
 	 * 
+	 * @see #RoiManager(boolean)
 	 * @see #getRoiManager
 	 */
 	public RoiManager() {
@@ -105,7 +106,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		showWindow();
 	}
 
-	/* Constructs an ROIManager without displaying it. */
+	/** Constructs an ROIManager without displaying it. The boolean argument is ignored. */
 	public RoiManager(boolean b) {
 		super("ROI Manager");
 		list = new JList();
@@ -1010,8 +1011,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 
 	/**
-	 * This method performs measurements for several ROI's in a stack and arranges the results with one line per slice. By contrast, the measure() method produces several lines per slice. The results
-	 * from multiMeasure() may be easier to import into a spreadsheet program for plotting or additional analysis. Based on the multi() method in Bob Dougherty's Multi_Measure plugin
+	 * This method performs measurements for several ROI's in a stack and arranges the results with one line per slice. By contrast, the measure() method produces several lines per slice. The results from
+	 * multiMeasure() may be easier to import into a spreadsheet program for plotting or additional analysis. Based on the multi() method in Bob Dougherty's Multi_Measure plugin
 	 * (http://www.optinav.com/Multi-Measure.htm).
 	 */
 	boolean multiMeasure(String cmd) {
@@ -1906,8 +1907,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 
 	/**
-	 * Returns a reference to the ROI Manager, or null if it is not open and a batch mode macro is not running. If the ROI Manager is not open and a batch mode macro is running, returns the hidden
-	 * batch mode RoiManager.
+	 * Returns a reference to the ROI Manager, or null if it is not open and a batch mode macro is not running. If the ROI Manager is not open and a batch mode macro is running, returns the hidden batch
+	 * mode RoiManager.
 	 * 
 	 * @see #getRoiManager
 	 */
@@ -2042,8 +2043,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 	}
 
 	/**
-	 * Executes the ROI Manager "Add", "Add & Draw", "Update", "Delete", "Measure", "Draw", "Show All", "Show None", "Fill", "Deselect", "Select All", "Combine", "AND", "XOR", "Split", "Sort" or
-	 * "Multi Measure" command. Returns false if <code>cmd</code> is not one of these strings.
+	 * Executes the ROI Manager "Add", "Add & Draw", "Update", "Delete", "Measure", "Draw", "Show All", "Show None", "Fill", "Deselect", "Select All", "Combine", "AND", "XOR", "Split", "Sort" or "Multi
+	 * Measure" command. Returns false if <code>cmd</code> is not one of these strings.
 	 */
 	public boolean runCommand(String cmd) {
 		cmd = cmd.toLowerCase();
@@ -2244,14 +2245,9 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			roi.setLocation(r.getX() + dx, r.getY() + dy);
 		}
 		ImagePlus imp = WindowManager.getCurrentImage();
-		if (imp != null) {
-			Roi roi = imp.getRoi();
-			if (roi != null && !(rois.length == 1 && rois[0] == roi)) {
-				Rectangle2D r = roi.getFloatBounds();
-				roi.setLocation(r.getX() + dx, r.getY() + dy);
-			}
+		if (imp != null)
 			imp.draw();
-		}
+
 	}
 
 	private boolean save(String name, boolean saveSelected) {
