@@ -1,6 +1,13 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51s24:
+
+1. Code completion (templates) action now displays the macro documentation when typing
+2. Images from macros are now opened fast (before had a 2s delay)
+3. Macros can now be executed within an external ImageJ instance in a separate Java process if enabled in the preferences
+4. Added JavaFX library reference for Java9
+
 ### New in 1.51p3:
 1. Improved grammar for nested functions in loop and if statements
 2. Added more code completion templates
