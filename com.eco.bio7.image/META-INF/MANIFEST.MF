@@ -26,6 +26,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: bin/,
  commons-io-1.4.jar,
  external:$java.home$/lib/jfxswt.jar,
+ external:$java.home$/lib/javafx-swt.jar,
  external:$java.home$/lib/tools.jar
 Export-Package: .,
  com.eco.bio7.ImageJPluginActions,

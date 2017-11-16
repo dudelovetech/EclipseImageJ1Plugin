@@ -71,7 +71,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import com.eco.bio7.image.PlaceholderLabel;
 
-
 public class ThumbnailsView extends ViewPart {
 
 	private double zoomLevel[] = { 0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0 };
@@ -160,8 +159,8 @@ public class ThumbnailsView extends ViewPart {
 	private LightweightSystem lws;
 
 	public SashForm sashForm;
-	
-	ArrayList listImages=new ArrayList();
+
+	ArrayList listImages = new ArrayList();
 
 	private IContributionItem placeholderlabel;
 
@@ -220,19 +219,17 @@ public class ThumbnailsView extends ViewPart {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "com.eco.bio7.thumbnails");
 
 		initializeToolBar();
-		
+
 		DeviceData data = new DeviceData();
 
-	    data.tracking = true;
+		data.tracking = true;
 
-	    Display.getCurrent().setData(data);
+		Display.getCurrent().setData(data);
 
-	    
-	     //Enable Sleak for Debugging SWT resources!
-	     Sleak sleak = new Sleak();
+		// Enable Sleak for Debugging SWT resources!
+		/*Sleak sleak = new Sleak();
 
-	    sleak.open();
-	   
+		sleak.open();*/
 
 		this.parent = parent;
 
@@ -241,17 +238,17 @@ public class ThumbnailsView extends ViewPart {
 		composite.setLayout(new FillLayout());
 
 		sashForm = new SashForm(composite, SWT.HORIZONTAL);
-		
+
 		sashForm.setBackground(composite.getBackground());
 
 		FigureCanvas canvas = new FigureCanvas(sashForm);
 
-		scalableLayer = new ScalableLayeredPane();		
+		scalableLayer = new ScalableLayeredPane();
 
 		layeredpane = new LayeredPane();
 
 		layeredpane.setLayoutManager(new XYLayout());
-		
+
 		layeredpane.setBackgroundColor(parent.getBackground());
 
 		scalableLayer.add(layeredpane);
@@ -259,14 +256,14 @@ public class ThumbnailsView extends ViewPart {
 		canvas.setContents(scalableLayer);
 
 		Canvas thumbCanvas = new Canvas(sashForm, SWT.BORDER);
-		
-		thumbCanvas.setBackground( parent.getBackground() );
+
+		thumbCanvas.setBackground(parent.getBackground());
 
 		lws = new LightweightSystem(thumbCanvas);
 
 		thumbnail = new ScrollableThumbnail();
-		
-		thumbnail.setBackgroundColor(parent.getBackground() );
+
+		thumbnail.setBackgroundColor(parent.getBackground());
 
 		thumbnail.setViewport(canvas.getViewport());
 
@@ -288,11 +285,11 @@ public class ThumbnailsView extends ViewPart {
 
 			}
 		});
-		
+
 		for (int i = 0; i < listImages.size(); i++) {
-			Image im=(Image) listImages.get(i);
-			if(im!=null){
-			im.dispose();
+			Image im = (Image) listImages.get(i);
+			if (im != null) {
+				im.dispose();
 			}
 		}
 		listImages.clear();
@@ -303,7 +300,7 @@ public class ThumbnailsView extends ViewPart {
 				try {
 					throw new InterruptedException();
 				} catch (InterruptedException e) {
-					canceled = true; 
+					canceled = true;
 
 				}
 			}
@@ -332,17 +329,17 @@ public class ThumbnailsView extends ViewPart {
 				String trimmedName = name.trim();
 				int dot = trimmedName.lastIndexOf(".");
 				String fileExtension = trimmedName.substring(dot);
-                
+
 				Image im = null;
 
 				/* If it is not a.zip etc.! */
-				if (!fileExtension.equals(".zip") && !fileExtension.equals(".tif") && !fileExtension.equals(".TIF") && !fileExtension.equals(".TIFF") && !fileExtension.equals(".avi")
-						&& !fileExtension.equals(".pnm") && !fileExtension.equals(".dcm") && !fileExtension.equals(".txt") && !fileExtension.equals(".roi")) {
+				if (!fileExtension.equals(".zip") && !fileExtension.equals(".tif") && !fileExtension.equals(".TIF") && !fileExtension.equals(".TIFF") && !fileExtension.equals(".avi") && !fileExtension.equals(".pnm") && !fileExtension.equals(".dcm") && !fileExtension.equals(".txt")
+						&& !fileExtension.equals(".roi")) {
 					try {
 						im = createThumbnailFromFile(files[i], fileExtension, null, false);
 						listImages.add(im);
 					} catch (RuntimeException e) {
-                       
+
 						imageError();
 					}
 					if (im != null) {
@@ -389,15 +386,13 @@ public class ThumbnailsView extends ViewPart {
 					}
 				}
 
-				else if (fileExtension.equals(".zip") || fileExtension.equals(".dcm") || fileExtension.equals(".pnm") || fileExtension.equals(".tif") || fileExtension.equals(".TIF")
-						|| fileExtension.equals(".TIFF")) {
+				else if (fileExtension.equals(".zip") || fileExtension.equals(".dcm") || fileExtension.equals(".pnm") || fileExtension.equals(".tif") || fileExtension.equals(".TIF") || fileExtension.equals(".TIFF")) {
 					ImageData imageData = null;
 					Opener.setErrorMessage(false);
-					ImagePlus plus=null;
+					ImagePlus plus = null;
 					if (fileExtension.equals(".tif") || fileExtension.equals(".TIF") || fileExtension.equals(".TIFF")) {
-					 plus = IJ.openImage(files[i].getAbsolutePath(),1);
-					}
-					else{
+						plus = IJ.openImage(files[i].getAbsolutePath(), 1);
+					} else {
 						plus = IJ.openImage(files[i].getAbsolutePath());
 					}
 					Opener.setErrorMessage(true);
@@ -412,7 +407,7 @@ public class ThumbnailsView extends ViewPart {
 								listImages.add(im);
 							} else {
 
-								if (fileExtension.equals(".tif") || fileExtension.equals(".TIF") || fileExtension.equals(".TIFF")|| fileExtension.equals(".zip")) {
+								if (fileExtension.equals(".tif") || fileExtension.equals(".TIF") || fileExtension.equals(".TIFF") || fileExtension.equals(".zip")) {
 									// IJ.run(plus, "Scale...",
 									// "x=0.5 y=0.5 width=100 height=100 interpolation=Bilinear");
 									imageData = convertToSWT(plus.getBufferedImage());
@@ -445,7 +440,7 @@ public class ThumbnailsView extends ViewPart {
 					}
 					plus = null;
 					imageData = null;
-					//im = null;
+					// im = null;
 
 				}
 
@@ -454,19 +449,18 @@ public class ThumbnailsView extends ViewPart {
 					setThumbSize();
 
 					if (thumbsize == 50) {
-						Image imTxt=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt50.jpg"));
+						Image imTxt = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt50.jpg"));
 						button = new Button(imTxt);
 						listImages.add(imTxt);
 					} else if (thumbsize == 100) {
-						Image imTxt=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt100.jpg"));
+						Image imTxt = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt100.jpg"));
 						button = new Button(imTxt);
 						listImages.add(imTxt);
-						
+
 					} else {
-						Image imTxt=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt200.jpg"));
+						Image imTxt = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/txt200.jpg"));
 						button = new Button(imTxt);
 						listImages.add(imTxt);
-						
 
 					}
 
@@ -475,25 +469,23 @@ public class ThumbnailsView extends ViewPart {
 					setThumbSize();
 
 					if (thumbsize == 50) {
-						Image imRoi=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi50.jpg"));
+						Image imRoi = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi50.jpg"));
 						button = new Button(imRoi);
 						listImages.add(imRoi);
 					} else if (thumbsize == 100) {
-						Image imRoi=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi100.jpg"));
+						Image imRoi = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi100.jpg"));
 						button = new Button(imRoi);
 						listImages.add(imRoi);
-						
+
 					} else {
-						Image imRoi=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi200.jpg"));
+						Image imRoi = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/roi200.jpg"));
 						button = new Button(imRoi);
 						listImages.add(imRoi);
-						
 
 					}
 
 				}
 
-				
 				info(files, i);
 				button.addActionListener(new ActionListener() {
 
@@ -513,7 +505,7 @@ public class ThumbnailsView extends ViewPart {
 
 							};
 
-							//job.setUser(true);
+							// job.setUser(true);
 							job.schedule();
 						} else {
 							MessageDialog.openWarning(new Shell(), "ImageJ", "You probably closed all ImageJ-Views");
@@ -577,15 +569,15 @@ public class ThumbnailsView extends ViewPart {
 	private void imageError() {
 		setThumbSize();
 		if (thumbsize == 50) {
-			Image imError=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error50.jpg"));
+			Image imError = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error50.jpg"));
 			button = new Button(imError);
 			listImages.add(imError);
 		} else if (thumbsize == 100) {
-			Image imError=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error100.jpg"));
+			Image imError = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error100.jpg"));
 			button = new Button(imError);
 			listImages.add(imError);
 		} else {
-			Image imError=new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error200.jpg"));
+			Image imError = new Image(Display.getCurrent(), getClass().getResourceAsStream("/images/error200.jpg"));
 			button = new Button(imError);
 			listImages.add(imError);
 
@@ -604,8 +596,7 @@ public class ThumbnailsView extends ViewPart {
 		BigDecimal bd2 = new BigDecimal(ff);
 		bd2 = bd2.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
 		rr = bd2.doubleValue();
-		button.setToolTip(new org.eclipse.draw2d.Label(" Directory:  " + files[i].getParent() + "\n" + " File name: " + files[i].getName() + "\n" + " File size:    " + r + " kb | " + rr + " mb"
-				+ "\n" + " Width:       " + width + "\n" + " Height:      " + height));
+		button.setToolTip(new org.eclipse.draw2d.Label(" Directory:  " + files[i].getParent() + "\n" + " File name: " + files[i].getName() + "\n" + " File size:    " + r + " kb | " + rr + " mb" + "\n" + " Width:       " + width + "\n" + " Height:      " + height));
 	}
 
 	protected void zoomChange(int level) {
@@ -632,8 +623,9 @@ public class ThumbnailsView extends ViewPart {
 		tbm.add(recursiveAction);
 		tbm.add(preview);
 		tbm.add(zo);
-		/*placeholderlabel = new PlaceholderLabel().getPlaceholderLabel();
-		tbm.add(placeholderlabel);*/
+		/*
+		 * placeholderlabel = new PlaceholderLabel().getPlaceholderLabel(); tbm.add(placeholderlabel);
+		 */
 
 	}
 
@@ -682,12 +674,9 @@ public class ThumbnailsView extends ViewPart {
 		}
 
 		/*
-		 * else if (fileExtension.equals(".tif") ||
-		 * fileExtension.equals(".tiff") || fileExtension.equals(".TIF") ||
-		 * fileExtension.equals(".TIFF")) { try {
+		 * else if (fileExtension.equals(".tif") || fileExtension.equals(".tiff") || fileExtension.equals(".TIF") || fileExtension.equals(".TIFF")) { try {
 		 * 
-		 * bigImage = new Image(composite.getDisplay(), new
-		 * ImageData(filename));
+		 * bigImage = new Image(composite.getDisplay(), new ImageData(filename));
 		 * 
 		 * } catch (SWTException ex) {
 		 * 
@@ -704,7 +693,7 @@ public class ThumbnailsView extends ViewPart {
 
 			} catch (SWTException ex) {
 				imageError();
-				//System.out.println(ex.getMessage());
+				// System.out.println(ex.getMessage());
 
 			}
 
