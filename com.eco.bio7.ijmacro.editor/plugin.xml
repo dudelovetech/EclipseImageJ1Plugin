@@ -198,7 +198,7 @@
           commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.abort"
           contextId="com.eco.bio7.ijmacro.editor.scope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="CTRL+X">
+          sequence="CTRL+SHIFT+A">
     </key>
     <key
           commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.step"
@@ -447,6 +447,60 @@
                </visibleWhen>
             </command>
          </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:#IJMacroContext?after=additions">
+         <menu
+               id="debug.menu"
+               label="Debug"
+               tooltip="Debug">
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug"
+                  label="Debug Macro"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.step"
+                  label="Step"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.trace"
+                  label="Trace"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.fasttrace"
+                  label="Fast Trace"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runtocompletion"
+                  label="Run"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.runto"
+                  label="Run To Insertion Point"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.abort"
+                  label="Abort"
+                  style="push">
+            </command>
+         </menu>
+         <command
+               commandId="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext"
+               label="Get Macro Recorder Text"
+               style="push">
+         </command>
+         <command
+               commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.evaluateline"
+               label="Evaluate Line"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension

@@ -248,6 +248,11 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		colorManager = new ColorManager();
 		ijMacroConfig=new IJMacroConfiguration(colorManager, this);
 		setSourceViewerConfiguration(ijMacroConfig);
+		/*
+		 * Set the context to avoid that menus appear in a different editor. E.g.,
+		 * refactor dialogs!
+		 */
+		setEditorContextMenuId("#IJMacroContext");
 
 	}
 
