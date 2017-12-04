@@ -17,8 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * This class displays a dialog window from which the user can select an input
- * file.
+ * This class displays a dialog window from which the user can select an input file.
  */
 public class OpenDialog {
 
@@ -37,9 +36,7 @@ public class OpenDialog {
 	}
 
 	/**
-	 * Displays a file open dialog with 'title' as the title. If 'path' is
-	 * non-blank, it is used and the dialog is not displayed. Uses and updates
-	 * the ImageJ default directory.
+	 * Displays a file open dialog with 'title' as the title. If 'path' is non-blank, it is used and the dialog is not displayed. Uses and updates the ImageJ default directory.
 	 */
 	public OpenDialog(String title, String path) {
 		String macroOptions = Macro.getOptions();
@@ -68,8 +65,7 @@ public class OpenDialog {
 	}
 
 	/**
-	 * Displays a file open dialog, using the specified default directory and
-	 * file name.
+	 * Displays a file open dialog, using the specified default directory and file name.
 	 */
 	public OpenDialog(String title, String defaultDir, String defaultName) {
 		String path = null;
@@ -210,12 +206,8 @@ public class OpenDialog {
 			}
 		});
 		/*
-		 * FileDialog fd = new FileDialog(parent, title); if (path!=null)
-		 * fd.setDirectory(path); if (fileName!=null) fd.setFile(fileName);
-		 * //GUI.center(fd); fd.show(); name = fd.getFile(); if (name==null) {
-		 * if (IJ.isMacOSX())
-		 * System.setProperty("apple.awt.fileDialogForDirectories", "false");
-		 * Macro.abort(); } else dir = fd.getDirectory();
+		 * FileDialog fd = new FileDialog(parent, title); if (path!=null) fd.setDirectory(path); if (fileName!=null) fd.setFile(fileName); //GUI.center(fd); fd.show(); name = fd.getFile(); if (name==null) {
+		 * if (IJ.isMacOSX()) System.setProperty("apple.awt.fileDialogForDirectories", "false"); Macro.abort(); } else dir = fd.getDirectory();
 		 */
 	}
 
@@ -257,8 +249,7 @@ public class OpenDialog {
 	}
 
 	/**
-	 * Returns the current working directory, which may be null. The returned
-	 * string always ends with the separator character ("/" or "\").
+	 * Returns the current working directory, which may be null. The returned string always ends with the separator character ("/" or "\").
 	 */
 	public static String getDefaultDirectory() {
 		if (defaultDirectory == null)
@@ -274,26 +265,21 @@ public class OpenDialog {
 	}
 
 	/**
-	 * Returns the path to the last directory opened by the user using a file
-	 * open or file save dialog, or using drag and drop. Returns null if the
-	 * users has not opened a file.
+	 * Returns the path to the directory that contains the last file opened, or null if a file has not been opened.
 	 */
 	public static String getLastDirectory() {
 		return lastDir;
 	}
 
 	/**
-	 * Sets the path to the directory containing the last file opened by the
-	 * user.
+	 * Sets the path to the directory containing the last file opened by the user.
 	 */
 	public static void setLastDirectory(String dir) {
 		lastDir = dir;
 	}
 
 	/**
-	 * Returns the name of the last file opened by the user using a file open or
-	 * file save dialog, or using drag and drop. Returns null if the users has
-	 * not opened a file.
+	 * Returns the name of the last file opened by the user using a file open or file save dialog, or using drag and drop. Returns null if the users has not opened a file.
 	 */
 	public static String getLastName() {
 		return lastName;

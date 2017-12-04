@@ -322,6 +322,7 @@ public class Menus {
 		addExample(submenu, "Gamma Adjuster", "Gamma_Adjuster.js");
 		addExample(submenu, "Custom Measurement", "Custom_Measurement.js");
 		addExample(submenu, "Terabyte VirtualStack", "Terabyte_VirtualStack.js");
+		addExample(submenu, "Event Listener", "Event_Listener.js");
 		submenu.addActionListener(listener);
 		menu.add(submenu);
 		submenu = new Menu("BeanShell");
@@ -1004,13 +1005,13 @@ public class Menus {
 
 	void setupPluginsAndMacrosPaths() {
 		/*
-		 * ImageJPath = pluginsPath = macrosPath = null; String currentDir = Prefs.getHomeDir(); // "user.dir" if (currentDir==null) return; if (currentDir.endsWith("plugins")) ImageJPath =
-		 * pluginsPath = currentDir+File.separator; else { String pluginsDir = System.getProperty("plugins.dir"); if (pluginsDir!=null) { if (pluginsDir.endsWith("/")||pluginsDir.endsWith("\\"))
-		 * pluginsDir = pluginsDir.substring(0, pluginsDir.length()-1); if (pluginsDir.endsWith("/plugins")||pluginsDir.endsWith("\\plugins")) pluginsDir = pluginsDir.substring(0,
-		 * pluginsDir.length()-8); } if (pluginsDir==null) pluginsDir = currentDir; else if (pluginsDir.equals("user.home")) { pluginsDir = System.getProperty("user.home"); if (!(new
-		 * File(pluginsDir+File.separator+"plugins")).isDirectory()) pluginsDir = pluginsDir + File.separator + "ImageJ"; // needed to run plugins when ImageJ launched using Java WebStart if
-		 * (applet==null) System.setSecurityManager(null); jnlp = true; } pluginsPath = pluginsDir+File.separator+"plugins"+File.separator; macrosPath =
-		 * pluginsDir+File.separator+"macros"+File.separator; ImageJPath = pluginsDir+File.separator; }
+		 * ImageJPath = pluginsPath = macrosPath = null; String currentDir = Prefs.getHomeDir(); // "user.dir" if (currentDir==null) return; if (currentDir.endsWith("plugins")) ImageJPath = pluginsPath =
+		 * currentDir+File.separator; else { String pluginsDir = System.getProperty("plugins.dir"); if (pluginsDir!=null) { if (pluginsDir.endsWith("/")||pluginsDir.endsWith("\\")) pluginsDir =
+		 * pluginsDir.substring(0, pluginsDir.length()-1); if (pluginsDir.endsWith("/plugins")||pluginsDir.endsWith("\\plugins")) pluginsDir = pluginsDir.substring(0, pluginsDir.length()-8); } if
+		 * (pluginsDir==null) pluginsDir = currentDir; else if (pluginsDir.equals("user.home")) { pluginsDir = System.getProperty("user.home"); if (!(new
+		 * File(pluginsDir+File.separator+"plugins")).isDirectory()) pluginsDir = pluginsDir + File.separator + "ImageJ"; // needed to run plugins when ImageJ launched using Java WebStart if (applet==null)
+		 * System.setSecurityManager(null); jnlp = true; } pluginsPath = pluginsDir+File.separator+"plugins"+File.separator; macrosPath = pluginsDir+File.separator+"macros"+File.separator; ImageJPath =
+		 * pluginsDir+File.separator; }
 		 */
 
 		/* Changed for Bio7! */
@@ -1644,17 +1645,6 @@ public class Menus {
 	}
 
 	void installStartupMacroSet() {
-		if (applet != null) {
-			String docBase = "" + applet.getDocumentBase();
-			if (!docBase.endsWith("/")) {
-				int index = docBase.lastIndexOf("/");
-				if (index != -1)
-					docBase = docBase.substring(0, index + 1);
-			}
-			IJ.runPlugIn("ij.plugin.URLOpener", docBase + "StartupMacros.txt");
-			return;
-		}
-
 		if (macrosPath == null) {
 			try {
 				(new MacroInstaller()).installFromIJJar("/macros/StartupMacros.txt");
@@ -1671,6 +1661,9 @@ public class Menus {
 				(new MacroInstaller()).installFromIJJar("/macros/StartupMacros.txt");
 				return;
 			}
+		} else {
+			if ("StartupMacros.fiji.ijm".equals(f.getName()))
+				path = f.getPath();
 		}
 		String libraryPath = macrosPath + "Library.txt";
 		f = new File(libraryPath);

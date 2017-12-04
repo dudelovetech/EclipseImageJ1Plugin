@@ -94,7 +94,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version string.
 	 */
 	public static final String VERSION = "1.51s";
-	public static final String BUILD = "24";
+	public static final String BUILD = "40";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -246,12 +246,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		if (applet == null)
 			IJ.runPlugIn("ij.plugin.DragAndDrop", "");
 		String str = m.getMacroCount() == 1 ? " macro" : " macros";
-		IJ.showStatus(version() + m.getPluginCount() + " commands; " + m.getMacroCount() + str);
 		configureProxy();
 		if (applet == null)
 			loadCursors();
 		runStartupMacro();
 		MacroInstaller.autoRun();
+		IJ.showStatus(version()+ m.getPluginCount() + " commands; " + m.getMacroCount() + str);
 	}
 
 	/* Changed for Bio7! */
