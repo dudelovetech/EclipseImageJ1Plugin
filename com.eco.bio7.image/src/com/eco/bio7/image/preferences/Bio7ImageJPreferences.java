@@ -50,7 +50,7 @@ public class Bio7ImageJPreferences extends FieldEditorPreferencePage implements 
 		
 		addField(new BooleanFieldEditor("FONT_ANTIALIASED", "Antialiased Fonts", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor("MAC_MENU_ENABLED", "Enable ImageJ menu on MacOSX", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
+		addField(new BooleanFieldEditor("MAC_MENU_ENABLED", "Enable ImageJ Menu on MacOSX", BooleanFieldEditor.DEFAULT, getFieldEditorParent()));
 	
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Image Methods Dialog Size:", getFieldEditorParent()));

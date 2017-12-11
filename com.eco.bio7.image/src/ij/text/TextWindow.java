@@ -5,16 +5,11 @@ import ij.io.*;
 import ij.gui.*;
 import ij.plugin.filter.Analyzer;
 import ij.macro.Interpreter;
-
 import java.awt.*;
 import java.io.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import com.eco.bio7.image.Activator;
 
 /**
