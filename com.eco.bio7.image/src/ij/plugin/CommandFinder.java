@@ -548,8 +548,12 @@ public class CommandFinder implements PlugIn, ActionListener, WindowListener, Ke
 	}
 
 	public void windowActivated(WindowEvent e) {
-		if (IJ.isMacOSX() && frame!=null)
+		if (IJ.isMacOSX() && frame!=null) {
+			/*Changed for Bio7!*/
+			if (Prefs.setIJMenuBar) {
 			frame.setMenuBar(Menus.getMenuBar());
+			}
+		}
 	}
 	
 	public void windowDeactivated(WindowEvent e) { }
