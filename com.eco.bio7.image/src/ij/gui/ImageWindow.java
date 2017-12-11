@@ -644,7 +644,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		if (IJ.debugMode)
 			IJ.log("windowActivated: " + imp.getTitle());
 		if (IJ.isMacOSX())
-			setImageJMenuBar(this);//Changed for Bio7!
+			setImageJMenuBar(this);
 		if (imp == null)
 			return;
 		ImageJ ij = IJ.getInstance();
@@ -805,9 +805,9 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	public int getSliderHeight() {
 		return sliderHeight;
 	}
-   /*Changed for Bio7! No MacOSX menubar necessary!*/
+  
 	public static void setImageJMenuBar(ImageWindow win) {
-		/*ImageJ ij = IJ.getInstance();
+		ImageJ ij = IJ.getInstance();
 		boolean setMenuBar = true;
 		ImagePlus imp = win.getImagePlus();
 		if (imp != null)
@@ -830,7 +830,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 
 		}
 		if (imp != null)
-			imp.setIJMenuBar(true);*/
+			imp.setIJMenuBar(true);
 	}
 
 } // class ImageWindow

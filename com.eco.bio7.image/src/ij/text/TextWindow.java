@@ -307,6 +307,8 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 			if (!saveContents()) return;
 		}
 		//setVisible(false);
+		/*Changed for Bio7!Remove menubar for MacOSX!*/
+		remove(mb);
 		dispose();
 		WindowManager.removeWindow(this);
 		textPanel.flush();

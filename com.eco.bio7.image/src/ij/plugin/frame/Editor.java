@@ -971,6 +971,10 @@ public class Editor extends PlugInFrame implements ActionListener, ItemListener,
 				save();
 		}
 		if (okayToClose) {
+			/* Changed for Bio7!Remove menubar for MacOSX! */
+			if (IJ.isMacOSX()) {
+				remove(mb);
+			}
 			//setVisible(false);
 			dispose();
 			WindowManager.removeWindow(this);
