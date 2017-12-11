@@ -12,8 +12,10 @@ import java.applet.Applet;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 
+import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.Util;
 
 import ij.io.*;
@@ -179,7 +181,9 @@ public class Prefs {
 	/** Ignore stack positions when displaying points. */
 	public static boolean showAllPoints;
 	/** Set MenuBar on Macs running Java 8. */
-	public static boolean setIJMenuBar = IJ.isMacOSX();
+	/*Changed for Bio7 instead of IJ.isMacOSX()!*/
+	static IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+	public static boolean setIJMenuBar = store.getBoolean("MAC_MENU_ENABLED");//IJ.isMacOSX();
 	/** "ImageJ" window is always on top. */
 	public static boolean alwaysOnTop;
 	/** Automatically spline fit line selections */

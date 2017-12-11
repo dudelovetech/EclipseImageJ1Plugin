@@ -36,6 +36,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault("IMAGE_METHODS_SIZE_Y", 1000);// 790
 		store.setDefault("IMAGEJ_TOOLBAR_SIZE_X", 750);// 580
 		store.setDefault("IMAGEJ_TOOLBAR_SIZE_Y", 150);// 130
+		store.setDefault("MAC_MENU_ENABLED",false);
 
 		if (Util.getOS().equals("Windows")) {
 			store.setDefault("FONT_SIZE_CORRECTION", 0);
