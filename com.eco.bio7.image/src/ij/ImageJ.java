@@ -10,7 +10,7 @@ import ij.text.*;
 import ij.macro.Interpreter;
 import ij.io.Opener;
 import ij.util.*;
-import ij.macro.MacroRunner;
+import ij.macro.*;
 
 import java.awt.*;
 import java.util.*;
@@ -37,8 +37,11 @@ import com.eco.bio7.image.IJTabs;
 /**
  * This frame is the main ImageJ class.
  * <p>
- * ImageJ is a work of the United States Government. It is in the public domain and open source. There is no copyright. You are free to do anything you want with this source but I like to get credit
- * for my work and I would like you to offer your changes to me so I can possibly add them to the "official" version.
+ * ImageJ is a work of the United States Government. It is in the public domain
+ * and open source. There is no copyright. You are free to do anything you want
+ * with this source but I like to get credit for my work and I would like you to
+ * offer your changes to me so I can possibly add them to the "official"
+ * version.
  * 
  * <pre>
  * The following command line options are recognized by ImageJ:
@@ -91,10 +94,11 @@ import com.eco.bio7.image.IJTabs;
 public class ImageJ extends Frame implements ActionListener, MouseListener, KeyListener, WindowListener, ItemListener, Runnable {
 
 	/**
-	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version string.
+	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version
+	 * string.
 	 */
-	public static final String VERSION = "1.51s";
-	public static final String BUILD = "40";
+	public static final String VERSION = "1.51t";
+	public static final String BUILD = "8";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -141,6 +145,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	private int tabsBefore;
 	private int tabsAfter;
 	private org.eclipse.swt.graphics.Point p;
+	private static boolean batchMode;
 
 	boolean hotkey;
 
@@ -162,7 +167,9 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * If 'applet' is not null, creates a new ImageJ frame that runs as an applet. If 'mode' is ImageJ.EMBEDDED and 'applet is null, creates an embedded (non-standalone) version of ImageJ.
+	 * If 'applet' is not null, creates a new ImageJ frame that runs as an applet.
+	 * If 'mode' is ImageJ.EMBEDDED and 'applet is null, creates an embedded
+	 * (non-standalone) version of ImageJ.
 	 */
 	public ImageJ(java.applet.Applet applet, int mode) {
 		super("ImageJ");
@@ -223,9 +230,13 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			/* Changed for Bio7! */
 			// setVisible(true);
 			/*
-			 * Dimension size = getSize(); if (size!=null) { if (IJ.debugMode) IJ.log("size: "+size); if (IJ.isWindows() && size.height>108) { // workaround for IJ window layout and FileDialog freeze problems
-			 * with Windows 10 Creators Update IJ.wait(10); pack(); if (IJ.debugMode) IJ.log("pack()"); if (!Prefs.jFileChooserSettingChanged) Prefs.useJFileChooser = true; } else if (IJ.isMacOSX()) { Rectangle
-			 * maxBounds = GUI.getMaxWindowBounds(); if (loc.x+size.width>maxBounds.x+maxBounds.width) setLocation(loc.x, loc.y); }
+			 * Dimension size = getSize(); if (size!=null) { if (IJ.debugMode)
+			 * IJ.log("size: "+size); if (IJ.isWindows() && size.height>108) { // workaround
+			 * for IJ window layout and FileDialog freeze problems with Windows 10 Creators
+			 * Update IJ.wait(10); pack(); if (IJ.debugMode) IJ.log("pack()"); if
+			 * (!Prefs.jFileChooserSettingChanged) Prefs.useJFileChooser = true; } else if
+			 * (IJ.isMacOSX()) { Rectangle maxBounds = GUI.getMaxWindowBounds(); if
+			 * (loc.x+size.width>maxBounds.x+maxBounds.width) setLocation(loc.x, loc.y); }
 			 */
 		}
 		if (err1 != null)
@@ -249,9 +260,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		configureProxy();
 		if (applet == null)
 			loadCursors();
-		runStartupMacro();
-		MacroInstaller.autoRun();
-		IJ.showStatus(version()+ m.getPluginCount() + " commands; " + m.getMacroCount() + str);
+		(new StartupRunner()).run(batchMode); // run RunAtStartup and AutoRun macros
+		IJ.showStatus(version() + m.getPluginCount() + " commands; " + m.getMacroCount() + str);
 	}
 
 	/* Changed for Bio7! */
@@ -264,12 +274,6 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		col = new Color(r, g, b);
 
 		return col;
-	}
-
-	private void runStartupMacro() {
-		String macro = (new Startup()).getStartupMacro();
-		if (macro != null && macro.length() > 4)
-			IJ.runMacro(macro);
 	}
 
 	private void loadCursors() {
@@ -808,7 +812,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Adds the specified class to a Vector to keep it from being garbage collected, causing static fields to be reset.
+	 * Adds the specified class to a Vector to keep it from being garbage collected,
+	 * causing static fields to be reset.
 	 */
 	public void register(Class c) {
 		if (!classes.contains(c))
@@ -852,32 +857,32 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		boolean noGUI = false;
 		int mode = STANDALONE;
 		arguments = args;
-		// System.setProperty("file.encoding", "UTF-8");
 		int nArgs = args != null ? args.length : 0;
 		boolean commandLine = false;
 		for (int i = 0; i < nArgs; i++) {
 			String arg = args[i];
 			if (arg == null)
 				continue;
-			if (args[i].startsWith("-")) {
-				if (args[i].startsWith("-batch"))
-					noGUI = true;
-				else if (args[i].startsWith("-debug"))
-					IJ.setDebugMode(true);
-				else if (args[i].startsWith("-ijpath") && i + 1 < nArgs) {
-					if (IJ.debugMode)
-						IJ.log("-ijpath: " + args[i + 1]);
-					Prefs.setHomeDir(args[i + 1]);
-					commandLine = true;
-					args[i + 1] = null;
-				} else if (args[i].startsWith("-port")) {
-					int delta = (int) Tools.parseDouble(args[i].substring(5, args[i].length()), 0.0);
-					commandLine = true;
-					if (delta == 0)
-						mode = EMBEDDED;
-					else if (delta > 0 && DEFAULT_PORT + delta < 65536)
-						port = DEFAULT_PORT + delta;
-				}
+			if (arg.startsWith("-batch")) {
+				noGUI = true;
+				batchMode = true;
+			} else if (arg.startsWith("-macro") || arg.endsWith(".ijm") || arg.endsWith(".txt"))
+				batchMode = true;
+			else if (arg.startsWith("-debug"))
+				IJ.setDebugMode(true);
+			else if (arg.startsWith("-ijpath") && i + 1 < nArgs) {
+				if (IJ.debugMode)
+					IJ.log("-ijpath: " + args[i + 1]);
+				Prefs.setHomeDir(args[i + 1]);
+				commandLine = true;
+				args[i + 1] = null;
+			} else if (arg.startsWith("-port")) {
+				int delta = (int) Tools.parseDouble(arg.substring(5, arg.length()), 0.0);
+				commandLine = true;
+				if (delta == 0)
+					mode = EMBEDDED;
+				else if (delta > 0 && DEFAULT_PORT + delta < 65536)
+					port = DEFAULT_PORT + delta;
 			}
 		}
 		// If existing ImageJ instance, pass arguments to it and quit.
@@ -934,7 +939,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/**
-	 * Returns the port that ImageJ checks on startup to see if another instance is running.
+	 * Returns the port that ImageJ checks on startup to see if another instance is
+	 * running.
 	 * 
 	 * @see ij.OtherInstance
 	 */
@@ -1029,7 +1035,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	/*
-	 * Changed for Bio7! Overrides the default Frame settings since Bio7 Gui uses swt for the primary frame!
+	 * Changed for Bio7! Overrides the default Frame settings since Bio7 Gui uses
+	 * swt for the primary frame!
 	 */
 	public Point getLocationOnScreen() {
 
