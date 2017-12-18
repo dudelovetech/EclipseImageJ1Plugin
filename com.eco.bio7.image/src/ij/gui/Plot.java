@@ -55,7 +55,7 @@ public class Plot implements Cloneable {
 	public static final int CONNECTED_CIRCLES = 7;
 	/** Display points using an diamond-shaped mark. */
 	public static final int DIAMOND = 8;
-	/** Draw black lines between the dots and a circle with the given color at each dot */
+	/** Fill area between line plot and x-axis at y=0. */
 	public static final int FILLED = 9;
 	/** Draw shape using macro code */
 	public static final int CUSTOM = 10;
@@ -65,7 +65,7 @@ public class Plot implements Cloneable {
 			"Circle", "X", "Line", "Box", "Triangle", "+", "Dot", "Connected Circles", "Diamond", "Filled", "Custom"};
 	/** Names in nicely sorting order for menus */
 	final static String[] SORTED_SHAPES = new String[] {
-			SHAPE_NAMES[LINE], SHAPE_NAMES[CONNECTED_CIRCLES], SHAPE_NAMES[FILLED],SHAPE_NAMES[CIRCLE], SHAPE_NAMES[BOX], SHAPE_NAMES[TRIANGLE],
+			SHAPE_NAMES[LINE], SHAPE_NAMES[CONNECTED_CIRCLES], SHAPE_NAMES[FILLED], SHAPE_NAMES[CIRCLE], SHAPE_NAMES[BOX], SHAPE_NAMES[TRIANGLE],
 			SHAPE_NAMES[CROSS], SHAPE_NAMES[DIAMOND], SHAPE_NAMES[X], SHAPE_NAMES[DOT]};
 	/** flag for numeric labels of x-axis ticks */
 	public static final int X_NUMBERS = 0x1;
@@ -1012,7 +1012,7 @@ public class Plot implements Cloneable {
 
 	/** Gets the label String of the xLabel ('x'), yLabel('y') or the legend ('l').
 	 *	Returns null if the given PlotObject does not exist or its label is null */
-	String getLabel(char c) {
+	public String getLabel(char c) {
 		PlotObject plotObject = pp.getPlotObject(c);
 		if (plotObject != null)
 			return plotObject.label;
@@ -1034,8 +1034,8 @@ public class Plot implements Cloneable {
 		return p==null ? null : p.yValues;
 	}
 
-	/** Get an array with human-readable designations of the non-hidden PlotObjects (curves, labels, ...)
-	 *	in the sequence they are plotted (i.e., foreground last). **/
+	/** Get an array with human-readable designations of the PlotObjects (curves, labels, ...)
+	 *	in the sequence they are plotted (i.e., foreground last). Hidden PlotObjects are included. **/
 	public String[] getPlotObjectDesignations() {
 		int nObjects = allPlotObjects.size();
 		String[] names = new String[nObjects];
@@ -1049,7 +1049,6 @@ public class Plot implements Cloneable {
 			if (p >= allPlotObjects.size())                             //the PlotObject passed with Constructor comes last
 				p = 0;
 			PlotObject plotObject = allPlotObjects.get(p);
-			if (plotObject.hasFlag(PlotObject.HIDDEN)) continue;
 			int type = plotObject.type;
 			String label = plotObject.label;
 			switch (type) {
@@ -1712,7 +1711,7 @@ public class Plot implements Cloneable {
 				allMinMax[i] = defaultMinMax[i];
 		enlargeRange = new int[allMinMax.length];
 		for (PlotObject plotObject : allPlotObjects) {
-			if (plotObject.type == PlotObject.XY_DATA || plotObject.type == PlotObject.ARROWS) {
+			if ((plotObject.type == PlotObject.XY_DATA || plotObject.type == PlotObject.ARROWS) && !plotObject.hasFlag(PlotObject.HIDDEN)) {
 				getMinAndMax(allMinMax, enlargeRange, plotObject, axisRangeFlags);
 				if (!allObjects) break;
 			}
@@ -2269,12 +2268,12 @@ public class Plot implements Cloneable {
 
 	private void drawPlotObject(PlotObject plotObject, ImageProcessor ip) {
 		//IJ.log("DRAWING type="+plotObject.type+" lineWidth="+plotObject.lineWidth+" shape="+plotObject.shape);
+		if (plotObject.hasFlag(PlotObject.HIDDEN)) return;
 		ip.setColor(plotObject.color);
 		ip.setLineWidth(sc(plotObject.lineWidth));
 		int type = plotObject.type;
 		switch (type) {
 			case PlotObject.XY_DATA:
-				if (plotObject.hasFlag(PlotObject.HIDDEN)) break;
 				ip.setClipRect(frame);
 				if (plotObject.yEValues != null)
 					drawVerticalErrorBars(plotObject.xValues, plotObject.yValues, plotObject.yEValues);
@@ -2598,8 +2597,8 @@ public class Plot implements Cloneable {
 		}
 		double dx = maxX - minX;
 		int stretchedLen = (int) (dx * xScale * 10) + 1;
-		double[] stretchedArrX = resampleArray(xD, stretchedLen);
-		double[] stretchedArrY = resampleArray(yD, stretchedLen);
+		double[] stretchedArrX = Tools.resampleArray(xD, stretchedLen);
+		double[] stretchedArrY = Tools.resampleArray(yD, stretchedLen);
 		int yZero = scaleY(0);
 		int prevX = 0;
 		if (logYAxis) {
@@ -2620,39 +2619,6 @@ public class Plot implements Cloneable {
 		ip.setColor(Color.black);
 
 		makeRangeGetSteps();
-	}
-
-	double[] resampleArray(double[] y1, int len2) {
-		int len1 = y1.length;
-		double factor = (double) (len2 - 1) / (len1 - 1);
-		double[] y2 = new double[len2];
-		if (len1 == 0) {
-			return y2;
-		}
-		if (len1 == 1) {
-			for (int jj = 0; jj < len2; jj++) {
-				y2[jj] = y1[0];
-			}
-			return (y2);
-		}
-		double[] f1 = new double[len1];//fractional positions
-		double[] f2 = new double[len2];
-		for (int jj = 0; jj < len1; jj++) {
-			f1[jj] = jj * factor;
-		}
-		for (int jj = 0; jj < len2; jj++) {
-			f2[jj] = jj / factor;
-		}
-		for (int jj = 0; jj < len2 - 1; jj++) {
-			double pos = f2[jj];
-			int leftPos = (int) Math.floor(pos);
-			int rightPos = (int) Math.floor(pos) + 1;
-			double fraction = pos - Math.floor(pos);
-			double value = y1[leftPos] + fraction * (y1[rightPos] - y1[leftPos]);
-			y2[jj] = value;
-		}
-		y2[len2 - 1] = y1[len1 - 1];
-		return y2;
 	}
 
 	/** Vertical text for y axis label */
@@ -2878,8 +2844,8 @@ public class Plot implements Cloneable {
 		return plotMaker;
 	}
 
-	/** Returns the labels of the datasets as linefeed-delimited String.
-	 *	If the label is not set, a blank line is added */
+	/** Returns the labels of the (non-hidden) datasets as linefeed-delimited String.
+	 *	If the label is not set, a blank line is added. */
 	String getDataLabels() {
 		String labels = "";
 		boolean first = true;
@@ -2978,13 +2944,23 @@ public class Plot implements Cloneable {
 			int dataSetNumber, boolean writeX, boolean writeY, boolean multipleSets) {
 		if (writeX) {
 			String label = plotObject.type == PlotObject.ARROWS ? "XStart" : "X";
-			if (multipleSets) label += dataSetNumber;
+			if (multipleSets) label += dataSetNumber;			
+			if (dataSetNumber==0 && plotObject.type!=PlotObject.ARROWS) {
+				String plotXLabel = getLabel('x');
+				if (plotXLabel!=null && plotXLabel.startsWith(" ") && plotXLabel.endsWith(" "))
+					label = plotXLabel.substring(1,plotXLabel.length()-1);
+			}
 			headings.add(label);
 			data.add(plotObject.xValues);
 		}
 		if (writeY) {
 			String label = plotObject.type == PlotObject.ARROWS ? "YStart" : "Y";
 			if (multipleSets) label += dataSetNumber;
+			if (dataSetNumber==0 && plotObject.type!=PlotObject.ARROWS) {
+				String plotYLabel = getLabel('y');
+				if (plotYLabel!=null && plotYLabel.startsWith(" ") && plotYLabel.endsWith(" "))
+					label = plotYLabel.substring(1,plotYLabel.length()-1);
+			}
 			headings.add(label);
 			data.add(plotObject.yValues);
 		}
