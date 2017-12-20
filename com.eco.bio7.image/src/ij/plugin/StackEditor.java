@@ -290,7 +290,7 @@ public class StackEditor implements PlugIn {
 		/* Changed for Bio7! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-		IJTabs.deleteActiveTab();
+		
 		int size = stack.getSize();
 		if (size > 30 && !IJ.isMacro()) {
 			boolean ok = IJ.showMessageWithCancel("Convert to Images?", "Are you sure you want to convert this\nstack to " + size + " separate windows?");
@@ -299,6 +299,7 @@ public class StackEditor implements PlugIn {
 				return;
 			}
 		}
+		IJTabs.deleteActiveTab();
 		Calibration cal = imp.getCalibration();
 		CompositeImage cimg = imp.isComposite() ? (CompositeImage) imp : null;
 		if (imp.getNChannels() != imp.getStackSize())
