@@ -23,7 +23,7 @@ public class Distribution implements PlugIn, TextListener {
 	static boolean autoBinning = true;
 	static int nBins = 10;
 	static String range = "0-0";
-	JCheckBox checkbox;
+	Checkbox checkbox;
 	TextField nBinsField, rangeField;
 	String defaultNBins, defaultRange;
 
@@ -65,7 +65,7 @@ public class Distribution implements PlugIn, TextListener {
 			rangeField.addTextListener(this);
 		}
 		
-		checkbox = (JCheckBox)(gd.getCheckboxes().elementAt(0));
+		checkbox = (Checkbox)(gd.getCheckboxes().elementAt(0));
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return;
@@ -125,9 +125,9 @@ public class Distribution implements PlugIn, TextListener {
 
 	public void textValueChanged(TextEvent e) {
 		if (!defaultNBins.equals(nBinsField.getText()))
-			checkbox.setSelected(false);
+			checkbox.setState(false);
 		if (!defaultRange.equals(rangeField.getText()))
-			checkbox.setSelected(false);
+			checkbox.setState(false);
 	}
 
 	void stats(int nc, float[] data, float[] pars){
