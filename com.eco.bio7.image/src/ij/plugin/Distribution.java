@@ -36,7 +36,7 @@ public class Distribution implements PlugIn, TextListener {
 		}
 		String head= rt.getColumnHeadings();
 		//IJ.log(head);
-
+ 
 		StringTokenizer t = new StringTokenizer(head, "\t");
 		int tokens = t.countTokens()-1;
 		String[] strings = new String[tokens];
