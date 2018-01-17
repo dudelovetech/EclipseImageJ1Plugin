@@ -98,7 +98,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			public void widgetSelected(SelectionEvent e) {
 
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
+ 
 				IViewReference ref = null;
 				IWorkbenchPartSite part = null;
 
