@@ -1,11 +1,21 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51u20:
+
+1. Cluttered MACOSX menus are now closed (added from opened application windows and frames). Some default added menus are disabled in the Bio7 preferences by default
+2. Code completion (template) action now displays the macro documentation and context information when typing
+3. Improved code completion layout (context information) 
+4. Added debug context menu actions to the macro editor
+5. Added some other context menu actions, too ('Get Macro Recorder Text', 'Evaluate Line')
+
+
+
 ### New in 1.51s24:
 
 1. Code completion (templates) action now displays the macro documentation when typing
 2. Images from macros are now opened fast (before had a 2s delay)
-3. Macros can now be executed within an external ImageJ instance in a separate Java process if enabled in the preferences
+3. Macros can now be executed within an external ImageJ instance in a separate Java process if enabled in the preferences (Windows only!)
 4. Added JavaFX library reference for Java9
 
 ### New in 1.51p3:
