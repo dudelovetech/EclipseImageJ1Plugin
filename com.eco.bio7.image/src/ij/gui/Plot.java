@@ -154,7 +154,8 @@ public class Plot implements Cloneable {
 
 	PlotProperties pp = new PlotProperties();		//size, range, formatting etc, for easy serialization
 	Vector<PlotObject> allPlotObjects = new Vector<PlotObject>();	//all curves, labels etc., also serialized for saving/reading
-
+	//ArrayList<ImageProcessor> plotFamily = new ArrayList<ImageProcessor>();
+	PlotVirtualStack stack;
 	/** For high-resolution plots, everything will be scaled with this number. Otherwise, must be 1.0.
 	 *  (creating margins, saving PlotProperties etc only supports scale=1.0) */
 	float scale = 1.0f;
@@ -869,7 +870,7 @@ public class Plot implements Cloneable {
 	}
 
 	public void setColor(String color) {
-		setColor(Colors.getColor(color, Color.black));
+		setColor(Colors.decode(color, Color.black));
 	}
 
 	/** Changes the drawing color for the next objects that will be added to the plot.
@@ -1227,6 +1228,10 @@ public class Plot implements Cloneable {
 	 *  Note that the PlotWindow might get closed immediately if its 'listValues' and 'autoClose'
 	 *  flags are set */
 	public PlotWindow show() {
+		if (stack!=null && stack.size()>1) {
+			new ImagePlus("Plot Stack",stack).show();
+			return null;
+		}
 		if ((IJ.macroRunning() && IJ.getInstance()==null) || Interpreter.isBatchMode()) {
 			imp = getImagePlus();
 			WindowManager.setTempCurrentImage(imp);
@@ -1250,7 +1255,20 @@ public class Plot implements Cloneable {
 			IJ.selectWindow(imp.getID());
 		return pw;
 	}
-
+	
+	/**
+	 * Appends the plot to a stack and resets allPlotObjects
+	 * for next slice 
+	 * N. Vischer
+	 */
+	public void appendToStack() {
+		if (stack==null) 
+			stack = new PlotVirtualStack(getSize().width,getSize().height);
+		draw();
+		stack.addPlot(this);
+		allPlotObjects.clear();
+	}
+	
 	/** Draws the plot specified for the first time. Does nothing if the plot has been drawn already.
 	 *	Call getProcessor to retrieve the ImageProcessor with it.
 	 *	Does no action with respect to the ImagePlus (if any) */
@@ -2786,22 +2804,24 @@ public class Plot implements Cloneable {
 						yBest = p.yValues[i];
 					}
 				}
-				if (xScale != 0 && bestDx*xScale < 50) {	//ignore points more than 50 pixels away in x
+				if (Math.abs(scaleXtoPxl(xBest)-x) < 50) {	//ignore points more than 50 pixels away in x
 					xv = xBest;
 					yv = yBest;
 					yIsValue = true;
-				} else
-					xv = Double.NaN;
+				}
 			}
 		}
 		if (!Double.isNaN(xv)) {
-			text =	"X=" + IJ.d2s(xv, getDigits(xv, 0.001*(xMax-xMin), 6))+", Y";
+			int significantDigits = logXAxis ? -2 : getDigits(xv, 0.001*(xMax-xMin), 6);
+			text =	"X=" + IJ.d2s(xv, significantDigits)+", Y";
 			if (yIsValue) text += "(X)";
-			text +="="+ IJ.d2s(yv, getDigits(yv, 0.001*(yMax-yMin), 6));
+			significantDigits = logYAxis ? -2 : getDigits(yv, 0.001*(yMax-yMin), 6);
+			text +="="+ IJ.d2s(yv, significantDigits);
 		}
 		return text;
 		//}catch(Exception e){IJ.handleException(e);return "ERR";}
 	}
+
 
 	/** Returns a reference to the PlotObject having the data passed with the constructor or (if that was null)
 	 *	the first x & y data added later. Otherwise returns null. */

@@ -21,9 +21,12 @@ import ij.plugin.*;
 import ij.plugin.frame.*;
 
 /**
- * An ImagePlus contain an ImageProcessor (2D image) or an ImageStack (3D, 4D or 5D image). It also includes metadata (spatial calibration and possibly the directory/file where it was read from). The
- * ImageProcessor contains the pixel data (8-bit, 16-bit, float or RGB) of the 2D image and some basic methods to manipulate it. An ImageStack is essentually a list ImageProcessors of same type and
- * size.
+ * An ImagePlus contain an ImageProcessor (2D image) or an ImageStack (3D, 4D or
+ * 5D image). It also includes metadata (spatial calibration and possibly the
+ * directory/file where it was read from). The ImageProcessor contains the pixel
+ * data (8-bit, 16-bit, float or RGB) of the 2D image and some basic methods to
+ * manipulate it. An ImageStack is essentually a list ImageProcessors of same
+ * type and size.
  * 
  * @see ij.process.ImageProcessor
  * @see ij.ImageStack
@@ -108,8 +111,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Constructs an ImagePlus from an Image or BufferedImage. The first argument will be used as the title of the window that displays the image. Throws an IllegalStateException if an error occurs while
-	 * loading the image.
+	 * Constructs an ImagePlus from an Image or BufferedImage. The first argument
+	 * will be used as the title of the window that displays the image. Throws an
+	 * IllegalStateException if an error occurs while loading the image.
 	 */
 	public ImagePlus(String title, Image img) {
 		this.title = title;
@@ -125,7 +129,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Constructs an ImagePlus from a TIFF, BMP, DICOM, FITS, PGM, GIF or JPRG specified by a path or from a TIFF, DICOM, GIF or JPEG specified by a URL.
+	 * Constructs an ImagePlus from a TIFF, BMP, DICOM, FITS, PGM, GIF or JPRG
+	 * specified by a path or from a TIFF, DICOM, GIF or JPEG specified by a URL.
 	 */
 	public ImagePlus(String pathOrURL) {
 		Opener opener = new Opener();
@@ -164,8 +169,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Locks the image so other threads can test to see if it is in use. Returns true if the image was successfully locked. Beeps, displays a message in the status bar, and returns false if the image is
-	 * already locked.
+	 * Locks the image so other threads can test to see if it is in use. Returns
+	 * true if the image was successfully locked. Beeps, displays a message in the
+	 * status bar, and returns false if the image is already locked.
 	 */
 	public synchronized boolean lock() {
 		if (locked) {
@@ -183,7 +189,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Similar to lock, but doesn't beep and display an error message if the attempt to lock the image fails.
+	 * Similar to lock, but doesn't beep and display an error message if the attempt
+	 * to lock the image fails.
 	 */
 	public synchronized boolean lockSilently() {
 		if (locked)
@@ -237,7 +244,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Draws the image. If there is an ROI, its outline is also displayed. Does nothing if there is no window associated with this image (i.e. show() has not been called).
+	 * Draws the image. If there is an ROI, its outline is also displayed. Does
+	 * nothing if there is no window associated with this image (i.e. show() has not
+	 * been called).
 	 */
 	public void draw() {
 		if (win != null)
@@ -260,7 +269,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Updates this image from the pixel data in its associated ImageProcessor, then displays it. Does nothing if there is no window associated with this image (i.e. show() has not been called).
+	 * Updates this image from the pixel data in its associated ImageProcessor, then
+	 * displays it. Does nothing if there is no window associated with this image
+	 * (i.e. show() has not been called).
 	 */
 	public synchronized void updateAndDraw() {
 		if (stack != null && !stack.isVirtual() && currentSlice >= 1 && currentSlice <= stack.getSize()) {
@@ -282,7 +293,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the display mode of composite color images, where 'mode' should be IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE.
+	 * Sets the display mode of composite color images, where 'mode' should be
+	 * IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE.
 	 */
 	public void setDisplayMode(int mode) {
 		if (this instanceof CompositeImage) {
@@ -292,7 +304,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the display mode (IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE) if this is a composite color image, or 0 if it not.
+	 * Returns the display mode (IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE) if this is
+	 * a composite color image, or 0 if it not.
 	 */
 	public int getDisplayMode() {
 		if (this instanceof CompositeImage)
@@ -302,8 +315,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Controls which channels in a composite color image are displayed, where 'channels' is a list of ones and zeros that specify the channels to display. For example, "101" causes channels 1 and 3 to be
-	 * displayed.
+	 * Controls which channels in a composite color image are displayed, where
+	 * 'channels' is a list of ones and zeros that specify the channels to display.
+	 * For example, "101" causes channels 1 and 3 to be displayed.
 	 */
 	public void setActiveChannels(String channels) {
 		if (!(this instanceof CompositeImage))
@@ -320,21 +334,26 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Updates this image from the pixel data in its associated ImageProcessor, then displays it. The CompositeImage class overrides this method to only update the current channel.
+	 * Updates this image from the pixel data in its associated ImageProcessor, then
+	 * displays it. The CompositeImage class overrides this method to only update
+	 * the current channel.
 	 */
 	public void updateChannelAndDraw() {
 		updateAndDraw();
 	}
 
 	/**
-	 * Returns a reference to the current ImageProcessor. The CompositeImage class overrides this method to return the processor associated with the current channel.
+	 * Returns a reference to the current ImageProcessor. The CompositeImage class
+	 * overrides this method to return the processor associated with the current
+	 * channel.
 	 */
 	public ImageProcessor getChannelProcessor() {
 		return getProcessor();
 	}
 
 	/**
-	 * Returns an array containing the lookup tables used by this image, one per channel, or an empty array if this is an RGB image.
+	 * Returns an array containing the lookup tables used by this image, one per
+	 * channel, or an empty array if this is an RGB image.
 	 * 
 	 * @see #getNChannels
 	 * @see #isComposite
@@ -353,7 +372,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Calls draw to draw the image and also repaints the image window to force the information displayed above the image (dimension, type, size) to be updated.
+	 * Calls draw to draw the image and also repaints the image window to force the
+	 * information displayed above the image (dimension, type, size) to be updated.
 	 */
 	public void repaintWindow() {
 		if (win != null) {
@@ -363,7 +383,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Calls updateAndDraw to update from the pixel data and draw the image, and also repaints the image window to force the information displayed above the image (dimension, type, size) to be updated.
+	 * Calls updateAndDraw to update from the pixel data and draw the image, and
+	 * also repaints the image window to force the information displayed above the
+	 * image (dimension, type, size) to be updated.
 	 */
 	public void updateAndRepaintWindow() {
 		if (win != null) {
@@ -373,7 +395,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * ImageCanvas.paint() calls this method when the ImageProcessor has generated a new image.
+	 * ImageCanvas.paint() calls this method when the ImageProcessor has generated a
+	 * new image.
 	 */
 	public void updateImage() {
 		if (ip != null)
@@ -397,7 +420,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Closes this image and sets the ImageProcessor to null. To avoid the "Save changes?" dialog, first set the public 'changes' variable to false.
+	 * Closes this image and sets the ImageProcessor to null. To avoid the "Save
+	 * changes?" dialog, first set the public 'changes' variable to false.
 	 */
 	public void close() {
 		ImageWindow win = getWindow();
@@ -417,7 +441,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Opens a window to display this image and displays 'statusMessage' in the status bar.
+	 * Opens a window to display this image and displays 'statusMessage' in the
+	 * status bar.
 	 */
 	public void show(String statusMessage) {
 		if (isVisible())
@@ -522,7 +547,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Replaces the image, if any, with the one specified. Throws an IllegalStateException if an error occurs while loading the image.
+	 * Replaces the image, if any, with the one specified. Throws an
+	 * IllegalStateException if an error occurs while loading the image.
 	 */
 	public void setImage(Image img) {
 		if (img instanceof BufferedImage) {
@@ -569,7 +595,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Replaces this image with the specified ImagePlus. May not work as expected if 'imp' is a CompositeImage and this image is not.
+	 * Replaces this image with the specified ImagePlus. May not work as expected if
+	 * 'imp' is a CompositeImage and this image is not.
 	 */
 	public void setImage(ImagePlus imp) {
 		Properties newProperties = imp.getProperties();
@@ -601,16 +628,19 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Replaces the ImageProcessor with the one specified and updates the display. With stacks, the ImageProcessor must be the same type as the other images in the stack and it must be the same width and
-	 * height.
+	 * Replaces the ImageProcessor with the one specified and updates the display.
+	 * With stacks, the ImageProcessor must be the same type as the other images in
+	 * the stack and it must be the same width and height.
 	 */
 	public void setProcessor(ImageProcessor ip) {
 		setProcessor(null, ip);
 	}
 
 	/**
-	 * Replaces the ImageProcessor with the one specified and updates the display. With stacks, the ImageProcessor must be the same type as other images in the stack and it must be the same width and
-	 * height. Set 'title' to null to leave the title unchanged.
+	 * Replaces the ImageProcessor with the one specified and updates the display.
+	 * With stacks, the ImageProcessor must be the same type as other images in the
+	 * stack and it must be the same width and height. Set 'title' to null to leave
+	 * the title unchanged.
 	 */
 	public void setProcessor(String title, ImageProcessor ip) {
 		if (ip == null || ip.getPixels() == null)
@@ -681,7 +711,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Replaces the image with the specified stack and updates the display. Set 'title' to null to leave the title unchanged.
+	 * Replaces the image with the specified stack and updates the display. Set
+	 * 'title' to null to leave the title unchanged.
 	 */
 	public void setStack(String title, ImageStack newStack) {
 		int newStackSize = newStack.getSize();
@@ -764,7 +795,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Saves this image's FileInfo so it can be later retieved using getOriginalFileInfo().
+	 * Saves this image's FileInfo so it can be later retieved using
+	 * getOriginalFileInfo().
 	 */
 	public void setFileInfo(FileInfo fi) {
 		if (fi != null)
@@ -773,14 +805,18 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the ImageWindow that is being used to display this image. Returns null if show() has not be called or the ImageWindow has been closed.
+	 * Returns the ImageWindow that is being used to display this image. Returns
+	 * null if show() has not be called or the ImageWindow has been closed.
 	 */
 	public ImageWindow getWindow() {
 		return win;
 	}
 
 	/** Returns true if this image is currently being displayed in a window. */
-	/* Changed for Bio7! There is now physical AWT frame which embedds the imagePlus object! */
+	/*
+	 * Changed for Bio7! There is now physical AWT frame which embedds the imagePlus
+	 * object!
+	 */
 	public boolean isVisible() {
 		return win != null; // && win.isVisible();
 	}
@@ -822,8 +858,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns a reference to the current ImageProcessor. If there is no ImageProcessor, it creates one. Returns null if this ImagePlus contains no ImageProcessor and no AWT Image. Sets the line width to
-	 * the current line width and sets the calibration table if the image is density calibrated.
+	 * Returns a reference to the current ImageProcessor. If there is no
+	 * ImageProcessor, it creates one. Returns null if this ImagePlus contains no
+	 * ImageProcessor and no AWT Image. Sets the line width to the current line
+	 * width and sets the calibration table if the image is density calibrated.
 	 */
 	public ImageProcessor getProcessor() {
 		if (ip == null && img == null)
@@ -847,7 +885,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Frees RAM by setting the snapshot (undo) buffer in the current ImageProcessor to null.
+	 * Frees RAM by setting the snapshot (undo) buffer in the current ImageProcessor
+	 * to null.
 	 */
 	public void trimProcessor() {
 		ImageProcessor ip2 = ip;
@@ -862,7 +901,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * For images with irregular ROIs, returns a byte mask, otherwise, returns null. Mask pixels have a non-zero value.
+	 * For images with irregular ROIs, returns a byte mask, otherwise, returns null.
+	 * Mask pixels have a non-zero value.
 	 */
 	public ImageProcessor getMask() {
 		if (roi == null) {
@@ -881,8 +921,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Get calibrated statistics for this image or ROI, including histogram, area, mean, min and max, standard deviation and mode. This code demonstrates how to get the area, mean max and median of the
-	 * current image or selection:
+	 * Get calibrated statistics for this image or ROI, including histogram, area,
+	 * mean, min and max, standard deviation and mode. This code demonstrates how to
+	 * get the area, mean max and median of the current image or selection:
 	 * 
 	 * <pre>
 	 * imp = IJ.getImage();
@@ -903,14 +944,17 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * This method returns complete calibrated statistics for this image or ROI (with "Limit to threshold"), but it is up to 70 times slower than getStatistics().
+	 * This method returns complete calibrated statistics for this image or ROI
+	 * (with "Limit to threshold"), but it is up to 70 times slower than
+	 * getStatistics().
 	 */
 	public ImageStatistics getAllStatistics() {
 		return getStatistics(ALL_STATS + LIMIT);
 	}
 
 	/*
-	 * Returns uncalibrated statistics for this image or ROI, including 256 bin histogram, pixelCount, mean, mode, min and max.
+	 * Returns uncalibrated statistics for this image or ROI, including 256 bin
+	 * histogram, pixelCount, mean, mode, min and max.
 	 */
 	public ImageStatistics getRawStatistics() {
 		setupProcessor();
@@ -922,7 +966,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an ImageStatistics object generated using the specified measurement options.
+	 * Returns an ImageStatistics object generated using the specified measurement
+	 * options.
 	 * 
 	 * @see ij.process.ImageStatistics
 	 * @see ij.measure.Measurements
@@ -932,15 +977,19 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an ImageStatistics object generated using the specified measurement options and histogram bin count. Note: except for float images, the number of bins is currently fixed at 256.
+	 * Returns an ImageStatistics object generated using the specified measurement
+	 * options and histogram bin count. Note: except for float images, the number of
+	 * bins is currently fixed at 256.
 	 */
 	public ImageStatistics getStatistics(int mOptions, int nBins) {
 		return getStatistics(mOptions, nBins, 0.0, 0.0);
 	}
 
 	/**
-	 * Returns an ImageStatistics object generated using the specified measurement options, histogram bin count and histogram range. Note: for 8-bit and RGB images, the number of bins is fixed at 256 and
-	 * the histogram range is always 0-255.
+	 * Returns an ImageStatistics object generated using the specified measurement
+	 * options, histogram bin count and histogram range. Note: for 8-bit and RGB
+	 * images, the number of bins is fixed at 256 and the histogram range is always
+	 * 0-255.
 	 */
 	public ImageStatistics getStatistics(int mOptions, int nBins, double histMin, double histMax) {
 		setupProcessor();
@@ -970,7 +1019,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns a shortened version of image name that does not include spaces or a file name extension.
+	 * Returns a shortened version of image name that does not include spaces or a
+	 * file name extension.
 	 */
 	public String getShortTitle() {
 		String title = getTitle();
@@ -1041,7 +1091,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 	}
 
-	/** If this is a stack, returns the actual number of images in the stack, else returns 1. */
+	/**
+	 * If this is a stack, returns the actual number of images in the stack, else
+	 * returns 1.
+	 */
 	public int getImageStackSize() {
 		if (stack == null)
 			return 1;
@@ -1054,10 +1107,13 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the 3rd, 4th and 5th dimensions, where <code>nChannels</code>*<code>nSlices</code>*<code>nFrames</code> must be equal to the stack size.
+	 * Sets the 3rd, 4th and 5th dimensions, where
+	 * <code>nChannels</code>*<code>nSlices</code>*<code>nFrames</code> must be
+	 * equal to the stack size.
 	 */
 	public void setDimensions(int nChannels, int nSlices, int nFrames) {
-		// IJ.log("setDimensions: "+nChannels+" "+nSlices+" "+nFrames+" "+getImageStackSize());
+		// IJ.log("setDimensions: "+nChannels+" "+nSlices+" "+nFrames+"
+		// "+getImageStackSize());
 		if (nChannels * nSlices * nFrames != getImageStackSize() && ip != null) {
 			// throw new IllegalArgumentException("channels*slices*frames!=stackSize");
 			nChannels = 1;
@@ -1108,7 +1164,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return dimensions;
 	}
 
-	/** Returns 'true' if this is a hyperstack currently being displayed in a StackWindow. */
+	/**
+	 * Returns 'true' if this is a hyperstack currently being displayed in a
+	 * StackWindow.
+	 */
 	public boolean isDisplayedHyperStack() {
 		return win != null && win instanceof StackWindow && ((StackWindow) win).isHyperStack();
 	}
@@ -1133,7 +1192,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the dimensions of this image (width, height, nChannels, nSlices, nFrames) as a 5 element int array.
+	 * Returns the dimensions of this image (width, height, nChannels, nSlices,
+	 * nFrames) as a 5 element int array.
 	 */
 	public int[] getDimensions() {
 		return getDimensions(true);
@@ -1167,7 +1227,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the current image type (ImagePlus.GRAY8, ImagePlus.GRAY16, ImagePlus.GRAY32, ImagePlus.COLOR_256 or ImagePlus.COLOR_RGB).
+	 * Returns the current image type (ImagePlus.GRAY8, ImagePlus.GRAY16,
+	 * ImagePlus.GRAY32, ImagePlus.COLOR_256 or ImagePlus.COLOR_RGB).
 	 * 
 	 * @see #getBitDepth
 	 */
@@ -1176,7 +1237,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the bit depth, 8, 16, 24 (RGB) or 32, or 0 if the bit depth is unknown. RGB images actually use 32 bits per pixel.
+	 * Returns the bit depth, 8, 16, 24 (RGB) or 32, or 0 if the bit depth is
+	 * unknown. RGB images actually use 32 bits per pixel.
 	 */
 	public int getBitDepth() {
 		if (imageType == GRAY8 && ip == null && img == null && !typeSet)
@@ -1227,7 +1289,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the string value from the "Info" property string associated with 'key', or null if the key is not found. Works with DICOM tags and Bio-Formats metadata.
+	 * Returns the string value from the "Info" property string associated with
+	 * 'key', or null if the key is not found. Works with DICOM tags and Bio-Formats
+	 * metadata.
 	 * 
 	 * @see #getNumericProperty
 	 * @see #getInfoProperty
@@ -1266,8 +1330,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the numeric value from the "Info" property string associated with 'key', or NaN if the key is not found or the value associated with the key is not numeric. Works with DICOM tags and
-	 * Bio-Formats metadata.
+	 * Returns the numeric value from the "Info" property string associated with
+	 * 'key', or NaN if the key is not found or the value associated with the key is
+	 * not numeric. Works with DICOM tags and Bio-Formats metadata.
 	 * 
 	 * @see #getStringProperty
 	 * @see #getInfoProperty
@@ -1344,7 +1409,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Adds a key-value pair to this image's properties. The key is removed from the properties table if value is null.
+	 * Adds a key-value pair to this image's properties. The key is removed from the
+	 * properties table if value is null.
 	 */
 	public void setProperty(String key, Object value) {
 		if (properties == null)
@@ -1370,7 +1436,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns true is this image uses an inverting LUT that displays zero as white and 255 as black.
+	 * Returns true is this image uses an inverting LUT that displays zero as white
+	 * and 255 as black.
 	 */
 	public boolean isInvertedLut() {
 		if (ip == null) {
@@ -1384,8 +1451,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private int[] pvalue = new int[4];
 
 	/**
-	 * Returns the pixel value at (x,y) as a 4 element array. Grayscale values are retuned in the first element. RGB values are returned in the first 3 elements. For indexed color images, the RGB values
-	 * are returned in the first 3 three elements and the index (0-255) is returned in the last.
+	 * Returns the pixel value at (x,y) as a 4 element array. Grayscale values are
+	 * retuned in the first element. RGB values are returned in the first 3
+	 * elements. For indexed color images, the RGB values are returned in the first
+	 * 3 three elements and the index (0-255) is returned in the last.
 	 */
 	public int[] getPixel(int x, int y) {
 		pvalue[0] = pvalue[1] = pvalue[2] = pvalue[3] = 0;
@@ -1449,7 +1518,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an empty image stack that has the same width, height and color table as this image.
+	 * Returns an empty image stack that has the same width, height and color table
+	 * as this image.
 	 */
 	public ImageStack createEmptyStack() {
 		ColorModel cm;
@@ -1461,7 +1531,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the image stack. The stack may have only one slice. After adding or removing slices, call <code>setStack()</code> to update the image and the window that is displaying it.
+	 * Returns the image stack. The stack may have only one slice. After adding or
+	 * removing slices, call <code>setStack()</code> to update the image and the
+	 * window that is displaying it.
 	 * 
 	 * @see #setStack
 	 */
@@ -1504,7 +1576,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 	}
 
-	/** Returns the current stack index (one-based) or 1 if this is a single image. */
+	/**
+	 * Returns the current stack index (one-based) or 1 if this is a single image.
+	 */
 	public int getCurrentSlice() {
 		if (currentSlice < 1)
 			setCurrentSlice(1);
@@ -1542,7 +1616,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the current hyperstack position and updates the display, where 'channel', 'slice' and 'frame' are one-based indexes.
+	 * Sets the current hyperstack position and updates the display, where
+	 * 'channel', 'slice' and 'frame' are one-based indexes.
 	 */
 	public void setPosition(int channel, int slice, int frame) {
 		// IJ.log("setPosition: "+channel+" "+slice+" "+frame+" "+noUpdateMode);
@@ -1577,7 +1652,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the current hyperstack position without updating the display, where 'channel', 'slice' and 'frame' are one-based indexes.
+	 * Sets the current hyperstack position without updating the display, where
+	 * 'channel', 'slice' and 'frame' are one-based indexes.
 	 */
 	public void setPositionWithoutUpdate(int channel, int slice, int frame) {
 		noUpdateMode = true;
@@ -1615,7 +1691,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return position[2];
 	}
 
-	/** Returns that stack index (one-based) corresponding to the specified position. */
+	/**
+	 * Returns that stack index (one-based) corresponding to the specified position.
+	 */
 	public int getStackIndex(int channel, int slice, int frame) {
 		if (channel < 1)
 			channel = 1;
@@ -1644,13 +1722,18 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 	}
 
-	/** Set the current hyperstack position based on the stack index 'n' (one-based). */
+	/**
+	 * Set the current hyperstack position based on the stack index 'n' (one-based).
+	 */
 	public void setPosition(int n) {
 		int[] pos = convertIndexToPosition(n);
 		setPosition(pos[0], pos[1], pos[2]);
 	}
 
-	/** Converts the stack index 'n' (one-based) into a hyperstack position (channel, slice, frame). */
+	/**
+	 * Converts the stack index 'n' (one-based) into a hyperstack position (channel,
+	 * slice, frame).
+	 */
 	public int[] convertIndexToPosition(int n) {
 		if (n < 1 || n > getStackSize())
 			throw new IllegalArgumentException("n out of range: " + n);
@@ -1663,7 +1746,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Displays the specified stack image, where 1<=n<=stackSize. Does nothing if this image is not a stack.
+	 * Displays the specified stack image, where 1<=n<=stackSize. Does nothing if
+	 * this image is not a stack.
 	 * 
 	 * @see #setPosition
 	 * @see #setC
@@ -1731,7 +1815,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Displays the specified stack image (1<=n<=stackSize) without updating the display.
+	 * Displays the specified stack image (1<=n<=stackSize) without updating the
+	 * display.
 	 */
 	public void setSliceWithoutUpdate(int n) {
 		noUpdateMode = true;
@@ -1745,13 +1830,16 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Assigns the specified ROI to this image and displays it. Any existing ROI is deleted if <code>roi</code> is null or its width or height is zero.
+	 * Assigns the specified ROI to this image and displays it. Any existing ROI is
+	 * deleted if <code>roi</code> is null or its width or height is zero.
 	 */
 	public void setRoi(Roi newRoi) {
 		setRoi(newRoi, true);
 	}
 
-	/** Assigns 'newRoi' to this image and displays it if 'updateDisplay' is true. */
+	/**
+	 * Assigns 'newRoi' to this image and displays it if 'updateDisplay' is true.
+	 */
 	public void setRoi(Roi newRoi, boolean updateDisplay) {
 		if (newRoi == null) {
 			deleteRoi();
@@ -1804,8 +1892,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Starts the process of creating a new selection, where sx and sy are the starting screen coordinates. The selection type is determined by which tool in the tool bar is active. The user interactively
-	 * sets the selection size and shape.
+	 * Starts the process of creating a new selection, where sx and sy are the
+	 * starting screen coordinates. The selection type is determined by which tool
+	 * in the tool bar is active. The user interactively sets the selection size and
+	 * shape.
 	 */
 	public void createNewRoi(int sx, int sy) {
 		deleteRoi();
@@ -1877,7 +1967,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Deletes the current region of interest. Makes a copy of the ROI so it can be recovered by Edit/Selection/Restore Selection.
+	 * Deletes the current region of interest. Makes a copy of the ROI so it can be
+	 * recovered by Edit/Selection/Restore Selection.
 	 */
 	public void deleteRoi() {
 		if (roi != null) {
@@ -2022,7 +2113,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns a FileInfo object containing information, including the pixel array, needed to save this image. Use getOriginalFileInfo() to get a copy of the FileInfo object used to open the image.
+	 * Returns a FileInfo object containing information, including the pixel array,
+	 * needed to save this image. Use getOriginalFileInfo() to get a copy of the
+	 * FileInfo object used to open the image.
 	 * 
 	 * @see ij.io.FileInfo
 	 * @see #getOriginalFileInfo
@@ -2106,7 +2199,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the FileInfo object that was used to open this image. Returns null for images created using the File/New command.
+	 * Returns the FileInfo object that was used to open this image. Returns null
+	 * for images created using the File/New command.
 	 * 
 	 * @see ij.io.FileInfo
 	 * @see #getFileInfo
@@ -2135,7 +2229,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the ImageProcessor, Roi, AWT Image and stack image arrays to null. Does nothing if the image is locked.
+	 * Sets the ImageProcessor, Roi, AWT Image and stack image arrays to null. Does
+	 * nothing if the image is locked.
 	 */
 	public synchronized void flush() {
 		notifyListeners(CLOSED);
@@ -2191,7 +2286,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns a new ImagePlus with this image's attributes (e.g. spatial scale), but no image.
+	 * Returns a new ImagePlus with this image's attributes (e.g. spatial scale),
+	 * but no image.
 	 */
 	public ImagePlus createImagePlus() {
 		ImagePlus imp2 = new ImagePlus();
@@ -2246,7 +2342,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			setCalibration(imp.getCalibration());
 	}
 
-	/** Copies attributes (name, ID, calibration, path, plot) of the specified image to this image. */
+	/**
+	 * Copies attributes (name, ID, calibration, path, plot) of the specified image
+	 * to this image.
+	 */
 	public void copyAttributes(ImagePlus imp) {
 		if (IJ.debugMode)
 			IJ.log("copyAttributes: " + imp.getID() + "  " + this.getID() + " " + imp + "   " + this);
@@ -2267,7 +2366,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Calls System.currentTimeMillis() to save the current time so it can be retrieved later using getStartTime() to calculate the elapsed time of an operation.
+	 * Calls System.currentTimeMillis() to save the current time so it can be
+	 * retrieved later using getStartTime() to calculate the elapsed time of an
+	 * operation.
 	 */
 	public void startTiming() {
 		startTime = System.currentTimeMillis();
@@ -2318,13 +2419,17 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return globalCalibration;
 	}
 
-	/** This is a version of getGlobalCalibration() that can be called from a static context. */
+	/**
+	 * This is a version of getGlobalCalibration() that can be called from a static
+	 * context.
+	 */
 	public static Calibration getStaticGlobalCalibration() {
 		return globalCalibration;
 	}
 
 	/**
-	 * Returns this image's local calibration, ignoring the "Global" calibration flag.
+	 * Returns this image's local calibration, ignoring the "Global" calibration
+	 * flag.
 	 */
 	public Calibration getLocalCalibration() {
 		if (calibration == null)
@@ -2337,10 +2442,12 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Displays the cursor coordinates and pixel value in the status bar. Called by ImageCanvas when the mouse moves. Can be overridden by ImagePlus subclasses.
+	 * Displays the cursor coordinates and pixel value in the status bar. Called by
+	 * ImageCanvas when the mouse moves. Can be overridden by ImagePlus subclasses.
 	 */
 	public void mouseMoved(int x, int y) {
-		if (ij != null)
+		Roi roi2 = getRoi();
+		if (ij != null && (roi2 == null || roi2.getState() == Roi.NORMAL))
 			ij.showStatus(getLocationAsString(x, y) + getValueAsString(x, y));
 		savex = x;
 		savey = y;
@@ -2349,7 +2456,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private int savex, savey;
 
 	/**
-	 * Redisplays the (x,y) coordinates and pixel value (which may have changed) in the status bar. Called by the Next Slice and Previous Slice commands to update the z-coordinate and pixel value.
+	 * Redisplays the (x,y) coordinates and pixel value (which may have changed) in
+	 * the status bar. Called by the Next Slice and Previous Slice commands to
+	 * update the z-coordinate and pixel value.
 	 */
 	public void updateStatusbarValue() {
 		IJ.showStatus(getLocationAsString(savex, savey) + getValueAsString(savex, savey));
@@ -2378,21 +2487,22 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		Calibration cal = getCalibration();
 		if (getProperty("FHT") != null)
 			return getFFTLocation(x, height - y, cal);
-		if (!(IJ.altKeyDown() || IJ.shiftKeyDown())) {
-			String s = " x=" + d2s(cal.getX(x)) + ", y=" + d2s(cal.getY(y, height));
-			if (getStackSize() > 1) {
-				int z = isDisplayedHyperStack() ? getSlice() - 1 : getCurrentSlice() - 1;
-				s += ", z=" + d2s(cal.getZ(z));
-			}
-			return s;
-		} else {
-			String s = " x=" + x + ", y=" + y;
-			if (getStackSize() > 1) {
-				int z = isDisplayedHyperStack() ? getSlice() - 1 : getCurrentSlice() - 1;
-				s += ", z=" + z;
-			}
-			return s;
+		String xx = "", yy = "";
+		if (cal.scaled()) {
+			xx = " (" + x + ")";
+			yy = " (" + y + ")";
 		}
+		String s = " x=" + d2s(cal.getX(x)) + xx + ", y=" + d2s(cal.getY(y, height)) + yy;
+		if (getStackSize() > 1) {
+			Roi roi2 = getRoi();
+			if (roi2 == null || roi2.getState() == Roi.NORMAL) {
+				int z = isDisplayedHyperStack() ? getSlice() - 1 : getCurrentSlice() - 1;
+				String zz = cal.scaled() && cal.getZ(z) != z ? " (" + z + ")" : "";
+				s += ", z=" + d2s(cal.getZ(z)) + zz;
+			}
+
+		}
+		return s;
 	}
 
 	private String d2s(double n) {
@@ -2433,14 +2543,17 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Copies the contents of the current selection, or the entire image if there is no selection, to the internal clipboard.
+	 * Copies the contents of the current selection, or the entire image if there is
+	 * no selection, to the internal clipboard.
 	 */
 	public void copy() {
 		copy(false);
 	}
 
 	/**
-	 * Copies the contents of the current selection to the internal clipboard. Copies the entire image if there is no selection. Also clears the selection if <code>cut</code> is true.
+	 * Copies the contents of the current selection to the internal clipboard.
+	 * Copies the entire image if there is no selection. Also clears the selection
+	 * if <code>cut</code> is true.
 	 */
 	public void copy(boolean cut) {
 		Roi roi = getRoi();
@@ -2490,8 +2603,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Inserts the contents of the internal clipboard into the active image. If there is a selection the same size as the image on the clipboard, the image is inserted into that selection, otherwise the
-	 * selection is inserted into the center of the image.
+	 * Inserts the contents of the internal clipboard into the active image. If
+	 * there is a selection the same size as the image on the clipboard, the image
+	 * is inserted into that selection, otherwise the selection is inserted into the
+	 * center of the image.
 	 */
 	public void paste() {
 		if (clipboard == null)
@@ -2552,7 +2667,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		changes = true;
 	}
 
-	/** Returns the internal clipboard or null if the internal clipboard is empty. */
+	/**
+	 * Returns the internal clipboard or null if the internal clipboard is empty.
+	 */
 	public static ImagePlus getClipboard() {
 		return clipboard;
 	}
@@ -2608,7 +2725,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns the display mode (IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE) if this is a CompositeImage, otherwise returns -1.
+	 * Returns the display mode (IJ.COMPOSITE, IJ.COLOR or IJ.GRAYSCALE) if this is
+	 * a CompositeImage, otherwise returns -1.
 	 */
 	public int getCompositeMode() {
 		if (isComposite())
@@ -2618,7 +2736,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the display range of the current channel. With non-composite images it is identical to ip.setMinAndMax(min, max).
+	 * Sets the display range of the current channel. With non-composite images it
+	 * is identical to ip.setMinAndMax(min, max).
 	 */
 	public void setDisplayRange(double min, double max) {
 		if (ip != null)
@@ -2634,8 +2753,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Sets the display range of specified channels in an RGB image, where 4=red, 2=green, 1=blue, 6=red+green, etc. With non-RGB images, this method is identical to setDisplayRange(min, max). This method
-	 * is used by the Image/Adjust/Color Balance tool .
+	 * Sets the display range of specified channels in an RGB image, where 4=red,
+	 * 2=green, 1=blue, 6=red+green, etc. With non-RGB images, this method is
+	 * identical to setDisplayRange(min, max). This method is used by the
+	 * Image/Adjust/Color Balance tool .
 	 */
 	public void setDisplayRange(double min, double max, int channels) {
 		if (ip instanceof ColorProcessor)
@@ -2657,7 +2778,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Set the default 16-bit display range, where 'bitDepth' must be 0 (auto-scaling), 8 (0-255), 10 (0-1023), 12 (0-4095, 14 (0-16383), 15 (0-32767) or 16 (0-65535).
+	 * Set the default 16-bit display range, where 'bitDepth' must be 0
+	 * (auto-scaling), 8 (0-255), 10 (0-1023), 12 (0-4095, 14 (0-16383), 15
+	 * (0-32767) or 16 (0-65535).
 	 */
 	public static void setDefault16bitRange(int bitDepth) {
 		if (!(bitDepth == 8 || bitDepth == 10 || bitDepth == 12 || bitDepth == 14 || bitDepth == 15 || bitDepth == 16))
@@ -2665,7 +2788,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		default16bitDisplayRange = bitDepth;
 	}
 
-	/** Returns the default 16-bit display range, 0 (auto-scaling), 8, 10, 12, 14, 15 or 16. */
+	/**
+	 * Returns the default 16-bit display range, 0 (auto-scaling), 8, 10, 12, 14, 15
+	 * or 16.
+	 */
 	public static int getDefault16bitRange() {
 		return default16bitDisplayRange;
 	}
@@ -2723,7 +2849,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 * @throws UnsupportedOperationException
 	 *             if this image<br>
 	 *             does not have an overlay and the RoiManager overlay is null<br>
-	 *             or Java version is less than 1.6. Copied from OverlayCommands and modified by Marcel Boeglin on 2014.01.08 to work with HyperStacks.
+	 *             or Java version is less than 1.6. Copied from OverlayCommands and
+	 *             modified by Marcel Boeglin on 2014.01.08 to work with
+	 *             HyperStacks.
 	 */
 	public void flattenStack() {
 		if (IJ.debugMode)
@@ -2769,7 +2897,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Flattens Overlay 'overlay' on slice 'slice' of ImageStack 'stack'. Copied from OverlayCommands by Marcel Boeglin 2014.01.08.
+	 * Flattens Overlay 'overlay' on slice 'slice' of ImageStack 'stack'. Copied
+	 * from OverlayCommands by Marcel Boeglin 2014.01.08.
 	 */
 	private void flattenImage(ImageStack stack, int slice, Overlay overlay, boolean showAll) {
 		ImageProcessor ips = stack.getProcessor(slice);
@@ -2789,7 +2918,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Flattens Overlay 'overlay' on slice 'slice' corresponding to coordinates 'z' and 't' in RGB-HyperStack 'stack'
+	 * Flattens Overlay 'overlay' on slice 'slice' corresponding to coordinates 'z'
+	 * and 't' in RGB-HyperStack 'stack'
 	 */
 	private void flattenImage(ImageStack stack, int slice, Overlay overlay, boolean showAll, int z, int t) {
 		ImageProcessor ips = stack.getProcessor(slice);
@@ -2841,7 +2971,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Installs a list of ROIs that will be drawn on this image as a non-destructive overlay.
+	 * Installs a list of ROIs that will be drawn on this image as a non-destructive
+	 * overlay.
 	 * 
 	 * @see ij.gui.Roi#setStrokeColor
 	 * @see ij.gui.Roi#setStrokeWidth
@@ -2860,7 +2991,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Creates an Overlay from the specified Shape, Color and BasicStroke, and assigns it to this image.
+	 * Creates an Overlay from the specified Shape, Color and BasicStroke, and
+	 * assigns it to this image.
 	 * 
 	 * @see #setOverlay(ij.gui.Overlay)
 	 * @see ij.gui.Roi#setStrokeColor
@@ -2889,7 +3021,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		setOverlay(new Overlay(roi));
 	}
 
-	/** Returns the current overly, or null if this image does not have an overlay. */
+	/**
+	 * Returns the current overly, or null if this image does not have an overlay.
+	 */
 	public Overlay getOverlay() {
 		ImageCanvas ic = getCanvas();
 		if (ic != null)
