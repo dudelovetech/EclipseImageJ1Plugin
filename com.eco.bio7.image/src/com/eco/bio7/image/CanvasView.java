@@ -657,7 +657,7 @@ public class CanvasView extends ViewPart {
 		UIManager.put("MenuItem.font", fontResource); //$NON-NLS-1$
 		UIManager.put("CheckboxMenuItem.font", fontResource); //$NON-NLS-1$
 		UIManager.put("PopupMenu.font", fontResource); // $NON-NLS-1
-
+ 
 		java.util.Enumeration keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {
 			Object key = keys.nextElement();
