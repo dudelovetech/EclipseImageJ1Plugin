@@ -683,7 +683,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			}
 		}
 	}
-
+ 
 	/* Changed for Bio7! */
 	public void setFullScreen() {
 		currentPanel = CanvasView.getCurrent();
