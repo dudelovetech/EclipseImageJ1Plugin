@@ -18,6 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -68,6 +69,8 @@ public class Util {
 	 * @return the OS font as an AWT font.
 	 */
 	public static java.awt.Font getOSFontToAwt() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		int fontSizeCorrection = store.getInt("FONT_SIZE_CORRECTION");
 
 		Display dis = getDisplay();
 
@@ -83,7 +86,7 @@ public class Util {
 
 				/* Font size correction! */
 
-				awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize);
+				awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize+fontSizeCorrection);
 			}
 		});
 
