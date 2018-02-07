@@ -655,7 +655,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					full = null;
 					root.add(currentPanel);
 					root.validate();
-				}
+				} 
 				return;
 			/* Changed for Bio7! */
 			case KeyEvent.VK_F2:
