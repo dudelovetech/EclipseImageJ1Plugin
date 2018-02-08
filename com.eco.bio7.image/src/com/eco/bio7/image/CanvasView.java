@@ -23,6 +23,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -314,25 +319,23 @@ public class CanvasView extends ViewPart {
 						final int x = i;
 						IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 						boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-						if (javaFXEmbedded) {
-							Display dis = CanvasView.getParent2().getDisplay();
-							dis.syncExec(new Runnable() {
 
-								public void run() {
-									openFile(new File(fileList[x].toString()));
-								}
-							});
-						} else {
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
+						Job job = new Job("Open...") {
+							@Override
+							protected IStatus run(IProgressMonitor monitor) {
+								monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
 
-									/*
-									 * Opener o = new Opener(); o.open(fileList[x].toString());
-									 */
-									openFile(new File(fileList[x].toString()));
-								}
-							});
-						}
+								openFile(new File(fileList[x].toString()));
+
+								monitor.done();
+								return Status.OK_STATUS;
+							}
+
+						};
+
+						// job.setUser(true);
+						job.schedule();
+
 					}
 
 				}
