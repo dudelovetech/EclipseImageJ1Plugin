@@ -317,9 +317,6 @@ public class CanvasView extends ViewPart {
 					for (int i = 0; i < fileList.length; i++) {
 
 						final int x = i;
-						IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-						boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-
 						Job job = new Job("Open...") {
 							@Override
 							protected IStatus run(IProgressMonitor monitor) {
