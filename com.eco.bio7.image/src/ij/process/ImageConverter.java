@@ -177,15 +177,18 @@ public class ImageConverter {
 			B = (byte[])stack.getPixels(3);
 		else
 			B = new byte[width*height];
-		imp.trimProcessor();
+		/*Changed for Bio7!*/
+		//imp.trimProcessor();
 		ColorProcessor cp = new ColorProcessor(width, height);
 		cp.setRGB(R, G, B);
 		if (imp.isInvertedLut())
 			cp.invert();
-		imp.setImage(cp.createImage());
+		new ImagePlus(imp.getTitle(),cp.createImage()).show();
+		/*Changed for Bio7!*/
+		/*imp.setImage(cp.createImage());
 		imp.killStack();
 		if (IJ.isLinux())
-			imp.setTitle(imp.getTitle());
+			imp.setTitle(imp.getTitle());*/
 	}
 
 	/** Converts a 3-slice (hue, saturation, brightness) 8-bit stack to RGB. */
