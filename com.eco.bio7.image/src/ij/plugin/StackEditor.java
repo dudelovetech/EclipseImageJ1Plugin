@@ -376,6 +376,7 @@ public class StackEditor implements PlugIn {
 
 			} else {
 				try {
+					
 					SwingUtilities.invokeAndWait(new Runnable() {
 
 						public void run() {
