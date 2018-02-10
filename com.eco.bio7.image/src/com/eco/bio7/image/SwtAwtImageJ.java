@@ -141,7 +141,7 @@ public class SwtAwtImageJ {
 		} else {
 			/* Add SWT_AWT to embed the ImageJ canvas! */
 			Display dis = CanvasView.getParent2().getDisplay();
-			dis.syncExec(new Runnable() {
+			dis.asyncExec(new Runnable() {
 
 				public void run() {
 
