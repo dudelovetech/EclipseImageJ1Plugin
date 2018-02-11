@@ -12,6 +12,7 @@
 package com.eco.bio7.image;
 
 import ij.IJ;
+import javafx.application.Platform;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -46,7 +47,7 @@ public class IJtoolbar extends ViewPart {
 					SwingUtilities.invokeLater(new Runnable() {
 						// !!
 						public void run() {
-							jpp.repaint();
+							//jpp.repaint();
 						}
 					});
 
@@ -59,7 +60,7 @@ public class IJtoolbar extends ViewPart {
 					SwingUtilities.invokeLater(new Runnable() {
 						// !!
 						public void run() {
-							jpp.repaint();
+							//jpp.repaint();
 						}
 					});
 
@@ -108,7 +109,10 @@ public class IJtoolbar extends ViewPart {
 		 */
 		// else {
 		Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+		Platform.runLater(new Runnable() {
+			public void run() {
 		Frame frame = SWT_AWT.new_Frame(top);
+			
 		/*
 		 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
 		 * ef.addWindowListener(new WindowAdapter() { public void
@@ -134,6 +138,7 @@ public class IJtoolbar extends ViewPart {
 			jpp.add(IJ.getInstance().statusBar);
 
 			contentPane.add(jpp);
+			
 		} else {
 			Display display = Util.getDisplay();
 			display.syncExec(new Runnable() {
@@ -148,6 +153,8 @@ public class IJtoolbar extends ViewPart {
 			});
 		}
 		// }
+			}
+		});
 	}
 
 	public void setFocus() {
