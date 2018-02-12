@@ -290,7 +290,7 @@ public class StackEditor implements PlugIn {
 		/* Changed for Bio7! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
-		
+
 		int size = stack.getSize();
 		if (size > 30 && !IJ.isMacro()) {
 			boolean ok = IJ.showMessageWithCancel("Convert to Images?", "Are you sure you want to convert this\nstack to " + size + " separate windows?");
@@ -305,11 +305,11 @@ public class StackEditor implements PlugIn {
 		if (imp.getNChannels() != imp.getStackSize())
 			cimg = null;
 		Overlay overlay = imp.getOverlay();
-		/*Changed for Bio7!*/
+		/* Changed for Bio7! */
 		lastImageID = 0;
 		for (int i = 1; i <= size; i++) {
-			/*Changed for Bio7!*/
-			final int count=i;
+			/* Changed for Bio7! */
+			final int count = i;
 			String label = stack.getShortSliceLabel(i);
 			String title = label != null && !label.equals("") ? label : getTitle(imp, i);
 			ImageProcessor ip = stack.getProcessor(i);
@@ -352,7 +352,7 @@ public class StackEditor implements PlugIn {
 									Util.runAndWait(new Runnable() {
 
 										public void run() {
-											if (count==size)
+											if (count == size)
 												lastImageID = imp2.getID();
 											imp2.show();
 
@@ -376,16 +376,32 @@ public class StackEditor implements PlugIn {
 
 			} else {
 				try {
-					
-					SwingUtilities.invokeAndWait(new Runnable() {
+					if (Util.getOS().equals("Mac")) {
+						SwingUtilities.invokeAndWait(new Runnable() {
 
-						public void run() {
-							if (count==size)
-							lastImageID = imp2.getID();
-							imp2.show();
+							public void run() {
+								Platform.runLater(new Runnable() {
+									public void run() {
+										if (count == size)
+											lastImageID = imp2.getID();
+										imp2.show();
+									}
+								});
 
-						}
-					});
+							}
+						});
+
+					} else {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+							public void run() {
+								if (count == size)
+									lastImageID = imp2.getID();
+								imp2.show();
+
+							}
+						});
+					}
 				} catch (InvocationTargetException e) {
 
 					e.printStackTrace();
