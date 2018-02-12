@@ -1037,38 +1037,35 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	/** Returns the contents of the next text field. */
-	public String getNextString() {
-		String theText;
-		if (stringField == null)
-			return "";
-		TextField tf = (TextField) (stringField.elementAt(sfIndex));
-		theText = tf.getText();
-		if (macro) {
-			String label = (String) labels.get((Object) tf);
-			theText = Macro.getValue(macroOptions, label, theText);
-			if (theText != null && (theText.startsWith("&") || label.toLowerCase(Locale.US).startsWith(theText))) {
-				// Is the value a macro variable?
-				if (theText.startsWith("&"))
-					theText = theText.substring(1);
-				Interpreter interp = Interpreter.getInstance();
-				String s = interp != null ? interp.getVariableAsString(theText) : null;
-				if (s != null)
-					theText = s;
+	   public String getNextString() {
+	   		String theText;
+			if (stringField==null)
+				return "";
+			TextField tf = (TextField)(stringField.elementAt(sfIndex));
+			theText = tf.getText();
+			if (macro) {
+				String label = (String)labels.get((Object)tf);
+				theText = Macro.getValue(macroOptions, label, theText);
+				if (theText!=null && (theText.startsWith("&")||label.toLowerCase(Locale.US).startsWith(theText))) {
+					// Is the value a macro variable?
+					if (theText.startsWith("&")) theText = theText.substring(1);
+					Interpreter interp = Interpreter.getInstance();
+					String s = interp!=null?interp.getVariableAsString(theText):null;
+					if (s!=null) theText = s;
+				}
+			}	
+			if (recorderOn) {
+				String s = theText;
+				if (s!=null&&s.length()>=3&&Character.isLetter(s.charAt(0))&&s.charAt(1)==':'&&s.charAt(2)=='\\')
+					s = s.replaceAll("\\\\", "/");  // replace "\" with "/" in Windows file paths
+				if (!smartRecording || !s.equals((String)defaultStrings.elementAt(sfIndex)))
+					recordOption(tf, s);
+				else if (Recorder.getCommandOptions()==null)
+					Recorder.recordOption(" ");
 			}
-		}
-		if (recorderOn) {
-			String s = theText;
-			if (s != null && s.length() >= 3 && Character.isLetter(s.charAt(0)) && s.charAt(1) == ':' && s.charAt(2) == '\\')
-				s = s.replaceAll("\\\\", "\\\\\\\\"); // replace "\" with "\\"
-														// in Windows file paths
-			if (!smartRecording || !s.equals((String) defaultStrings.elementAt(sfIndex)))
-				recordOption(tf, s);
-			else if (Recorder.getCommandOptions() == null)
-				Recorder.recordOption(" ");
-		}
-		sfIndex++;
-		return theText;
-	}
+			sfIndex++;
+			return theText;
+	    }
 
 	/** Returns the state of the next checkbox. */
 	public boolean getNextBoolean() {
@@ -1210,36 +1207,28 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		return item;
 	}
 
-	/** Returns the contents of the next textarea. */
+	/** Returns the contents of the next text area. */
 	public String getNextText() {
-		String text;
-		if (textAreaIndex == 0 && textArea1 != null) {
-			// textArea1.selectAll();
+		String text = null;
+		String key = "text1";
+		if (textAreaIndex==0 && textArea1!=null) {
 			text = textArea1.getText();
-			textAreaIndex++;
 			if (macro)
 				text = Macro.getValue(macroOptions, "text1", text);
-			if (recorderOn) {
-				String text2 = text;
-				String cmd = Recorder.getCommand();
-				if (cmd != null && cmd.equals("Convolve...")) {
-					text2 = text.replaceAll("\n", "\\\\n");
-					if (!text.endsWith("\n"))
-						text2 = text2 + "\\n";
-				} else
-					text2 = text.replace('\n', ' ');
-				Recorder.recordOption("text1", text2);
-			}
-		} else if (textAreaIndex == 1 && textArea2 != null) {
-			textArea2.selectAll();
+		} else if (textAreaIndex==1 && textArea2!=null) {
 			text = textArea2.getText();
-			textAreaIndex++;
 			if (macro)
 				text = Macro.getValue(macroOptions, "text2", text);
-			if (recorderOn)
-				Recorder.recordOption("text2", text.replace('\n', ' '));
-		} else
-			text = null;
+			key = "text2";
+		}
+		textAreaIndex++;
+		if (recorderOn && text!=null) {
+			String text2 = text;
+			String cmd = Recorder.getCommand();
+			if (cmd!=null && cmd.equals("Calibrate..."))
+				text2 = text2.replace('\n',' ');
+			Recorder.recordOption(key, text2);
+		}
 		return text;
 	}
 

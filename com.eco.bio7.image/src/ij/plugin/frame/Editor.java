@@ -47,6 +47,7 @@ public class Editor extends PlugInFrame implements ActionListener, ItemListener,
 	static final String DEFAULT_DIR= "editor.dir";
 	static final String INSERT_SPACES= "editor.spaces";
 	static final String TAB_INC= "editor.tab-inc";
+	public static Editor currentMacroEditor;
 	private TextArea ta;
 	private String path;
 	protected boolean changes;
@@ -283,6 +284,7 @@ public class Editor extends PlugInFrame implements ActionListener, ItemListener,
 		if (installInPluginsMenu || nShortcutsOrTools>0)
 			installer.install(null);
 		dontShowWindow = installer.isAutoRunAndHide();
+		currentMacroEditor = this;
 	}
 		
 	/** Opens a file and replaces the text (if any) by the contents of the file. */
@@ -418,6 +420,7 @@ public class Editor extends PlugInFrame implements ActionListener, ItemListener,
 			changes = true;
 			checkForCurlyQuotes = false;
 		}
+		currentMacroEditor = this;
 		new MacroRunner(text, debug?this:null);
 	}
 	

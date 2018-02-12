@@ -135,13 +135,39 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		return commandName;
 	}
 
-	static String fixPath(String path) {
-		StringBuffer sb = new StringBuffer();
+	/** Replaces '\' characters with '/'. */
+	static String fixPath (String path) {
+		if (!IJ.isWindows())
+			return path;
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i<path.length(); i++) {
+			char c=path.charAt(i);
+			if (c=='\\')
+				sb.append("/");
+			else
+				sb.append(c);
+		}
+		return new String(sb);
+	}
+	
+	/** Replaces special characters in a String for creation of a quoted macro String. Does not add quotes. */
+	public static String fixString (String str) {
+		StringBuilder sb = new StringBuilder();
 		char c;
-		for (int i = 0; i < path.length(); i++) {
-			sb.append(c = path.charAt(i));
-			if (c == '\\')
-				sb.append("\\");
+		for (int i=0; i<str.length(); i++) {
+			c = str.charAt(i);
+			if (c =='\\' || c=='"')
+				sb.append("\\"+c);
+			else if (c == '\n')
+				sb.append("\\n");
+			else if (c < ' ' || c > '~' && c < 0xa0) {
+				sb.append('\\');
+				String octal = Integer.toString(c,8);
+				while (octal.length()<3)
+					octal = '0' + octal;
+				sb.append(octal);
+			} else
+				sb.append(c);
 		}
 		return new String(sb);
 	}
@@ -401,6 +427,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	public static void recordOption(String key, String value) {
 		if (key == null)
 			return;
+		key = fixString(key);
 		key = trimKey(key);
 		value = addQuotes(value);
 		checkForDuplicate(key + "=", value);

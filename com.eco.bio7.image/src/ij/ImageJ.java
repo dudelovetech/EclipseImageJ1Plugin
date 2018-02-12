@@ -93,7 +93,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * string.
 	 */
 	public static final String VERSION = "1.51u";
-	public static final String BUILD = "20";
+	public static final String BUILD = "51";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -438,7 +438,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		MenuItem item = (MenuItem) e.getSource();
 		MenuComponent parent = (MenuComponent) item.getParent();
 		String cmd = e.getItem().toString();
-		if ("Autorun".equals(cmd)) // Examples>Autorun
+		if ("Autorun Examples".equals(cmd)) // Examples>Autorun Examples
 			Prefs.autoRunExamples = e.getStateChange() == 1;
 		else if ((Menu) parent == Menus.window)
 			WindowManager.activateWindow(cmd, item);

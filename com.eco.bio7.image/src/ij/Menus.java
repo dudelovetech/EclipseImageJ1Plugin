@@ -252,6 +252,7 @@ public class Menus {
 		addPlugInItem(help, "Macros...", "ij.plugin.BrowserLauncher(\"" + IJ.URL + "/macros/\")", 0, false);
 		addPlugInItem(help, "Macro Functions...", "ij.plugin.BrowserLauncher(\"" + IJ.URL + "/developer/macro/functions.html\")", 0, false);
 		Menu examplesMenu = getExamplesMenu(ij);
+		addPlugInItem(examplesMenu, "Open as Panel", "ij.plugin.SimpleCommands(\"opencp\")", 0, false);
 		help.add(examplesMenu);
 		help.addSeparator();
 		/* Changed for Bio7! Left out ImageJ update! */
@@ -287,15 +288,23 @@ public class Menus {
 
 	public static Menu getExamplesMenu(ActionListener listener) {
 		Menu menu = new Menu("Examples");
-		Menu submenu = new Menu("Macro");
-		addExample(submenu, "Sphere", "Sphere.ijm");
-		addExample(submenu, "Dialog Box", "Dialog_Box.ijm");
+		Menu submenu = new Menu("Plots");
+
 		addExample(submenu, "Example Plot", "Example_Plot.ijm");
 		addExample(submenu, "Semi-log Plot", "Semi-log_Plot.ijm");
 		addExample(submenu, "Arrow Plot", "Arrow_Plot.ijm");
 		addExample(submenu, "Damped Wave Plot", "Damped_Wave_Plot.ijm");
 		addExample(submenu, "Dynamic Plot", "Dynamic_Plot.ijm");
+		addExample(submenu, "Dynamic Plot 2D", "Dynamic_Plot_2D.ijm");
 		addExample(submenu, "Custom Plot Symbols", "Custom_Plot_Symbols.ijm");
+		addExample(submenu, "Histograms", "Histograms.ijm");
+		addExample(submenu, "Bar Charts", "Bar_Charts.ijm");
+		addExample(submenu, "Shapes", "Plot_Shape_Macros.ijm");
+		submenu.addActionListener(listener);
+		menu.add(submenu);
+		submenu = new Menu("Macro");
+		addExample(submenu, "Sphere", "Sphere.ijm");
+		addExample(submenu, "Dialog Box", "Dialog_Box.ijm");
 		addExample(submenu, "Process Folder", "Batch_Process_Folder.ijm");
 		addExample(submenu, "OpenDialog Demo", "OpenDialog_Demo.ijm");
 		addExample(submenu, "Sine/Cosine Table", "Sine_Cosine_Table.ijm");
@@ -361,7 +370,7 @@ public class Menus {
 		submenu.addActionListener(listener);
 		menu.add(submenu);
 		menu.addSeparator();
-		CheckboxMenuItem item = new CheckboxMenuItem("Autorun");
+		CheckboxMenuItem item = new CheckboxMenuItem("Autorun Examples");
 		menu.add(item);
 		item.addItemListener(ij);
 		item.setState(Prefs.autoRunExamples);

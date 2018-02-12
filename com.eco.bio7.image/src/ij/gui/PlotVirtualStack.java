@@ -1,16 +1,17 @@
-package ij.util;
+package ij.gui;
 import ij.*;
 import ij.process.*;
-import ij.gui.Plot;
-import java.util.Vector;
-import java.io.ByteArrayInputStream;
+import java.util.*;
+import java.io.*;
 
-/** This class represents a collection of plots. */
+/** This is a virtual stack of frozen plots. */
 public class PlotVirtualStack extends VirtualStack {
-	Vector plots = new Vector(50);
+	private Vector plots = new Vector(50);
+	private int bitDepth = 24;
 	
 	public PlotVirtualStack(int width, int height) {
 		super(width, height);
+		this.bitDepth = bitDepth;
 	}
 	
 	/** Adds a plot to the end of the stack. */
@@ -35,7 +36,11 @@ public class PlotVirtualStack extends VirtualStack {
 			try {
 				Plot plot = new Plot(null, new ByteArrayInputStream(bytes));
 				ImageProcessor ip = plot.getProcessor();
-				return ip.convertToRGB();
+				if (bitDepth==24)
+					ip = ip.convertToRGB();
+				else if (bitDepth==8)
+					ip =  ip.convertToByte(false);
+				return ip;
 			} catch (Exception e) {
 				IJ.handleException(e);
 			}
@@ -48,17 +53,31 @@ public class PlotVirtualStack extends VirtualStack {
 		return plots.size();
 	}
 		
-	/** Always returns 24 (RGB). */
+	/** Returns either 24 (RGB) or 8 (grayscale). */
 	public int getBitDepth() {
-		return 24;
+		return bitDepth;
 	}
 		
+	public void setBitDepth(int bitDepth) {
+		this.bitDepth = bitDepth;
+	}
+
 	public String getSliceLabel(int n) {
 		return null;
 	}
 
 	public void setPixels(Object pixels, int n) {
 	}
+	
+	/** Deletes the specified slice, were 1<=n<=nslices. */
+	public void deleteSlice(int n) {
+		if (n<1 || n>plots.size())
+			throw new IllegalArgumentException("Argument out of range: "+n);
+		if (plots.size()<1)
+			return;			
+		plots.remove(n-1);
+	}
 
-} 
+
+} // PlotVirtualStack
 
