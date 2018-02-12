@@ -96,14 +96,17 @@ public class IJtoolbar extends ViewPart {
 		 */
 
 		if (Util.getOS().equals("Mac")) { //
+			Platform.runLater(new Runnable() {
+				public void run() {
+					jpp = new JPanel();
+					jpp.setLayout(new GridLayout(2, 1));
+					jpp.add(IJ.getInstance().toolbar);
+					jpp.add(IJ.getInstance().statusBar);
 
-			jpp = new JPanel();
-			jpp.setLayout(new GridLayout(2, 1));
-			jpp.add(IJ.getInstance().toolbar);
-			jpp.add(IJ.getInstance().statusBar);
-
-			SwingFxSwtView view = new SwingFxSwtView();
-			view.embedd(parent, jpp);
+					SwingFxSwtView view = new SwingFxSwtView();
+					view.embedd(parent, jpp);
+				}
+			});
 		}
 
 		/*
