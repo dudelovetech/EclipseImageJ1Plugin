@@ -44,26 +44,29 @@ public class IJtoolbar extends ViewPart {
 
 			public void partActivated(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
-					SwingUtilities.invokeLater(new Runnable() {
-						// !!
-						public void run() {
-							// jpp.repaint();
-						}
-					});
+					if (Util.getOS().equals("Mac") == false) {
+						SwingUtilities.invokeLater(new Runnable() {
+							// !!
+							public void run() {
+								jpp.repaint();
+							}
+						});
 
+					}
 				}
 
 			}
 
 			public void partBroughtToTop(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
-					SwingUtilities.invokeLater(new Runnable() {
-						// !!
-						public void run() {
-							// jpp.repaint();
-						}
-					});
-
+					if (Util.getOS().equals("Mac") == false) {
+						SwingUtilities.invokeLater(new Runnable() {
+							// !!
+							public void run() {
+								jpp.repaint();
+							}
+						});
+					}
 				}
 			}
 
@@ -96,15 +99,22 @@ public class IJtoolbar extends ViewPart {
 		 */
 
 		if (Util.getOS().equals("Mac")) { //
-			Platform.runLater(new Runnable() {
+			SwingUtilities.invokeLater(new Runnable() {
+				// !!
 				public void run() {
+					// jpp.repaint();
+
 					jpp = new JPanel();
 					jpp.setLayout(new GridLayout(2, 1));
 					jpp.add(IJ.getInstance().toolbar);
 					jpp.add(IJ.getInstance().statusBar);
-
-					SwingFxSwtView view = new SwingFxSwtView();
-					view.embedd(parent, jpp);
+					Display display = Util.getDisplay();
+					display.asyncExec(new Runnable() {
+						public void run() {
+							SwingFxSwtView view = new SwingFxSwtView();
+							view.embedd(parent, jpp);
+						}
+					});
 				}
 			});
 		}
