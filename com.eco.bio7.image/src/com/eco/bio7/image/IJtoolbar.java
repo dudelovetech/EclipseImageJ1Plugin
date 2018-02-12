@@ -44,7 +44,7 @@ public class IJtoolbar extends ViewPart {
 
 			public void partActivated(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
-					if (Util.getOS().equals("Mac") == false) {
+					/*if (Util.getOS().equals("Mac") == false) {
 						SwingUtilities.invokeLater(new Runnable() {
 							// !!
 							public void run() {
@@ -52,21 +52,21 @@ public class IJtoolbar extends ViewPart {
 							}
 						});
 
-					}
+					}*/
 				}
 
 			}
 
 			public void partBroughtToTop(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
-					if (Util.getOS().equals("Mac") == false) {
+					/*if (Util.getOS().equals("Mac") == false) {
 						SwingUtilities.invokeLater(new Runnable() {
 							// !!
 							public void run() {
 								jpp.repaint();
 							}
 						});
-					}
+					}*/
 				}
 			}
 
