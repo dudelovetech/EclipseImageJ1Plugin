@@ -1,5 +1,6 @@
 package ij.plugin.tool;
 import ij.*;
+import ij.plugin.frame.PlugInAwtFrame;
 import ij.plugin.frame.PlugInFrame;
 import ij.process.*;
 import ij.measure.*;
@@ -106,8 +107,8 @@ public class  PixelInspectionTool extends PlugInTool {
 
 }
 
-
-class PixelInspector extends PlugInFrame
+/*Changed for Bio7 - uses extra class PlugInAwtFrame instead of PlugInFrame!*/
+class PixelInspector extends PlugInAwtFrame
 		implements ImageListener, KeyListener, MouseListener, Runnable {
 	//ImageListener: listens to changes of image data
 	//KeyListener: for fix/unfix key
