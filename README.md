@@ -7,7 +7,7 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 2. Fixed lost keyboard focus for key shortcuts
 3. Improved preferences for Swing fonts (to decrease on Retina displays)
 4. Several other fixes for MacOSX
-5. Added description for increased fonts for MacOSX (see below!)
+5. Added description for font corrections for MacOSX (see bottom of this page!)
 
 ### New in 1.51u20:
 
