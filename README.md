@@ -139,14 +139,17 @@ drop action.
 
 #### MacOSX (increase fonts):
 
-To increase the fonts on MacOSX delete the arguments (twice available) in the Eclipse.ini
-file (see: https://wiki.eclipse.org/Eclipse.ini):
+To do the following two changes you have to open the package folder of Eclipse (right-click on Eclipse.app then
+execute 'Show Package Contents'.
+
+To increase the fonts on MacOSX delete the argument (twice available) in the Eclipse.ini
+file (Contents/Eclipse/eclipse.ini - see: https://wiki.eclipse.org/Eclipse.ini -):
 
 -Dorg.eclipse.swt.internal.carbon.smallFonts
 
 Unfortunately this will not increase the fonts in the view menu. 
 To increase the view menus font, too add the following lines to the default MacOSX
-theme css file in Eclipse (Eclipse/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css):
+theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css):
 
     #com-eco-bio7-imagej.MToolBar {
    
@@ -156,6 +159,8 @@ theme css file in Eclipse (Eclipse/Contents/Eclipse/plugins/org.eclipse.ui.theme
    
         font-size: 14px;
      }
+
+**Swing fonts on Retina displays:**
 
 To decrease oversized Swing fonts on Retina displays go to the ImageJ preferences (Preferences ImageJ->Font Correction) and add a negative value (-6 works as a good correction)
 
