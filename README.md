@@ -1,6 +1,14 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.51u54:
+
+1. Updated to ImageJ 1.51u54
+2. Fixed lost keyboard focus for key shortcuts
+3. Improved preferences for Swing fonts (to decrease on Retina displays)
+4. Several other fixes for MacOSX
+5. Added description for increased fonts for MacOSX (see below!)
+
 ### New in 1.51u20:
 
 1. Cluttered MACOSX menus are now closed (added from opened application windows and frames). Some default added menus are disabled in the Bio7 preferences by default
@@ -129,5 +137,25 @@ drop action.
 8. Evaluate Line (CTRL+Y or CMD+Y)
 
 
+#### MacOSX (increase fonts):
 
+To increase the fonts on MacOSX delete the arguments (twice available) in the Eclipse.ini
+file (see: https://wiki.eclipse.org/Eclipse.ini):
+
+-Dorg.eclipse.swt.internal.carbon.smallFonts
+
+Unfortunately this will not increase the fonts in the view menu. 
+To increase the view menus font, too add the following lines to the default MacOSX
+theme css file in Eclipse (Eclipse/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css):
+
+    #com-eco-bio7-imagej.MToolBar {
+   
+        font-size: 14px;
+     }
+    #com-eco-bio7-thumbnails.MToolBar {
+   
+        font-size: 14px;
+     }
+
+To decrease oversized Swing fonts on Retina displays go to the ImageJ preferences (Preferences ImageJ->Font Correction) and add a negative value (-6 works as a good correction)
 
