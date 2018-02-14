@@ -160,7 +160,7 @@ theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/c
         font-size: 14px;
      }
 
-**Swing fonts on Retina displays:**
+Swing fonts on Retina displays:
 
 To decrease oversized Swing fonts on Retina displays go to the ImageJ preferences (Preferences ImageJ->Font Correction) and add a negative value (-6 works as a good correction)
 
