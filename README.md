@@ -148,7 +148,7 @@ file (Contents/Eclipse/eclipse.ini - see: https://wiki.eclipse.org/Eclipse.ini -
 -Dorg.eclipse.swt.internal.carbon.smallFonts
 
 Unfortunately this will not increase the fonts in the view menu. 
-To increase the view menus font, too add the following lines to the default MacOSX
+To increase the ImageJ and Thumbnails view menus font add the following lines to the default MacOSX
 theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css):
 
     #com-eco-bio7-imagej.MToolBar {
