@@ -4,10 +4,11 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 ### New in 1.51u54:
 
 1. Updated to ImageJ 1.51u54
-2. Fixed lost keyboard focus for key shortcuts
+2. Fixed lost keyboard focus of the ImageJ panel on MacOSX
 3. Improved preferences for Swing fonts (to decrease on Retina displays)
 4. Several other fixes for MacOSX
 5. Added description for font corrections for MacOSX (see bottom of this page!)
+6. Improved drag and drop of images on the ImageJ panel
 
 ### New in 1.51u20:
 
