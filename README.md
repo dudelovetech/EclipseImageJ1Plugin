@@ -1,9 +1,9 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.51u54:
+### New in 1.51u (1.51u54):
 
-1. Updated to ImageJ 1.51u54
+1. Updated to ImageJ 1.51u (1.51u54)
 2. Fixed lost keyboard focus of the ImageJ panel on MacOSX
 3. Improved preferences for Swing fonts (to decrease on Retina displays)
 4. Several other fixes for MacOSX
