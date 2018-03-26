@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.net.URL;
 import java.awt.datatransfer.*;
 import java.awt.geom.*;
-import java.nio.channels.FileChannel;
 
 
 /** This class implements the built-in macro functions. */
@@ -3015,8 +3014,7 @@ public class Functions implements MacroConstants, Measurements {
 		if (pattern != null) {//Norbert
 			WildcardMatch wm = new WildcardMatch();
 			wm.setCaseSensitive(false);
-			//Frame frontWindow = WindowManager.getFrontWindow();
-			String otherStr = "\\\\Others";
+			String otherStr = "\\Others";
 			boolean others = pattern.equals(otherStr);
 			boolean hasWildcard = pattern.contains("*") || pattern.contains("?");
 			if (!others) {
@@ -3726,8 +3724,17 @@ public class Functions implements MacroConstants, Measurements {
 				String label = getFirstString();
 				double minValue = getNextArg();
 				double maxValue = getNextArg();
-				double defaultValue = getLastArg();
-				gd.addSlider(label, minValue, maxValue, defaultValue);
+				double defaultValue = getNextArg();
+				double stepSize = 0.0;
+				if (interp.nextToken()==',') {
+					interp.getComma();
+					stepSize = interp.getExpression();
+				}
+				interp.getRightParen();
+				if (stepSize==0.0)
+					gd.addSlider(label, minValue, maxValue, defaultValue);
+				else
+					gd.addSlider(label, minValue, maxValue, defaultValue, stepSize);
 			} else if (name.equals("addCheckbox")) {
 				gd.addCheckbox(getFirstString(), getLastArg()==1?true:false);
 			} else if (name.equals("addCheckboxGroup")) {
@@ -3752,6 +3759,9 @@ public class Functions implements MacroConstants, Measurements {
 				gd.addChoice(prompt, choices, defaultChoice);
 			} else if (name.equals("setInsets")) {
 				gd.setInsets((int)getFirstArg(), (int)getNextArg(), (int)getLastArg());
+			} else if (name.equals("addToSameRow")) {
+				interp.getParens();
+				gd.addToSameRow();
 			} else if (name.equals("setLocation")) {
 				gd.setLocation((int)getFirstArg(), (int)getLastArg());
 			} else if (name.equals("show")) {
@@ -4006,9 +4016,9 @@ public class Functions implements MacroConstants, Measurements {
 			else
 				return "0";
 		} else if (name.equals("copy")) {
-			File f1 = new File(getFirstString());
-			File f2 = new File(getLastString());
-			String err = copyFile(f1, f2);
+			String f1 = getFirstString();
+			String f2 = getLastString();		
+			String err = Tools.copyFile(f1, f2);
 			if (err.length()>0)
 				interp.error(err);
 			return null;
@@ -4190,28 +4200,9 @@ public class Functions implements MacroConstants, Measurements {
 		}
 		return null;
 	}
-
-	// Based on the method with the same name in Tobias Pietzsch's TifBenchmark class. */
-	public static String copyFile(File source, File destination) {
-		try {
-			if (!source.exists() )
-				return "Source file does not exist";
-			if (!destination.exists() )
-				destination.createNewFile();
-			FileInputStream sourceStream = new FileInputStream(source);
-			FileChannel sourceChannel = sourceStream.getChannel();
-			FileOutputStream destStream = new FileOutputStream(destination);
-			final FileChannel destChannel = destStream.getChannel();
-			if (destChannel!=null && sourceChannel!=null )
-				destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-			sourceChannel.close();
-			sourceStream.close();
-			destChannel.close();
-			destStream.close();
-		} catch(Exception e) {
-			return e.getMessage();
-		}
-		return "";
+	
+	public static String copyFile(File f1, File f2) {
+		return Tools.copyFile(f1.getPath(), f2.getPath());
 	}
 
 	// Calls a public static method with an arbitrary number
@@ -4384,6 +4375,8 @@ public class Functions implements MacroConstants, Measurements {
 			BatchProcessor.saveOutput(state);
 		else if (arg1.startsWith("converttomicrons"))
 			Prefs.convertToMicrons = state;
+		else if (arg1.equals("inverty"))
+			getImage().getCalibration().setInvertY(state);
 		else
 			interp.error("Invalid option");
 	}
@@ -4450,7 +4443,7 @@ public class Functions implements MacroConstants, Measurements {
 		arg = arg.toLowerCase(Locale.US);
 		if (arg.equals("locked"))
 			state = getImage().isLocked();
-		else if (arg.indexOf("invert")!=-1)
+		else if (arg.contains("invert") && arg.contains("lut"))
 			state = getImage().isInvertedLut();
 		else if (arg.indexOf("hyper")!=-1)
 			state = getImage().isHyperStack();
@@ -4475,7 +4468,9 @@ public class Functions implements MacroConstants, Measurements {
 		else if (arg.indexOf("animated")!=-1) {
 			ImageWindow win = getImage().getWindow();
 			state = win!=null && (win instanceof StackWindow) && ((StackWindow)win).getAnimate();
-		} else
+		} else if (arg.equals("inverty"))
+			state = getImage().getCalibration().getInvertY();
+		else
 			interp.error("Invalid argument");
 		return state?1.0:0.0;
 	}
@@ -6032,6 +6027,8 @@ public class Functions implements MacroConstants, Measurements {
 			return showOverlay(imp);
 		else if (name.equals("hide"))
 			return hideOverlay(imp);
+		else if (name.equals("selectable")) 
+			return overlaySelectable(imp);
 		else if (name.equals("remove"))
 			return removeOverlay(imp);
 		else if (name.equals("clear"))
@@ -6309,6 +6306,14 @@ public class Functions implements MacroConstants, Measurements {
 		return Double.NaN;
 	}
 
+	double overlaySelectable(ImagePlus imp) {
+		boolean selectable = getBooleanArg();
+		Overlay overlay = imp.getOverlay();
+		if (overlay!=null)
+			overlay.selectable(selectable);
+		return Double.NaN;
+	}
+
 	double removeOverlay(ImagePlus imp) {
 		interp.getParens();
 		imp.setOverlay(null);
@@ -6355,7 +6360,6 @@ public class Functions implements MacroConstants, Measurements {
 		Plot plot = (Plot)(getImage().getProperty(Plot.PROPERTY_KEY)); //null if not a plot window
 		int height = imp.getHeight();
 		Calibration cal = imp.getCalibration();
-
 		interp.getLeftParen();
 		if (isArrayArg()) {
 			Variable[] x = getArray();
@@ -6369,10 +6373,16 @@ public class Functions implements MacroConstants, Measurements {
 		} else {
 			Variable xv = getVariable();
 			Variable yv = null;
+			Variable zv = null;			
 			boolean twoArgs = interp.nextToken()==',';
 			if (twoArgs) {
 				interp.getComma();
 				yv = getVariable();
+			}
+			boolean threeArgs = interp.nextToken()==',';
+			if (threeArgs) {
+				interp.getComma();
+				zv = getVariable();
 			}
 			interp.getRightParen();
 			double x = xv.getValue();
@@ -6380,6 +6390,8 @@ public class Functions implements MacroConstants, Measurements {
 				double y = yv.getValue();
 				xv.setValue(plot == null ? cal.getX(x) : plot.descaleX((int)(x+0.5)));
 				yv.setValue(plot == null ? cal.getY(y,height) : plot.descaleY((int)(y+0.5)));
+				if (threeArgs)
+					zv.setValue(cal.getZ(zv.getValue()));
 			} else {
 				xv.setValue(plot == null ? x*cal.pixelWidth : plot.descaleX((int)(x+0.5)));
 			}
@@ -6404,10 +6416,16 @@ public class Functions implements MacroConstants, Measurements {
 		} else {
 			Variable xv = getVariable();
 			Variable yv = null;
+			Variable zv = null;			
 			boolean twoArgs = interp.nextToken()==',';
 			if (twoArgs) {
 				interp.getComma();
 				yv = getVariable();
+			}
+			boolean threeArgs = interp.nextToken()==',';
+			if (threeArgs) {
+				interp.getComma();
+				zv = getVariable();
 			}
 			interp.getRightParen();
 			double x = xv.getValue();
@@ -6415,6 +6433,8 @@ public class Functions implements MacroConstants, Measurements {
 				double y = yv.getValue();
 				xv.setValue(plot == null ? cal.getRawX(x) : plot.scaleXtoPxl(x));
 				yv.setValue(plot == null ? cal.getRawY(y,height) : plot.scaleYtoPxl(y));
+				if (threeArgs)
+					zv.setValue(cal.getRawZ(zv.getValue()));
 			} else {
 				xv.setValue(plot == null ? x/cal.pixelWidth : plot.scaleXtoPxl(x));
 			}

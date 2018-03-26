@@ -1846,7 +1846,7 @@ public class Interpreter implements MacroConstants {
 		if (imageTable==null)
 			imageTable = new Vector();
 		imageTable.add(imp);
-		//IJ.log("add: "+imp+"  "+imageTable.size());
+		//IJ.log("addBatchModeImage: "+imp+"  "+imageTable.size());
 		activateImage(imp);
 	}
 
@@ -1856,6 +1856,7 @@ public class Interpreter implements MacroConstants {
 			if (index!=-1) {
 				imageTable.remove(index);
 				imageActivations.remove(imp);
+				//IJ.log("removeBatchModeImage: "+imp+"  "+imageTable.size());
 				WindowManager.setTempCurrentImage(getLastBatchModeImage());
 			}
 		}
@@ -1867,7 +1868,7 @@ public class Interpreter implements MacroConstants {
 				imageActivations = new Vector();
 			imageActivations.remove(imp);
 			imageActivations.add(imp);
-			//IJ.log("activateImage: "+imp+"  "+imageActivations.size());
+			//IJ.log("activateImage: "+imp+"  "+imageTable.size());
 		}
 	}
 
@@ -1914,6 +1915,7 @@ public class Interpreter implements MacroConstants {
 			if (imp2==null)
 				imp2 = (ImagePlus)imageTable.get(size-1);
 		} catch(Exception e) { }
+		//IJ.log("getLastBatchModeImage: "+imp2+"  "+imageTable.size());
 		return imp2;
 	} 
  
@@ -1964,6 +1966,7 @@ public class Interpreter implements MacroConstants {
         return pgm.lineNumbers[pc];
     }
 
+	/** Returns the names of all variables and functions with human-readable annotations */
 	public String[] getVariables() {
 		int nImages = WindowManager.getImageCount();
 		if (nImages>0) showDebugFunctions = true;
@@ -1991,6 +1994,14 @@ public class Interpreter implements MacroConstants {
 		return variables;
 	}
 	
+	/** Returns the names of all variables, without any annotation */
+	public String[] getVariableNames() {
+		String[] variables = new String[topOfStack+1];
+		for (int i=0; i<=topOfStack; i++)
+			variables[i] = pgm.table[stack[i].symTabIndex].str;
+		return variables;
+	}
+
 	// Returns 'true' if this macro has finished or if it was aborted. */
 	public boolean done() {
 		return done;
@@ -2007,6 +2018,17 @@ public class Interpreter implements MacroConstants {
 			index = stack[i].symTabIndex;
 			if (pgm.table[index].str.equals(name)) {
 				stack[i].setValue(value);
+				break;
+			}
+		}
+	}
+	
+	public void setVariable(String name, String str) {
+		int index;
+		for (int i=0; i<=topOfStack; i++) {
+			index = stack[i].symTabIndex;
+			if (pgm.table[index].str.equals(name)) {
+				stack[i].setString(str);
 				break;
 			}
 		}
