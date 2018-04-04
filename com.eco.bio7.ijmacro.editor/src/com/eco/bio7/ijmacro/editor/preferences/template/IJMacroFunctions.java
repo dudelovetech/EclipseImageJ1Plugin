@@ -8,7 +8,7 @@ public class IJMacroFunctions {
 			"Array.concat(array1,array2)####Returns a new array created by joining two or more arrays or values (examples)."+linSeparator + 
 			"Array.copy(array)####Returns a copy of array."+linSeparator + 
 			"Array.fill(array, value)####Assigns the specified numeric value to each element of array."+linSeparator + 
-			"Array.findMaxima(array, tolerance)####Returns an array holding the peak positions (sorted with descending strength). 'Tolerance' is the minimum amplitude difference needed to separate two peaks. With v1.51n and later, there is an optional 'edgeMode' argument: 0=include edges, 1=exclude edges(default), 2=circular array. Examples."+linSeparator + 
+			"Array.findMaxima(array, tolerance)####Returns an array holding the peak positions (sorted with descending strength). 'Tolerance' is the minimum amplitude difference needed to separate two peaks. With v1.51n and later, there is an optional 'edgeMode' argument: 0=include edges, 1=exclude edges(default), 2=circular array."+linSeparator + 
 			"Array.findMinima(array, tolerance)####Returns an array holding the minima positions."+linSeparator + 
 			"Array.fourier(array, windowType)####Calculates and returns the Fourier amplitudes of array. WindowType can be \"none\", \"Hamming\", \"Hann\", or \"flat-top\", or may be omitted (meaning \"none\"). See the TestArrayFourier macro for an example and more documentation. Requires 1.49i."+linSeparator + 
 			"Array.getSequence(n)####Returns an array containing the numeric sequence 0,1,2...n-1. Requires 1.49u."+linSeparator + 
@@ -17,6 +17,8 @@ public class IJMacroFunctions {
 			"Array.rankPositions(array)####Returns, as an array, the rank position indexes of array, starting with the index of the smallest value (example)."+linSeparator + 
 			"Array.resample(array,len)####Returns an array which is linearly resampled to a different length."+linSeparator + 
 			"Array.reverse(array)####Reverses (inverts) the order of the elements in array."+linSeparator + 
+			"Array.rotate(array, d)####Rotates the array elements by 'd' steps (positive 'd' = rotate right). Requires 1.51n."+linSeparator +
+			"Array.getVertexAngles(xArr, yArr, arm)####From a closed contour given by 'xArr', 'yArr', an array is returned holding vertex angles in degrees (straight=0, convex = positive if contour is clockwise). Set 'arm'=1 to calculate the angle from the closest vertex points left and right, or use arm>1 for more distant neighbours and smoother results. Requires 1.51n."+linSeparator +
 			"Array.show(array)####Displays the contents of array in a window."+linSeparator + 
 			"Array.show(\"title\", array1, array2, ...)####Displays one or more arrays in a Results window (examples). If title (optional) is \"Results\", the window will be the active Results window, otherwise, it will be a dormant Results window (see also IJ.renameResults). If title ends with \"(indexes)\", a 0-based Index column is shown. If title ends with \"(row numbers)\", the row number column is shown."+linSeparator + 
 			"Array.slice(array,start,end)####Extracts a part of an array and returns it. (examples)."+linSeparator + 
@@ -350,7 +352,6 @@ public class IJMacroFunctions {
 			"resetMinAndMax####With 16-bit and 32-bit images, resets the minimum and maximum displayed pixel values (display range) to be the same as the current image's minimum and maximum pixel values. With 8-bit images, sets the display range to 0-255. With RGB images, does nothing. See the DisplayRangeMacros for examples."+linSeparator + 
 			"resetThreshold####Disables thresholding. See also: setThreshold, setAutoThreshold, getThreshold."+linSeparator + 
 			"restoreSettings####Restores Edit/Options submenu settings saved by the saveSettings() function."+linSeparator +
-			"Recorder.fixString()####Function to escape strings passed to the recorder"+linSeparator +
 			"Roi.contains(x, y)####Returns \"1\" if the point x,y is inside the current selection or \"0\" if it is not. Aborts the macro if there is no selection. Requires 1.49h. See also: selectionContains."+linSeparator + 
 			"Roi.getBounds(x, y, width, height)####Returns the location and size of the selection's bounding rectangle."+linSeparator + 
 			"Roi.getCoordinates(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates that define this selection."+linSeparator + 
