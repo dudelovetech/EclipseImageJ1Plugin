@@ -51,6 +51,7 @@ public class IJMacroFunctions {
 			"Dialog.addChoice(\"Label\", items)####Adds a popup menu to the dialog, where items is a string array containing the menu items."+linSeparator + 
 			"Dialog.addChoice(\"Label\", items, default)####Adds a popup menu, where items is a string array containing the choices and default is the default choice."+linSeparator + 
 			"Dialog.addHelp(url)####Adds a \"Help\" button that opens the specified URL in the default browser. This can be used to supply a help page for this dialog or macro. With v1.46b or later, displays an HTML formatted message if 'url' starts with \"<html>\" (example)."+linSeparator + 
+			"Dialog.addToSameRow()####Makes the next item added appear on the same row as the previous item. May be used for addNumericField, addSlider, addChoice, addCheckbox, addStringField, addMessage, addPanel, and before the showDialog() method. In the latter case, the buttons appear to the right of the previous item. Note that addMessage uses the remaining width, so it must be the last item of a row. Requires 1.51r."+linSeparator +
 			"Dialog.setInsets(top, left, bottom)####Overrides the default insets (margins) used for the next component added to the dialog."+linSeparator+
 			"Dialog.setLocation(x,y)####Sets the screen location where this dialog will be displayed."+linSeparator+
 			"Dialog.show()####Displays the dialog and waits until the user clicks \"OK\" or \"Cancel\". The macro terminates if the user clicks \"Cancel\"."+linSeparator + 
@@ -244,7 +245,10 @@ public class IJMacroFunctions {
 			"List.getList####Returns the list as a string."+linSeparator + 
 			"List.setMeasurements####Measures the current image or selection and loads the resulting parameter names (as keys) and values. All parameters listed in the Analyze>Set Measurements dialog box are measured. Use List.getValue() in an assignment statement to retrieve the values. See the DrawEllipse macro for an example."+linSeparator + 
 			"List.setMeasurements(\"limit\")####This is a version of List.setMeasurements that enables the \"Limit to threshold\" option."+linSeparator+
-			"List.setCommands####Loads the ImageJ menu commands (as keys) and the plugins that implement them (as values). Requires v1.43f. "+linSeparator + 
+			"List.setCommands####Loads the ImageJ menu commands (as keys) and the plugins that implement them (as values). Requires v1.43f."+linSeparator +
+			"List.toArrays(keys, values)####Retrieves keys and values as a pair of string arrays, sorted alphabetically for keys."+linSeparator + 
+			"List.fromArrays(keys, values)####Creates the List from keys and values arrays."+linSeparator + 
+			"List.indexOf(key)####Returns the alphabetic position of the specified key, or -1 if not found. Note that this function, as well as List.size, returns a string."+linSeparator + 
 			"log(n)####Returns the natural logarithm (base e) of n. Note that log10(n) = log(n)/log(10)."+linSeparator + 
 			"makeArrow(x1, y1, x2, y2, style)####Creates an arrow selection, where 'style' is a string containing \"filled\", \"notched\", \"open\", \"headless\" or \"bar\", plus the optionial modifiers \"outline\", \"double\", \"small\", \"medium\" and \"large\" (example). See also: Roi.setStrokeWidth and Roi.setStrokeColor. Requires 1.49a."+linSeparator + 
 			"makeEllipse(x1, y1, x2, y2, aspectRatio)####Creates an elliptical selection, where x1,y1,x2,y2 specify the major axis of the ellipse and aspectRatio (<=1.0) is the ratio of the lengths of minor and major axis."+linSeparator+
@@ -255,6 +259,7 @@ public class IJMacroFunctions {
 			"makePolygon(x1, y1, x2, y2, x3, y3, ...)####Creates a polygonal selection. At least three coordinate pairs must be specified, but not more than 200. As an example, makePolygon(20,48,59,13,101,40,75,77,38,70) creates a polygon selection with five sides."+linSeparator + 
 			"makeRectangle(x, y, width, height)####Creates a rectangular selection. The x and y arguments are the coordinates (in pixels) of the upper left corner of the selection. The origin (0,0) of the coordinate system is the upper left corner of the image."+linSeparator + 
 			"makeRectangle(x, y, width, height, arcSize)####Creates a rounded rectangular selection using the specified corner arc size."+linSeparator+
+			"makeRotatedRectangle(x1, y1, x2, y2, width)####Creates a rotated rectangular selection, which is similar to a wide line where (x1,y1) is the start of the line, (x2,y2) is the end of the line and 'width' is the line width."+linSeparator+
 			"makeSelection(type, xcoord, ycoord)####Creates a selection from a list of XY coordinates. The first argument should be \"polygon\", \"freehand\", \"polyline\", \"freeline\", \"angle\" or \"point\". In ImageJ 1.32g or later, it can also be the numeric value returned by selectionType. The xcoord and ycoord arguments are numeric arrays that contain the X and Y coordinates. See the MakeSelectionDemo macro for examples."+linSeparator + 
 			"makeText(string, x, y)####Creates a text selection at the specified coordinates. The selection will use the font and size specified by the last call to setFont(). The CreateOverlay macro provides an example."+linSeparator+
 			"matches(string, regex)####Returns true if string matches the specified regular expression. See also: startsWith, endsWith, indexOf, replace. Requires v1.39r."+linSeparator + 
@@ -293,7 +298,9 @@ public class IJMacroFunctions {
 			"Overlay.removeSelection(index)####Removes the specified selection from the overlay."+linSeparator + 
 			"Overlay.copy####Copies the overlay on the current image to the overlay clipboard."+linSeparator + 
 			"Overlay.paste####Copies the overlay on the overlay clipboard to the current image."+linSeparator + 
-			"Overlay.drawLabels(boolean)####Enables/disables overlay labels."+linSeparator + 
+			"Overlay.drawLabels(boolean)####Enables/disables overlay labels."+linSeparator +
+			"Overlay.selectable(false)####Prevents the selections in this overlay from being activated by clicking on their labels or by long clicking. Requires 1.51r."+linSeparator +
+			"Overlay.setLabelFont(font,true)####Causes labels in overlays to scale as the image is zoomed."+linSeparator+
 			"Overlay.measure####Measures all the selections in the current overlay."+linSeparator+
 			"parseFloat(string)####Converts the string argument to a number and returns it. Returns NaN (Not a Number) if the string cannot be converted into a number. Use the isNaN() function to test for NaN. For examples, see ParseFloatIntExamples."+linSeparator + 
 			"parseInt(string)####Converts string to an integer and returns it. Returns NaN if the string cannot be converted into a integer."+linSeparator + 
@@ -301,8 +308,12 @@ public class IJMacroFunctions {
 			"PI####Returns the constant π (3.14159265), the ratio of the circumference to the diameter of a circle."+linSeparator+
 			"Plot.create(\"Title\", \"X-axis Label\", \"Y-axis Label\", xValues, yValues)####Generates a plot using the specified title, axis labels and X and Y coordinate arrays. If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. It is also permissible to specify no arrays and use Plot.setLimits() and Plot.add() to generate the plot. Use Plot.show() to display the plot in a window, or it will be displayed automatically when the macro exits."+linSeparator + 
 			"Plot.add(type, xValues, yValues)####Adds a curve, set of points or error bars to a plot created using Plot.create(). If only one array is specified it is assumed to contain the Y values and a 0..n-1 sequence is used as the X values. The first argument (type) can be \"line\", \"circles\", \"boxes\", \"triangles\", \"crosses\", \"dots\", \"x\", \"connected\" (requires 1.49t), \"error bars\" (in y direction) or \"xerror bars\". In 1.49t or later, error bars apply to the last dataset provided by Plot.create or Plot.add."+linSeparator + 
-			"Plot.drawVectors(xStarts, yStarts, xEnds, yEnds)####Draws arrows from the starting to ending coordinates contained in the arrays."+linSeparator + 
-			"Plot.drawLine(x1, y1, x2, y2)####Draws a line between x1,y1 and x2,y2, using the coordinate system defined by Plot.setLimits()."+linSeparator + 
+			"Plot.drawVectors(xStarts, yStarts, xEnds, yEnds)####Draws arrows from the starting to ending coordinates contained in the arrays."+linSeparator +
+			"Plot.appendToStack()####No documentation! available"+linSeparator +
+			"Plot.drawShapes(\"rectangles\", lefts, tops, rights, bottoms)####Draws one or more rectangles. The four arguments (values or arrays) hold rectangle coordinates. Requires 1.49u."+linSeparator +
+			"Plot.drawGrid()####Redraws the grid above previous plots. Requires 1.49u."+linSeparator +
+			"Plot.drawLine(x1, y1, x2, y2)####Draws a line between x1,y1 and x2,y2, using the coordinate system defined by Plot.setLimits()."+linSeparator +
+			"Plot.drawBoxes(\"boxes width=30\", x, y1, y2, y3, y4, y5)####Draws a boxplot, where 'width' is in pixels, array 'x' holds x-positions and arrays 'y1'..'y5' hold the quartile borders in ascending order. Secondary color will fill the box. For horizontal boxes, use \"boxesx width=30\" instead. Requires 1.49u."+linSeparator + 
 			"Plot.drawNormalizedLine(x1, y1, x2, y2)####Draws a line using a normalized 0-1, 0-1 coordinate system, with (0,0) at the top left and (1,1) at the lower right corner."+linSeparator + 
 			"Plot.addText(\"A line of text\", x, y)####Adds text to the plot at the specified location, where (0,0) is the upper left corner of the the plot frame and (1,1) is the lower right corner. Call Plot.setJustification() to have the text centered or right justified. Plot.setLimits(xMin, xMax, yMin, yMax)"+linSeparator + 
 			"Plot.setLimits(xMin, xMax, yMin, yMax)####Sets the range of the x-axis and y-axis of plots. With version 1.50g and later, when 'NaN' is used as a limit, the range is calculated automatically from the plots that have been added so far."+linSeparator + 
@@ -315,6 +326,7 @@ public class IJMacroFunctions {
 			"Plot.setJustification(\"center\")####Specifies the justification used by Plot.addText(). The argument can be \"left\", \"right\" or \"center\". The default is \"left\"."+linSeparator + 
 			"Plot.setLegend(\"label1\\tlabel2...\", \"options\")####Creates a legend for each of the data sets added with Plot.create and Plot.add. In the first argument, the labels for the data sets should be separated with tab or newline characters. The optional second argument can contain the legend position (\"top-left\", \"top-right\", \"bottom-left\", \"bottom-right\"; default is automatic positioning), \"bottom-to-top\" for reversed sequence of the labels, and \"transparent\" to make the legend background transparent. Requires 1.49t."+linSeparator + 
 			"Plot.setFrameSize(width, height)####Sets the plot frame size in pixels, overriding the default size defined in the Edit>Options>Profile Plot Options dialog box."+linSeparator + 
+			"Plot.getFrameBounds(x, y, width, height)####Returns the plot frame bounds."+linSeparator +
 			"Plot.setLogScaleX(boolean)####Sets the x axis scale to Logarithmic, or back to linear if the optional boolean argument is false. In versions up to 1.49s, it must be called immediately after Plot.create and before Plot.setLimits. See the LogLogPlot macro for an example."+linSeparator + 
 			"Plot.setLogScaleY(boolean)####Sets the y axis scale to Logarithmic, or back to linear if the optional boolean argument is false."+linSeparator + 
 			"Plot.setXYLabels(\"x Label\", \"y Label\")####Sets the axis labels. Requires 1.49t."+linSeparator + 
@@ -338,6 +350,7 @@ public class IJMacroFunctions {
 			"resetMinAndMax####With 16-bit and 32-bit images, resets the minimum and maximum displayed pixel values (display range) to be the same as the current image's minimum and maximum pixel values. With 8-bit images, sets the display range to 0-255. With RGB images, does nothing. See the DisplayRangeMacros for examples."+linSeparator + 
 			"resetThreshold####Disables thresholding. See also: setThreshold, setAutoThreshold, getThreshold."+linSeparator + 
 			"restoreSettings####Restores Edit/Options submenu settings saved by the saveSettings() function."+linSeparator +
+			"Recorder.fixString()####Function to escape strings passed to the recorder"+linSeparator +
 			"Roi.contains(x, y)####Returns \"1\" if the point x,y is inside the current selection or \"0\" if it is not. Aborts the macro if there is no selection. Requires 1.49h. See also: selectionContains."+linSeparator + 
 			"Roi.getBounds(x, y, width, height)####Returns the location and size of the selection's bounding rectangle."+linSeparator + 
 			"Roi.getCoordinates(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates that define this selection."+linSeparator + 
@@ -510,5 +523,6 @@ public class IJMacroFunctions {
 			"waitForUser(string)####Halts the macro and displays string in a dialog box. The macro proceeds when the user clicks \"OK\". Unlike showMessage, the dialog box is not modal, so the user can, for example, create a selection or adjust the threshold while the dialog is open. To display a multi-line message, add newline characters (\"\\n\") to string. This function is based on Michael Schmid's Wait_For_User plugin. Example: WaitForUserDemo. Requires v1.39r."+linSeparator + 
 			"waitForUser(title, message)####This is a two argument version of waitForUser, where title is the dialog box title and message is the text dispayed in the dialog."+linSeparator + 
 			"waitForUser####This is a no argument version of waitForUser that displays \"Click OK to continue\" in the dialog box.";
+	        
 			
 }
