@@ -506,6 +506,25 @@ public class IJMacroFunctions {
 			"String.show(title, str)####Displays str in a text window using title as the title."+linSeparator+
 			"substring(string, index1, index2)####Returns a new string that is a substring of string. The substring begins at index1 and extends to the character at index2 - 1. See also: indexOf, startsWith, endsWith, replace."+linSeparator + 
 			"substring(string, index)####Returns a substring of string that begins at index and extends to the end of string. Requires v1.41i."+linSeparator + 
+			"Table.create()####Opens a new table."+linSeparator +
+			"Table.reset()####Resets (clears) the table."+linSeparator +
+			"Table.size()####Number of rows in the table."+linSeparator +
+			"Table.title()####Title of the current table."+linSeparator +
+			"Table.headings()####Column headings as a tab-delimited string."+linSeparator + 
+			"Table.get(columnName, rowIndex)####Returns a numeric value."+linSeparator + 
+			"Table.getColumn(columnName)####Returns a column as an array."+linSeparator + 
+			"Table.getString(columnName, rowIndex)####Returns a string value."+linSeparator + 
+			"Table.set(columnName, rowIndex, value)####Sets numeric or string value.\r\n" + 
+			"Table.update()####Updates table window."+linSeparator + 
+			"Table.applyMacro(macro)####Applies macro code to table."+linSeparator + 
+			"Table.rename(title1, title2)####Renames a table."+linSeparator + 
+			"Table.save(filePath)####saves the table."+linSeparator + 
+			"Table.open(filePath)####Opens a table."+linSeparator + 
+			"Table.deleteRows(index1, index2)####Deletes specified rows."+linSeparator + 
+			"Table.renameColumn(oldName, newName)####Renames a column."+linSeparator + 
+			"Table.deleteColumn(columnName)####deletes specified column."+linSeparator + 
+			"Table.showRowNumbers(boolean)####Enable/disable row numbers."+linSeparator + 
+			"Table.showArrays(titleAndOptions, array1, array2, ...)####Displays arrays in a table (like Array.show)."+linSeparator + 
 			"tan(angle)####Returns the tangent of an angle (in radians)."+linSeparator + 
 			"toBinary(number)####Returns a binary string representation of number."+linSeparator + 
 			"toHex(number)####Returns a hexadecimal string representation of number."+linSeparator + 
