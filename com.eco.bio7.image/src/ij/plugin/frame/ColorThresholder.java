@@ -65,7 +65,7 @@ public class ColorThresholder extends PlugInFrame implements PlugIn, Measurement
 	private BandPlot bplot = new BandPlot();
 	private int sliderRange = 256;
 	private JPanel panel, panelt;
-	private JButton  originalB, filteredB, stackB, helpB, sampleB, resetallB, newB, macroB, selectB;
+	private Button  originalB, filteredB, stackB, helpB, sampleB, resetallB, newB, macroB, selectB;
 	private Checkbox bandPassH, bandPassS, bandPassB, darkBackground;
 	private CheckboxGroup colourMode;
 	private Choice colorSpaceChoice, methodChoice, modeChoice;
@@ -542,7 +542,7 @@ public class ColorThresholder extends PlugInFrame implements PlugIn, Measurement
 
 	public void actionPerformed(ActionEvent e) {
 		if (IJ.debugMode) IJ.log("ColorThresholder.actionPerformed");
-		JButton b = (JButton)e.getSource();
+		Button b = (Button)e.getSource();
 		if (b==null) return;
 		boolean imageThere = b==sampleB || checkImage();
 		if (imageThere) {

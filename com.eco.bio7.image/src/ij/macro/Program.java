@@ -20,7 +20,7 @@ public class Program implements MacroConstants {
 	int macroCount;
     Hashtable menus;
     // run keyboard shortcut macros on event dispatch thread?
-	boolean queueCommands; 
+	public boolean queueCommands; 
 	Hashtable extensionRegistry;
 	
 	

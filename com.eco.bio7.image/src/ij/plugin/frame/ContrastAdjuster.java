@@ -39,7 +39,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 	boolean doAutoAdjust,doReset,doSet,doApplyLut;
 	
 	JPanel panel, tPanel;
-	JButton autoB, resetB, setB, applyB;
+	Button autoB, resetB, setB, applyB;
 	int previousImageID;
 	int previousType;
 	int previousSlice = 1;
@@ -295,7 +295,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 	}
 
 	public synchronized  void actionPerformed(ActionEvent e) {
-		JButton b = (JButton)e.getSource();
+		Button b = (Button)e.getSource();
 		if (b==null) return;
 		if (b==resetB)
 			doReset = true;

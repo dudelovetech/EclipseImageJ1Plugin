@@ -35,8 +35,8 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	protected long[] histogram;
 	protected LookUpTable lut;
 	protected Rectangle frame = null;
-	protected JButton list, save, copy, log, live, rgb;
-	protected JLabel value, count;
+	protected Button list, save, copy, log, live, rgb;
+	protected Label value, count;
 	protected static String defaultDirectory = null;
 	protected int decimalPlaces;
 	protected int digits;
@@ -202,11 +202,11 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 			JPanel valueAndCount = new JPanel();
 			valueAndCount.setLayout(new GridLayout(2, 1, 0, 0));
 			blankLabel = IJ.isMacOSX() ? "           " : "                ";
-			value = new JLabel(blankLabel);
+			value = new Label(blankLabel);
 			Font font = new Font("Monospaced", Font.PLAIN, 12);
 			value.setFont(font);
 			valueAndCount.add(value);
-			count = new JLabel(blankLabel);
+			count = new Label(blankLabel);
 			count.setFont(font);
 			valueAndCount.add(count);
 			buttons.add(valueAndCount);

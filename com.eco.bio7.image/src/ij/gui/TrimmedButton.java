@@ -3,7 +3,7 @@ import java.awt.*;
 import javax.swing.JButton;
 
 /** This is an extended Button class used to reduce the width of the HUGE buttons on Mac OS X. */
-public class TrimmedButton extends JButton {
+public class TrimmedButton extends Button {
     private int trim = 0;
     
     public TrimmedButton(String title, int trim) {
