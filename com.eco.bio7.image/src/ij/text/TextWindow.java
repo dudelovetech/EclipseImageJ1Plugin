@@ -10,6 +10,10 @@ import java.io.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+
+import com.eco.bio7.image.Activator;
+
 /** Uses a TextPanel to displays text in a window.
 	@see TextPanel
 */
@@ -115,6 +119,10 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 			setSize(width, height);
 			if (!IJ.debugMode) GUI.center(this);
 		}
+		/* Changed for Bio7! */
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean onTop = store.getBoolean("RESULTS_TABLE");
+		this.setAlwaysOnTop(onTop);
 		show();
 		WindowManager.setWindow(this);
 	}
@@ -134,6 +142,10 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 		if (openFile(path)) {
 			WindowManager.addWindow(this);
 			setSize(width, height);
+			/* Changed for Bio7! */
+			IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+			boolean onTop = store.getBoolean("RESULTS_TABLE");
+			this.setAlwaysOnTop(onTop);
 			show();
 		} else
 			dispose();
@@ -296,6 +308,8 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 			if (!saveContents()) return;
 		}
 		//setVisible(false);
+		/*Changed for Bio7!Remove menubar for MacOSX!*/
+		remove(mb);
 		dispose();
 		WindowManager.removeWindow(this);
 		textPanel.flush();
