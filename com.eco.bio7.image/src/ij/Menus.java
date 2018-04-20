@@ -508,7 +508,6 @@ public class Menus {
 				boolean functionKey = keyCode >= KeyEvent.VK_F1 && keyCode <= KeyEvent.VK_F12;
 				if (keyCode > 0 && !functionKey)
 					command = command.substring(0, openBracket);
-				// IJ.write(command+": "+shortcut);
 			}
 		}
 		if (keyCode >= KeyEvent.VK_F1 && keyCode <= KeyEvent.VK_F12) {
@@ -1157,7 +1156,6 @@ public class Menus {
 				v.addElement(dir + name);
 				classCount++;
 				className = name;
-				// IJ.write("File: "+f+"/"+name);
 			} else if (hasUnderscore && (name.endsWith(".jar") || name.endsWith(".zip"))) {
 				if (jarFiles == null)
 					jarFiles = new Vector();
@@ -1433,7 +1431,6 @@ public class Menus {
 			window.insertSeparator(WINDOW_MENU_ITEMS + windowMenuItems2);
 			windowMenuItems2++;
 		}
-		// IJ.write("insertWindowMenuItem: "+windowMenuItems2);
 	}
 
 	/** Adds one image to the end of the Window menu. */

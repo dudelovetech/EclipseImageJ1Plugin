@@ -284,7 +284,8 @@ public class TextPanel extends Panel implements AdjustmentListener,
 	
 	void handleDoubleClick() {
 		boolean overlayList = "Overlay Elements".equals(title);
-		if (selStart<0 || selStart!=selEnd || (iColCount!=1&&!overlayList)) return;
+		if (selStart<0 || selStart!=selEnd || (iColCount!=1&&!overlayList))
+			return;
 		boolean doubleClick = System.currentTimeMillis()-mouseDownTime<=DOUBLE_CLICK_THRESHOLD;
 		mouseDownTime = System.currentTimeMillis();
 		if (doubleClick) {
@@ -544,10 +545,15 @@ public class TextPanel extends Panel implements AdjustmentListener,
 			if (mbSize>0 && tw.mb.getMenu(mbSize-1).getLabel().equals("Results"))
 				tw.mb.remove(mbSize-1);
 			title = title2;
+			rt.show(title);
 		}
 		Menus.updateWindowMenuItem(title1, title2);
-		if (Recorder.record)
-			Recorder.recordString("IJ.renameResults(\""+title2+"\");\n");
+		if (Recorder.record) {
+			if (Recorder.scriptMode())
+				Recorder.recordString("IJ.renameResults(\""+title1+"\", \""+title2+"\");\n");
+			else
+				Recorder.record("Table.rename", title1, title2);
+		}
 	}
 
 	void duplicate() {
@@ -698,8 +704,16 @@ public class TextPanel extends Panel implements AdjustmentListener,
 				IJ.error("Selection required");
 			return;
 		}
-		if (Recorder.record)
-			Recorder.recordString("IJ.deleteRows("+selStart+", "+selEnd+");\n");
+		if (Recorder.record) {
+			if (Recorder.scriptMode())
+				Recorder.recordString("IJ.deleteRows("+selStart+", "+selEnd+");\n");
+			else {
+				if ("Results".equals(title))
+					Recorder.record("Table.deleteRows", selStart, selEnd);
+				else
+					Recorder.record("Table.deleteRows", selStart, selEnd, title);
+			}
+		}
 		int first=selStart, last=selEnd, rows=iRowCount;
 		if (selStart==0 && selEnd==(iRowCount-1)) {
 			vData.removeAllElements();
@@ -719,7 +733,7 @@ public class TextPanel extends Panel implements AdjustmentListener,
 				vData.removeElementAt(selStart);
 				iRowCount--;
 			}
-			if (rt!=null && rowCount==rt.getCounter()) {
+			if (rt!=null && rowCount==rt.size()) {
 				for (int i=0; i<count; i++)
 					rt.deleteRow(selStart);
 				rt.show(title);
@@ -852,7 +866,7 @@ public class TextPanel extends Panel implements AdjustmentListener,
 			summarized = lastLine!=null && lastLine.startsWith("Max");
 		}
 		String fileName = null;
-		if (rt!=null && rt.getCounter()!=0 && !summarized) {
+		if (rt!=null && rt.size()!=0 && !summarized) {
 			if (path==null || path.equals("")) {
 				IJ.wait(10);
 				String name = isResults?"Results":title;

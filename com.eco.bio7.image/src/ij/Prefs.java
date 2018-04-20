@@ -62,9 +62,8 @@ public class Prefs {
 	public static final String vistaHint = ""; // no longer used
 
 	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4,
-			REVERSE_NEXT_PREVIOUS_ORDER=1<<5, AUTO_RUN_EXAMPLES=1<<6, SHOW_ALL_POINTS=1<<7,
-					DO_NOT_SAVE_WINDOW_LOCS=1<<8, JFILE_CHOOSER_CHANGED=1<<9,
-							CANCEL_BUTTON_ON_RIGHT=1<<10;
+			REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7, DO_NOT_SAVE_WINDOW_LOCS = 1 << 8, JFILE_CHOOSER_CHANGED = 1 << 9,
+			CANCEL_BUTTON_ON_RIGHT = 1 << 10;
 	public static final String OPTIONS2 = "prefs.options2";
 
 	/** file.separator system property */
@@ -109,8 +108,7 @@ public class Prefs {
 	/** Do not draw black border around image. */
 	public static boolean noBorder;
 	/**
-	 * Only show ROIs associated with current slice in Roi Manager "Show All"
-	 * mode.
+	 * Only show ROIs associated with current slice in Roi Manager "Show All" mode.
 	 */
 	public static boolean showAllSliceOnly;
 	/** Include column headers when copying tables to clipboard. */
@@ -173,8 +171,8 @@ public class Prefs {
 	/** Do not display dialog when opening .raw files */
 	public static boolean skipRawDialog;
 	/**
-	 * Reverse channel-slice-frame priority used by Next Slice and Previous
-	 * Slice commands.
+	 * Reverse channel-slice-frame priority used by Next Slice and Previous Slice
+	 * commands.
 	 */
 	public static boolean reverseNextPreviousOrder;
 	/** Automatically run examples in Help/Examples menu. */
@@ -182,17 +180,19 @@ public class Prefs {
 	/** Ignore stack positions when displaying points. */
 	public static boolean showAllPoints;
 	/** Set MenuBar on Macs running Java 8. */
-	/*Changed for Bio7 instead of IJ.isMacOSX()!*/
+	/* Changed for Bio7 instead of IJ.isMacOSX()! */
 	static IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-	public static boolean setIJMenuBar = store.getBoolean("MAC_MENU_ENABLED");//IJ.isMacOSX();
+	public static boolean setIJMenuBar = store.getBoolean("MAC_MENU_ENABLED");// IJ.isMacOSX();
 	/** "ImageJ" window is always on top. */
 	public static boolean alwaysOnTop;
 	/** Automatically spline fit line selections */
 	public static boolean splineFitLines;
-	/** Enable this option to workaround a bug with some Linux window
-	     managers that causes windows to wander down the screen. */
+	/**
+	 * Enable this option to workaround a bug with some Linux window managers that
+	 * causes windows to wander down the screen.
+	 */
 	public static boolean doNotSaveWindowLocations = true;
-	
+
 	/** Use JFileChooser setting changed/ */
 	public static boolean jFileChooserSettingChanged;
 	/** Convert tiff units to microns if pixel width is less than 0.0001 cm. */
@@ -202,7 +202,7 @@ public class Prefs {
 	/** "Close All" command running */
 	public static boolean closingAll;
 	/** Dialog "Cancel" button is on right on Linux */
-    public static boolean dialogCancelButtonOnRight;
+	public static boolean dialogCancelButtonOnRight;
 	static boolean commandLineMacro;
 	static Properties ijPrefs = new Properties();
 	static Properties props = new Properties(ijPrefs);
@@ -232,11 +232,10 @@ public class Prefs {
 		/*
 		 * String userHome = path;// System.getProperty("user.home"); if
 		 * (IJ.isWindows()) { prefsDir = homeDir; // ImageJ folder on Windows if
-		 * (prefsDir.endsWith("Desktop")) prefsDir = userHome; } else { prefsDir
-		 * = homeDir; // prefsDir = userHome; // Mac Preferences folder or Unix
-		 * home dir if (IJ.isMacOSX()) // prefsDir += "/Library/Preferences";
-		 * prefsDir = homeDir; // else // prefsDir += File.separator +
-		 * ".imagej"; }
+		 * (prefsDir.endsWith("Desktop")) prefsDir = userHome; } else { prefsDir =
+		 * homeDir; // prefsDir = userHome; // Mac Preferences folder or Unix home dir
+		 * if (IJ.isMacOSX()) // prefsDir += "/Library/Preferences"; prefsDir = homeDir;
+		 * // else // prefsDir += File.separator + ".imagej"; }
 		 */
 		if (f == null) {
 			try {
@@ -261,10 +260,9 @@ public class Prefs {
 	}
 
 	/*
-	 * static void dumpPrefs(String title) { IJ.log(""); IJ.log(title);
-	 * Enumeration e = ijPrefs.keys(); while (e.hasMoreElements()) { String key
-	 * = (String) e.nextElement(); IJ.log(key+": "+ijPrefs.getProperty(key)); }
-	 * }
+	 * static void dumpPrefs(String title) { IJ.log(""); IJ.log(title); Enumeration
+	 * e = ijPrefs.keys(); while (e.hasMoreElements()) { String key = (String)
+	 * e.nextElement(); IJ.log(key+": "+ijPrefs.getProperty(key)); } }
 	 */
 
 	static String loadAppletProps(InputStream f, Applet applet) {
@@ -297,8 +295,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Obsolete, replaced by getImageJDir(), which, unlike this method, returns
-	 * a path that ends with File.separator.
+	 * Obsolete, replaced by getImageJDir(), which, unlike this method, returns a
+	 * path that ends with File.separator.
 	 */
 	public static String getHomeDir() {
 		return homeDir;
@@ -315,8 +313,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Returns the path to the directory where the preferences file
-	 * (IJPrefs.txt) is saved.
+	 * Returns the path to the directory where the preferences file (IJPrefs.txt) is
+	 * saved.
 	 */
 	public static String getPrefsDir() {
 		/* Changed for Bio7! */
@@ -383,7 +381,7 @@ public class Prefs {
 			try {
 				return Integer.decode(s).intValue();
 			} catch (NumberFormatException e) {
-				IJ.write("" + e);
+				IJ.log("" + e);
 			}
 		}
 		return defaultValue;
@@ -469,7 +467,8 @@ public class Prefs {
 				prefs.put(THREADS, Integer.toString(threads));
 			if (IJ.isMacOSX())
 				useJFileChooser = false;
-			if (!IJ.isLinux()) dialogCancelButtonOnRight = false;
+			if (!IJ.isLinux())
+				dialogCancelButtonOnRight = false;
 			saveOptions(prefs);
 			savePluginPrefs(prefs);
 			IJ.getInstance().savePreferences(prefs);
@@ -513,8 +512,9 @@ public class Prefs {
 	}
 
 	static void loadOptions() {
-		//Changed for Bio7. On Win 10 we use the SWT file dialog by default. No need to switch to JFileChooser!
-		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + (!IJ.isMacOSX()?RUN_SOCKET_LISTENER:0);
+		// Changed for Bio7. On Win 10 we use the SWT file dialog by default. No need to
+		// switch to JFileChooser!
+		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + (!IJ.isMacOSX() ? RUN_SOCKET_LISTENER : 0);
 		int options = getInt(OPTIONS, defaultOptions);
 		usePointerCursor = (options & USE_POINTER) != 0;
 		// antialiasedText = (options&ANTIALIASING)!=0;
@@ -540,8 +540,8 @@ public class Prefs {
 		multiPointMode = (options & MULTI_POINT_MODE) != 0;
 		rotateYZ = (options & ROTATE_YZ) != 0;
 		flipXZ = (options & FLIP_XZ) != 0;
-		//dontSaveHeaders = (options&DONT_SAVE_HEADERS)!=0;
-		//dontSaveRowNumbers = (options&DONT_SAVE_ROW_NUMBERS)!=0;
+		// dontSaveHeaders = (options&DONT_SAVE_HEADERS)!=0;
+		// dontSaveRowNumbers = (options&DONT_SAVE_ROW_NUMBERS)!=0;
 		noClickToGC = (options & NO_CLICK_TO_GC) != 0;
 		avoidResliceInterpolation = (options & AVOID_RESLICE_INTERPOLATION) != 0;
 		keepUndoBuffers = (options & KEEP_UNDO_BUFFERS) != 0;
@@ -556,9 +556,9 @@ public class Prefs {
 		reverseNextPreviousOrder = (options2 & REVERSE_NEXT_PREVIOUS_ORDER) != 0;
 		autoRunExamples = (options2 & AUTO_RUN_EXAMPLES) != 0;
 		showAllPoints = (options2 & SHOW_ALL_POINTS) != 0;
-		doNotSaveWindowLocations = (options2&DO_NOT_SAVE_WINDOW_LOCS)!=0;
-		jFileChooserSettingChanged = (options2&JFILE_CHOOSER_CHANGED)!=0;
-		dialogCancelButtonOnRight = (options2&CANCEL_BUTTON_ON_RIGHT)!=0;
+		doNotSaveWindowLocations = (options2 & DO_NOT_SAVE_WINDOW_LOCS) != 0;
+		jFileChooserSettingChanged = (options2 & JFILE_CHOOSER_CHANGED) != 0;
+		dialogCancelButtonOnRight = (options2 & CANCEL_BUTTON_ON_RIGHT) != 0;
 	}
 
 	static void saveOptions(Properties prefs) {
@@ -574,17 +574,15 @@ public class Prefs {
 
 		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0)
 				+ (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0)
-				+ (autoRunExamples?AUTO_RUN_EXAMPLES:0) + (showAllPoints?SHOW_ALL_POINTS:0)
-				+ (doNotSaveWindowLocations?DO_NOT_SAVE_WINDOW_LOCS:0)
-				+ (jFileChooserSettingChanged?JFILE_CHOOSER_CHANGED:0)
-				+ (dialogCancelButtonOnRight?CANCEL_BUTTON_ON_RIGHT:0);
+				+ (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0) + (doNotSaveWindowLocations ? DO_NOT_SAVE_WINDOW_LOCS : 0)
+				+ (jFileChooserSettingChanged ? JFILE_CHOOSER_CHANGED : 0) + (dialogCancelButtonOnRight ? CANCEL_BUTTON_ON_RIGHT : 0);
 		prefs.put(OPTIONS2, Integer.toString(options2));
 	}
 
 	/**
-	 * Saves the value of the string <code>text</code> in the preferences file
-	 * using the keyword <code>key</code>. This string can be retrieved using
-	 * the appropriate <code>get()</code> method.
+	 * Saves the value of the string <code>text</code> in the preferences file using
+	 * the keyword <code>key</code>. This string can be retrieved using the
+	 * appropriate <code>get()</code> method.
 	 */
 	public static void set(String key, String text) {
 		if (key.indexOf('.') < 1)
@@ -614,8 +612,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Saves the boolean variable <code>value</code> in the preferences file
-	 * using the keyword <code>key</code>. This value can be retrieved using the
+	 * Saves the boolean variable <code>value</code> in the preferences file using
+	 * the keyword <code>key</code>. This value can be retrieved using the
 	 * appropriate <code>getPref()</code> method.
 	 */
 	public static void set(String key, boolean value) {
@@ -623,9 +621,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Uses the keyword <code>key</code> to retrieve a string from the
-	 * preferences file. Returns <code>defaultValue</code> if the key is not
-	 * found.
+	 * Uses the keyword <code>key</code> to retrieve a string from the preferences
+	 * file. Returns <code>defaultValue</code> if the key is not found.
 	 */
 	public static String get(String key, String defaultValue) {
 		String value = ijPrefs.getProperty(KEY_PREFIX + key);
@@ -636,9 +633,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Uses the keyword <code>key</code> to retrieve a number from the
-	 * preferences file. Returns <code>defaultValue</code> if the key is not
-	 * found.
+	 * Uses the keyword <code>key</code> to retrieve a number from the preferences
+	 * file. Returns <code>defaultValue</code> if the key is not found.
 	 */
 	public static double get(String key, double defaultValue) {
 		String s = ijPrefs.getProperty(KEY_PREFIX + key);
@@ -656,9 +652,8 @@ public class Prefs {
 	}
 
 	/**
-	 * Uses the keyword <code>key</code> to retrieve a boolean from the
-	 * preferences file. Returns <code>defaultValue</code> if the key is not
-	 * found.
+	 * Uses the keyword <code>key</code> to retrieve a boolean from the preferences
+	 * file. Returns <code>defaultValue</code> if the key is not found.
 	 */
 	public static boolean get(String key, boolean defaultValue) {
 		String value = ijPrefs.getProperty(KEY_PREFIX + key);
@@ -669,18 +664,18 @@ public class Prefs {
 	}
 
 	/**
-	 * Saves the Point <code>loc</code> in the preferences file as a string
-	 * using the keyword <code>key</code>.
+	 * Saves the Point <code>loc</code> in the preferences file as a string using
+	 * the keyword <code>key</code>.
 	 */
 	public static void saveLocation(String key, Point loc) {
 		if (!doNotSaveWindowLocations)
-			 set(key, loc.x+","+loc.y);
+			set(key, loc.x + "," + loc.y);
 	}
 
 	/**
-	 * Uses the keyword <code>key</code> to retrieve a location from the
-	 * preferences file. Returns null if the key is not found or the location is
-	 * not valid (e.g., offscreen).
+	 * Uses the keyword <code>key</code> to retrieve a location from the preferences
+	 * file. Returns null if the key is not found or the location is not valid
+	 * (e.g., offscreen).
 	 */
 	public static Point getLocation(String key) {
 		String value = ijPrefs.getProperty(KEY_PREFIX + key);
@@ -739,8 +734,7 @@ public class Prefs {
 	}
 
 	/**
-	 * Sets the number of threads (1-32) used by PlugInFilters to process
-	 * stacks.
+	 * Sets the number of threads (1-32) used by PlugInFilters to process stacks.
 	 */
 	public static void setThreads(int n) {
 		if (n < 1)

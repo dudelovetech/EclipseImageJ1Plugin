@@ -56,11 +56,12 @@ public class ResultsTable implements Cloneable {
 	private String rowLabelHeading = "";
 	private char delimiter = '\t';
 	private boolean headingSet; 
-	private boolean showRowNumbers = true;
+	private boolean showRowNumbers;
 	private Hashtable stringColumns;
 	private boolean NaNEmptyCells;
 	private boolean quoteCommas;
 	private String title;
+	private boolean columnDeleted;
 
 
 	/** Constructs an empty ResultsTable with the counter=0, no columns
@@ -611,6 +612,74 @@ public class ResultsTable implements Cloneable {
 		return new String(sb);
 	}
 	
+	/** Implements the Table.getColumn() macro function. */
+	public Variable[] getColumnAsVariables(String column) {
+		int col = getColumnIndex(column);
+		if (col==COLUMN_NOT_FOUND)
+			throw new IllegalArgumentException("\""+column+"\" column not found");
+		boolean firstValueNumeric = true;
+		int nValues = size();
+		Variable[] values = new Variable[nValues];
+		for (int row=0; row<size(); row++) {
+			double value = columns[col][row];
+			String str = null;
+			if (Double.isNaN(value) && stringColumns!=null) {
+				ArrayList stringColumn = (ArrayList)stringColumns.get(new Integer(col));
+				if (stringColumn!=null && row>=0 && row<stringColumn.size()) {
+						str = (String)stringColumn.get(row);
+						if (firstValueNumeric && "".equals(str)) {
+							nValues = row;
+							break;
+						}
+				}
+			}
+			if (str!=null)
+				values[row] = new Variable(str);
+			else {
+				values[row] = new Variable(value);
+				if (row==0) firstValueNumeric=true;
+			}
+		}
+		if (nValues<values.length) {
+			Variable[] values2 = new Variable[nValues];
+			for (int i=0; i<nValues; i++)
+				values2[i] = values[i];
+			values = values2;
+		}
+		return values;
+	}
+	
+	/** Implements the Table.setColumn() macro function. */
+	public void setColumn(String column, Variable[] array) {
+		if (column==null)
+			return;
+		int initialSize = size();
+		int col = getColumnIndex(column);
+		if (col==COLUMN_NOT_FOUND)
+			col = getFreeColumn(column);
+		for (int i=0; i<array.length; i++) {
+			if (array[i].getString()!=null)
+				setValue(col, i, array[i].getString());
+			else
+				setValue(col, i, array[i].getValue());
+		}
+		if (array.length<size()) {
+			for (int i=array.length; i<size(); i++)
+				setValue(col, i, "");
+		}
+		if (initialSize>0 && size()>initialSize) {
+			for (int c=0; c<=lastColumn; c++) {
+				if (c!=col && columns[c]!=null) {
+					String heading = headings[c];
+					if (heading!=null) {
+						for (int i=initialSize; i<size(); i++)
+							setValue(c, i, "");
+					}
+				}
+			}
+		}
+	}
+	
 	private String getValueAsString(int column, int row) { 
 		double value = columns[column][row];
 		//IJ.log("getValueAsString1: col="+column+ ", row= "+row+", value= "+value+", size="+stringColumns.size());
@@ -666,6 +735,7 @@ public class ResultsTable implements Cloneable {
 	public void setDefaultHeadings() {
 		for(int i=0; i<defaultHeadings.length; i++)
 				headings[i] = defaultHeadings[i];
+		showRowNumbers(true);
 	}
 
 	/** Sets the decimal places (digits to the right of decimal point)
@@ -749,20 +819,21 @@ public class ResultsTable implements Cloneable {
 	}
 
 	/** Deletes the specified row. */
-	public synchronized void deleteRow(int row) {
-		if (counter==0 || row<0 || row>counter-1) return;
+	public synchronized void deleteRow(int rowIndex) {
+		if (counter==0 || rowIndex<0 || rowIndex>counter-1)
+			return;
 		if (rowLabels!=null) {
-			rowLabels[row] = null;
-			for (int i=row; i<counter-1; i++)
+			rowLabels[rowIndex] = null;
+			for (int i=rowIndex; i<counter-1; i++)
 				rowLabels[i] = rowLabels[i+1];
 		}
 		for (int col=0; col<=lastColumn; col++) {
 			if (columns[col]!=null) {
-				for (int i=row; i<counter-1; i++)
+				for (int i=rowIndex; i<counter-1; i++)
 					columns[col][i] = columns[col][i+1];
 				ArrayList stringColumn = stringColumns!=null?(ArrayList)stringColumns.get(new Integer(col)):null;
 				if (stringColumn!=null && stringColumn.size()==counter) {
-					for (int i=row; i<counter-1; i++)
+					for (int i=rowIndex; i<counter-1; i++)
 						stringColumn.set(i,stringColumn.get(i+1));
 					stringColumn.remove(counter-1);
 				}
@@ -771,6 +842,35 @@ public class ResultsTable implements Cloneable {
 		counter--;
 	}
 	
+	/** Deletes the specified rows. */
+	public void deleteRows(int index1, int index2) {
+		if (index1<0) index1=0;
+		int n = index2 - index1 + 1;
+		for (int i=index1; i<index1+n; i++)
+			deleteRow(index1);
+	}
+	
+	/** Deletes the specified column. */
+	public void deleteColumn(String column) {
+		int col = getColumnIndex(column);
+		if (col==COLUMN_NOT_FOUND)
+			throw new IllegalArgumentException("\""+column+"\" column not found");
+		columns[col] = null;
+		headings[col] = "-";
+		columnDeleted = true;
+	}
+
+	/** Changes the name of a column. */
+	public void renameColumn(String oldName, String newName) {
+		int oldCol = getColumnIndex(oldName);
+		if (oldCol==COLUMN_NOT_FOUND)
+			throw new IllegalArgumentException("\""+oldName+"\" column not found");
+		int newCol = getColumnIndex(newName);
+		if (columnExists(newCol))
+			throw new IllegalArgumentException("\""+newName+"\" column exists");
+		headings[oldCol] = newName;
+	}
+
 	public synchronized void reset() {
 		counter = 0;
 		maxRows = 100;
@@ -783,6 +883,7 @@ public class ResultsTable implements Cloneable {
 		lastColumn = -1;
 		rowLabels = null;
 		stringColumns = null;
+		columnDeleted = false;
 	}
 	
 	/** Returns the index of the last used column, or -1 if no columns are used. */
@@ -817,6 +918,8 @@ public class ResultsTable implements Cloneable {
 		The title must be "Results" if this table was obtained using 
 		ResultsTable.getResultsTable() or Analyzer.getResultsTable . */
 	public void show(String windowTitle) {
+		if (windowTitle==null)
+			windowTitle = "Results";
 		title = windowTitle;
 		if (!windowTitle.equals("Results") && this==Analyzer.getResultsTable())
 			IJ.log("ResultsTable.show(): the system ResultTable should only be displayed in the \"Results\" window.");
@@ -844,8 +947,10 @@ public class ResultsTable implements Cloneable {
 			TextWindow win;
 			if (frame!=null && frame instanceof TextWindow) {
 				win = (TextWindow)frame;
-				if (!IJ.isMacro() && (windowTitle==null || !windowTitle.startsWith("Counts_")))
+				if (win!=null) {
 					win.toFront();
+					WindowManager.setWindow(frame);
+				}
 			} else {
 				int width = getLastColumn()<=0?250:400;
 				if (showRowNumbers)
@@ -1072,7 +1177,7 @@ public class ResultsTable implements Cloneable {
 	public void saveAs(String path) throws IOException {
 		if (size()==0 && lastColumn<0) return;
 		if (path==null || path.equals("")) {
-			SaveDialog sd = new SaveDialog("Save Results", "Results", Prefs.defaultResultsExtension());
+			SaveDialog sd = new SaveDialog("Save Table", "Table", Prefs.defaultResultsExtension());
 			String file = sd.getFileName();
 			if (file==null) return;
 			path = sd.getDirectory() + file;
@@ -1142,13 +1247,13 @@ public class ResultsTable implements Cloneable {
 	}
 	
 	public String toString() {
-		return ("ctr="+counter+", hdr="+getColumnHeadings());
+		return ("title="+title+", size="+counter+", hdr="+getColumnHeadings());
 	}
 	
 	/** Applies a macro to each row of the table; the columns are assigned variable names
 	 *  as given by getHeadingsAsVaribleNames(). New variables starting with an uppercase letter
 	 *  create a new column with this name.
-	 *  There is also a variable 'rowNumber' available.
+	 *  The variable 'row' (the row index) is pre-defined.
 	 *  Except for the row label (if existing), currently only supports numeric values, no Strings.
 	 *  @return false in case of a macro error */
 	public boolean applyMacro(String macro) {
@@ -1170,13 +1275,14 @@ public class ResultsTable implements Cloneable {
 				sb.append(Math.abs(getValueAsDouble(columnIndices[i], 0))); //avoid negative values since minus would be extra token
 			sb.append(',');
 		}
-		sb.append("rowNumber;\n");
+		sb.append("row;\n");
 		sb.append("function dummy() {}\n");
 		sb.append(macro);
 		sb.append(";\n");
 		String code = sb.toString();
 		int PCStart = 9+4*columnNames.length;       // 'macro' code starts at this token number
 		Interpreter interp = new Interpreter();
+		interp.setApplyMacroTable(this);
 		try {
 			interp.run(code, null);  // first test run
 		} catch(Exception e) {}
@@ -1212,7 +1318,7 @@ public class ResultsTable implements Cloneable {
 					}
 				}
 			}
-			interp.setVariable("rowNumber", row);
+			interp.setVariable("row", row);
 			interp.run(PCStart);
 			if (interp.wasError())
 				return false;
@@ -1274,7 +1380,13 @@ public class ResultsTable implements Cloneable {
 	}
 	
 	public String getTitle() {
+		if (title==null && this==Analyzer.getResultsTable())
+			title = "Results";
 		return title;
+	}
+	
+	public boolean columnDeleted() {
+		return columnDeleted;
 	}
 		
 }

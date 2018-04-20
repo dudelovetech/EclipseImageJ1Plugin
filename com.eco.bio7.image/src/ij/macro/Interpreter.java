@@ -46,7 +46,7 @@ public class Interpreter implements MacroConstants {
 	Functions func;
 	boolean inFunction;
 	String macroName;
-	public String argument;
+	String argument;
 	String returnValue;
 	boolean calledMacro; // macros envoked by eval() or runMacro()
 	boolean batchMacro; // macros envoked by Process/Batch commands
@@ -70,6 +70,7 @@ public class Interpreter implements MacroConstants {
 	int inspectStkIndex = -1;
 	int inspectSymIndex = -1;
 	boolean evaluating;
+	ResultsTable applyMacroTable;
 
 
 	/** Interprets the specified string. */
@@ -246,6 +247,9 @@ public class Interpreter implements MacroConstants {
 				break;
 			case PREDEFINED_FUNCTION:
 				func.doFunction(pgm.table[tokenAddress].type);
+				break;
+			case VARIABLE_FUNCTION:
+				func.getVariableFunction(pgm.table[tokenAddress].type);
 				break;
 			case USER_FUNCTION:
 				runUserFunction();
@@ -785,6 +789,18 @@ public class Interpreter implements MacroConstants {
 			return Variable.ARRAY;
 		if (tok==USER_FUNCTION)
 			return USER_FUNCTION;
+		if (tok==VARIABLE_FUNCTION) {
+			int address = rightSideToken>>TOK_SHIFT;
+			int type = pgm.table[address].type;
+			if (type==TABLE) {
+				int token2 = pgm.code[pc+4];
+				String name = pgm.table[token2>>TOK_SHIFT].str;
+				if (name.equals("getString")||name.equals("title")||name.equals("headings"))
+					return Variable.STRING;
+				else if (name.equals("getColumn"))
+					return Variable.ARRAY;
+			}
+		}
 		if (tok!=WORD)
 			return Variable.VALUE;
 		Variable v = lookupVariable(rightSideToken>>TOK_SHIFT);
@@ -978,6 +994,12 @@ public class Interpreter implements MacroConstants {
 			Variable v2 = lookupVariable();
 			v.setArray(v2.getArray());
 			v.setArraySize(v2.getArraySize());
+		} else if (token==VARIABLE_FUNCTION) {
+			Variable v2 = func.getVariableFunction(pgm.table[tokenAddress].type);
+			Variable[] array = v2.getArray();
+			if (array==null)
+				error("Array expected");			
+			v.setArray(array);
 		} else
 			error("Array expected");
 	}
@@ -1190,7 +1212,7 @@ public class Interpreter implements MacroConstants {
 		}
 	}
 
-	public void error (String message) {
+	void error (String message) {
 		boolean showMessage = !done;
 		String[] variables = showMessage?getVariables():null;
 		token = EOF;
@@ -1326,6 +1348,7 @@ public class Interpreter implements MacroConstants {
 
 	final String getStringTerm() {
 		String str;
+		Variable v;
 		getToken();
 		switch (token) {
 		case STRING_CONSTANT:
@@ -1334,8 +1357,19 @@ public class Interpreter implements MacroConstants {
 		case STRING_FUNCTION:
 			str = func.getStringFunction(pgm.table[tokenAddress].type);
 			break;
+		case VARIABLE_FUNCTION:
+			v = func.getVariableFunction(pgm.table[tokenAddress].type);
+			str = v.getString();
+			if (str==null) {
+				double value = v.getValue();
+				if ((int)value==value)
+					str = IJ.d2s(value,0);
+				else
+					str = ""+value;
+			}
+			break;
 		case USER_FUNCTION:
-			Variable v = runUserFunction();
+			v = runUserFunction();
 			if (v==null)
 				error("No return value");
 			str = v.getString();
@@ -1433,6 +1467,15 @@ public class Interpreter implements MacroConstants {
 					value = Double.NaN;
 				else if (Double.isNaN(value))
 					error("Numeric value expected");
+				break;				
+			case VARIABLE_FUNCTION:
+				v = func.getVariableFunction(pgm.table[tokenAddress].type);
+				if (v==null)
+					error("No return value");
+				if (v.getString()!=null)
+						error("Numeric return value expected");
+				else
+					value = v.getValue();
 				break;
 			case USER_FUNCTION:
 				v = runUserFunction();
@@ -2182,6 +2225,10 @@ public class Interpreter implements MacroConstants {
 			interp.selectCount++;
 		lastInterp = interp;
 		return !interp.waitingForUser && interp.debugger==null && count>0 && !isBatchMode();
+	}
+	
+	public void setApplyMacroTable(ResultsTable rt) {
+		applyMacroTable = rt;
 	}
 
 } // class Interpreter

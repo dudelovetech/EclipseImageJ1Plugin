@@ -65,7 +65,6 @@ public class WindowManager {
 
 	/** Returns the active ImageWindow. */
 	public static ImageWindow getCurrentWindow() {
-		// if (IJ.debugMode) IJ.write("ImageWindow.getCurrentWindow");
 		return currentWindow;
 	}
 
@@ -243,7 +242,6 @@ public class WindowManager {
 	 * Returns null if the ID is zero.
 	 */
 	public synchronized static ImagePlus getImage(int imageID) {
-		// if (IJ.debugMode) IJ.write("ImageWindow.getImage");
 		if (imageID > 0)
 			imageID = getNthImageID(imageID);
 		if (imageID == 0 || getImageCount() == 0)
@@ -306,7 +304,6 @@ public class WindowManager {
 
 	/** Adds the specified window to the Window menu. */
 	public synchronized static void addWindow(Window win) {
-		// IJ.write("addWindow: "+win.getTitle());
 		if (win == null)
 			return;
 		else if (win instanceof ImageWindow)
@@ -387,7 +384,6 @@ public class WindowManager {
 
 	/** Removes the specified window from the Window menu. */
 	public synchronized static void removeWindow(Window win) {
-		// IJ.write("removeWindow: "+win.getTitle());
 		if (win instanceof ImageWindow)
 			removeImageWindow((ImageWindow) win);
 		else {
@@ -429,7 +425,7 @@ public class WindowManager {
 	/** The specified Window becomes the front window. */
 	public static void setWindow(Window win) {
 		/* Changed for Bio7? - Probably not necessary! */
-
+	   //System.out.println("setWindow: "+win);
 		frontWindow = win;
 		if (win instanceof Frame)
 			frontFrame = (Frame) win;
@@ -445,7 +441,7 @@ public class WindowManager {
 		frontWindow = win;
 		frontFrame = win;
 
-		// IJ.log("Set window: "+(win!=null?win.getTitle():"null"));
+		//System.out.println("Set window: "+(win!=null?win.getTitle():"null"));
 	}
 
 	/**
