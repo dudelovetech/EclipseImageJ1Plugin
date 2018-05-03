@@ -93,7 +93,7 @@ public class WordMarkerCreation extends WorkspaceJob {
 					break;
 
 				minusLength--;
-				if (offset + minusLength <= 0) {
+				if (offset + minusLength < 0) {
 					break;
 				}
 			} else {

@@ -111,7 +111,7 @@ public class IJMacroEditorTextHover implements ITextHover, ITextHoverExtension, 
 				}
 
 				minusLength--;
-				if (offset + minusLength <= 0) {
+				if (offset + minusLength < 0) {
 					break;
 				}
 			} else {
