@@ -55,7 +55,8 @@ public class IJ {
 	private static ProgressBar progressBar;
 	private static TextPanel textPanel;
 	private static String osname, osarch;
-	private static boolean isMac, isWin, isJava16, isJava17, isJava18, isJava19, isLinux, is64Bit;
+	private static boolean isMac, isWin, isLinux, is64Bit;
+	private static int javaVersion = 6;
 	private static boolean controlDown, altDown, spaceDown, shiftDown;
 	private static boolean macroRunning;
 	private static Thread previousThread;
@@ -84,14 +85,14 @@ public class IJ {
 		isLinux = osname.startsWith("Linux");
 
 		String version = System.getProperty("java.version");
-		if (version.startsWith("1.9") || version.startsWith("9"))
-			isJava16 = isJava17 = isJava18 = isJava19 = true;
-		else if (!isJava18 && version.startsWith("1.8"))
-			isJava16 = isJava17 = isJava18 = true;
-		else if (!isJava17 && version.startsWith("1.7"))
-			isJava16 = isJava17 = true;
-		else if (!isJava16 && version.startsWith("1.6"))
-			isJava16 = true;
+		if (version.startsWith("10"))
+			javaVersion = 10;
+		else if (version.startsWith("1.9") || version.startsWith("9"))
+			javaVersion = 9;
+		else if (version.startsWith("1.8"))
+			javaVersion = 8;
+		else if (version.startsWith("1.7"))
+			javaVersion = 7;
 		dfs = new DecimalFormatSymbols(Locale.US);
 		df = new DecimalFormat[10];
 		df[0] = new DecimalFormat("0", dfs);
@@ -131,16 +132,21 @@ public class IJ {
 	}
 
 	/**
-	 * Runs the macro contained in the string <code>macro</code>. Returns any string value returned by the macro, null if the macro does not return a value, or "[aborted]" if the macro was aborted due to
-	 * an error. The equivalent macro function is eval().
+	 * Runs the macro contained in the string <code>macro</code>. Returns any string
+	 * value returned by the macro, null if the macro does not return a value, or
+	 * "[aborted]" if the macro was aborted due to an error. The equivalent macro
+	 * function is eval().
 	 */
 	public static String runMacro(String macro) {
 		return runMacro(macro, "");
 	}
 
 	/**
-	 * Runs the macro contained in the string <code>macro</code>. The optional string argument can be retrieved in the called macro using the getArgument() macro function. Returns any string value
-	 * returned by the macro, null if the macro does not return a value, or "[aborted]" if the macro was aborted due to an error.
+	 * Runs the macro contained in the string <code>macro</code>. The optional
+	 * string argument can be retrieved in the called macro using the getArgument()
+	 * macro function. Returns any string value returned by the macro, null if the
+	 * macro does not return a value, or "[aborted]" if the macro was aborted due to
+	 * an error.
 	 */
 	public static String runMacro(String macro, String arg) {
 		Macro_Runner mr = new Macro_Runner();
@@ -148,9 +154,12 @@ public class IJ {
 	}
 
 	/**
-	 * Runs the specified macro or script file in the current thread. The file is assumed to be in the macros folder unless <code>name</code> is a full path. The optional string argument
-	 * (<code>arg</code>) can be retrieved in the called macro or script (v1.42k or later) using the getArgument() function. Returns any string value returned by the macro, or null. Scripts always return
-	 * null. The equivalent macro function is runMacro().
+	 * Runs the specified macro or script file in the current thread. The file is
+	 * assumed to be in the macros folder unless <code>name</code> is a full path.
+	 * The optional string argument (<code>arg</code>) can be retrieved in the
+	 * called macro or script (v1.42k or later) using the getArgument() function.
+	 * Returns any string value returned by the macro, or null. Scripts always
+	 * return null. The equivalent macro function is runMacro().
 	 */
 	public static String runMacroFile(String name, String arg) {
 		if (ij == null && Menus.getCommands() == null)
@@ -285,16 +294,19 @@ public class IJ {
 	}
 
 	/**
-	 * Runs an ImageJ command. Does not return until the command has finished executing. To avoid "image locked", errors, plugins that call this method should implement the PlugIn interface instead of
-	 * PlugInFilter.
+	 * Runs an ImageJ command. Does not return until the command has finished
+	 * executing. To avoid "image locked", errors, plugins that call this method
+	 * should implement the PlugIn interface instead of PlugInFilter.
 	 */
 	public static void run(String command) {
 		run(command, null);
 	}
 
 	/**
-	 * Runs an ImageJ command, with options that are passed to the GenericDialog and OpenDialog classes. Does not return until the command has finished executing. To generate run() calls, start the
-	 * recorder (Plugins/Macro/Record) and run commands from the ImageJ menu bar.
+	 * Runs an ImageJ command, with options that are passed to the GenericDialog and
+	 * OpenDialog classes. Does not return until the command has finished executing.
+	 * To generate run() calls, start the recorder (Plugins/Macro/Record) and run
+	 * commands from the ImageJ menu bar.
 	 */
 	public static void run(String command, String options) {
 		// IJ.log("run1: "+command+" "+Thread.currentThread().hashCode()+"
@@ -321,7 +333,8 @@ public class IJ {
 	}
 
 	/**
-	 * Converts commands that have been renamed so macros using the old names continue to work.
+	 * Converts commands that have been renamed so macros using the old names
+	 * continue to work.
 	 */
 	private static String convert(String command) {
 		if (commandTable == null) {
@@ -362,7 +375,9 @@ public class IJ {
 	}
 
 	/**
-	 * Runs an ImageJ command using the specified image and options. To generate run() calls, start the recorder (Plugins/Macro/Record) and run commands from the ImageJ menu bar.
+	 * Runs an ImageJ command using the specified image and options. To generate
+	 * run() calls, start the recorder (Plugins/Macro/Record) and run commands from
+	 * the ImageJ menu bar.
 	 */
 	public static void run(ImagePlus imp, String command, String options) {
 		if (ij == null && Menus.getCommands() == null)
@@ -393,14 +408,16 @@ public class IJ {
 	}
 
 	/**
-	 * Returns true if a macro is running, or if the run(), open() or newImage() method is executing.
+	 * Returns true if a macro is running, or if the run(), open() or newImage()
+	 * method is executing.
 	 */
 	public static boolean isMacro() {
 		return macroRunning || Interpreter.getInstance() != null;
 	}
 
 	/**
-	 * Returns the Applet that created this ImageJ or null if running as an application.
+	 * Returns the Applet that created this ImageJ or null if running as an
+	 * application.
 	 */
 	public static java.applet.Applet getApplet() {
 		return applet;
@@ -417,7 +434,9 @@ public class IJ {
 	}
 
 	/**
-	 * @deprecated replaced by IJ.log(), ResultsTable.setResult() and TextWindow.append(). There are examples at http://imagej.nih.gov/ij/plugins/sine-cosine.html
+	 * @deprecated replaced by IJ.log(), ResultsTable.setResult() and
+	 *             TextWindow.append(). There are examples at
+	 *             http://imagej.nih.gov/ij/plugins/sine-cosine.html
 	 */
 	public static void write(String s) {
 		if (textPanel == null && ij != null)
@@ -505,7 +524,9 @@ public class IJ {
 	}
 
 	/**
-	 * Clears the "Results" window and sets the column headings to those in the tab-delimited 'headings' String. Writes to System.out.println if the "ImageJ" frame is not present.
+	 * Clears the "Results" window and sets the column headings to those in the
+	 * tab-delimited 'headings' String. Writes to System.out.println if the "ImageJ"
+	 * frame is not present.
 	 */
 	public static void setColumnHeadings(String headings) {
 		if (textPanel == null && ij != null)
@@ -526,7 +547,7 @@ public class IJ {
 		Frame frame = WindowManager.getFrontWindow();
 		if (frame != null && (frame instanceof TextWindow)) {
 			TextWindow tw = (TextWindow) frame;
-			if (tw.getResultsTable()==null) {
+			if (tw.getResultsTable() == null) {
 				IJ.error("Rename", "\"" + tw.getTitle() + "\" is not a results table");
 				return;
 			}
@@ -546,26 +567,30 @@ public class IJ {
 			return;
 		} else if (frame instanceof TextWindow) {
 			TextWindow tw = (TextWindow) frame;
-			if (tw.getResultsTable()==null) {
-								error("Rename", "\""+oldTitle+"\" is not a table");
+			if (tw.getResultsTable() == null) {
+				error("Rename", "\"" + oldTitle + "\" is not a table");
 				return;
 			}
 			tw.rename(newTitle);
 		} else
-			error("Rename", "\""+oldTitle+"\" is not a table");
+			error("Rename", "\"" + oldTitle + "\" is not a table");
 	}
 
-	/** Deletes 'row1' through 'row2' of the "Results" window, where
-	'row1' and 'row2' must be in the range 0-Analyzer.getCounter()-1. */
+	/**
+	 * Deletes 'row1' through 'row2' of the "Results" window, where 'row1' and
+	 * 'row2' must be in the range 0-Analyzer.getCounter()-1.
+	 */
 	public static void deleteRows(int row1, int row2) {
-		
+
 		ResultsTable rt = Analyzer.getResultsTable();
 		rt.deleteRows(row1, row2);
 		rt.show("Results");
 	}
 
 	/**
-	 * Returns a reference to the "Results" window TextPanel. Opens the "Results" window if it is currently not open. Returns null if the "ImageJ" window is not open.
+	 * Returns a reference to the "Results" window TextPanel. Opens the "Results"
+	 * window if it is currently not open. Returns null if the "ImageJ" window is
+	 * not open.
 	 */
 	public static TextPanel getTextPanel() {
 		if (textPanel == null && ij != null)
@@ -574,7 +599,8 @@ public class IJ {
 	}
 
 	/**
-	 * TextWindow calls this method with a null argument when the "Results" window is closed.
+	 * TextWindow calls this method with a null argument when the "Results" window
+	 * is closed.
 	 */
 	public static void setTextPanel(TextPanel tp) {
 		textPanel = tp;
@@ -605,8 +631,10 @@ public class IJ {
 	}
 
 	/**
-	 * Updates the progress bar, where 0<=progress<=1.0. The progress bar is not shown in BatchMode and erased if progress>=1.0. The progress bar is updated only if more than 90 ms have passes since the
-	 * last call. Does nothing if the ImageJ window is not present.
+	 * Updates the progress bar, where 0<=progress<=1.0. The progress bar is not
+	 * shown in BatchMode and erased if progress>=1.0. The progress bar is updated
+	 * only if more than 90 ms have passes since the last call. Does nothing if the
+	 * ImageJ window is not present.
 	 */
 	public static void showProgress(double progress) {
 		if (progressBar != null)
@@ -614,8 +642,11 @@ public class IJ {
 	}
 
 	/**
-	 * Updates the progress bar, where the length of the bar is set to ( <code>currentValue+1)/finalValue</code> of the maximum bar length. The bar is erased if <code>currentValue&gt;=finalValue</code>.
-	 * The bar is updated only if more than 90 ms have passed since the last call. Does nothing if the ImageJ window is not present.
+	 * Updates the progress bar, where the length of the bar is set to (
+	 * <code>currentValue+1)/finalValue</code> of the maximum bar length. The bar is
+	 * erased if <code>currentValue&gt;=finalValue</code>. The bar is updated only
+	 * if more than 90 ms have passed since the last call. Does nothing if the
+	 * ImageJ window is not present.
 	 */
 	public static void showProgress(int currentIndex, int finalIndex) {
 		if (progressBar != null) {
@@ -626,15 +657,18 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box titled "Message". Writes the Java console if ImageJ is not present.
+	 * Displays a message in a dialog box titled "Message". Writes the Java console
+	 * if ImageJ is not present.
 	 */
 	public static void showMessage(String msg) {
 		showMessage("Message", msg);
 	}
 
 	/**
-	 * Displays a message in a dialog box with the specified title. Displays HTML formatted text if 'msg' starts with "<html>". There are examples at "http://imagej.nih.gov/ij/macros/HtmlDialogDemo.txt".
-	 * Writes to the Java console if ImageJ is not present.
+	 * Displays a message in a dialog box with the specified title. Displays HTML
+	 * formatted text if 'msg' starts with "<html>". There are examples at
+	 * "http://imagej.nih.gov/ij/macros/HtmlDialogDemo.txt". Writes to the Java
+	 * console if ImageJ is not present.
 	 */
 	public static void showMessage(String title, String msg) {
 		/* Changed for Bio7! */
@@ -658,7 +692,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box titled "ImageJ". If a macro is running, it is aborted. Writes to the Java console if the ImageJ window is not present.
+	 * Displays a message in a dialog box titled "ImageJ". If a macro is running, it
+	 * is aborted. Writes to the Java console if the ImageJ window is not present.
 	 */
 	public static void error(String msg) {
 		error(null, msg);
@@ -669,7 +704,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box with the specified title. If a macro is running, it is aborted. Writes to the Java console if ImageJ is not present.
+	 * Displays a message in a dialog box with the specified title. If a macro is
+	 * running, it is aborted. Writes to the Java console if ImageJ is not present.
 	 */
 	public static void error(String title, String msg) {
 		if (msg != null && msg.endsWith(Macro.MACRO_CANCELED))
@@ -689,7 +725,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the last error message written by IJ.error() or null if there was no error since the last time this method was called.
+	 * Returns the last error message written by IJ.error() or null if there was no
+	 * error since the last time this method was called.
 	 * 
 	 * @see #error(String)
 	 */
@@ -700,7 +737,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box with the specified title. Returns false if the user pressed "Cancel".
+	 * Displays a message in a dialog box with the specified title. Returns false if
+	 * the user pressed "Cancel".
 	 */
 	public static boolean showMessageWithCancel(String title, String msg) {
 		GenericDialog gd = new GenericDialog(title);
@@ -712,7 +750,9 @@ public class IJ {
 	public static final int CANCELED = Integer.MIN_VALUE;
 
 	/**
-	 * Allows the user to enter a number in a dialog box. Returns the value IJ.CANCELED (-2,147,483,648) if the user cancels the dialog box. Returns 'defaultValue' if the user enters an invalid number.
+	 * Allows the user to enter a number in a dialog box. Returns the value
+	 * IJ.CANCELED (-2,147,483,648) if the user cancels the dialog box. Returns
+	 * 'defaultValue' if the user enters an invalid number.
 	 */
 	public static double getNumber(String prompt, double defaultValue) {
 		GenericDialog gd = new GenericDialog("");
@@ -729,7 +769,8 @@ public class IJ {
 	}
 
 	/**
-	 * Allows the user to enter a string in a dialog box. Returns "" if the user cancels the dialog box.
+	 * Allows the user to enter a string in a dialog box. Returns "" if the user
+	 * cancels the dialog box.
 	 */
 	public static String getString(String prompt, String defaultString) {
 		GenericDialog gd = new GenericDialog("");
@@ -754,8 +795,9 @@ public class IJ {
 	}
 
 	/**
-	 * Runs the garbage collector and returns a string something like "64K of 256MB (25%)" that shows how much of the available memory is in use. This is the string displayed when the user clicks in the
-	 * status bar.
+	 * Runs the garbage collector and returns a string something like "64K of 256MB
+	 * (25%)" that shows how much of the available memory is in use. This is the
+	 * string displayed when the user clicks in the status bar.
 	 */
 	public static String freeMemory() {
 		long inUse = currentMemory();
@@ -777,7 +819,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the maximum amount of memory available to ImageJ or zero if ImageJ is unable to determine this limit.
+	 * Returns the maximum amount of memory available to ImageJ or zero if ImageJ is
+	 * unable to determine this limit.
 	 */
 	public static long maxMemory() {
 		if (maxMemory == 0L) {
@@ -819,15 +862,17 @@ public class IJ {
 	}
 
 	/**
-	 * Converts a number to a formatted string using 2 digits to the right of the decimal point.
+	 * Converts a number to a formatted string using 2 digits to the right of the
+	 * decimal point.
 	 */
 	public static String d2s(double n) {
 		return d2s(n, 2);
 	}
 
 	/**
-	 * Converts a number to a rounded formatted string. The 'decimalPlaces' argument specifies the number of digits to the right of the decimal point (0-9). Uses scientific notation if 'decimalPlaces is
-	 * negative.
+	 * Converts a number to a rounded formatted string. The 'decimalPlaces' argument
+	 * specifies the number of digits to the right of the decimal point (0-9). Uses
+	 * scientific notation if 'decimalPlaces is negative.
 	 */
 	public static String d2s(double n, int decimalPlaces) {
 		if (Double.isNaN(n) || Double.isInfinite(n))
@@ -867,8 +912,11 @@ public class IJ {
 	}
 
 	/**
-	 * Converts a number to a rounded formatted string. The 'significantDigits' argument specifies the minimum number of significant digits, which is also the preferred number of digits behind the
-	 * decimal. Fewer decimals are shown if the number would have more than 'maxDigits'. Exponential notation is used if more than 'maxDigits' would be needed.
+	 * Converts a number to a rounded formatted string. The 'significantDigits'
+	 * argument specifies the minimum number of significant digits, which is also
+	 * the preferred number of digits behind the decimal. Fewer decimals are shown
+	 * if the number would have more than 'maxDigits'. Exponential notation is used
+	 * if more than 'maxDigits' would be needed.
 	 */
 	public static String d2s(double x, int significantDigits, int maxDigits) {
 		double log10 = Math.log10(Math.abs(x));
@@ -894,7 +942,9 @@ public class IJ {
 	}
 
 	/**
-	 * Adds the specified class to a Vector to keep it from being garbage collected, which would cause the classes static fields to be reset. Probably not needed with Java 1.2 or later.
+	 * Adds the specified class to a Vector to keep it from being garbage collected,
+	 * which would cause the classes static fields to be reset. Probably not needed
+	 * with Java 1.2 or later.
 	 */
 	public static void register(Class c) {
 		if (ij != null)
@@ -1020,6 +1070,11 @@ public class IJ {
 		return isWin;
 	}
 
+	/** Returns the Java version (6, 7, 8, 9, 10, etc.). */
+	public static int javaVersion() {
+		return javaVersion;
+	}
+
 	/** Always returns true. */
 	public static boolean isJava2() {
 		return true;
@@ -1037,22 +1092,22 @@ public class IJ {
 
 	/** Returns true if ImageJ is running on a Java 1.6 or greater JVM. */
 	public static boolean isJava16() {
-		return isJava16;
+		return javaVersion >= 6;
 	}
 
 	/** Returns true if ImageJ is running on a Java 1.7 or greater JVM. */
 	public static boolean isJava17() {
-		return isJava17;
+		return javaVersion >= 7;
 	}
 
 	/** Returns true if ImageJ is running on a Java 1.8 or greater JVM. */
 	public static boolean isJava18() {
-		return isJava18;
+		return javaVersion >= 8;
 	}
 
 	/** Returns true if ImageJ is running on a Java 1.9 or greater JVM. */
 	public static boolean isJava19() {
-		return isJava19;
+		return javaVersion >= 9;
 	}
 
 	/** Returns true if ImageJ is running on Linux. */
@@ -1073,7 +1128,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays an error message and returns true if the ImageJ version is less than the one specified.
+	 * Displays an error message and returns true if the ImageJ version is less than
+	 * the one specified.
 	 */
 	public static boolean versionLessThan(String version) {
 		boolean lessThan = ImageJ.VERSION.compareTo(version) < 0;
@@ -1083,7 +1139,9 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a "Process all images?" dialog. Returns 'flags'+PlugInFilter.DOES_STACKS if the user selects "Yes", 'flags' if the user selects "No" and PlugInFilter.DONE if the user selects "Cancel".
+	 * Displays a "Process all images?" dialog. Returns
+	 * 'flags'+PlugInFilter.DOES_STACKS if the user selects "Yes", 'flags' if the
+	 * user selects "No" and PlugInFilter.DONE if the user selects "Cancel".
 	 */
 	public static int setupDialog(ImagePlus imp, int flags) {
 		if (imp == null || (ij != null && ij.hotkey)) {
@@ -1113,7 +1171,8 @@ public class IJ {
 			else if (d.yesPressed()) {
 				if (imp.getStack().isVirtual() && ((flags & PlugInFilter.NO_CHANGES) == 0)) {
 					int size = (stackSize * imp.getWidth() * imp.getHeight() * imp.getBytesPerPixel() + 524288) / 1048576;
-					String msg = "Use the Process>Batch>Virtual Stack command\n" + "to process a virtual stack or convert it into a\n" + "normal stack using Image>Duplicate, which\n" + "will require " + size + "MB of additional memory.";
+					String msg = "Use the Process>Batch>Virtual Stack command\n" + "to process a virtual stack or convert it into a\n" + "normal stack using Image>Duplicate, which\n" + "will require "
+							+ size + "MB of additional memory.";
 					error(msg);
 					return PlugInFilter.DONE;
 				}
@@ -1128,7 +1187,8 @@ public class IJ {
 	}
 
 	/**
-	 * Creates a rectangular selection. Removes any existing selection if width or height are less than 1.
+	 * Creates a rectangular selection. Removes any existing selection if width or
+	 * height are less than 1.
 	 */
 	public static void makeRectangle(int x, int y, int width, int height) {
 		if (width <= 0 || height < 0)
@@ -1151,7 +1211,8 @@ public class IJ {
 	}
 
 	/**
-	 * Creates an oval selection. Removes any existing selection if width or height are less than 1.
+	 * Creates an oval selection. Removes any existing selection if width or height
+	 * are less than 1.
 	 */
 	public static void makeOval(int x, int y, int width, int height) {
 		if (width <= 0 || height < 0)
@@ -1213,21 +1274,24 @@ public class IJ {
 	}
 
 	/**
-	 * Sets the display range (minimum and maximum displayed pixel values) of the current image.
+	 * Sets the display range (minimum and maximum displayed pixel values) of the
+	 * current image.
 	 */
 	public static void setMinAndMax(double min, double max) {
 		setMinAndMax(getImage(), min, max, 7);
 	}
 
 	/**
-	 * Sets the display range (minimum and maximum displayed pixel values) of the specified image.
+	 * Sets the display range (minimum and maximum displayed pixel values) of the
+	 * specified image.
 	 */
 	public static void setMinAndMax(ImagePlus img, double min, double max) {
 		setMinAndMax(img, min, max, 7);
 	}
 
 	/**
-	 * Sets the minimum and maximum displayed pixel values on the specified RGB channels, where 4=red, 2=green and 1=blue.
+	 * Sets the minimum and maximum displayed pixel values on the specified RGB
+	 * channels, where 4=red, 2=green and 1=blue.
 	 */
 	public static void setMinAndMax(double min, double max, int channels) {
 		setMinAndMax(getImage(), min, max, channels);
@@ -1245,14 +1309,16 @@ public class IJ {
 	}
 
 	/**
-	 * Resets the minimum and maximum displayed pixel values of the current image to be the same as the min and max pixel values.
+	 * Resets the minimum and maximum displayed pixel values of the current image to
+	 * be the same as the min and max pixel values.
 	 */
 	public static void resetMinAndMax() {
 		resetMinAndMax(getImage());
 	}
 
 	/**
-	 * Resets the minimum and maximum displayed pixel values of the specified image to be the same as the min and max pixel values.
+	 * Resets the minimum and maximum displayed pixel values of the specified image
+	 * to be the same as the min and max pixel values.
 	 */
 	public static void resetMinAndMax(ImagePlus img) {
 		img.resetDisplayRange();
@@ -1260,15 +1326,18 @@ public class IJ {
 	}
 
 	/**
-	 * Sets the lower and upper threshold levels and displays the image using red to highlight thresholded pixels. May not work correctly on 16 and 32 bit images unless the display range has been reset
-	 * using IJ.resetMinAndMax().
+	 * Sets the lower and upper threshold levels and displays the image using red to
+	 * highlight thresholded pixels. May not work correctly on 16 and 32 bit images
+	 * unless the display range has been reset using IJ.resetMinAndMax().
 	 */
 	public static void setThreshold(double lowerThreshold, double upperThresold) {
 		setThreshold(lowerThreshold, upperThresold, null);
 	}
 
 	/**
-	 * Sets the lower and upper threshold levels and displays the image using the specified <code>displayMode</code> ("Red", "Black & White", "Over/Under" or "No Update").
+	 * Sets the lower and upper threshold levels and displays the image using the
+	 * specified <code>displayMode</code> ("Red", "Black & White", "Over/Under" or
+	 * "No Update").
 	 */
 	public static void setThreshold(double lowerThreshold, double upperThreshold, String displayMode) {
 		setThreshold(getImage(), lowerThreshold, upperThreshold, displayMode);
@@ -1280,8 +1349,11 @@ public class IJ {
 	}
 
 	/**
-	 * Sets the lower and upper threshold levels of the specified image and updates the display using the specified <code>displayMode</code> ("Red", "Black & White", "Over/Under" or "No Update"). With
-	 * calibrated images, 'lowerThreshold' and 'upperThreshold' must be density calibrated values. Use setRawThreshold() to set the threshold using raw (uncalibrated) values.
+	 * Sets the lower and upper threshold levels of the specified image and updates
+	 * the display using the specified <code>displayMode</code> ("Red", "Black &
+	 * White", "Over/Under" or "No Update"). With calibrated images,
+	 * 'lowerThreshold' and 'upperThreshold' must be density calibrated values. Use
+	 * setRawThreshold() to set the threshold using raw (uncalibrated) values.
 	 */
 	public static void setThreshold(ImagePlus img, double lowerThreshold, double upperThreshold, String displayMode) {
 		Calibration cal = img.getCalibration();
@@ -1293,7 +1365,8 @@ public class IJ {
 	}
 
 	/**
-	 * This is a version of setThreshold() that always uses raw (uncalibrated) values in the range 0-255 for 8-bit images and 0-65535 for 16-bit images.
+	 * This is a version of setThreshold() that always uses raw (uncalibrated)
+	 * values in the range 0-255 for 8-bit images and 0-65535 for 16-bit images.
 	 */
 	public static void setRawThreshold(ImagePlus img, double lowerThreshold, double upperThreshold, String displayMode) {
 		int mode = ImageProcessor.RED_LUT;
@@ -1391,7 +1464,8 @@ public class IJ {
 	}
 
 	/**
-	 * For IDs less than zero, activates the image with the specified ID. For IDs greater than zero, activates the Nth image.
+	 * For IDs less than zero, activates the image with the specified ID. For IDs
+	 * greater than zero, activates the Nth image.
 	 */
 	public static void selectWindow(int id) {
 		if (id > 0)
@@ -1408,7 +1482,7 @@ public class IJ {
 			Interpreter.activateImage(imp);
 			WindowManager.setWindow(null);
 		} else {
-			if (imp==null)
+			if (imp == null)
 				return;
 			ImageWindow win = imp.getWindow();
 			if (win != null) {
@@ -1515,14 +1589,16 @@ public class IJ {
 	}
 
 	/**
-	 * Switches to the specified tool, where id = Toolbar.RECTANGLE (0), Toolbar.OVAL (1), etc.
+	 * Switches to the specified tool, where id = Toolbar.RECTANGLE (0),
+	 * Toolbar.OVAL (1), etc.
 	 */
 	public static void setTool(int id) {
 		Toolbar.getInstance().setTool(id);
 	}
 
 	/**
-	 * Switches to the specified tool, where 'name' is "rect", "elliptical", "brush", etc. Returns 'false' if the name is not recognized.
+	 * Switches to the specified tool, where 'name' is "rect", "elliptical",
+	 * "brush", etc. Returns 'false' if the name is not recognized.
 	 */
 	public static boolean setTool(String name) {
 		return Toolbar.getInstance().setTool(name);
@@ -1534,15 +1610,19 @@ public class IJ {
 	}
 
 	/**
-	 * Equivalent to clicking on the current image at (x,y) with the wand tool. Returns the number of points in the resulting ROI.
+	 * Equivalent to clicking on the current image at (x,y) with the wand tool.
+	 * Returns the number of points in the resulting ROI.
 	 */
 	public static int doWand(int x, int y) {
 		return doWand(getImage(), x, y, 0, null);
 	}
 
 	/**
-	 * Traces the boundary of the area with pixel values within 'tolerance' of the value of the pixel at the starting location. 'tolerance' is in uncalibrated units. 'mode' can be "4-connected",
-	 * "8-connected" or "Legacy". "Legacy" is for compatibility with previous versions of ImageJ; it is ignored if 'tolerance' > 0.
+	 * Traces the boundary of the area with pixel values within 'tolerance' of the
+	 * value of the pixel at the starting location. 'tolerance' is in uncalibrated
+	 * units. 'mode' can be "4-connected", "8-connected" or "Legacy". "Legacy" is
+	 * for compatibility with previous versions of ImageJ; it is ignored if
+	 * 'tolerance' > 0.
 	 */
 	public static int doWand(int x, int y, double tolerance, String mode) {
 		return doWand(getImage(), x, y, tolerance, mode);
@@ -1594,8 +1674,9 @@ public class IJ {
 	}
 
 	/**
-	 * Sets the transfer mode used by the <i>Edit/Paste</i> command, where mode is "Copy", "Blend", "Average", "Difference", "Transparent", "Transparent2", "AND", "OR", "XOR", "Add", "Subtract",
-	 * "Multiply", or "Divide".
+	 * Sets the transfer mode used by the <i>Edit/Paste</i> command, where mode is
+	 * "Copy", "Blend", "Average", "Difference", "Transparent", "Transparent2",
+	 * "AND", "OR", "XOR", "Add", "Subtract", "Multiply", or "Divide".
 	 */
 	public static void setPasteMode(String mode) {
 		mode = mode.toLowerCase(Locale.US);
@@ -1630,7 +1711,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns a reference to the active image, or displays an error message and aborts the plugin or macro if no images are open.
+	 * Returns a reference to the active image, or displays an error message and
+	 * aborts the plugin or macro if no images are open.
 	 */
 	public static ImagePlus getImage() {
 		ImagePlus img = WindowManager.getCurrentImage();
@@ -1645,7 +1727,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the active image or stack slice as an ImageProcessor, or displays an error message and aborts the plugin or macro if no images are open.
+	 * Returns the active image or stack slice as an ImageProcessor, or displays an
+	 * error message and aborts the plugin or macro if no images are open.
 	 */
 	public static ImageProcessor getProcessor() {
 		ImagePlus imp = IJ.getImage();
@@ -1663,7 +1746,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the ImageJ version and build number as a String, for example "1.46n05", or 1.46n99 if there is no build number.
+	 * Returns the ImageJ version and build number as a String, for example
+	 * "1.46n05", or 1.46n99 if there is no build number.
 	 */
 	public static String getFullVersion() {
 		String build = ImageJ.BUILD;
@@ -1675,9 +1759,13 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the path to the home ("user.home"), startup, ImageJ, plugins, macros, luts, temp, current or image directory if <code>title</code> is "home", "startup", "imagej", "plugins", "macros",
-	 * "luts", "temp", "current", "default", "image", otherwise, displays a dialog and returns the path to the directory selected by the user. Returns null if the specified directory is not found or the
-	 * user cancels the dialog box. Also aborts the macro if the user cancels the dialog box.
+	 * Returns the path to the home ("user.home"), startup, ImageJ, plugins, macros,
+	 * luts, temp, current or image directory if <code>title</code> is "home",
+	 * "startup", "imagej", "plugins", "macros", "luts", "temp", "current",
+	 * "default", "image", otherwise, displays a dialog and returns the path to the
+	 * directory selected by the user. Returns null if the specified directory is
+	 * not found or the user cancels the dialog box. Also aborts the macro if the
+	 * user cancels the dialog box.
 	 */
 	public static String getDirectory(String title) {
 		String title2 = title.toLowerCase(Locale.US);
@@ -1728,7 +1816,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays an open file dialog and returns the path to the choosen file, or returns null if the dialog is canceled.
+	 * Displays an open file dialog and returns the path to the choosen file, or
+	 * returns null if the dialog is canceled.
 	 */
 	public static String getFilePath(String dialogTitle) {
 		OpenDialog od = new OpenDialog(dialogTitle);
@@ -1736,16 +1825,20 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a file open dialog box and then opens the tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text file selected by the user. Displays an error message if the selected file is not in one
-	 * of the supported formats, or if it is not found.
+	 * Displays a file open dialog box and then opens the tiff, dicom, fits, pgm,
+	 * jpeg, bmp, gif, lut, roi, or text file selected by the user. Displays an
+	 * error message if the selected file is not in one of the supported formats, or
+	 * if it is not found.
 	 */
 	public static void open() {
 		open(null);
 	}
 
 	/**
-	 * Opens and displays a tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or text file. Displays an error message if the specified file is not in one of the supported formats, or if it is not found.
-	 * With 1.41k or later, opens images specified by a URL.
+	 * Opens and displays a tiff, dicom, fits, pgm, jpeg, bmp, gif, lut, roi, or
+	 * text file. Displays an error message if the specified file is not in one of
+	 * the supported formats, or if it is not found. With 1.41k or later, opens
+	 * images specified by a URL.
 	 */
 	public static void open(String path) {
 		if (ij == null && Menus.getCommands() == null)
@@ -1769,9 +1862,12 @@ public class IJ {
 	}
 
 	/**
-	 * Opens the specified file as a tiff, bmp, dicom, fits, pgm, gif, jpeg or text image and returns an ImagePlus object if successful. Calls HandleExtraFileTypes plugin if the file type is not
-	 * recognised. Displays a file open dialog if 'path' is null or an empty string. Note that 'path' can also be a URL. Some reader plugins, including the Bio-Formats plugin, display the image and return
-	 * null. Use IJ.open() to display a file open dialog box.
+	 * Opens the specified file as a tiff, bmp, dicom, fits, pgm, gif, jpeg or text
+	 * image and returns an ImagePlus object if successful. Calls
+	 * HandleExtraFileTypes plugin if the file type is not recognised. Displays a
+	 * file open dialog if 'path' is null or an empty string. Note that 'path' can
+	 * also be a URL. Some reader plugins, including the Bio-Formats plugin, display
+	 * the image and return null. Use IJ.open() to display a file open dialog box.
 	 */
 	public static ImagePlus openImage(String path) {
 		return (new Opener()).openImage(path);
@@ -1788,14 +1884,16 @@ public class IJ {
 	}
 
 	/**
-	 * Opens an image using a file open dialog and returns it as an ImagePlus object.
+	 * Opens an image using a file open dialog and returns it as an ImagePlus
+	 * object.
 	 */
 	public static ImagePlus openImage() {
 		return openImage(null);
 	}
 
 	/**
-	 * Opens a URL and returns the contents as a string. Returns "<Error: message>" if there an error, including host or file not found.
+	 * Opens a URL and returns the contents as a string. Returns "<Error: message>"
+	 * if there an error, including host or file not found.
 	 */
 	public static String openUrlAsString(String url) {
 		// if (!trustManagerCreated && url.contains("nih.gov")) trustAllCerts();
@@ -1828,31 +1926,49 @@ public class IJ {
 	}
 
 	/*
-	 * public static void addRootCA() throws Exception { String path = "/Users/wayne/Downloads/Certificates/lets-encrypt-x1-cross-signed.pem"; InputStream fis = new BufferedInputStream(new
-	 * FileInputStream(path)); Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(fis); KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType()); ks.load(null, null);
-	 * ks.setCertificateEntry(Integer.toString(1), ca); TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm() ); tmf.init(ks); SSLContext ctx =
-	 * SSLContext.getInstance("TLS"); ctx.init(null, tmf.getTrustManagers(), null); HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory()); }
+	 * public static void addRootCA() throws Exception { String path =
+	 * "/Users/wayne/Downloads/Certificates/lets-encrypt-x1-cross-signed.pem";
+	 * InputStream fis = new BufferedInputStream(new FileInputStream(path));
+	 * Certificate ca =
+	 * CertificateFactory.getInstance("X.509").generateCertificate(fis); KeyStore ks
+	 * = KeyStore.getInstance(KeyStore.getDefaultType()); ks.load(null, null);
+	 * ks.setCertificateEntry(Integer.toString(1), ca); TrustManagerFactory tmf =
+	 * TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm() );
+	 * tmf.init(ks); SSLContext ctx = SSLContext.getInstance("TLS"); ctx.init(null,
+	 * tmf.getTrustManagers(), null);
+	 * HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory()); }
 	 */
 
 	/*
-	 * // Create a new trust manager that trust all certificates // http://stackoverflow.com/questions/10135074/download-file-from-https- server-using-java private static void trustAllCerts() {
-	 * trustManagerCreated = true; TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() { public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; } public
-	 * void checkClientTrusted (java.security.cert.X509Certificate[] certs, String authType) { } public void checkServerTrusted (java.security.cert.X509Certificate[] certs, String authType) { } } }; //
-	 * Activate the new trust manager try { SSLContext sc = SSLContext.getInstance("SSL"); sc.init(null, trustAllCerts, new java.security.SecureRandom());
-	 * HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory()); } catch (Exception e) { IJ.log(""+e); } }
+	 * // Create a new trust manager that trust all certificates //
+	 * http://stackoverflow.com/questions/10135074/download-file-from-https-
+	 * server-using-java private static void trustAllCerts() { trustManagerCreated =
+	 * true; TrustManager[] trustAllCerts = new TrustManager[] { new
+	 * X509TrustManager() { public java.security.cert.X509Certificate[]
+	 * getAcceptedIssuers() { return null; } public void checkClientTrusted
+	 * (java.security.cert.X509Certificate[] certs, String authType) { } public void
+	 * checkServerTrusted (java.security.cert.X509Certificate[] certs, String
+	 * authType) { } } }; // Activate the new trust manager try { SSLContext sc =
+	 * SSLContext.getInstance("SSL"); sc.init(null, trustAllCerts, new
+	 * java.security.SecureRandom());
+	 * HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory()); } catch
+	 * (Exception e) { IJ.log(""+e); } }
 	 */
 
 	/**
-	 * Saves the current image, lookup table, selection or text window to the specified file path. The path must end in ".tif", ".jpg", ".gif", ".zip", ".raw", ".avi", ".bmp", ".fits", ".pgm", ".png",
-	 * ".lut", ".roi" or ".txt".
+	 * Saves the current image, lookup table, selection or text window to the
+	 * specified file path. The path must end in ".tif", ".jpg", ".gif", ".zip",
+	 * ".raw", ".avi", ".bmp", ".fits", ".pgm", ".png", ".lut", ".roi" or ".txt".
 	 */
 	public static void save(String path) {
 		save(null, path);
 	}
 
 	/**
-	 * Saves the specified image, lookup table or selection to the specified file path. The file path should end with ".tif", ".jpg", ".gif", ".zip", ".raw", ".avi", ".bmp", ".fits", ".pgm", ".png",
-	 * ".lut", ".roi" or ".txt". The specified image is saved in TIFF format if there is no extension.
+	 * Saves the specified image, lookup table or selection to the specified file
+	 * path. The file path should end with ".tif", ".jpg", ".gif", ".zip", ".raw",
+	 * ".avi", ".bmp", ".fits", ".pgm", ".png", ".lut", ".roi" or ".txt". The
+	 * specified image is saved in TIFF format if there is no extension.
 	 */
 
 	public static void save(ImagePlus imp, String path) {
@@ -1877,16 +1993,21 @@ public class IJ {
 	}
 
 	/*
-	 * Saves the active image, lookup table, selection, measurement results, selection XY coordinates or text window to the specified file path. The format argument must be "tiff", "jpeg", "gif", "zip",
-	 * "raw", "avi", "bmp", "fits", "pgm", "png", "text image", "lut", "selection", "measurements", "xy Coordinates" or "text". If <code>path</code> is null or an emply string, a file save dialog is
-	 * displayed.
+	 * Saves the active image, lookup table, selection, measurement results,
+	 * selection XY coordinates or text window to the specified file path. The
+	 * format argument must be "tiff", "jpeg", "gif", "zip", "raw", "avi", "bmp",
+	 * "fits", "pgm", "png", "text image", "lut", "selection", "measurements",
+	 * "xy Coordinates" or "text". If <code>path</code> is null or an emply string,
+	 * a file save dialog is displayed.
 	 */
 	public static void saveAs(String format, String path) {
 		saveAs(null, format, path);
 	}
 
 	/*
-	 * Saves the specified image. The format argument must be "tiff", "jpeg", "gif", "zip", "raw", "avi", "bmp", "fits", "pgm", "png", "text image", "lut", "selection" or "xy Coordinates".
+	 * Saves the specified image. The format argument must be "tiff", "jpeg", "gif",
+	 * "zip", "raw", "avi", "bmp", "fits", "pgm", "png", "text image", "lut",
+	 * "selection" or "xy Coordinates".
 	 */
 	public static void saveAs(ImagePlus imp, String format, String path) {
 		if (format == null)
@@ -1957,8 +2078,9 @@ public class IJ {
 	}
 
 	/**
-	 * Saves the specified image in TIFF format. Displays a file save dialog if 'path' is null or an empty string. Returns 'false' if there is an error or if the user selects "Cancel" in the file save
-	 * dialog.
+	 * Saves the specified image in TIFF format. Displays a file save dialog if
+	 * 'path' is null or an empty string. Returns 'false' if there is an error or if
+	 * the user selects "Cancel" in the file save dialog.
 	 */
 	public static boolean saveAsTiff(ImagePlus imp, String path) {
 		if (imp == null)
@@ -1994,14 +2116,18 @@ public class IJ {
 	}
 
 	/**
-	 * Saves a string as a file. Displays a file save dialog if 'path' is null or blank. Returns an error message if there is an exception, otherwise returns null.
+	 * Saves a string as a file. Displays a file save dialog if 'path' is null or
+	 * blank. Returns an error message if there is an exception, otherwise returns
+	 * null.
 	 */
 	public static String saveString(String string, String path) {
 		return write(string, path, false);
 	}
 
 	/**
-	 * Appends a string to the end of a file. A newline character ("\n") is added to the end of the string before it is written. Returns an error message if there is an exception, otherwise returns null.
+	 * Appends a string to the end of a file. A newline character ("\n") is added to
+	 * the end of the string before it is written. Returns an error message if there
+	 * is an exception, otherwise returns null.
 	 */
 	public static String append(String string, String path) {
 		return write(string + "\n", path, true);
@@ -2027,8 +2153,9 @@ public class IJ {
 	}
 
 	/**
-	 * Opens a text file as a string. Displays a file open dialog if path is null or blank. Returns null if the user cancels the file open dialog. If there is an error, returns a message in the form
-	 * "Error: message".
+	 * Opens a text file as a string. Displays a file open dialog if path is null or
+	 * blank. Returns null if the user cancels the file open dialog. If there is an
+	 * error, returns a message in the form "Error: message".
 	 */
 	public static String openAsString(String path) {
 		if (path == null || path.equals("")) {
@@ -2080,8 +2207,10 @@ public class IJ {
 	}
 
 	/**
-	 * Creates a new imagePlus. <code>Type</code> should contain "8-bit", "16-bit", "32-bit" or "RGB". In addition, it can contain "white", "black" or "ramp". <code>Width</code> and <code>height</code>
-	 * specify the width and height of the image in pixels. <code>Depth</code> specifies the number of stack slices.
+	 * Creates a new imagePlus. <code>Type</code> should contain "8-bit", "16-bit",
+	 * "32-bit" or "RGB". In addition, it can contain "white", "black" or "ramp".
+	 * <code>Width</code> and <code>height</code> specify the width and height of
+	 * the image in pixels. <code>Depth</code> specifies the number of stack slices.
 	 */
 	public static ImagePlus createImage(String title, String type, int width, int height, int depth) {
 		type = type.toLowerCase(Locale.US);
@@ -2113,7 +2242,9 @@ public class IJ {
 	 * @param title
 	 *            image name
 	 * @param type
-	 *            "8-bit", "16-bit", "32-bit" or "RGB". May also contain "white" , "black" (the default), "ramp", "composite-mode", "color-mode", "grayscale-mode or "label".
+	 *            "8-bit", "16-bit", "32-bit" or "RGB". May also contain "white" ,
+	 *            "black" (the default), "ramp", "composite-mode", "color-mode",
+	 *            "grayscale-mode or "label".
 	 * @param width
 	 *            image width in pixels
 	 * @param height
@@ -2173,8 +2304,10 @@ public class IJ {
 	}
 
 	/**
-	 * Opens a new image. <code>Type</code> should contain "8-bit", "16-bit", "32-bit" or "RGB". In addition, it can contain "white", "black" or "ramp". <code>Width</code> and <code>height</code> specify
-	 * the width and height of the image in pixels. <code>Depth</code> specifies the number of stack slices.
+	 * Opens a new image. <code>Type</code> should contain "8-bit", "16-bit",
+	 * "32-bit" or "RGB". In addition, it can contain "white", "black" or "ramp".
+	 * <code>Width</code> and <code>height</code> specify the width and height of
+	 * the image in pixels. <code>Depth</code> specifies the number of stack slices.
 	 */
 	public static void newImage(String title, String type, int width, int height, int depth) {
 		ImagePlus imp = createImage(title, type, width, height, depth);
@@ -2186,14 +2319,16 @@ public class IJ {
 	}
 
 	/**
-	 * Returns true if the <code>Esc</code> key was pressed since the last ImageJ command started to execute or since resetEscape() was called.
+	 * Returns true if the <code>Esc</code> key was pressed since the last ImageJ
+	 * command started to execute or since resetEscape() was called.
 	 */
 	public static boolean escapePressed() {
 		return escapePressed;
 	}
 
 	/**
-	 * This method sets the <code>Esc</code> key to the "up" position. The Executer class calls this method when it runs an ImageJ command in a separate thread.
+	 * This method sets the <code>Esc</code> key to the "up" position. The Executer
+	 * class calls this method when it runs an ImageJ command in a separate thread.
 	 */
 	public static void resetEscape() {
 		escapePressed = false;
@@ -2208,7 +2343,8 @@ public class IJ {
 	}
 
 	/**
-	 * Set 'true' and IJ.error() output will be temporarily redirected to the "Log" window.
+	 * Set 'true' and IJ.error() output will be temporarily redirected to the "Log"
+	 * window.
 	 */
 	public static void redirectErrorMessages(boolean redirect) {
 		redirectErrorMessages = redirect;
@@ -2216,7 +2352,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the state of the 'redirectErrorMessages' flag, which is set by File/Import/Image Sequence.
+	 * Returns the state of the 'redirectErrorMessages' flag, which is set by
+	 * File/Import/Image Sequence.
 	 */
 	public static boolean redirectingErrorMessages() {
 		return redirectErrorMessages;
@@ -2228,7 +2365,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the class loader ImageJ uses to run plugins or the system class loader if Menus.getPlugInsPath() returns null.
+	 * Returns the class loader ImageJ uses to run plugins or the system class
+	 * loader if Menus.getPlugInsPath() returns null.
 	 */
 	public static ClassLoader getClassLoader() {
 		if (classLoader == null) {
@@ -2278,7 +2416,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns, as an array of strings, a list of the LUTs in the Image/Lookup Tables menu.
+	 * Returns, as an array of strings, a list of the LUTs in the Image/Lookup
+	 * Tables menu.
 	 */
 	public static String[] getLuts() {
 		ArrayList list = new ArrayList();
@@ -2314,7 +2453,8 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a stack trace. Use the setExceptionHandler method() to override with a custom exception handler.
+	 * Displays a stack trace. Use the setExceptionHandler method() to override with
+	 * a custom exception handler.
 	 */
 	public static void handleException(Throwable e) {
 		if (exceptionHandler != null) {
@@ -2335,7 +2475,8 @@ public class IJ {
 	}
 
 	/**
-	 * Installs a custom exception handler that overrides the handleException() method.
+	 * Installs a custom exception handler that overrides the handleException()
+	 * method.
 	 */
 	public static void setExceptionHandler(ExceptionHandler handler) {
 		exceptionHandler = handler;
@@ -2365,7 +2506,8 @@ public class IJ {
 	}
 
 	/**
-	 * Adds a key-value pair to IJ.properties. The key and value are removed if 'value' is null.
+	 * Adds a key-value pair to IJ.properties. The key and value are removed if
+	 * 'value' is null.
 	 */
 	public static void setProperty(String key, Object value) {
 		if (properties == null)
@@ -2377,7 +2519,8 @@ public class IJ {
 	}
 
 	/**
-	 * Returns the object in IJ.properties associated with 'key', or null if 'key' is not found.
+	 * Returns the object in IJ.properties associated with 'key', or null if 'key'
+	 * is not found.
 	 */
 	public static Object getProperty(String key) {
 		if (properties == null)

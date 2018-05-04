@@ -229,7 +229,9 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			IJ.log("ImageCanvas.paint: " + imp);
 		painted = true;
 		Roi roi = imp.getRoi();
-		if (roi != null || overlay != null || showAllOverlay != null || Prefs.paintDoubleBuffered) {
+		if (roi != null || overlay != null || showAllOverlay != null || Prefs.paintDoubleBuffered || (IJ.isLinux() && magnification < 0.25)) {
+			// Use double buffering to avoid flickering of ROIs and to work around
+			// a Linux problem with large images not showing at low magnification.
 			if (roi != null)
 				roi.updatePaste();
 			if (imageWidth != 0) {

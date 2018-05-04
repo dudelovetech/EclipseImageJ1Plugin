@@ -92,8 +92,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version
 	 * string.
 	 */
-	public static final String VERSION = "1.52a";
-	public static final String BUILD = "59";
+	public static final String VERSION = "1.52b";
+	public static final String BUILD = "25";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -226,9 +226,10 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			// setVisible(true);
 			/*
 			 * Dimension size = getSize(); if (size!=null) { if (IJ.debugMode)
-			 * IJ.log("size: "+size); if (IJ.isWindows() && size.height>108) { // workaround
-			 * for IJ window layout and FileDialog freeze problems with Windows 10 Creators
-			 * Update IJ.wait(10); pack(); if (IJ.debugMode) IJ.log("pack()"); if
+			 * IJ.log("size: "+size); if (IJ.isWindows() &&
+			 * (size.height>108||IJ.javaVersion()>=10)) { { // workaround for IJ window
+			 * layout and FileDialog freeze problems with Windows 10 Creators Update
+			 * IJ.wait(10); pack(); if (IJ.debugMode) IJ.log("pack()"); if
 			 * (!Prefs.jFileChooserSettingChanged) Prefs.useJFileChooser = true; } else if
 			 * (IJ.isMacOSX()) { Rectangle maxBounds = GUI.getMaxWindowBounds(); if
 			 * (loc.x+size.width>maxBounds.x+maxBounds.width) setLocation(loc.x, loc.y); }
@@ -578,12 +579,14 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				return;
 			case KeyEvent.VK_BACK_SPACE:
 			case KeyEvent.VK_DELETE:
-				if (deleteOverlayRoi(imp))
-					return;
-				if (imp != null && imp.getOverlay() != null && imp == GelAnalyzer.getGelImage())
-					return;
-				cmd = "Clear";
-				hotkey = true;
+				if (!(shift || control || alt || meta)) {
+					if (deleteOverlayRoi(imp))
+						return;
+					if (imp != null && imp.getOverlay() != null && imp == GelAnalyzer.getGelImage())
+						return;
+					cmd = "Clear";
+					hotkey = true;
+				}
 				break;
 			// case KeyEvent.VK_BACK_SLASH:
 			// cmd=IJ.altKeyDown()?"Animation Options...":"Start Animation";
@@ -655,7 +658,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					full = null;
 					root.add(currentPanel);
 					root.validate();
-				} 
+				}
 				return;
 			/* Changed for Bio7! */
 			case KeyEvent.VK_F2:
@@ -683,7 +686,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 			}
 		}
 	}
- 
+
 	/* Changed for Bio7! */
 	public void setFullScreen() {
 		currentPanel = CanvasView.getCurrent();
