@@ -1371,7 +1371,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		} else {
 			if (pfr != null) // prepare preview (not in macro mode): tell the PlugInFilterRunner to listen
 				pfr.setDialog(this);
-			Panel buttons = new Panel();
+			JPanel buttons = new JPanel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new Button(cancelLabel);
 			cancel.addActionListener(this);
