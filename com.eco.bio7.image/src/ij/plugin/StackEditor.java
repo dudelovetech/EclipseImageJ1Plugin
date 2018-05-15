@@ -280,7 +280,12 @@ public class StackEditor implements PlugIn {
 
 	public void convertStackToImages(ImagePlus imp) {
 		if (nSlices < 2) {
-			IJ.error("\"Convert Stack to Images\" requires a stack");
+			IJ.wait(500);
+			imp = IJ.getImage();
+			nSlices = imp.getStackSize();
+		}
+		if (nSlices < 2) {
+			IJ.error("\"Convert Stack to Images\" requires a stack\n" + imp);
 			return;
 		}
 		if (!imp.lock())
