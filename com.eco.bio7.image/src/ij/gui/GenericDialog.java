@@ -47,7 +47,7 @@ import ij.macro.*;
  * when the dialog is displayed. For example, change the checkbox labels "Show
  * Quality" and "Show Residue" to "Show_Quality" and "Show_Residue".
  */
-public class GenericDialog extends JDialog implements ActionListener, TextListener, FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener, ComponentListener {
+public class GenericDialog extends Dialog implements ActionListener, TextListener, FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener, ComponentListener {
 
 	protected Vector numberField, stringField, checkbox, choice, slider, radioButtonGroups;
 	protected TextArea textArea1, textArea2;
@@ -463,7 +463,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	 *            http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int nRows = headings != null ? rows + 1 : rows;
 		panel.setLayout(new GridLayout(nRows, columns, 6, 0));
 		int startCBIndex = cbIndex;
@@ -539,7 +539,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	 */
 	public void addRadioButtonGroup(String label, String[] items, int rows, int columns, String defaultItem) {
 		addToSameRow = false;
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int n = items.length;
 		panel.setLayout(new GridLayout(rows, columns, 0, 0));
 		CheckboxGroup cg = new CheckboxGroup();
@@ -680,7 +680,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 	public void addTextAreas(String text1, String text2, int rows, int columns) {
 		if (textArea1 != null)
 			return;
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		Font font = new Font("SansSerif", Font.PLAIN, 14);
 		textArea1 = new TextArea(text1, rows, columns, TextArea.SCROLLBARS_NONE);
 		if (IJ.isLinux())
@@ -1712,7 +1712,7 @@ public class GenericDialog extends JDialog implements ActionListener, TextListen
 		}
 	}
 
-	public void paint(Graphics g) {
+	public void paintComponents(Graphics g) {
 		super.paint(g);
 		if (firstPaint && IJ.isMacOSX() && IJ.isJava18()) {
 			IJ.wait(25);
