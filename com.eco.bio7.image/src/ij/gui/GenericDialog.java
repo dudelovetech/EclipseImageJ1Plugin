@@ -132,6 +132,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (font != null) {
 			setFont(Util.getOSFontToAwt());
 		}
+		/* Changed for Bio7! AWT must be colored per component. All JPanels will get the SWT background
+		 * from the definition of the CanvasView (UIManager)! */
 		if (Util.getOS().equals("Linux")) {
 			setBackground(Util.getSWTBackgroundToAWT());
 		}
