@@ -1712,7 +1712,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		}
 	}
 
-	public void paintComponents(Graphics g) {
+	public void paint(Graphics g) {
 		super.paint(g);
 		if (firstPaint && IJ.isMacOSX() && IJ.isJava18()) {
 			IJ.wait(25);
