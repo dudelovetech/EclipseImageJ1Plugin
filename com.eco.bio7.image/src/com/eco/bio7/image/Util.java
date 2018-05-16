@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -86,7 +87,7 @@ public class Util {
 
 				/* Font size correction! */
 
-				awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize+fontSizeCorrection);
+				awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize + fontSizeCorrection);
 			}
 		});
 
@@ -101,6 +102,25 @@ public class Util {
 			public void run() {
 
 				org.eclipse.swt.graphics.Color colswt = CanvasView.getCanvas_view().getParent2().getBackground();
+				int r = colswt.getRed();
+				int g = colswt.getGreen();
+				int b = colswt.getBlue();
+				col = new Color(r, g, b);
+
+			}
+		});
+		return col;
+
+	}
+
+	public static Color getSWTBackgroundToAWT(Composite parent) {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+
+				org.eclipse.swt.graphics.Color colswt = parent.getBackground();
 				int r = colswt.getRed();
 				int g = colswt.getGreen();
 				int b = colswt.getBlue();
