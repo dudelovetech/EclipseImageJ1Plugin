@@ -132,7 +132,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (font != null) {
 			setFont(Util.getOSFontToAwt());
 		}
-		// setBackground(Util.getSWTBackgroundToAWT());
+		if (Util.getOS().equals("Linux")) {
+			setBackground(Util.getSWTBackgroundToAWT());
+		}
 	}
 
 	/**
@@ -858,24 +860,23 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	/** Adds a Panel to the dialog. */
 	/** Adds a Panel to the dialog. */
-    public void addPanel(Panel panel) {
-    	addPanel(panel, GridBagConstraints.WEST, addToSameRow ? c.insets : getInsets(5,0,0,0));
-    }
+	public void addPanel(Panel panel) {
+		addPanel(panel, GridBagConstraints.WEST, addToSameRow ? c.insets : getInsets(5, 0, 0, 0));
+	}
 
 	/*
 	 * public void addPanel(Panel panel) { addPanel(panel , GridBagConstraints.WEST,
 	 * new Insets(5, 0, 0, 0)); }
 	 */
 	// extra method to avoid plugin mistake
-	/*public void addPanel(Panel panel) {
-		JPanel panel2 = new JPanel();
-		Component[] comp = panel.getComponents();
-		for (int i = 0; i < comp.length; i++) {
-			panel2.add(comp[i]);
-		}
-
-		addPanel(panel, GridBagConstraints.WEST, addToSameRow ? c.insets : getInsets(5, 0, 0, 0));
-	}*/
+	/*
+	 * public void addPanel(Panel panel) { JPanel panel2 = new JPanel(); Component[]
+	 * comp = panel.getComponents(); for (int i = 0; i < comp.length; i++) {
+	 * panel2.add(comp[i]); }
+	 * 
+	 * addPanel(panel, GridBagConstraints.WEST, addToSameRow ? c.insets :
+	 * getInsets(5, 0, 0, 0)); }
+	 */
 
 	/* Changed for Bio7! -> Extra method for plugins! */
 	public void addPanel(Panel panel, int constraints, Insets insets) {
