@@ -222,7 +222,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (units == null || units.equals("")) {
 			add(tf, c);
 		} else {
-			Panel panel = new Panel();
+			JPanel panel = new JPanel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			panel.add(tf);
 			panel.add(new Label(" " + units));
@@ -507,7 +507,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				if (Recorder.record || macro)
 					saveLabel(cb, labels[i1]);
 				if (IJ.isLinux()) {
-					Panel panel2 = new Panel();
+					JPanel panel2 = new JPanel();
 					panel2.setLayout(new BorderLayout());
 					panel2.add("West", cb);
 					panel.add(panel2);
@@ -826,7 +826,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		tf.setEditable(true);
 		firstSlider = false;
 
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		GridBagLayout pgrid = new GridBagLayout();
 		GridBagConstraints pc = new GridBagConstraints();
 		panel.setLayout(pgrid);
