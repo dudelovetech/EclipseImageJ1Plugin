@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Vector;
 
+import javax.swing.JPanel;
+
 /** This plugin implements the File/Batch/Macro and File/Batch/Virtual Stack commands. */
 	public class BatchProcessor implements PlugIn, ActionListener, ItemListener, Runnable {
 		private static final String MACRO_FILE_NAME = "BatchMacro.ijm";
@@ -269,7 +271,7 @@ import java.util.Vector;
 	}
 
 	void addPanels(GenericDialog gd) {
-		Panel p = new Panel();
+		JPanel p = new JPanel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		if (virtualStack==null) {
 			input = new Button("Input...");
@@ -279,7 +281,7 @@ import java.util.Vector;
 			p.add(inputDir);
 			gd.addPanel(p);
 		}
-		p = new Panel();
+		p = new JPanel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		output = new Button("Output...");
 		output.addActionListener(this);
@@ -290,7 +292,7 @@ import java.util.Vector;
 	}
 	
 	void addButtons(GenericDialog gd) {
-		Panel p = new Panel();
+		JPanel p = new JPanel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		test = new Button("Test");
 		test.addActionListener(this);
