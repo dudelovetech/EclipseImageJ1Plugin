@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.IJTabs;
 
 import ij.process.*;
 import ij.io.*;
@@ -754,6 +755,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		if (newStackSize > 1 && !(win instanceof StackWindow)) {
 			if (isDisplayedHyperStack())
 				setOpenAsHyperStack(true);
+			/*Changed for Bio7!*/
+			IJTabs.hideTab();
 			win = new StackWindow(this, getCanvas()); // replaces this window
 			setPosition(1, 1, 1);
 			if (Interpreter.getInstance() != null)
@@ -761,6 +764,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		} else if (newStackSize > 1 && invalidDimensions) {
 			if (isDisplayedHyperStack())
 				setOpenAsHyperStack(true);
+			/*Changed for Bio7!*/
+			IJTabs.hideTab();
 			win = new StackWindow(this); // replaces this window
 			setPosition(1, 1, 1);
 		} else if (dimensionsChanged || sliderChange) {
