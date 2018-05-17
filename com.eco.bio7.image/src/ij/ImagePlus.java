@@ -756,7 +756,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			if (isDisplayedHyperStack())
 				setOpenAsHyperStack(true);
 			/*Changed for Bio7!*/
-			IJTabs.hideTab();
+			//IJTabs.hideTab();
 			win = new StackWindow(this, getCanvas()); // replaces this window
 			setPosition(1, 1, 1);
 			if (Interpreter.getInstance() != null)
@@ -765,7 +765,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			if (isDisplayedHyperStack())
 				setOpenAsHyperStack(true);
 			/*Changed for Bio7!*/
-			IJTabs.hideTab();
+			//IJTabs.hideTab();
 			win = new StackWindow(this); // replaces this window
 			setPosition(1, 1, 1);
 		} else if (dimensionsChanged || sliderChange) {
