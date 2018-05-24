@@ -1,12 +1,12 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.52c (1.52c11):
+### New in 1.52c (1.52c12):
 
-1. Updated to ImageJ 1.52c (1.52c11)
+1. Updated to ImageJ 1.52c (1.52c12)
 2. Updated ImageJ2 libraries (pom-scijava 20.0.0)
 3. Added recent macro API commands to code completion
-4. Fixed some minor bugs (hoover offset, etc.)
+4. Fixed some minor bugs (hoover offset, Linux awt dialogs etc.)
 
 ### New in 1.51u (1.51u54):
 
