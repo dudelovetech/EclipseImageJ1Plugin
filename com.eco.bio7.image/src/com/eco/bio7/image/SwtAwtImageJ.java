@@ -15,6 +15,8 @@ import java.util.Vector;
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+
+import org.eclipse.albireo.internal.AwtDialogListener;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -100,6 +102,7 @@ public class SwtAwtImageJ {
 			/* Add SWT_AWT to embed the ImageJ canvas! */
 
 			Display dis = Util.getDisplay();
+			//new AwtDialogListener(Util.getDisplay());
 			if (Util.getOS().equals("Mac")) {
 				/*On Mac we have to use async else we get no keyboard focus!
 				 *We also have to change the StackEditor for Mac to avoid a deadlock when converting a stack
@@ -142,7 +145,6 @@ public class SwtAwtImageJ {
 		// ImageWindow and the Image!!
 		ci.setText(title);
 		ci.isShowing();
-
 		top = new Composite(CanvasView.tabFolder, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 		try {
 			System.setProperty("sun.awt.noerasebackground", "true");
