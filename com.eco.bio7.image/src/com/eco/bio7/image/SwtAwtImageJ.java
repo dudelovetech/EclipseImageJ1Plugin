@@ -151,7 +151,7 @@ public class SwtAwtImageJ {
 		ci.setControl(top);
 
 		frame = SWT_AWT.new_Frame(top);
-		SwtAwt.setSwtAwtFocus(frame, top);
+		//SwtAwt.setSwtAwtFocus(frame, top);
 		panel = new JApplet() {
 			public void update(java.awt.Graphics g) {
 				// Do not erase the background
