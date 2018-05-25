@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2013 M. Austenfeld
+ * Copyright (c) 2004-2018 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,7 +23,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -50,7 +49,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -62,10 +60,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import com.eco.bio7.ImageJPluginActions.ImageJHelp;
 import com.eco.bio7.ImageJPluginActions.ImageJAnalyzeAction;
 import com.eco.bio7.ImageJPluginActions.ImageJEditAction;
 import com.eco.bio7.ImageJPluginActions.ImageJFileAction;
+import com.eco.bio7.ImageJPluginActions.ImageJHelp;
 import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
@@ -291,7 +289,7 @@ public class CanvasView extends ViewPart {
 				}
 			}
 		});
-		Display display = Display.getDefault();
+		//Display display = Display.getDefault();
 		this.parent2 = parent;
 
 		new ImageJ();

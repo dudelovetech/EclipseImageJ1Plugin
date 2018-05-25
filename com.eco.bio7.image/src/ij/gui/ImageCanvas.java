@@ -20,7 +20,6 @@ import java.awt.geom.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 
-
 import com.eco.bio7.image.CanvasView;
 
 /** This is a Canvas used to display images in a Window. */
@@ -1298,8 +1297,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			setDrawingColor(ox, oy, IJ.altKeyDown());
 			break;
 		case Toolbar.WAND:
-			Roi roi = imp.getRoi();
 			double tolerance = WandToolOptions.getTolerance();
+			Roi roi = imp.getRoi();
 			if (roi != null && (tolerance == 0.0 || imp.isThreshold()) && roi.contains(ox, oy)) {
 				Rectangle r = roi.getBounds();
 				if (r.width == imageWidth && r.height == imageHeight)
@@ -1429,8 +1428,9 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		int ox = offScreenX(sx);
 		int oy = offScreenY(sy);
 		Roi roi = imp.getRoi();
+		int tool = Toolbar.getToolId();
 		int handle = roi != null ? roi.isHandle(sx, sy) : -1;
-		boolean multiPointMode = roi != null && (roi instanceof PointRoi) && handle == -1 && Toolbar.getToolId() == Toolbar.POINT && Toolbar.getMultiPointMode();
+		boolean multiPointMode = roi != null && (roi instanceof PointRoi) && handle == -1 && tool == Toolbar.POINT && Toolbar.getMultiPointMode();
 		if (multiPointMode) {
 			double oxd = offScreenXD(sx);
 			double oyd = offScreenYD(sy);
@@ -1450,6 +1450,17 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			imp.setRoi(roi);
 			return;
 		}
+
+		if (roi != null && (roi instanceof PointRoi) && ((PointRoi) roi).promptBeforeDeleting()) {
+			int npoints = ((PolygonRoi) roi).getNCoordinates();
+			int counters = ((PointRoi) roi).getNCounters();
+			if (handle == -1 && !(tool == Toolbar.POINT && !Toolbar.getMultiPointMode() && IJ.shiftKeyDown())) {
+				String msg = "Delete this multi-point selection (" + npoints + " points, " + counters + " counter" + (counters > 1 ? "s" : "") + ")?";
+				if (!IJ.showMessageWithCancel("Delete Points?", msg + "\nRestore using Edit>Selection>Restore Selection."))
+					return;
+			}
+		}
+
 		setRoiModState(e, roi, handle);
 		if (roi != null) {
 			if (handle >= 0) {
@@ -1473,7 +1484,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			}
 			if ((type == Roi.POLYGON || type == Roi.POLYLINE || type == Roi.ANGLE) && roi.getState() == roi.CONSTRUCTING)
 				return;
-			int tool = Toolbar.getToolId();
+
 			if ((tool == Toolbar.POLYGON || tool == Toolbar.POLYLINE || tool == Toolbar.ANGLE) && !(IJ.shiftKeyDown() || IJ.altKeyDown())) {
 				imp.deleteRoi();
 				return;
