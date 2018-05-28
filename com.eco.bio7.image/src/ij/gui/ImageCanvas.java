@@ -1821,7 +1821,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 			IJ.getInstance().doCommand("In [+]");
 
-		} else {
+		} else { 
 
 			IJ.getInstance().doCommand("Out [-]");
 
