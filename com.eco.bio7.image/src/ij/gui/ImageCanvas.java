@@ -1816,7 +1816,6 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	/* Changed for Bio7! */
 	public void mouseWheelMoved(MouseWheelEvent evt) {
 		double w = evt.getPreciseWheelRotation();
-		System.out.println(w);
 		if (w > 0) { 
 
 			IJ.getInstance().doCommand("In [+]");
