@@ -20,8 +20,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -250,6 +252,27 @@ public class Util {
 			return window.getShell();
 		}
 		return null;
+	}
+
+	/**
+	 * A method to get the dpi of the display.
+	 * 
+	 * @return the dpi as type Point.
+	 */
+	public static Point getDpi() {
+		Display dis = getDisplay();
+		return dis.getDPI();
+	}
+
+	/**
+	 * A method to return the primary monitor zoom.
+	 * 
+	 * @return the zoom value as integer.
+	 */
+	public static int getZoom() {
+		Display dis = getDisplay();
+		Monitor primary = dis.getPrimaryMonitor();
+		return primary.getZoom();
 	}
 
 	/**
