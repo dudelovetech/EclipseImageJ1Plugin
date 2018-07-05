@@ -83,7 +83,7 @@ public class ScriptCodeScanner extends RuleBasedScanner {
 		RGB rgbkey7 = PreferenceConverter.getColor(store, "colourkey7");
 		RGB rgbkey8 = PreferenceConverter.getColor(store, "colourkey8");
 		
-	
+	 
 		
 
 		keyword = new Token(new TextAttribute(provider.getColor(rgbkey), null, isBold("BOLD_COLOURKEY")));
