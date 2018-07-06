@@ -28,6 +28,7 @@ import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.CustomDetachedImageJView;
 import com.eco.bio7.image.Fullscreen;
 import com.eco.bio7.image.IJTabs;
+import com.eco.bio7.image.Util;
 
 /**
  * This frame is the main ImageJ class.
@@ -193,6 +194,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusBar.setForeground(Color.black);
 		statusBar.setBackground(getSystemColour());// Changed for Bio7!
 		statusLine = new JLabel();
+		// Changed for Bio7!
+		if (Util.isThemeBlack()) {
+			statusLine.setForeground(Color.white);
+		} else {
+			statusLine.setForeground(Color.black);
+		}
 		statusLine.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		statusLine.addKeyListener(this);
 		statusLine.addMouseListener(this);

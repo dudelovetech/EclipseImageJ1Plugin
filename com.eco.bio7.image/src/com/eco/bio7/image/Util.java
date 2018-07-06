@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -28,11 +27,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 /**
  * A utility class for the ImageJ plugin.
@@ -349,6 +348,24 @@ public class Util {
 				lock.unlock();
 			}
 		}
+	}
+	
+	public static boolean isThemeBlack() {
+		boolean themeBlack = false;
+		if (ThemeHelper.getEngine().getActiveTheme() != null) {
+			String activeTheme = ThemeHelper.getEngine().getActiveTheme().getId();
+			/*
+			 * We use a black style if the CSS is the dark theme or the darkest dark theme!
+			 */
+			if (activeTheme.equals("org.eclipse.e4.ui.css.theme.e4_dark") || activeTheme.equals("com.genuitec.eclipse.themes.dark")) {
+
+				
+
+				themeBlack = true;
+
+			} 
+		}
+		return themeBlack;
 	}
 
 }

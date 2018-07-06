@@ -126,8 +126,9 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="com.eco.bio7.albireo" version="2.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.model.workbench"/>
       <import plugin="org.eclipse.e4.ui.workbench"/>
-      <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.e4.ui.css.swt.theme"/>
    </requires>
 
    <plugin

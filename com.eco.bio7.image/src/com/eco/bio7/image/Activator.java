@@ -19,6 +19,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
+	
+	// The plug-in ID
+	public static final String PLUGIN_ID = "com.eco.bio7.image";
 
 	// The shared instance.
 	public static Activator plugin;
