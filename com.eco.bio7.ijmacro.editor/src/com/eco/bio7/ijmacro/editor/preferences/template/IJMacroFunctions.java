@@ -355,6 +355,7 @@ public class IJMacroFunctions {
 			"Roi.contains(x, y)####Returns \"1\" if the point x,y is inside the current selection or \"0\" if it is not. Aborts the macro if there is no selection. Requires 1.49h. See also: selectionContains."+linSeparator + 
 			"Roi.getBounds(x, y, width, height)####Returns the location and size of the selection's bounding rectangle."+linSeparator + 
 			"Roi.getCoordinates(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates that define this selection."+linSeparator + 
+			"Roi.getContainedPoints(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates of the pixels inside the current selection. Aborts the macro if there is no selection."+linSeparator + 
 			"Roi.getDefaultColor####Returns the current default selection color."+linSeparator + 
 			"Roi.getStrokeColor####Returns the selection stroke color."+linSeparator + 
 			"Roi.getFillColor####Returns the selection fill color."+linSeparator + 
