@@ -515,7 +515,9 @@ public class IJMacroFunctions {
 			"Table.get(columnName, rowIndex)####Returns a numeric value."+linSeparator + 
 			"Table.getColumn(columnName)####Returns a column as an array."+linSeparator + 
 			"Table.getString(columnName, rowIndex)####Returns a string value."+linSeparator + 
+			"Table.set(columnName, rowIndex, value)####Sets numeric or string value.\r\n" +
 			"Table.set(columnName, rowIndex, value)####Sets numeric or string value.\r\n" + 
+			"Table.setColumn(columnName, array)####Sets an array as a column."+linSeparator + 
 			"Table.update()####Updates table window."+linSeparator + 
 			"Table.applyMacro(macro)####Applies macro code to table."+linSeparator + 
 			"Table.rename(title1, title2)####Renames a table."+linSeparator + 
