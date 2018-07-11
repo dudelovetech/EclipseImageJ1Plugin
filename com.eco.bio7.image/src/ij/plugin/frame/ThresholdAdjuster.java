@@ -2,6 +2,9 @@ package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+
+import javax.swing.JPanel;
+
 import ij.*;
 import ij.plugin.*;
 import ij.process.*;
@@ -42,7 +45,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 	int sliderRange = 256;
 	boolean doAutoAdjust,doReset,doApplyLut,doStateChange,doSet;
 	
-	Panel panel;
+	JPanel panel;
 	Button autoB, resetB, applyB, setB;
 	int previousImageID;
 	int previousImageType;
@@ -172,7 +175,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		maxLabel.addKeyListener(this);
 				
 		// choices
-		panel = new Panel();
+		panel = new JPanel();
 		methodChoice = new Choice();
 		for (int i=0; i<methodNames.length; i++)
 			methodChoice.addItem(methodNames[i]);
@@ -196,7 +199,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 		add(panel, c);
 
 		// checkboxes
-		panel = new Panel();
+		panel = new JPanel();
 		boolean db = Prefs.get(DARK_BACKGROUND, Prefs.blackBackground?true:false);
         darkBackground = new Checkbox("Dark background");
         darkBackground.setState(db);
@@ -214,7 +217,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 
 		// buttons
 		int trim = IJ.isMacOSX()?11:0;
-		panel = new Panel();
+		panel = new JPanel();
 		autoB = new TrimmedButton("Auto",trim);
 		autoB.addActionListener(this);
 		autoB.addKeyListener(ij);

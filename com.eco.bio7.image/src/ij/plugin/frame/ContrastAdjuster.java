@@ -2,6 +2,9 @@ package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+
+import javax.swing.JPanel;
+
 import ij.*;
 import ij.plugin.*;
 import ij.process.*;
@@ -32,7 +35,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 	int sliderRange = 256;
 	boolean doAutoAdjust,doReset,doSet,doApplyLut;
 	
-	Panel panel, tPanel;
+	JPanel panel, tPanel;
 	Button autoB, resetB, setB, applyB;
 	int previousImageID;
 	int previousType;
@@ -104,7 +107,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 		// min and max labels
 		
 		if (!windowLevel) {
-			panel = new Panel();
+			panel = new JPanel();
 			c.gridy = y++;
 			c.insets = new Insets(0, 10, 0, 10);
 			gridbag.setConstraints(panel, c);
@@ -196,7 +199,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 	
 		// buttons
 		int trim = IJ.isMacOSX()?20:0;
-		panel = new Panel();
+		panel = new JPanel();
 		panel.setLayout(new GridLayout(0,2, 0, 0));
 		autoB = new TrimmedButton("Auto",trim);
 		autoB.addActionListener(this);
@@ -248,7 +251,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable,
 
 	void addLabel(String text, Label label2) {
 		if (label2==null&&IJ.isMacOSX()) text += "    ";
-		panel = new Panel();
+		panel = new JPanel();
 		c.gridy = y++;
 		int bottomInset = IJ.isMacOSX()?4:0;
 		c.insets = new Insets(0, 10, bottomInset, 0);
