@@ -35,10 +35,8 @@ public class ByteProcessor extends ImageProcessor {
    		cm = pg.getColorModel();
 		if (cm instanceof IndexColorModel)
 			pixels = (byte[])(pg.getPixels());
-		else
-			System.err.println("ByteProcessor: not 8-bit image");
-		if (((IndexColorModel)cm).getTransparentPixel()!=-1) {
-    		IndexColorModel icm = (IndexColorModel)cm;
+		if ((cm instanceof IndexColorModel) && ((IndexColorModel)cm).getTransparentPixel()!=-1) {
+			IndexColorModel icm = (IndexColorModel)cm;
 			int mapSize = icm.getMapSize();
 			byte[] reds = new byte[mapSize];
 			byte[] greens = new byte[mapSize];
@@ -104,19 +102,9 @@ public class ByteProcessor extends ImageProcessor {
 	}
 
 	public Image createImage() {
-		if (cm==null) cm = getDefaultColorModel();
-		if (ij.IJ.isJava16()) return createBufferedImage();
-		if (source==null) {
-			source = new MemoryImageSource(width, height, cm, pixels, 0, width);
-			source.setAnimated(true);
-			source.setFullBufferUpdates(true);
-			img = Toolkit.getDefaultToolkit().createImage(source);
-		} else if (newPixels) {
-			source.newPixels(pixels, cm, 0, width);
-			newPixels = false;
-		} else
-			source.newPixels();
-		return img;
+		if (cm==null)
+			cm = getDefaultColorModel();
+		return createBufferedImage();
 	}
 
 	Image createBufferedImage() {
@@ -448,8 +436,6 @@ public class ByteProcessor extends ImageProcessor {
 			}
 		}
 		cm = new IndexColorModel(8, 256, rLUT2, gLUT2, bLUT2);
-		newPixels = true;
-		if (min==0.0 && max==255.0) source = null;
 		minThreshold = NO_THRESHOLD;
 	}
 
@@ -1253,10 +1239,26 @@ public class ByteProcessor extends ImageProcessor {
 	public int getBitDepth() {
 		return 8;
 	}
-
+	
+	/** Returns a binary mask, or null if a threshold is not set. */
+	public ByteProcessor createMask() {
+		if (getMinThreshold()==NO_THRESHOLD)
+			return null;
+		int minThreshold = (int)getMinThreshold();
+		int maxThreshold = (int)getMaxThreshold();
+		ByteProcessor mask = new ByteProcessor(width, height);
+		byte[] mpixels = (byte[])mask.getPixels();
+		for (int i=0; i<pixels.length; i++) {
+			int value = pixels[i]&0xff;
+			if (value>=minThreshold && value<=maxThreshold)
+				mpixels[i] = (byte)255;
+		}
+		return mask;
+	}
 	
 	byte[] create8BitImage() {
 		return pixels;
 	}
 
 }
+

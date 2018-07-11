@@ -56,7 +56,7 @@ public class IJ {
 	private static TextPanel textPanel;
 	private static String osname, osarch;
 	private static boolean isMac, isWin, isLinux, is64Bit;
-	private static int javaVersion = 6;
+	private static int javaVersion;
 	private static boolean controlDown, altDown, spaceDown, shiftDown;
 	private static boolean macroRunning;
 	private static Thread previousThread;
@@ -85,14 +85,22 @@ public class IJ {
 		isLinux = osname.startsWith("Linux");
 
 		String version = System.getProperty("java.version");
-		if (version.startsWith("10"))
-			javaVersion = 10;
+		if (version.startsWith("1.8"))
+			javaVersion = 8;
+		else if (version.startsWith("1.6"))
+			javaVersion = 6;
 		else if (version.startsWith("1.9") || version.startsWith("9"))
 			javaVersion = 9;
-		else if (version.startsWith("1.8"))
-			javaVersion = 8;
+		else if (version.startsWith("10"))
+			javaVersion = 10;
+		else if (version.startsWith("11"))
+			javaVersion = 11;
+		else if (version.startsWith("12"))
+			javaVersion = 12;
 		else if (version.startsWith("1.7"))
 			javaVersion = 7;
+		else
+			javaVersion = 6;
 		dfs = new DecimalFormatSymbols(Locale.US);
 		df = new DecimalFormat[10];
 		df[0] = new DecimalFormat("0", dfs);
@@ -162,8 +170,6 @@ public class IJ {
 	 * return null. The equivalent macro function is runMacro().
 	 */
 	public static String runMacroFile(String name, String arg) {
-		if (ij == null && Menus.getCommands() == null)
-			init();
 		Macro_Runner mr = new Macro_Runner();
 		return mr.runMacroFile(name, arg);
 	}
@@ -464,8 +470,17 @@ public class IJ {
 		if (logPanel != null) {
 			if (s.startsWith("\\"))
 				handleLogCommand(s);
-			else
+			else {
+				if (s.endsWith("\n")) {
+					if (s.equals("\n\n"))
+						s = "\n \n ";
+					else if (s.endsWith("\n\n"))
+						s = s.substring(0, s.length() - 2) + "\n \n ";
+					else
+						s = s + " ";
+				}
 				logPanel.append(s);
+			}
 		} else {
 			LogStream.redirectSystem(false);
 			System.out.println(s);
@@ -1273,6 +1288,16 @@ public class IJ {
 			img.setRoi(new PointRoi(x, y));
 	}
 
+	/** Creates an Roi. */
+	public static Roi Roi(double x, double y, double width, double height) {
+		return new Roi(x, y, width, height);
+	}
+
+	/** Creates an OvalRoi. */
+	public static OvalRoi OvalRoi(double x, double y, double width, double height) {
+		return new OvalRoi(x, y, width, height);
+	}
+
 	/**
 	 * Sets the display range (minimum and maximum displayed pixel values) of the
 	 * current image.
@@ -1870,7 +1895,10 @@ public class IJ {
 	 * the image and return null. Use IJ.open() to display a file open dialog box.
 	 */
 	public static ImagePlus openImage(String path) {
-		return (new Opener()).openImage(path);
+		macroRunning = true;
+		ImagePlus imp = (new Opener()).openImage(path);
+		macroRunning = false;
+		return imp;
 	}
 
 	/** Opens the nth image of the specified tiff stack. */
@@ -2018,12 +2046,14 @@ public class IJ {
 		if (format.indexOf("tif") != -1) {
 			saveAsTiff(imp, path);
 			return;
-		} else if (format.indexOf("jpeg") != -1 || format.indexOf("jpg") != -1) {
+		} else if (format.indexOf("jpeg")!=-1 || format.indexOf("jpg")!=-1) {
 			path = updateExtension(path, ".jpg");
-			format = "Jpeg...";
+			JpegWriter.save(imp, path, FileSaver.getJpegQuality());
+						return;
 		} else if (format.indexOf("gif") != -1) {
 			path = updateExtension(path, ".gif");
-			format = "Gif...";
+			GifWriter.save(imp, path);
+						return;
 		} else if (format.indexOf("text image") != -1) {
 			path = updateExtension(path, ".txt");
 			format = "Text Image...";
@@ -2068,11 +2098,9 @@ public class IJ {
 		if (path == null)
 			run(format);
 		else {
-			if (path.contains(" ")) {
-				if (path.contains("]"))
-					error("ImageJ cannot save when file path contains both \" \" and \"]\"");
+			if (path.contains(" "))
 				run(imp, format, "save=[" + path + "]");
-			} else
+			else
 				run(imp, format, "save=" + path);
 		}
 	}
@@ -2423,7 +2451,7 @@ public class IJ {
 		ArrayList list = new ArrayList();
 		Hashtable commands = Menus.getCommands();
 		Menu lutsMenu = Menus.getImageJMenu("Image>Lookup Tables");
-		if (lutsMenu == null)
+		if (commands==null || lutsMenu==null)
 			return new String[0];
 		for (int i = 0; i < lutsMenu.getItemCount(); i++) {
 			MenuItem menuItem = lutsMenu.getItem(i);

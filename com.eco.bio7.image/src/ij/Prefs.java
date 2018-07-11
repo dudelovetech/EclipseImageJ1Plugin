@@ -53,10 +53,10 @@ public class Prefs {
 	public static final String KEY_PREFIX = ".";
 
 	private static final int USE_POINTER = 1 << 0, ANTIALIASING = 1 << 1, INTERPOLATE = 1 << 2, ONE_HUNDRED_PERCENT = 1 << 3, BLACK_BACKGROUND = 1 << 4, JFILE_CHOOSER = 1 << 5, UNUSED = 1 << 6,
-			BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10, USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12, INTEL_BYTE_ORDER = 1 << 13,
-			DOUBLE_BUFFER = 1 << 14, NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18, NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20,
-			ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25, DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27,
-			NO_CLICK_TO_GC = 1 << 28, AVOID_RESLICE_INTERPOLATION = 1 << 29, KEEP_UNDO_BUFFERS = 1 << 30;
+			BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10, USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12,
+			INTEL_BYTE_ORDER = 1 << 13, DOUBLE_BUFFER = 1 << 14, NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18,
+			NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20, ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25,
+			DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27, NO_CLICK_TO_GC = 1 << 28, AVOID_RESLICE_INTERPOLATION = 1 << 29, KEEP_UNDO_BUFFERS = 1 << 30;
 	public static final String OPTIONS = "prefs.options";
 
 	public static final String vistaHint = ""; // no longer used
@@ -158,7 +158,7 @@ public class Prefs {
 	public static boolean useFileChooser;
 	/** Use sub-pixel resolution with line selections */
 	public static boolean subPixelResolution;
-	/** Adjust contrast when scrolling stacks (or hold shift key down) */
+	/** Adjust contrast when scrolling stacks */
 	public static boolean autoContrast;
 	/**
 	 * Allow lines to be created with one click at start and another at the end
@@ -427,8 +427,8 @@ public class Prefs {
 				path = homeDir + separator + PREFS_NAME; // ImageJ folder
 			else
 				path = System.getProperty("user.home") + separator + PREFS_NAME; // User's
-																					// home
-																					// dir
+													// home
+													// dir
 			ok = loadPrefs(path);
 			if (ok)
 				new File(path).delete();
@@ -564,12 +564,12 @@ public class Prefs {
 	static void saveOptions(Properties prefs) {
 		int options = (usePointerCursor ? USE_POINTER : 0) + (antialiasedText ? ANTIALIASING : 0) + (interpolateScaledImages ? INTERPOLATE : 0) + (open100Percent ? ONE_HUNDRED_PERCENT : 0)
 				+ (blackBackground ? BLACK_BACKGROUND : 0) + (useJFileChooser ? JFILE_CHOOSER : 0) + (blackCanvas ? BLACK_CANVAS : 0) + (weightedColor ? WEIGHTED : 0)
-				+ (requireControlKey ? REQUIRE_CONTROL : 0) + (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0) + (intelByteOrder ? INTEL_BYTE_ORDER : 0)
-				+ (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0) + (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0)
-				+ (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0) + (moveToMisc ? MOVE_TO_MISC : 0) + (runSocketListener ? RUN_SOCKET_LISTENER : 0)
-				+ (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0) + (dontSaveHeaders ? DONT_SAVE_HEADERS : 0)
-				+ (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0) + (noClickToGC ? NO_CLICK_TO_GC : 0) + (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0)
-				+ (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
+				+ (requireControlKey ? REQUIRE_CONTROL : 0) + (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0)
+				+ (intelByteOrder ? INTEL_BYTE_ORDER : 0) + (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0)
+				+ (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0) + (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0) + (moveToMisc ? MOVE_TO_MISC : 0)
+				+ (runSocketListener ? RUN_SOCKET_LISTENER : 0) + (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0)
+				+ (dontSaveHeaders ? DONT_SAVE_HEADERS : 0) + (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0) + (noClickToGC ? NO_CLICK_TO_GC : 0)
+				+ (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0) + (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
 		prefs.put(OPTIONS, Integer.toString(options));
 
 		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0)

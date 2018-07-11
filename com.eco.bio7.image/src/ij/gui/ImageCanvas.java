@@ -1446,7 +1446,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 						oxd = points.xpoints[0];
 				}
 			}
-			((PointRoi) roi).addPoint(imp, oxd, oyd);
+			((PointRoi)roi).addUserPoint(imp, oxd, oyd);
 			imp.setRoi(roi);
 			return;
 		}

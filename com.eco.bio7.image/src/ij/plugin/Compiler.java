@@ -300,15 +300,15 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	void validateTarget() {
-		if (target>TARGET19)
+		if (target > TARGET19)
 			target = TARGET19;
-		if (target<TARGET16)
+		if (target < TARGET16)
 			target = TARGET16;
-		if (target>TARGET16 && IJ.javaVersion()<7)
+		if (target > TARGET16 && IJ.javaVersion() < 7)
 			target = TARGET16;
-		if (target>TARGET17 && IJ.javaVersion()<8)
+		if (target > TARGET17 && IJ.javaVersion() < 8)
 			target = TARGET17;
-		if (target>TARGET18 && IJ.javaVersion()<9)
+		if (target > TARGET18 && IJ.javaVersion() < 9)
 			target = TARGET18;
 		Prefs.set(TARGET_KEY, target);
 	}
@@ -446,11 +446,9 @@ abstract class CompilerTool {
 	}
 
 	public static CompilerTool getDefault() {
-		if (IJ.isJava16()) {
-			CompilerTool javax = new JavaxCompilerTool();
-			if (javax.isSupported())
-				return javax;
-		}
+		CompilerTool javax = new JavaxCompilerTool();
+		if (javax.isSupported())
+			return javax;
 		CompilerTool legacy = new LegacyCompilerTool();
 		if (legacy.isSupported())
 			return legacy;

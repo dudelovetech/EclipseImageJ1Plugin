@@ -2,9 +2,6 @@ package ij.process;
 
 import java.awt.*;
 import java.awt.image.*;
-
-import com.eco.bio7.image.IJTabs;
-
 import ij.*;
 import ij.gui.*;
 import ij.measure.*;
@@ -129,9 +126,7 @@ public class ImageConverter {
 	/** Converts an RGB image to a HSB (hue, saturation and brightness) stack. */
 	public void convertToHSB() {
 		if (type!=ImagePlus.COLOR_RGB)
-			throw new IllegalArgumentException("Image must be RGB");
-		//convert to hue, saturation and brightness
-		//IJ.showProgress(0.1);
+			throw new IllegalArgumentException("Image must be RGB");;
 		ColorProcessor cp;
 		if (imp.getType()==ImagePlus.COLOR_RGB)
 			cp = (ColorProcessor)imp.getProcessor();
@@ -141,7 +136,6 @@ public class ImageConverter {
 		imp.trimProcessor();
 		imp.setStack(null, stack);
 		imp.setDimensions(3, 1, 1);
-		//IJ.showProgress(1.0);
 	}
 	
 	/** Converts an RGB image to a Lab stack. */
@@ -177,18 +171,15 @@ public class ImageConverter {
 			B = (byte[])stack.getPixels(3);
 		else
 			B = new byte[width*height];
-		/*Changed for Bio7!*/
-		//imp.trimProcessor();
+		imp.trimProcessor();
 		ColorProcessor cp = new ColorProcessor(width, height);
 		cp.setRGB(R, G, B);
 		if (imp.isInvertedLut())
 			cp.invert();
-		new ImagePlus(imp.getTitle(),cp.createImage()).show();
-		/*Changed for Bio7!*/
-		/*imp.setImage(cp.createImage());
+		imp.setImage(cp.createImage());
 		imp.killStack();
 		if (IJ.isLinux())
-			imp.setTitle(imp.getTitle());*/
+			imp.setTitle(imp.getTitle());
 	}
 
 	/** Converts a 3-slice (hue, saturation, brightness) 8-bit stack to RGB. */
@@ -216,10 +207,8 @@ public class ImageConverter {
 			throw new IllegalArgumentException("3-slice 32-bit stack required");
 		ColorSpaceConverter converter = new ColorSpaceConverter();
 		ImagePlus imp2 = converter.LabToRGB(imp);
-		imp2.setCalibration(imp.getCalibration());	
+		imp2.setCalibration(imp.getCalibration());
 		imp.setImage(imp2);
-		/*Changed for Bio7!*/
-		IJTabs.deleteActiveTab();
 	}
 
 	/** Converts an RGB image to 8-bits indexed color. 'nColors' must

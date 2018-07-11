@@ -327,6 +327,7 @@ public class Menus {
 		addExample(submenu, "Plasma Cloud", "Plasma_Cloud.js");
 		addExample(submenu, "Cloud Debugger", "Cloud_Debugger.js");
 		addExample(submenu, "Synthetic Images", "Synthetic_Images.js");
+		addExample(submenu, "Points", "Points.js");
 		addExample(submenu, "Spiral Rotation", "Spiral_Rotation.js");
 		addExample(submenu, "Example Plot", "Example_Plot.js");
 		addExample(submenu, "Semi-log Plot", "Semi-log_Plot.js");
@@ -342,6 +343,7 @@ public class Menus {
 		addExample(submenu, "Custom Measurement", "Custom_Measurement.js");
 		addExample(submenu, "Terabyte VirtualStack", "Terabyte_VirtualStack.js");
 		addExample(submenu, "Event Listener", "Event_Listener.js");
+		addExample(submenu, "FFT Filter", "FFT_Filter.js");
 		submenu.addActionListener(listener);
 		menu.add(submenu);
 		submenu = new Menu("BeanShell");
@@ -854,6 +856,8 @@ public class Menus {
 	 * found.
 	 */
 	public static Menu getImageJMenu(String menuPath) {
+		if (menus == null)
+			return null;
 		if (menus.get(menuPath) != null)
 			return getMenu(menuPath, false);
 		else
@@ -1528,16 +1532,11 @@ public class Menus {
 	/**
 	 * Adds a plugin based command to the end of a specified menu.
 	 * 
-	 * @param plugin
-	 *            the plugin (e.g. "Inverter_", "Inverter_("arg")")
-	 * @param menuCode
-	 *            PLUGINS_MENU, IMPORT_MENU, SAVE_AS_MENU or HOT_KEYS
-	 * @param command
-	 *            the menu item label (set to "" to uninstall)
-	 * @param shortcut
-	 *            the keyboard shortcut (e.g. "y", "Y", "F1")
-	 * @param ij
-	 *            ImageJ (the action listener)
+	 * @param plugin   the plugin (e.g. "Inverter_", "Inverter_("arg")")
+	 * @param menuCode PLUGINS_MENU, IMPORT_MENU, SAVE_AS_MENU or HOT_KEYS
+	 * @param command  the menu item label (set to "" to uninstall)
+	 * @param shortcut the keyboard shortcut (e.g. "y", "Y", "F1")
+	 * @param ij       ImageJ (the action listener)
 	 *
 	 * @return returns an error code(NORMAL_RETURN,COMMAND_IN_USE_ERROR, etc.)
 	 */
