@@ -17,6 +17,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.ui.css.swt.theme.ITheme;
+import org.eclipse.e4.ui.css.swt.theme.IThemeEngine;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
@@ -24,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
@@ -31,7 +36,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 /**
  * A utility class for the ImageJ plugin.
@@ -167,8 +171,7 @@ public class Util {
 		// Filter the extension of the file.
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return (name.endsWith(extensions[0]) || name.endsWith(extensions[1]) || name.endsWith(extensions[2]) || name.endsWith(extensions[3]) || name.endsWith(extensions[4])
-						|| name.endsWith(extensions[5]));
+				return (name.endsWith(extensions[0]) || name.endsWith(extensions[1]) || name.endsWith(extensions[2]) || name.endsWith(extensions[3]) || name.endsWith(extensions[4]) || name.endsWith(extensions[5]));
 			}
 		};
 
@@ -292,12 +295,10 @@ public class Util {
 	 * Invokes a Runnable in JFX Thread and waits while it's finished. Like
 	 * SwingUtilities.invokeAndWait does for EDT.
 	 * 
-	 * @param run
-	 *            The Runnable that has to be called on JFX thread.
-	 * @throws InterruptedException
-	 *             f the execution is interrupted.
-	 * @throws ExecutionException
-	 *             If a exception is occurred in the run method of the Runnable
+	 * @param run The Runnable that has to be called on JFX thread.
+	 * @throws InterruptedException f the execution is interrupted.
+	 * @throws ExecutionException   If a exception is occurred in the run method of
+	 *                              the Runnable
 	 */
 	/**
 	 * Simple helper class.
@@ -349,21 +350,29 @@ public class Util {
 			}
 		}
 	}
-	
+
 	public static boolean isThemeBlack() {
 		boolean themeBlack = false;
-		if (ThemeHelper.getEngine().getActiveTheme() != null) {
-			String activeTheme = ThemeHelper.getEngine().getActiveTheme().getId();
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		MApplication application = workbench.getService(MApplication.class);
+		IEclipseContext context = application.getContext();
+		IThemeEngine engine = context.get(IThemeEngine.class);
+		ITheme theme = engine.getActiveTheme();
+		// System.out.println(theme.getLabel());
+
+		// IPreferenceStore workbenchStore =
+		// IDEWorkbenchPlugin.getDefault().getPreferenceStore();
+		// System.out.print(ThemeHelper.getEngine().getActiveTheme().getId());
+		if (theme != null) {
+			String activeTheme = theme.getId();
 			/*
 			 * We use a black style if the CSS is the dark theme or the darkest dark theme!
 			 */
-			if (activeTheme.equals("org.eclipse.e4.ui.css.theme.e4_dark") || activeTheme.equals("com.genuitec.eclipse.themes.dark")) {
-
-				
+			if (activeTheme.startsWith("org.eclipse.e4.ui.css.theme.e4_dark") || activeTheme.startsWith("com.genuitec.eclipse.themes.dark")) {
 
 				themeBlack = true;
 
-			} 
+			}
 		}
 		return themeBlack;
 	}

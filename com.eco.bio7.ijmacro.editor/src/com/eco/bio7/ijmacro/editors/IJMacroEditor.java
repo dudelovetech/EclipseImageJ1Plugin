@@ -51,6 +51,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -84,6 +85,8 @@ import com.eco.bio7.ijmacro.editor.antlr.WordMarkerCreation;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
+import com.eco.bio7.image.Util;
+
 import ij.IJ;
 import ij.macro.Debugger;
 import ij.macro.Interpreter;
@@ -162,7 +165,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		super.createPartControl(parent);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,
 		// "com.eco.bio7.beanshell");
-		 store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 		viewer = (ProjectionViewer) getSourceViewer();
 
@@ -196,7 +199,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 									.getSelection();
 							int offset = textSelection.getOffset();
 							if (store.getBoolean("MARK_WORDS")) {
-							markWords(offset, document, editor);
+								markWords(offset, document, editor);
 							}
 
 						}
@@ -246,13 +249,39 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		 */
 		setKeyBindingScopes(new String[] { "com.eco.bio7.ijmacro.editor.scope" });
 		colorManager = new ColorManager();
-		ijMacroConfig=new IJMacroConfiguration(colorManager, this);
+		ijMacroConfig = new IJMacroConfiguration(colorManager, this);
 		setSourceViewerConfiguration(ijMacroConfig);
 		/*
 		 * Set the context to avoid that menus appear in a different editor. E.g.,
 		 * refactor dialogs!
 		 */
 		setEditorContextMenuId("#IJMacroContext");
+
+		if (Util.isThemeBlack()) {
+			IPreferenceStore store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+			PreferenceConverter.setValue(store, "colourkey", new RGB(167, 236, 33));
+			PreferenceConverter.setValue(store, "colourkey1", new RGB(177, 102, 218));
+			PreferenceConverter.setValue(store, "colourkey2", new RGB(23, 198, 163));
+			PreferenceConverter.setValue(store, "colourkey3", new RGB(128, 128, 128));
+			PreferenceConverter.setValue(store, "colourkey4", new RGB(204, 108, 29));
+			PreferenceConverter.setValue(store, "colourkey5", new RGB(230, 230, 250));
+			PreferenceConverter.setValue(store, "colourkey6", new RGB(250, 243, 243));
+			PreferenceConverter.setValue(store, "colourkey7", new RGB(104, 151, 187));
+			PreferenceConverter.setValue(store, "colourkey8", new RGB(250, 243, 243));
+		} else {
+
+			IPreferenceStore store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+			PreferenceConverter.setValue(store, "colourkey", new RGB(127, 0, 85));
+			PreferenceConverter.setValue(store, "colourkey1", new RGB(127, 0, 85));
+			PreferenceConverter.setValue(store, "colourkey2", new RGB(42, 0, 255));
+			PreferenceConverter.setValue(store, "colourkey3", new RGB(128, 128, 128));
+			PreferenceConverter.setValue(store, "colourkey4", new RGB(0, 0, 0));
+			PreferenceConverter.setValue(store, "colourkey5", new RGB(0, 0, 0));
+			PreferenceConverter.setValue(store, "colourkey6", new RGB(0, 0, 0));
+			PreferenceConverter.setValue(store, "colourkey7", new RGB(0, 0, 0));
+			PreferenceConverter.setValue(store, "colourkey8", new RGB(63, 127, 95));
+
+		}
 
 	}
 
@@ -348,9 +377,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			return;
 		} else if (f7.getHeight() + Math.round(fontSize) < 2) {
 			return;
-		}
-			else if (f8.getHeight() + Math.round(fontSize) < 2) {
-				return;
+		} else if (f8.getHeight() + Math.round(fontSize) < 2) {
+			return;
 		} /*
 			 * else if (f8.getHeight() + Math.round(fontSize) < 2) { return; }
 			 */
@@ -405,7 +433,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		addAction(menu, "Add Block Comment");
 		addAction(menu, "Remove Block Comment");
 		menu.add(new Separator());
-		addAction(menu,"ImageJForum");
+		addAction(menu, "ImageJForum");
 		menu.add(new Separator());
 		addAction(menu, "Format Source");
 		addAction(menu, "Format Selected Source");
@@ -454,7 +482,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 		interpretImageJMacroAction = new com.eco.bio7.ijmacro.editor.actions.InterpretImageJMacroAction("");
 		setAction("Interpret Macro", interpretImageJMacroAction);
-		
+
 		imagejForumCopy = new com.eco.bio7.ijmacro.editor.actions.ImageJForumCopy();
 		setAction("ImageJForum", imagejForumCopy);
 
