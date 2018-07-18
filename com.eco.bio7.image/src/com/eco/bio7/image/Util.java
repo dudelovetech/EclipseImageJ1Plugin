@@ -351,6 +351,11 @@ public class Util {
 		}
 	}
 
+	/**
+	 * A method to detect if the dark theme is active.
+	 * 
+	 * @return a boolean value.
+	 */
 	public static boolean isThemeBlack() {
 		boolean themeBlack = false;
 		IWorkbench workbench = PlatformUI.getWorkbench();
