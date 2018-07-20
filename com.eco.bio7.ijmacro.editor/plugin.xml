@@ -561,4 +561,31 @@
             name="ImageJ Edit">
       </perspective>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:#IJMacroContext?after=additions">
+            <menu
+               id="ijmacroeditor.text"
+               label="Text">
+            <command
+                  commandId="org.eclipse.ui.edit.findReplace"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.edit.text.toggleBlockSelectionMode"
+                  style="toggle">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.edit.text.upperCase"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.edit.text.lowerCase"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
 </plugin>
