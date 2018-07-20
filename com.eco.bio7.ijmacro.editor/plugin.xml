@@ -178,6 +178,11 @@
             commandId="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext">
            
       </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.RefactorRename"
+            commandId="com.eco.bio7.ijmacroeditor.refactor.rename">
+           
+      </handler>
      
    </extension>
    <extension
@@ -297,6 +302,12 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+SHIFT+R">
     </key>
+    <key
+          commandId="com.eco.bio7.ijmacroeditor.refactor.rename"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+ALT+W">
+    </key>
     
     
    
@@ -412,6 +423,12 @@
           id="com.eco.bio7.ijmacro.editor.actions.getmacrorecordertext"
           name="Get Macro Recorder Text">
     </command>
+    <command
+          categoryId="org.eclipse.ui.category.textEditor"
+          description="Rename"
+          id="com.eco.bio7.ijmacroeditor.refactor.rename"
+          name="Rename">
+    </command>
       
      
    </extension>
@@ -499,6 +516,14 @@
          <command
                commandId="com.eco.bio7.ijmacro.editor.actions.text.debug.evaluateline"
                label="Evaluate Line"
+               style="push">
+         </command>
+         <separator
+               name="com.eco.bio7.ijmacro.editor.separator1">
+         </separator>
+         <command
+               commandId="com.eco.bio7.ijmacroeditor.refactor.rename"
+               label="Rename"
                style="push">
          </command>
       </menuContribution>
