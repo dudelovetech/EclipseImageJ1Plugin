@@ -5,12 +5,8 @@ import ij.process.*;
 import ij.measure.*;
 import ij.util.Tools;
 import ij.io.FileOpener;
-
 import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /** Implements the Analyze/Set Scale command. */
 public class ScaleDialog implements PlugInFilter {
@@ -105,8 +101,10 @@ public class ScaleDialog implements PlugInFilter {
 				cal.pixelHeight = cal.pixelWidth;
 			cal.setUnit(unit);
 		}
-		if (!cal.equals(calOrig))
+		if (!cal.equals(calOrig)) {
 			imp.setCalibration(cal);
+			imp.changes = true;
+		}
 		imp.setGlobalCalibration(global2?cal:null);
 		if (global2 || global2!=global1)
 			WindowManager.repaintImageWindows();
@@ -117,10 +115,10 @@ public class ScaleDialog implements PlugInFilter {
 	}
 	
 	/** Creates a panel containing an "Unscale" button. */
-	JPanel makeButtonPanel(SetScaleDialog gd) {
-		JPanel panel = new JPanel();
+	Panel makeButtonPanel(SetScaleDialog gd) {
+		Panel panel = new Panel();
     	panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		gd.unscaleButton = new JButton("Click to Remove Scale");
+		gd.unscaleButton = new Button("Click to Remove Scale");
 		gd.unscaleButton.addActionListener(gd);
 		panel.add(gd.unscaleButton);
 		return panel;
@@ -131,7 +129,7 @@ public class ScaleDialog implements PlugInFilter {
 class SetScaleDialog extends GenericDialog {
 	static final String NO_SCALE = "<no scale>";
 	String initialScale;
-	JButton unscaleButton;
+	Button unscaleButton;
 	String length;
 	boolean scaleChanged;
 
