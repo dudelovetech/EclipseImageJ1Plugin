@@ -374,7 +374,8 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * @see IInformationControl#setInformation(String)
 	 */
 	public void setInformation(String content) {
-
+		Font font = JFaceResources.getFontRegistry().get("com.eco.bio7.ijmacro.editor.textfont");
+		fText.setFont(font);
 		String context = null;
 		String[] functions = IJMacroFunctions.functions.split(System.lineSeparator());
 		for (int i = 0; i < functions.length; i++) {
