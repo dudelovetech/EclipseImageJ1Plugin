@@ -344,7 +344,7 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 */
 
 	protected void createContent(Composite parent) {
-		Font font = JFaceResources.getFontRegistry().get("com.eco.bio7.reditor.reditor.textfont");
+		Font font = JFaceResources.getFontRegistry().get("com.eco.bio7.ijmacro.editor.textfont");
 		fText = new StyledText(parent, SWT.MULTI | SWT.READ_ONLY | fAdditionalTextStyles);
 		fText.setFont(font);
 		fText.addListener(SWT.MouseDown, new Listener() {
