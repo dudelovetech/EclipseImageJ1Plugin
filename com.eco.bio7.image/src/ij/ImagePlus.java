@@ -2434,7 +2434,6 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				ip.reset(ip.getMask());
 			}
 			updateAndDraw();
-			//deleteRoi();
 		} else if (roi!=null) {
 			roi.startPaste(clipboard);
 			Undo.setup(Undo.PASTE, this);

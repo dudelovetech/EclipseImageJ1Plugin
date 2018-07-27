@@ -940,7 +940,7 @@ public class IJ {
 		int decimals = x == 0 ? 0 : maxDigits - magnitude;
 		if (decimals < 0 || magnitude < significantDigits + 1 - maxDigits)
 			return IJ.d2s(x, -significantDigits); // exp notation for large and
-													// small numbers
+								// small numbers
 		else {
 			if (decimals > significantDigits)
 				decimals = Math.max(significantDigits, decimals - maxDigits + significantDigits);
@@ -1186,8 +1186,7 @@ public class IJ {
 			else if (d.yesPressed()) {
 				if (imp.getStack().isVirtual() && ((flags & PlugInFilter.NO_CHANGES) == 0)) {
 					int size = (stackSize * imp.getWidth() * imp.getHeight() * imp.getBytesPerPixel() + 524288) / 1048576;
-					String msg = "Use the Process>Batch>Virtual Stack command\n" + "to process a virtual stack or convert it into a\n" + "normal stack using Image>Duplicate, which\n" + "will require "
-							+ size + "MB of additional memory.";
+					String msg = "Use the Process>Batch>Virtual Stack command\n" + "to process a virtual stack or convert it into a\n" + "normal stack using Image>Duplicate, which\n" + "will require " + size + "MB of additional memory.";
 					error(msg);
 					return PlugInFilter.DONE;
 				}
@@ -2006,7 +2005,7 @@ public class IJ {
 		int dotLoc = path.lastIndexOf('.');
 		if (dotLoc == -1 && imp2 != null) {
 			path = path + ".tif"; // save as TIFF if file name does not have an
-									// extension
+						// extension
 			dotLoc = path.lastIndexOf('.');
 		}
 
@@ -2043,17 +2042,20 @@ public class IJ {
 		if (path != null && path.length() == 0)
 			path = null;
 		format = format.toLowerCase(Locale.US);
+		Roi roi2 = imp != null ? imp.getRoi() : null;
+		if (roi2 != null)
+			roi2.endPaste();
 		if (format.indexOf("tif") != -1) {
 			saveAsTiff(imp, path);
 			return;
-		} else if (format.indexOf("jpeg")!=-1 || format.indexOf("jpg")!=-1) {
+		} else if (format.indexOf("jpeg") != -1 || format.indexOf("jpg") != -1) {
 			path = updateExtension(path, ".jpg");
 			JpegWriter.save(imp, path, FileSaver.getJpegQuality());
-						return;
+			return;
 		} else if (format.indexOf("gif") != -1) {
 			path = updateExtension(path, ".gif");
 			GifWriter.save(imp, path);
-						return;
+			return;
 		} else if (format.indexOf("text image") != -1) {
 			path = updateExtension(path, ".txt");
 			format = "Text Image...";
@@ -2219,16 +2221,11 @@ public class IJ {
 	/**
 	 * Creates a new image.
 	 * 
-	 * @param title
-	 *            image name
-	 * @param width
-	 *            image width in pixels
-	 * @param height
-	 *            image height in pixels
-	 * @param depth
-	 *            number of stack images
-	 * @param bitdepth
-	 *            8, 16, 32 (float) or 24 (RGB)
+	 * @param title    image name
+	 * @param width    image width in pixels
+	 * @param height   image height in pixels
+	 * @param depth    number of stack images
+	 * @param bitdepth 8, 16, 32 (float) or 24 (RGB)
 	 */
 	public static ImagePlus createImage(String title, int width, int height, int depth, int bitdepth) {
 		return NewImage.createImage(title, width, height, depth, bitdepth, NewImage.FILL_BLACK);
@@ -2267,22 +2264,15 @@ public class IJ {
 	/**
 	 * Creates a new hyperstack.
 	 * 
-	 * @param title
-	 *            image name
-	 * @param type
-	 *            "8-bit", "16-bit", "32-bit" or "RGB". May also contain "white" ,
-	 *            "black" (the default), "ramp", "composite-mode", "color-mode",
-	 *            "grayscale-mode or "label".
-	 * @param width
-	 *            image width in pixels
-	 * @param height
-	 *            image height in pixels
-	 * @param channels
-	 *            number of channels
-	 * @param slices
-	 *            number of slices
-	 * @param frames
-	 *            number of frames
+	 * @param title    image name
+	 * @param type     "8-bit", "16-bit", "32-bit" or "RGB". May also contain
+	 *                 "white" , "black" (the default), "ramp", "composite-mode",
+	 *                 "color-mode", "grayscale-mode or "label".
+	 * @param width    image width in pixels
+	 * @param height   image height in pixels
+	 * @param channels number of channels
+	 * @param slices   number of slices
+	 * @param frames   number of frames
 	 */
 	public static ImagePlus createImage(String title, String type, int width, int height, int channels, int slices, int frames) {
 		if (type.contains("label"))
@@ -2307,20 +2297,13 @@ public class IJ {
 	/**
 	 * Creates a new hyperstack.
 	 * 
-	 * @param title
-	 *            image name
-	 * @param width
-	 *            image width in pixels
-	 * @param height
-	 *            image height in pixels
-	 * @param channels
-	 *            number of channels
-	 * @param slices
-	 *            number of slices
-	 * @param frames
-	 *            number of frames
-	 * @param bitdepth
-	 *            8, 16, 32 (float) or 24 (RGB)
+	 * @param title    image name
+	 * @param width    image width in pixels
+	 * @param height   image height in pixels
+	 * @param channels number of channels
+	 * @param slices   number of slices
+	 * @param frames   number of frames
+	 * @param bitdepth 8, 16, 32 (float) or 24 (RGB)
 	 */
 	public static ImagePlus createHyperStack(String title, int width, int height, int channels, int slices, int frames, int bitdepth) {
 		ImagePlus imp = createImage(title, width, height, channels * slices * frames, bitdepth);
@@ -2427,7 +2410,7 @@ public class IJ {
 		if (bounds != null)
 			return new Dimension(bounds.width, bounds.height);
 		if (isWindows()) // GraphicsEnvironment.getConfigurations is *very* slow
-							// on Windows
+					// on Windows
 			return Toolkit.getDefaultToolkit().getScreenSize();
 		if (GraphicsEnvironment.isHeadless())
 			return new Dimension(0, 0);
@@ -2451,7 +2434,7 @@ public class IJ {
 		ArrayList list = new ArrayList();
 		Hashtable commands = Menus.getCommands();
 		Menu lutsMenu = Menus.getImageJMenu("Image>Lookup Tables");
-		if (commands==null || lutsMenu==null)
+		if (commands == null || lutsMenu == null)
 			return new String[0];
 		for (int i = 0; i < lutsMenu.getItemCount(); i++) {
 			MenuItem menuItem = lutsMenu.getItem(i);
