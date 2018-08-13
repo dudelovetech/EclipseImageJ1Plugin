@@ -11,6 +11,9 @@
 
 package com.eco.bio7.ImageJPluginActions;
 
+import java.util.UUID;
+import java.util.Vector;
+
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainerElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -18,6 +21,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,7 +37,12 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.CustomDetachedImageJView;
+import com.eco.bio7.image.IJTabs;
 import com.eco.bio7.image.Util;
+
+import ij.ImagePlus;
+import ij.gui.ImageWindow;
 
 public class ImageJWindowAction extends Action implements IMenuCreator {
 
@@ -152,6 +161,40 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 						s.detach(p, 100, 100, xSize, ySize);
 					}
 
+				}
+
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+		new MenuItem(fMenu, SWT.SEPARATOR);
+		MenuItem menuItemDetachTab = new MenuItem(fMenu, SWT.PUSH);
+
+		menuItemDetachTab.setText("Detach current image");
+
+		menuItemDetachTab.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				CTabFolder ctab = CanvasView.getCanvas_view().tabFolder;
+				if (ctab.getItemCount() > 0) {
+					Vector ve = (Vector) ctab.getSelection().getData();
+					ImagePlus plu = (ImagePlus) ve.get(0);
+
+					ImageWindow win = (ImageWindow) ve.get(1);
+					// JPanel current = (JPanel) ve.get(2);
+
+					CustomDetachedImageJView custom = new CustomDetachedImageJView();
+					/* Create ImageJ view with unique ID! */
+					String id = UUID.randomUUID().toString();
+					// detachedSecViewIDs.add(id);
+					custom.setPanel(CanvasView.getCurrent(), id, plu.getTitle());
+					custom.setData(plu, win);
+					/*
+					 * Only hide the tab without to close the ImagePlus object!
+					 */
+					IJTabs.hideTab();
 				}
 
 			}
