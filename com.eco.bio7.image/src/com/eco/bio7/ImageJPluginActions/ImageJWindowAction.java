@@ -172,7 +172,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 		new MenuItem(fMenu, SWT.SEPARATOR);
 		MenuItem menuItemDetachTab = new MenuItem(fMenu, SWT.PUSH);
 
-		menuItemDetachTab.setText("Detach current image");
+		menuItemDetachTab.setText("Detach Image");
 
 		menuItemDetachTab.addSelectionListener(new SelectionListener() {
 
