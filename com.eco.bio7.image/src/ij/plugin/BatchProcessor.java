@@ -10,8 +10,6 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Vector;
 
-import javax.swing.JPanel;
-
 /** This plugin implements the File/Batch/Macro and File/Batch/Virtual Stack commands. */
 	public class BatchProcessor implements PlugIn, ActionListener, ItemListener, Runnable {
 		private static final String MACRO_FILE_NAME = "BatchMacro.ijm";
@@ -271,7 +269,7 @@ import javax.swing.JPanel;
 	}
 
 	void addPanels(GenericDialog gd) {
-		JPanel p = new JPanel();
+		Panel p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		if (virtualStack==null) {
 			input = new Button("Input...");
@@ -281,7 +279,7 @@ import javax.swing.JPanel;
 			p.add(inputDir);
 			gd.addPanel(p);
 		}
-		p = new JPanel();
+		p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		output = new Button("Output...");
 		output.addActionListener(this);
@@ -292,7 +290,7 @@ import javax.swing.JPanel;
 	}
 	
 	void addButtons(GenericDialog gd) {
-		JPanel p = new JPanel();
+		Panel p = new Panel();
     	p.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		test = new Button("Test");
 		test.addActionListener(this);
@@ -350,9 +348,7 @@ import javax.swing.JPanel;
 		Class c = ij!=null?ij.getClass():(new ImageStack()).getClass();
 		String macro = null;
         try {
-        	/*Changed for Bio7! The macros folder is not in the class folder!*/
-        	InputStream is = c .getResourceAsStream("../../macros/"+name);
-			//InputStream is = c .getResourceAsStream("/macros/"+name);
+			InputStream is = c .getResourceAsStream("/macros/"+name);
 			if (is==null) return null;
             InputStreamReader isr = new InputStreamReader(is);
             StringBuffer sb = new StringBuffer();
@@ -374,14 +370,10 @@ import javax.swing.JPanel;
 			String path = IJ.getDirectory("Input Folder");
 			if (path==null) return;
 			inputDir.setText(path);
-			if (IJ.isMacOSX())
-				{gd.setVisible(false); gd.setVisible(true);}
 		} else if (source==output) {
 			String path = IJ.getDirectory("Output Folder");
 			if (path==null) return;
 			outputDir.setText(path);
-			if (IJ.isMacOSX())
-				{gd.setVisible(false); gd.setVisible(true);}
 		} else if (source==test) {
 			thread = new Thread(this, "BatchTest"); 
 			thread.setPriority(Math.max(thread.getPriority()-2, Thread.MIN_PRIORITY));

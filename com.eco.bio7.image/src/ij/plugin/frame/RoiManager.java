@@ -581,8 +581,11 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 						delete = true;
 				}
 				if (delete) {
-					rois.remove(i);
-					listModel.remove(i);
+					if (EventQueue.isDispatchThread()) {
+						rois.remove(i);
+						listModel.remove(i);
+					} else
+						deleteOnEDT(i);
 				}
 			}
 		}
@@ -593,6 +596,19 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		if (record())
 			Recorder.record("roiManager", "Delete");
 		return true;
+	}
+
+	// Delete ROI on event dispatch thread
+	private void deleteOnEDT(final int i) {
+		try {
+			EventQueue.invokeAndWait(new Runnable() {
+				public void run() {
+					rois.remove(i);
+					listModel.remove(i);
+				}
+			});
+		} catch (Exception e) {
+		}
 	}
 
 	boolean update(boolean clone) {
@@ -984,8 +1000,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		for (int i = 0; i < indexes.length; i++) {
 			Roi roi = (Roi) rois.get(indexes[i]);
 			String label = (String) listModel.getElementAt(indexes[i]);
-			if (getSliceNumber(roi, label) > 1)
-				allSliceOne = false;
+			if (getSliceNumber(roi,label)>1 || roi.hasHyperStackPosition())
+				allSliceOne=false;
 		}
 		int measurements = Analyzer.getMeasurements();
 		if (imp.getStackSize() > 1)
