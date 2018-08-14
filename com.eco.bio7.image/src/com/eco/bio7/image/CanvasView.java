@@ -446,7 +446,7 @@ public class CanvasView extends ViewPart {
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {
 
-					IJ.getInstance().doCommand("Rename...");
+					//IJ.getInstance().doCommand("Rename...");
 				}
 			}
 
