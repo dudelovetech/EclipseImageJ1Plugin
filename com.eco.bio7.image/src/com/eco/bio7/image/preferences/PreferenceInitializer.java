@@ -21,9 +21,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		String path = Util.getImageJPath();//Get the installation directory of the ImageJ plugin!
-		String pluginsPath = path + File.separator+"plugins";// Default plugins directory!
-		String macrosPath = path + File.separator+"macros";// Default macros directory!
+		String path = Util.getImageJPath();// Get the installation directory of the ImageJ plugin!
+		String pluginsPath = path + File.separator + "plugins";// Default plugins directory!
+		String macrosPath = path + File.separator + "macros";// Default macros directory!
 		store.setDefault("PLUGINS_PATH", pluginsPath);
 		store.setDefault("MACROS_PATH", macrosPath);
 
@@ -36,7 +36,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault("IMAGE_METHODS_SIZE_Y", 1000);// 790
 		store.setDefault("IMAGEJ_TOOLBAR_SIZE_X", 750);// 580
 		store.setDefault("IMAGEJ_TOOLBAR_SIZE_Y", 150);// 130
-		store.setDefault("MAC_MENU_ENABLED",false);
+		store.setDefault("MAC_MENU_ENABLED", false);
 
 		if (Util.getOS().equals("Windows")) {
 			store.setDefault("FONT_SIZE_CORRECTION", 0);
@@ -45,11 +45,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 			store.setDefault("FONT_SIZE_CORRECTION", 2);
 			store.setDefault("FONT_ANTIALIASED", true);
 		} else if (Util.getOS().equals("Mac")) {
-			if(Util.isMacRetinaDisplay()) {
+			if (Util.isMacRetinaDisplay()) {
 				store.setDefault("FONT_SIZE_CORRECTION", -6);
-			}
-			else {
-			store.setDefault("FONT_SIZE_CORRECTION", 0);
+			} else {
+				store.setDefault("FONT_SIZE_CORRECTION", 0);
 			}
 			store.setDefault("FONT_ANTIALIASED", false);
 		}
