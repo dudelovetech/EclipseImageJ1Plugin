@@ -384,13 +384,15 @@ public class Util {
 		}
 		return themeBlack;
 	}
-	
-	//The source for the following method from: https://stackoverflow.com/questions/20767708/how-do-you-detect-a-retina-display-in-java#20767802
+
+	// The source for the following method from:
+	// https://stackoverflow.com/questions/20767708/how-do-you-detect-a-retina-display-in-java#20767802
 
 	public static boolean isMacRetinaDisplay() {
-		final GraphicsConfiguration gfxConfig = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-		final AffineTransform transform = gfxConfig.getDefaultTransform();
-		return !transform.isIdentity();
+		if (getZoom() == 200) {
+			return true;
+		}
+		return false;
 	}
 
 }
