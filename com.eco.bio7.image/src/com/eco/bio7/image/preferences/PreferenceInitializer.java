@@ -45,8 +45,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 			store.setDefault("FONT_SIZE_CORRECTION", 2);
 			store.setDefault("FONT_ANTIALIASED", true);
 		} else if (Util.getOS().equals("Mac")) {
+			/*Correct Swing fonts on Retina displays!*/
 			if (Util.isMacRetinaDisplay()) {
-				store.setDefault("FONT_SIZE_CORRECTION", -6);
+				store.setDefault("FONT_SIZE_CORRECTION", -10);
 			} else {
 				store.setDefault("FONT_SIZE_CORRECTION", 0);
 			}
