@@ -1,6 +1,18 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52h (1.52h5):
+
+1. Updated to ImageJ 1.52h (1.52h5)
+2. Added a new rename action (rename all words like selection with multiple cursor)
+3. Improved dark theme with popular Eclipse darkest dark theme and default dark theme
+4. Editor colors are automatically switched when using the dark theme (or darkest dark theme)
+5. ImageJ toolbar improved for the dark theme
+6. Added a new ImageJ detach image menu in the ‘Window’ menu of the ImageJ-Canvas view
+7. Added all new ImageJ macro API functions to the code completion of the macro editor
+8. Improved the ImageJ MacOSX touchpad resizing of the ImageJ panel
+9. Improved the default font size for Swing components on Retina displays (e.g., ImageJ components - can be changed in the preferences)
+
 ### New in 1.52c (1.52c12):
 
 1. Updated to ImageJ 1.52c (1.52c12)
