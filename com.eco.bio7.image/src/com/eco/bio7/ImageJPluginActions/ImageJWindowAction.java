@@ -99,7 +99,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			}
 		});
 
-		MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
+		/*MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
 
 		menuItem1.setText("Bio7-Toolbar");
 		menuItem1.addSelectionListener(new SelectionListener() {
@@ -169,7 +169,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
-		new MenuItem(fMenu, SWT.SEPARATOR);
+		new MenuItem(fMenu, SWT.SEPARATOR);*/
 		MenuItem menuItemDetachTab = new MenuItem(fMenu, SWT.PUSH);
 
 		menuItemDetachTab.setText("Detach Image");
