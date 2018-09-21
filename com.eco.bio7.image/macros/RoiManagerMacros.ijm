@@ -24,7 +24,7 @@
       run("Draw", "slice");
   }
 
-  macro "Add and Outline in Overlay [5]" {
+  macro "Add and Move to Overlay [5]" {
       roiManager("add");
       run("Add Selection...");
   }
@@ -36,7 +36,7 @@
       run("Next Slice [>]");
   }
 
-  macro "Update [6]" {
+  macro "Update [7]" {
       roiManager("update");
   }
 

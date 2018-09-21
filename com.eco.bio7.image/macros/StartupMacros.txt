@@ -32,3 +32,4 @@ macro 'Scale Scanner Tool (set the scale for a scanned image) Options...' {
         run("Set Scale...", "distance=" + dist + " known=1.0 pixel=1 unit=mm");
     }
 }
+

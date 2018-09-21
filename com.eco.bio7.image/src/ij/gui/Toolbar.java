@@ -2072,7 +2072,9 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			IJ.setKeyUp(KeyEvent.VK_SHIFT);
 		}
 	}
-
+	/*
+	 * Changed the below called MacroInstaller class for Bio7! ImageJ resources are not wrapped in a *.jar.
+	 */
 	private void installMacroFromJar(String path) {
 		if (IJ.shiftKeyDown())
 			showCode(path, (new MacroInstaller()).openFromIJJar(path));

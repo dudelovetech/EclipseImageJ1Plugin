@@ -5,22 +5,10 @@
         "Convert Images to Stack", "Convert Stack to Images", "Make Montage...", "Reslice [/]...", "Z Project...",
         "3D Project...", "Plot Z-axis Profile", "-", "Start Animation", "Stop Animation", "Animation Options...",
         "-", "MRI Stack (528K)"));
+
     macro "Stacks Menu Tool - C037T0b11ST8b09tTcb09k" {
        cmd = getArgument();
        if (cmd!="-") run(cmd);
-    }
-
-
-    macro "Start/Stop Animation (alt click for dialog) Action Tool - C037B43L1131L1252L1373L1494L1595L1676L1757L1838" {
-        if (nImages==0) {
-            showMessage("Stack Tools", "The \"Stack Tools\" macros require a stack");
-            return;
-        }
-        if (isKeyDown("alt")) {
-            run("Animation Options...");
-            setKeyDown("alt");
-        } else
-            run("Start Animation");
     }
 
     macro "First Slice Action Tool - C037T0d14<T7d14<" {
@@ -46,10 +34,4 @@
     macro "Delete Slice Action Tool - C037T4c14-T7c14-" {
         run("Delete Slice");
     }
-
-    macro "Install StartupMacros Action Tool - C900T1d12<T8d12<" {
-        path = getDirectory("macros")+"StartupMacros.txt";
-        run("Install...", "install="+path);
-    }
-
 

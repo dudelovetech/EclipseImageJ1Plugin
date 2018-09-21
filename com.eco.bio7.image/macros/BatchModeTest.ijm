@@ -6,7 +6,7 @@
   makeRectangle(104, 72, 150, 159);
   run("Fill");
   run("Select None");
-  run("Arbitrarily...", "angle=15 interpolate");
+  run("Rotate... ", "angle=15 interpolation=Bilinear");
   run("Smooth");
   run("Find Edges");
   run("Add...", "value=25");
