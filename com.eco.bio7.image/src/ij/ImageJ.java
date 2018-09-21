@@ -93,8 +93,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version
 	 * string.
 	 */
-	public static final String VERSION = "1.52f";
-	public static final String BUILD = "18";
+	public static final String VERSION = "1.52h";
+	public static final String BUILD = "5";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -501,10 +501,15 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		ImagePlus imp = WindowManager.getCurrentImage();
 		boolean isStack = (imp != null) && (imp.getStackSize() > 1);
 
-		if (imp != null && !control && ((keyChar >= 32 && keyChar <= 255) || keyChar == '\b' || keyChar == '\n')) {
+		if (imp!=null && ((keyChar>=32 && keyChar<=255) || keyChar=='\b' || keyChar=='\n')) {
 			Roi roi = imp.getRoi();
-			if (roi instanceof TextRoi) {
-				if ((flags & KeyEvent.META_MASK) != 0 && IJ.isMacOSX())
+			if (roi!=null && roi instanceof TextRoi) {
+				if (imp.getOverlay()!=null && (control || alt || meta)
+				&& (keyCode==KeyEvent.VK_BACK_SPACE || keyCode==KeyEvent.VK_DELETE)) {
+					if (deleteOverlayRoi(imp))
+							return;
+				}
+				if ((flags & KeyEvent.META_MASK)!=0 && IJ.isMacOSX())
 					return;
 				if (alt) {
 					switch (keyChar) {
@@ -532,7 +537,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				else
 					cmd = (String) macroShortcuts.get(new Integer(keyCode));
 				if (cmd != null) {
-					// MacroInstaller.runMacroCommand(cmd);
+					
 					commandName = cmd;
 					MacroInstaller.runMacroShortcut(cmd);
 					return;

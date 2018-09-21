@@ -88,6 +88,14 @@ public class HyperStackConverter implements PlugIn {
 		imp2.setOverlay(imp.getOverlay());
 		return imp2;
 	}
+	
+	/** Converts the specified stack into a hyperstack with 'c' channels, 'z' slices and
+	 't' frames using the default ordering ("xyczt") and the specified display
+	 mode ("composite", "color" or "grayscale"). */
+public static ImagePlus toHyperStack(ImagePlus imp, int c, int z, int t, String mode) {
+	return toHyperStack(imp, c, z, t, null, mode);
+}
+
 		
 	/** Displays the specified stack in a HyperStack window. Based on the 
 		Stack_to_Image5D class in Joachim Walter's Image5D plugin. */
@@ -168,10 +176,13 @@ public class HyperStackConverter implements PlugIn {
 		}
 		if (Recorder.record && Recorder.scriptMode()) {
 			String order = orders[ordering];
-			if (order.equals(orders[0]))
-				order = "default";
-			Recorder.recordCall("imp2 = HyperStackConverter.toHyperStack(imp, "+nChannels+", "+
-				nSlices+", "+nFrames+", \""+order+"\", \""+modes[mode]+"\");");
+			if (order.equals(orders[0])) { // default order
+				Recorder.recordCall("imp2 = HyperStackConverter.toHyperStack(imp, "+nChannels+", "+
+					nSlices+", "+nFrames+", \""+modes[mode]+"\");");
+			} else {
+				Recorder.recordCall("imp2 = HyperStackConverter.toHyperStack(imp, "+nChannels+", "+
+					nSlices+", "+nFrames+", \""+order+"\", \""+modes[mode]+"\");");
+			}
 		}
 
 	}

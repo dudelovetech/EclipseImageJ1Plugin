@@ -716,6 +716,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 * 'title' to null to leave the title unchanged.
 	 */
 	public void setStack(String title, ImageStack newStack) {
+		int previousStackSize = getStackSize();
 		int newStackSize = newStack.getSize();
 		// IJ.log("setStack: "+newStackSize+" "+this);
 		if (newStackSize == 0)
@@ -757,7 +758,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			/* Changed for Bio7! */
 			// IJTabs.hideTab();
 			activated = false;
-			win = new StackWindow(this, getCanvas()); // replaces this window
+			win = new StackWindow(this, dimensionsChanged ? null : getCanvas()); // replaces this window
 			if (IJ.isMacro()) { // wait for stack window to be activated
 				long start = System.currentTimeMillis();
 				while (!activated) {
@@ -787,6 +788,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		if (resetCurrentSlice)
 			setSlice(currentSlice);
+		if (isComposite() && previousStackSize != newStackSize)
+			compositeImage = false;
 	}
 
 	public void setStack(ImageStack newStack, int channels, int slices, int frames) {
@@ -938,31 +941,46 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		return mask;
 	}
-	
 
-	/** Returns an 8-bit binary (0 and 255) ROI mask that has
-	 * the same dimensions as this image.
+	/**
+	 * Returns an 8-bit binary (0 and 255) ROI or overlay mask that has the same
+	 * dimensions as this image.
+	 * 
 	 * @see ij.gui.Roi#getMask
-	*/
+	 */
 	public ByteProcessor createRoiMask() {
 		Roi roi2 = getRoi();
 		Overlay overlay2 = getOverlay();
-		if (roi2==null && overlay2==null)
+		if (roi2 == null && overlay2 == null)
 			throw new IllegalArgumentException("ROI or overlay required");
-		ByteProcessor mask = new ByteProcessor(getWidth(),getHeight());
+		ByteProcessor mask = new ByteProcessor(getWidth(), getHeight());
 		mask.setColor(255);
-		if (overlay2!=null) {
-			for (int i=0; i<overlay2.size(); i++)
-				mask.fill(overlay2.get(i));			
-		} else if (roi2!=null)
+		if (overlay2 != null) {
+			if (overlay2.size() == 1 && (overlay2.get(0) instanceof ImageRoi)) {
+				ImageRoi iRoi = (ImageRoi) overlay2.get(0);
+				ImageProcessor ip = iRoi.getProcessor();
+				if (ip.getWidth() != mask.getWidth() || ip.getHeight() != mask.getHeight())
+					return mask;
+				for (int i = 0; i < ip.getPixelCount(); i++) {
+					if (ip.get(i) != 0)
+						mask.set(i, 255);
+				}
+			} else {
+				for (int i = 0; i < overlay2.size(); i++)
+					mask.fill(overlay2.get(i));
+			}
+		} else if (roi2 != null)
 			mask.fill(roi2);
 		return mask;
 	}
-	/** Returns an 8-bit binary (0 and 255) threshold mask
-	 * that has the same dimensions as this image.
+
+	/**
+	 * Returns an 8-bit binary (0 and 255) threshold mask that has the same
+	 * dimensions as this image.
+	 * 
 	 * @see ij.plugin.Thresholder#createMask
 	 * @see ij.process.ImageProcessor#createMask
-	*/
+	 */
 	public ByteProcessor createThresholdMask() {
 		return Thresholder.createMask(this);
 	}
@@ -1129,7 +1147,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			return 1;
 		else {
 			int slices = stack.getSize();
-			// if (compositeImage) slices /= nChannels;
+
 			if (slices <= 0)
 				slices = 1;
 			return slices;
@@ -2195,9 +2213,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			fi.nImages = getImageStackSize();
 		fi.whiteIsZero = isInvertedLut();
 		fi.intelByteOrder = false;
-		if (fi.nImages == 1)
+		if (fi.nImages == 1 && ip != null)
 			fi.pixels = ip.getPixels();
-		else
+		else if (stack != null)
 			fi.pixels = stack.getImageArray();
 		Calibration cal = getCalibration();
 		if (cal.scaled()) {

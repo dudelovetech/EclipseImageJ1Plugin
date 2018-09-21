@@ -108,13 +108,21 @@ public class FolderOpener implements PlugIn {
 		if (directory==null)
 			return;
 		String[] list = (new File(directory)).list();
-		if (list==null)
+		if (list==null) {
+			IJ.error("File>Import>Image Sequence", "Directory not found: "+directory);
 			return;
+		}
 		String title = directory;
 		if (title.endsWith(File.separator) || title.endsWith("/"))
 			title = title.substring(0, title.length()-1);
 		int index = title.lastIndexOf(File.separatorChar);
-		if (index!=-1) title = title.substring(index + 1);
+		if (index!=-1)
+			title = title.substring(index + 1);
+		else {
+			index = title.lastIndexOf("/");
+			if (index!=-1)
+				title = title.substring(index + 1);
+		}
 		if (title.endsWith(":"))
 			title = title.substring(0, title.length()-1);
 		

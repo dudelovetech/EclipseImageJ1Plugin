@@ -187,7 +187,8 @@ public class ImportDialog {
 		Does nothing if the dialog is canceled. */
 	public void openImage() {
 		FileInfo fi = getFileInfo();
-		if (fi==null) return;
+		if (fi==null)
+			return;
 		if (openAll) {
 			if (virtual) {
 				ImagePlus imp = Raw.openAllVirtual(directory, fi);
@@ -218,7 +219,8 @@ public class ImportDialog {
 					ip.resetMinAndMax();
 					imp.setDisplayRange(ip.getMin(),ip.getMax());
 				}
-			}
+			} else
+				IJ.error("File>Import>Raw", "File not found: "+filePath);
 		}
 	}
 
