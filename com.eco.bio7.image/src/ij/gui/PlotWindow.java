@@ -345,16 +345,16 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				ImageWindow win = (ImageWindow) ve.get(1);
 				// JPanel current = (JPanel) ve.get(2);
 
-				/*CustomDetachedImageJView custom = new CustomDetachedImageJView();
-				 Create ImageJ view with unique ID! 
+				CustomDetachedImageJView custom = new CustomDetachedImageJView();
+				// Create ImageJ view with unique ID! 
 				String id = UUID.randomUUID().toString();
 				// detachedSecViewIDs.add(id);
 				custom.setPanel(CanvasView.getCurrent(), id, plu.getTitle());
 				custom.setData(plu, win);
 				
-				 * Only hide the tab without to close the ImagePlus object!
+				// Only hide the tab without to close the ImagePlus object!
 				 
-				IJTabs.hideTab();*/
+				IJTabs.hideTab();
 
 				CustomDetachedImageJView custom2 = new CustomDetachedImageJView();
 				/* Create ImageJ view with unique ID! */
