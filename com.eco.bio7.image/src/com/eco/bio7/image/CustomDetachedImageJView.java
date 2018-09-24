@@ -126,18 +126,18 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 						// !!
 						public void run() {
 							if (WindowManager.getImageCount() > 0) {
-								win.bio7TabClose();
+								if (win != null) {
+									win.bio7TabClose();
+								}
 							}
 						}
 					});
 
 					/*
-					 * ArrayList arrL =
-					 * CanvasView.getCanvas_view().getDetachedSecViewIDs();
-					 * System.out.println("prim: " + secId); for (int i = 0; i <
-					 * arrL.size(); i++) { if (arrL.get(i).equals(secId)) {
-					 * System.out.println("removed: " + arrL.get(i));
-					 * arrL.remove(i); } }
+					 * ArrayList arrL = CanvasView.getCanvas_view().getDetachedSecViewIDs();
+					 * System.out.println("prim: " + secId); for (int i = 0; i < arrL.size(); i++) {
+					 * if (arrL.get(i).equals(secId)) { System.out.println("removed: " +
+					 * arrL.get(i)); arrL.remove(i); } }
 					 */
 
 				}
@@ -169,10 +169,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	/**
 	 * Creates a given JPanel tab inside a custom view.
 	 * 
-	 * @param jpanel
-	 *            a JPanel
-	 * @param title
-	 *            the title of the tab.
+	 * @param jpanel a JPanel
+	 * @param title  the title of the tab.
 	 */
 	public void setPanel(final JPanel jpanel, final String id, final String name) {
 		secId = id;
@@ -211,10 +209,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	/**
 	 * Creates a given Panel tab inside a custom view.
 	 * 
-	 * @param panel
-	 *            a Panel
-	 * @param title
-	 *            the title of the tab.
+	 * @param panel a Panel
+	 * @param title the title of the tab.
 	 */
 
 	/**
@@ -280,8 +276,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	}
 
 	/*
-	 * Close tab items and dispose different GUI references. Called if the view
-	 * or a tab item is closed!
+	 * Close tab items and dispose different GUI references. Called if the view or a
+	 * tab item is closed!
 	 */
 	private void closeTabPanels(Vector ve) {
 		if (ve != null) {
