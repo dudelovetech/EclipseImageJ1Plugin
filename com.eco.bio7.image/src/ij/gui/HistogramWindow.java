@@ -6,11 +6,21 @@ import java.awt.event.*;
 import java.io.*;
 import java.awt.datatransfer.*;
 import java.util.ArrayList;
+import java.util.UUID;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Display;
+
+import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.CustomDetachedImageJView;
+import com.eco.bio7.image.IJTabs;
+import com.eco.bio7.image.Util;
 
 import ij.*;
 import ij.process.*;
@@ -53,6 +63,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	private int rgbMode = -1;
 	private String blankLabel;
 	private boolean stackHistogram;
+	protected Vector ve;
 
 	/** Displays a histogram using the title "Histogram of ImageName". */
 	public HistogramWindow(ImagePlus imp) {
@@ -185,7 +196,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		 * in Bio7!
 		 */
 		JPanel buttons = new JPanel();
-		buttons.setLayout(new GridLayout(2, 4, 0, 0));
+		buttons.setLayout(new GridLayout(10, 4, 0, 0));
 		int hgap = IJ.isMacOSX() || isRGB ? 1 : 5;
 		// buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
 		int trim = IJ.isMacOSX() ? 6 : 0;
@@ -222,15 +233,45 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 			buttons.add(valueAndCount);
 		}
 		/* Changed for Bio7! */
-		/* Changed for Bio7! */
-		JFrame fr = new JFrame();
+		Display display = Util.getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+				CTabFolder ctab = CanvasView.getCanvas_view().tabFolder;
+
+				ve = (Vector) ctab.getSelection().getData();
+				ImagePlus plu = (ImagePlus) ve.get(0);
+
+				ImageWindow win = (ImageWindow) ve.get(1);
+				// JPanel current = (JPanel) ve.get(2);
+
+				CustomDetachedImageJView custom = new CustomDetachedImageJView();
+				// Create ImageJ view with unique ID! 
+				String id = UUID.randomUUID().toString();
+				// detachedSecViewIDs.add(id);
+				custom.setPanel(CanvasView.getCurrent(), id, plu.getTitle());
+				custom.setData(plu, win);
+				
+				// Only hide the tab without to close the ImagePlus object!
+				 
+				IJTabs.hideTab();
+
+				CustomDetachedImageJView custom2 = new CustomDetachedImageJView();
+				/* Create ImageJ view with unique ID! */
+				String id2 = UUID.randomUUID().toString();
+
+				custom2.setPanel(buttons, id2, "Options " + plu.getTitle());
+			}
+		});
+		
+		/*JFrame fr = new JFrame();
 		fr.setContentPane(buttons);
 		fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		fr.setBounds(100, 100, 450, 172);
 		fr.setAlwaysOnTop(true);
 		fr.setVisible(true);
 		// add(buttons);
-		pack();
+		pack();*/
 	}
 
 	public void setup() {

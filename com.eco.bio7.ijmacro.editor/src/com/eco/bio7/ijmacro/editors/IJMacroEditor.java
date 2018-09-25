@@ -189,6 +189,10 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 				@Override
 				public void mouseDown(MouseEvent e) {
+					if (org.eclipse.jface.util.Util.isMac()) {
+
+						activateEditorPage(editor);
+					}
 					IDocumentProvider prov = textEditor.getDocumentProvider();
 					IEditorInput inp = editor.getEditorInput();
 					if (prov != null) {
