@@ -354,8 +354,52 @@ public class CanvasView extends ViewPart {
 		tabFolder.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				for (int i = 0; i < shortcuts.length; i++) {
+
 					String[] splitShortcut = shortcuts[i].split("\t");
+					splitShortcut[0] = splitShortcut[0].trim();
 					if (splitShortcut[0].equals("" + e.character)) {
+						IJ.doCommand(splitShortcut[1]);
+					}
+                                        /*Also allow the F keys for a shortcut!*/
+					if (splitShortcut[0].equals("F1") && e.keyCode == SWT.F1) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F2") && e.keyCode == SWT.F2) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F3") && e.keyCode == SWT.F3) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F4") && e.keyCode == SWT.F4) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F5") && e.keyCode == SWT.F5) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F6") && e.keyCode == SWT.F6) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F7") && e.keyCode == SWT.F7) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F8") && e.keyCode == SWT.F8) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F9") && e.keyCode == SWT.F9) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F10") && e.keyCode == SWT.F10) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F11") && e.keyCode == SWT.F11) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F12") && e.keyCode == SWT.F12) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F13") && e.keyCode == SWT.F13) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F14") && e.keyCode == SWT.F14) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F15") && e.keyCode == SWT.F15) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F16") && e.keyCode == SWT.F16) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F17") && e.keyCode == SWT.F17) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F18") && e.keyCode == SWT.F18) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F19") && e.keyCode == SWT.F19) {
+						IJ.doCommand(splitShortcut[1]);
+					} else if (splitShortcut[0].equals("F20") && e.keyCode == SWT.F20) {
 						IJ.doCommand(splitShortcut[1]);
 					}
 
