@@ -45,6 +45,8 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -77,8 +79,10 @@ import ij.gui.ImageWindow;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.io.Opener;
+import ij.plugin.CommandLister;
 import ij.plugin.DragAndDrop;
 import ij.plugin.FolderOpener;
+import ij.plugin.Hotkeys;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;
@@ -229,11 +233,11 @@ public class CanvasView extends ViewPart {
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
 
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = "
-								+ (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION",
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
-						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = "
-								+ (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION",
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
@@ -244,7 +248,7 @@ public class CanvasView extends ViewPart {
 		getViewSite().getPage().addPartListener(new IPartListener() {
 			public void partActivated(IWorkbenchPart part) {
 				if (part instanceof CanvasView) {
-
+					tabFolder.setFocus();
 				}
 			}
 
@@ -289,7 +293,7 @@ public class CanvasView extends ViewPart {
 				}
 			}
 		});
-		//Display display = Display.getDefault();
+		// Display display = Display.getDefault();
 		this.parent2 = parent;
 
 		new ImageJ();
@@ -337,6 +341,29 @@ public class CanvasView extends ViewPart {
 				}
 			}
 		});
+
+		CommandLister hotkeys = new CommandLister();
+		String[] shortcuts = hotkeys.getShortcuts();
+		for (int i = 0; i < shortcuts.length; i++) {
+			if (shortcuts[i].contains("\t^")) {
+				shortcuts[i] += " (macro)";
+			}
+
+		}
+
+		tabFolder.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				for (int i = 0; i < shortcuts.length; i++) {
+					String[] splitShortcut = shortcuts[i].split("\t");
+					if (splitShortcut[0].equals("" + e.character)) {
+						IJ.doCommand(splitShortcut[1]);
+					}
+
+				}
+
+			}
+		});
+
 		tabFolder.setBorderVisible(true);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
@@ -446,7 +473,7 @@ public class CanvasView extends ViewPart {
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {
 
-					//IJ.getInstance().doCommand("Rename...");
+					// IJ.getInstance().doCommand("Rename...");
 				}
 			}
 
