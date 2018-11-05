@@ -10,6 +10,9 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
+import com.eco.bio7.jfxswt.JavaFXUtil;
+
 import javafx.embed.swing.SwingNode;
 import javafx.embed.swt.FXCanvas;
 import javafx.event.EventHandler;
@@ -44,14 +47,7 @@ public class SwingFxSwtView {
 
 	public void embedd(Composite top, JComponent comp) {
         this.top=top;
-		canvas = new FXCanvas(top, SWT.NORMAL) {
-			public Point computeSize(int wHint, int hHint, boolean changed) {
-				getScene().getWindow().sizeToScene();
-				int width = (int) getScene().getWidth();
-				int height = (int) getScene().getHeight();
-				return new Point(width, height);
-			}
-		};
+		canvas = new JavaFXUtil().createFXCanvas(top, SWT.NORMAL);
 		canvas.setData("false");
 		canvas.addPaintListener(new PaintListener() {
 

@@ -17,17 +17,16 @@ Require-Bundle: org.eclipse.ui,
  com.eco.bio7.albireo,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.e4.ui.workbench,
- com.eco.bio7.jfxswt;bundle-version="2.0.0";resolution:=optional,
+ com.eco.bio7.jfxswt;bundle-version="2.0.0",
  org.eclipse.ui.ide,
  org.eclipse.ui.editors,
  org.eclipse.e4.ui.css.swt.theme,
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ com.eco.bio7.javafx.devel;bundle-version="1.0.0";resolution:=optional
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: bin/,
  commons-io-1.4.jar,
- external:$java.home$/lib/javafx-swt.jar,
  external:$java.home$/lib/tools.jar
 Export-Package: .,
  com.eco.bio7.ImageJPluginActions,
@@ -45,4 +44,5 @@ Export-Package: .,
  ij.process,
  ij.text,
  ij.util
+Bundle-ActivationPolicy: lazy
 
