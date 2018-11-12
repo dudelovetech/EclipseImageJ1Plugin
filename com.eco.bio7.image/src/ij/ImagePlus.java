@@ -105,6 +105,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private boolean ignoreGlobalCalibration;
 	private boolean oneSliceStack;
 	public boolean setIJMenuBar = Prefs.setIJMenuBar;
+	private String scale = "";
 
 	/** Constructs an uninitialized ImagePlus. */
 	public ImagePlus() {
@@ -1120,7 +1121,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				Menus.updateWindowMenuItem(this, this.title, title);
 			String virtual = stack != null && stack.isVirtual() ? " (V)" : "";
 			String global = getGlobalCalibration() != null ? " (G)" : "";
-			String scale = "";
+			
 			double magnification = win.getCanvas().getMagnification();
 			if (magnification != 1.0) {
 				double percent = magnification * 100.0;
@@ -1136,7 +1137,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				public void run() {
 					if (CanvasView.tabFolder.getItemCount() > 0) {
 
-						CanvasView.tabFolder.getSelection().setText(title);
+						CanvasView.tabFolder.getSelection().setText(title + virtual + global + scale);
 
 					}
 				}

@@ -46,7 +46,7 @@ public class Interpreter implements MacroConstants {
 	Functions func;
 	boolean inFunction;
 	String macroName;
-	String argument;
+	public String argument;
 	String returnValue;
 	boolean calledMacro; // macros envoked by eval() or runMacro()
 	boolean batchMacro; // macros envoked by Process/Batch commands
@@ -1213,7 +1213,7 @@ public class Interpreter implements MacroConstants {
 		}
 	}
 
-	void error (String message) {
+	public void error (String message) {
 		if (ignoreErrors)
 			return;
 		errorCount++;
