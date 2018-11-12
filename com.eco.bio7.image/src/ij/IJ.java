@@ -707,9 +707,11 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box titled "ImageJ". If a macro is running, it
-	 * is aborted. Writes to the Java console if the ImageJ window is not present.
+	 * Displays a message in a dialog box titled "ImageJ". If a macro or JavaScript
+	 * is running, it is aborted. Writes to the Java console if the ImageJ window is
+	 * not present.
 	 */
+
 	public static void error(String msg) {
 		error(null, msg);
 		if (Thread.currentThread().getName().endsWith("JavaScript"))
@@ -719,8 +721,9 @@ public class IJ {
 	}
 
 	/**
-	 * Displays a message in a dialog box with the specified title. If a macro is
-	 * running, it is aborted. Writes to the Java console if ImageJ is not present.
+	 * Displays a message in a dialog box with the specified title. If a macro or
+	 * JavaScript is running, it is aborted. Writes to the Java console if the
+	 * ImageJ window is not present.
 	 */
 	public static void error(String title, String msg) {
 		if (msg != null && msg.endsWith(Macro.MACRO_CANCELED))
@@ -737,6 +740,15 @@ public class IJ {
 		redirectErrorMessages = false;
 		if (abortMacro)
 			Macro.abort();
+	}
+
+	/**
+	 * Aborts any currently running JavaScript, or use IJ.error(string) to abort a
+	 * JavaScript with a message.
+	 */
+	public static void exit() {
+		if (Thread.currentThread().getName().endsWith("JavaScript"))
+			throw new RuntimeException(Macro.MACRO_CANCELED);
 	}
 
 	/**
@@ -1815,16 +1827,16 @@ public class IJ {
 			String dir = System.getProperty("java.io.tmpdir");
 			if (isMacintosh())
 				dir = "/tmp/";
-			if (dir!=null && !dir.endsWith(File.separator))
+			if (dir != null && !dir.endsWith(File.separator))
 				dir += File.separator;
 			return dir;
 		} else if (title2.equals("image")) {
 			ImagePlus imp = WindowManager.getCurrentImage();
 			FileInfo fi = imp != null ? imp.getOriginalFileInfo() : null;
-			if (fi!=null && fi.directory!=null) {
+			if (fi != null && fi.directory != null) {
 				String dir = fi.directory;
-				if (dir!=null && !(dir.endsWith(File.separator)||dir.endsWith("/"))) {
-					if (IJ.isWindows()&&dir.contains(File.separator))
+				if (dir != null && !(dir.endsWith(File.separator) || dir.endsWith("/"))) {
+					if (IJ.isWindows() && dir.contains(File.separator))
 						dir += File.separator;
 					else
 						dir += "/";
@@ -2485,7 +2497,7 @@ public class IJ {
 		PrintWriter pw = new PrintWriter(caw);
 		e.printStackTrace(pw);
 		String s = caw.toString();
-		if (s!=null && s.contains("ThreadDeath"))
+		if (s != null && s.contains("ThreadDeath"))
 			return;
 		if (getInstance() != null) {
 			s = IJ.getInstance().getInfo() + "\n \n" + s;

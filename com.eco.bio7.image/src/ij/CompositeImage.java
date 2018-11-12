@@ -510,6 +510,11 @@ public class CompositeImage extends ImagePlus {
 		setup(nChannels, getImageStack());
 	}
 	
+	public void completeReset() {
+		cip = null;
+		lut = null;
+	}
+	
 	/* Sets the LUT of the current channel. */
 	public void setChannelLut(LUT table) {
 		int c = getChannelIndex();

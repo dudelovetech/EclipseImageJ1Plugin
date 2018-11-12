@@ -27,8 +27,9 @@ import org.osgi.framework.Bundle;
 import com.eco.bio7.image.Util;
 
 /**
- * This plugin implements the Plugins/Macros/Install Macros command. It is also used by the Editor class to install macro in menus and by the ImageJ class to install macros in menus and by the ImageJ
- * class to install macros at startup.
+ * This plugin implements the Plugins/Macros/Install Macros command. It is also
+ * used by the Editor class to install macro in menus and by the ImageJ class to
+ * install macros in menus and by the ImageJ class to install macros at startup.
  */
 
 public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
@@ -37,7 +38,7 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 	public static final char commandPrefix = '^';
 	static final String commandPrefixS = "^";
 	static final int MACROS_MENU_COMMANDS = 6; // number of commands in
-												// Plugins>Macros submenu
+							// Plugins>Macros submenu
 
 	private int[] macroStarts;
 	private String[] macroNames;
@@ -288,7 +289,9 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 			Toolbar tb = Toolbar.getInstance();
 			if (tb != null)
 				tb.installStartupTools();
-		} else
+		} else if (path.contains("Tools"))
+			install(text);
+		else
 			installSingleTool(text);
 	}
 
@@ -410,7 +413,8 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 	}
 
 	/*
-	 * Changed for Bio7! ImageJ resources are not wrapped in a *.jar. So we calculate and return the paths!
+	 * Changed for Bio7! ImageJ resources are not wrapped in a *.jar. So we
+	 * calculate and return the paths!
 	 */
 	/** Returns a text file contained in ij.jar. */
 	public String openFromIJJar(String path) {
@@ -419,12 +423,18 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 		path = pathDir + path;
 
 		/*
-		 * String currentDir = path; // System.out.println(path); pluginsPath = path + "plugins/";// plugins dir; macrosPath = path + "macros/";// macros dir; ImageJPath = path;
+		 * String currentDir = path; // System.out.println(path); pluginsPath = path +
+		 * "plugins/";// plugins dir; macrosPath = path + "macros/";// macros dir;
+		 * ImageJPath = path;
 		 */
 
 		/*
-		 * String text = null; try { InputStream is = this.getClass().getResourceAsStream(path); //IJ.log(is+"	"+path); if (is==null) return null; InputStreamReader isr = new InputStreamReader(is);
-		 * StringBuffer sb = new StringBuffer(); char [] b = new char [8192]; int n; while ((n = isr.read(b)) > 0) sb.append(b,0, n); text = sb.toString(); } catch (IOException e) {}
+		 * String text = null; try { InputStream is =
+		 * this.getClass().getResourceAsStream(path); //IJ.log(is+"	"+path); if
+		 * (is==null) return null; InputStreamReader isr = new InputStreamReader(is);
+		 * StringBuffer sb = new StringBuffer(); char [] b = new char [8192]; int n;
+		 * while ((n = isr.read(b)) > 0) sb.append(b,0, n); text = sb.toString(); }
+		 * catch (IOException e) {}
 		 */
 		/* Open the calculated file with the ApacheIO lib! */
 		File file = new File(path);
@@ -467,11 +477,11 @@ public class MacroInstaller implements PlugIn, MacroConstants, ActionListener {
 	public static boolean runMacroCommand(String name) {
 		if (instance == null)
 			return false;
-		
+
 		if (name.startsWith(commandPrefixS))
 			name = name.substring(1);
 		for (int i = 0; i < instance.nMacros; i++) {
-			
+
 			if (name.equals(instance.macroNames[i])) {
 				MacroRunner mm = new MacroRunner();
 				mm.run(instance.pgm, instance.macroStarts[i], name);

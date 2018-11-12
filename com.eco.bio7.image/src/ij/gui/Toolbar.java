@@ -2082,7 +2082,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			(new MacroInstaller()).installFromIJJar(path);
 	}
 
-	private void showCode(String title, String code) {
+	public static void showCode(String title, String code) {
 		Editor ed = new Editor();
 		ed.setSize(550, 450);
 		ed.create(title, code);

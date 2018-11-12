@@ -46,7 +46,7 @@ public class SwingFxSwtView {
 	public Composite top;
 
 	public void embedd(Composite top, JComponent comp) {
-        this.top=top;
+		this.top = top;
 		canvas = new JavaFXUtil().createFXCanvas(top, SWT.NORMAL);
 		canvas.setData("false");
 		canvas.addPaintListener(new PaintListener() {
@@ -70,11 +70,13 @@ public class SwingFxSwtView {
 		});
 
 		swingNode = new SwingNode();
-		/*SwingUtilities.invokeLater(new Runnable() {
-			public void run() {*/
+		/*
+		 * SwingUtilities.invokeLater(new Runnable() { public void run() {
+		 */
 		swingNode.setContent(comp);
-		/*	}
-		});*/
+		/*
+		 * } });
+		 */
 
 		pane = new StackPane();
 		pane.getChildren().add(swingNode);

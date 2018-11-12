@@ -4,11 +4,6 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import java.io.*;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-
 import java.awt.datatransfer.*;
 import ij.gui.*;
 import ij.process.*;
@@ -37,13 +32,24 @@ public class CalibrationBar implements PlugIn {
 	static final String[] locations = {"Upper Right","Lower Right","Lower Left", "Upper Left", "At Selection"};
 	static final int UPPER_RIGHT=0, LOWER_RIGHT=1, LOWER_LEFT=2, UPPER_LEFT=3, AT_SELECTION=4;
 
-	static String fillColor = colors[0];
-	static String textColor = colors[3];
-	static String location = locations[UPPER_RIGHT];
-	static double zoom = 1;
-	static int numLabels = 5;
-	static int fontSize = 12;
-	static int decimalPlaces = 0;
+	private static String sFillColor = colors[0];
+	private static String sTextColor = colors[3];
+	private static String sLocation = locations[UPPER_RIGHT];
+	private static double sZoom = 1;
+	private static int sNumLabels = 5;
+	private static int sFontSize = 12;
+	private static int sDecimalPlaces = 0;
+	private static boolean sFlatten;
+	
+	private String fillColor = sFillColor;
+	private String textColor = sTextColor;
+	private String location = sLocation;
+	private double zoom = sZoom;
+	private int numLabels = sNumLabels;
+	private int fontSize = sFontSize;
+	private int decimalPlaces = sDecimalPlaces;
+	private boolean flatten = sFlatten;
+
 	ImagePlus imp;
 	LiveDialog gd;
 
@@ -51,10 +57,10 @@ public class CalibrationBar implements PlugIn {
 	Calibration cal;
 	int[] histogram;
 	Image img;
-	JButton setup, redraw, insert, unInsert;
-	JCheckBox ne,nw,se,sw;
+	Button setup, redraw, insert, unInsert;
+	Checkbox ne,nw,se,sw;
 	CheckboxGroup locGroup;
-	JLabel value, note;
+	Label value, note;
 	int newMaxCount;
 	boolean logScale;
 	int win_width;
@@ -62,8 +68,6 @@ public class CalibrationBar implements PlugIn {
 	int fontHeight = 0;
 	boolean boldText;
 	boolean showUnit;
-	static boolean staticFlatten;
-	boolean flatten = staticFlatten;
 	Object backupPixels;
 	byte[] byteStorage;
 	int[] intStorage;
@@ -91,7 +95,7 @@ public class CalibrationBar implements PlugIn {
 		double mag = (ic!=null)?ic.getMagnification():1.0;
 		if (zoom<=1 && mag<1)
 			zoom = (double) 1.0/mag;
-		insetPad = imp.getWidth()/50;
+		insetPad = (imp.getWidth()+imp.getHeight())/100;
 		if (insetPad<4)
 			insetPad = 4;
 		updateColorBar();
@@ -174,8 +178,16 @@ public class CalibrationBar implements PlugIn {
 		boldText = gd.getNextBoolean();
 		flatten = !gd.getNextBoolean();
 		showUnit = gd.getNextBoolean();
-		if (!IJ.isMacro())
-			staticFlatten = flatten;
+		if (!IJ.isMacro()) {
+			sFlatten = flatten;
+			sFillColor = fillColor;
+			sTextColor = textColor;
+			sLocation = location;
+			sZoom = zoom;
+			sNumLabels = numLabels;
+			sFontSize = fontSize;
+			sDecimalPlaces = decimalPlaces;
+		}
 		return true;
 	}
 
@@ -197,7 +209,6 @@ public class CalibrationBar implements PlugIn {
 		win_width = (int)(XMARGIN*zoom) + 5 + (int)(BAR_THICKNESS*zoom) + maxTextWidth + (int)((XMARGIN/2)*zoom);
 		if (x==-1 && y==-1)
 			return;	 // return if calculating width
-
 		Color c = getColor(fillColor);
 		if (c!=null) {
 			Roi r = new Roi(x, y, win_width, (int)(WIN_HEIGHT*zoom + 2*(int)(YMARGIN*zoom)));
