@@ -1121,7 +1121,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				Menus.updateWindowMenuItem(this, this.title, title);
 			String virtual = stack != null && stack.isVirtual() ? " (V)" : "";
 			String global = getGlobalCalibration() != null ? " (G)" : "";
-			
+			scale="";
 			double magnification = win.getCanvas().getMagnification();
 			if (magnification != 1.0) {
 				double percent = magnification * 100.0;
@@ -1147,6 +1147,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		this.title = title;
 		if (titleChanged && listeners.size() > 0)
 			notifyListeners(UPDATED);
+		
 	}
 
 	public int getWidth() {
