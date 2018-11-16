@@ -22,11 +22,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.e4.ui.css.swt.theme,
  org.eclipse.e4.core.contexts,
- com.eco.bio7.javafx.devel;bundle-version="1.0.0";resolution:=optional
+ com.eco.bio7.javafx.devel;bundle-version="1.0.0";resolution:=optional,
+ org.eclipse.swt
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: bin/,
  commons-io-1.4.jar,
+ external:$java.home$/lib/jfxswt.jar,
+ external:$java.home$/lib/javafx-swt.jar,
  external:$java.home$/lib/tools.jar
 Export-Package: .,
  com.eco.bio7.ImageJPluginActions,
