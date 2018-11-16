@@ -198,7 +198,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(10, 4, 0, 0));
 		int hgap = IJ.isMacOSX() || isRGB ? 1 : 5;
-		// buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
+		buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
 		int trim = IJ.isMacOSX() ? 6 : 0;
 		list = new TrimmedButton("List", trim);
 		list.addActionListener(this);
@@ -235,43 +235,14 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		/* Changed for Bio7! */
 		Display display = Util.getDisplay();
 		display.syncExec(new Runnable() {
-
 			public void run() {
 				CTabFolder ctab = CanvasView.getCanvas_view().tabFolder;
-
-				ve = (Vector) ctab.getSelection().getData();
-				ImagePlus plu = (ImagePlus) ve.get(0);
-
-				ImageWindow win = (ImageWindow) ve.get(1);
-				// JPanel current = (JPanel) ve.get(2);
-
-				CustomDetachedImageJView custom = new CustomDetachedImageJView();
-				// Create ImageJ view with unique ID! 
-				String id = UUID.randomUUID().toString();
-				// detachedSecViewIDs.add(id);
-				custom.setPanel(CanvasView.getCurrent(), id, plu.getTitle());
-				custom.setData(plu, win);
-				
-				// Only hide the tab without to close the ImagePlus object!
-				 
-				IJTabs.hideTab();
-
-				CustomDetachedImageJView custom2 = new CustomDetachedImageJView();
-				/* Create ImageJ view with unique ID! */
-				String id2 = UUID.randomUUID().toString();
-
-				custom2.setPanel(buttons, id2, "Options " + plu.getTitle());
+				ve = (Vector<?>) ctab.getSelection().getData();
+				JPanel current = (JPanel) ve.get(2);
+				current.add(buttons);
 			}
 		});
-		
-		/*JFrame fr = new JFrame();
-		fr.setContentPane(buttons);
-		fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		fr.setBounds(100, 100, 450, 172);
-		fr.setAlwaysOnTop(true);
-		fr.setVisible(true);
-		// add(buttons);
-		pack();*/
+
 	}
 
 	public void setup() {
