@@ -6,6 +6,8 @@ import java.io.*;
 import java.awt.datatransfer.*;
 import java.util.*;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ij.*;
@@ -97,11 +99,12 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 
 	boolean wasActivated; // true after window has been activated once, needed by PlotCanvas
 
-	private Button list, data, more, live;
+	JButton list;
+	private JButton data, more, live;
 	private PopupMenu dataPopupMenu, morePopupMenu;
 	private static final int NUM_MENU_ITEMS = 18; // how many menu items we have in total
 	private MenuItem[] menuItems = new MenuItem[NUM_MENU_ITEMS];
-	private Label coordinates;
+	private JLabel coordinates;
 	private static String defaultDirectory = null;
 	private static int options;
 	private int defaultDigits = -1;
@@ -273,22 +276,22 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		JPanel bottomPanel = new JPanel();
 		int hgap = IJ.isMacOSX() ? 1 : 5;
 
-		list = new Button(" List ");
+		list = new JButton(" List ");
 		list.addActionListener(this);
 		bottomPanel.add(list);
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
-		data = new Button(dataButtonLabel);
+		data = new JButton(dataButtonLabel);
 		data.addActionListener(this);
 		bottomPanel.add(data);
-		more = new Button(moreButtonLabel);
+		more = new JButton(moreButtonLabel);
 		more.addActionListener(this);
 		bottomPanel.add(more);
 		if (plot != null && plot.getPlotMaker() != null) {
-			live = new Button("Live");
+			live = new JButton("Live");
 			live.addActionListener(this);
 			bottomPanel.add(live);
 		}
-		coordinates = new Label(blankLabel);
+		coordinates = new JLabel(blankLabel);
 		coordinates.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
 		// Changed for Bio7!

@@ -13,7 +13,7 @@ public class FontUtil {
 		Font font = new Font(fontFamilyName, style, (int)size);
 		if (!font.getFamily().startsWith(fontFamilyName)) {
 			String[] similarFonts = getSimilarFontsList(fontFamilyName);
-			font = getFont(fontFamilyName, style, (int)size);
+			font = getFont(similarFonts, style, (int)size);
 		}
 		if (size != (int)size)
 			font = font.deriveFont(size);
@@ -39,7 +39,7 @@ public class FontUtil {
 	 *	sans-serif fonts in the list; thus it should be considered a fallback option only.
 	 *	Also note that some fonts (Times, Helvetica, Courier, Monospace, Serif) tend to truncate some
 	 *	diacritical marks when using FontMetrics.getHeight (as ImageJ does), e.g. the ring of the
-	 *  Angstrom symbol Ã… may be clipped (at least on Java 1.6/Mac)
+	 *  Angstrom symbol Å may be clipped (at least on Java 1.6/Mac)
 	 */
 	public static String[] getSimilarFontsList(String fontFamily) {
 		if (fontFamily.indexOf("Times")>=0 || fontFamily.indexOf("Serif")>=0)
