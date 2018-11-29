@@ -93,24 +93,7 @@ public class FXSwtAwtCustom {
 
 					view.getCustomViewParent().setData(ve);
 
-					frame = SWT_AWT.new_Frame(top);
-
-					SwtAwt.setSwtAwtFocus(frame, top);
-
-					panel = new JApplet() {
-						public void update(java.awt.Graphics g) {
-							// Do not erase the background
-							paint(g);
-						}
-					};
-
-					frame.add(panel);
-
-					JRootPane root = new JRootPane();
-					panel.add(root);
-					contentPane = root.getContentPane();
-
-					contentPane.add(jpanel);
+					
 					view.getCustomViewParent().layout();
 
 				}

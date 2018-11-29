@@ -132,8 +132,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (font != null) {
 			setFont(Util.getOSFontToAwt());
 		}
-		/* Changed for Bio7! AWT must be colored per component. All JPanels will get the SWT background
-		 * from the definition of the CanvasView (UIManager)! */
+		/*
+		 * Changed for Bio7! AWT must be colored per component. All JPanels will get the
+		 * SWT background from the definition of the CanvasView (UIManager)!
+		 */
 		if (Util.getOS().equals("Linux")) {
 			setBackground(Util.getSWTBackgroundToAWT());
 		}
@@ -143,12 +145,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * Adds a numeric field. The first word of the label must be unique or command
 	 * recording will not work.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param defaultValue
-	 *            value to be initially displayed
-	 * @param digits
-	 *            number of digits to right of decimal point
+	 * @param label        the label
+	 * @param defaultValue value to be initially displayed
+	 * @param digits       number of digits to right of decimal point
 	 */
 	public void addNumericField(String label, double defaultValue, int digits) {
 		addNumericField(label, defaultValue, digits, 6, null);
@@ -158,16 +157,11 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * Adds a numeric field. The first word of the label must be unique or command
 	 * recording will not work.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param defaultValue
-	 *            value to be initially displayed
-	 * @param digits
-	 *            number of digits to right of decimal point
-	 * @param columns
-	 *            width of field in characters
-	 * @param units
-	 *            a string displayed to the right of the field
+	 * @param label        the label
+	 * @param defaultValue value to be initially displayed
+	 * @param digits       number of digits to right of decimal point
+	 * @param columns      width of field in characters
+	 * @param units        a string displayed to the right of the field
 	 */
 	public void addNumericField(String label, double defaultValue, int digits, int columns, String units) {
 		String label2 = label;
@@ -273,10 +267,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds an 8 column text field.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param defaultText
-	 *            the text initially displayed
+	 * @param label       the label
+	 * @param defaultText the text initially displayed
 	 */
 	public void addStringField(String label, String defaultText) {
 		addStringField(label, defaultText, 8);
@@ -285,13 +277,11 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a text field.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param defaultText
-	 *            text initially displayed
-	 * @param columns
-	 *            width of the text field. If columns is 8 or more, additional items
-	 *            may be added to this line with addToSameRow()
+	 * @param label       the label
+	 * @param defaultText text initially displayed
+	 * @param columns     width of the text field. If columns is 8 or more,
+	 *                    additional items may be added to this line with
+	 *                    addToSameRow()
 	 */
 	public void addStringField(String label, String defaultText, int columns) {
 		String label2 = label;
@@ -347,10 +337,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a checkbox.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param defaultValue
-	 *            the initial state
+	 * @param label        the label
+	 * @param defaultValue the initial state
 	 */
 	public void addCheckbox(String label, boolean defaultValue) {
 		addCheckbox(label, defaultValue, false);
@@ -406,8 +394,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * flags. A previewCheckbox is always off when the filter is started and does
 	 * not get recorded by the Macro Recorder.
 	 *
-	 * @param pfr
-	 *            A reference to the PlugInFilterRunner calling the PlugInFilter if
+	 * @param pfr A reference to the PlugInFilterRunner calling the PlugInFilter if
 	 *            automatic preview is desired, null otherwise.
 	 */
 	public void addPreviewCheckbox(PlugInFilterRunner pfr) {
@@ -438,14 +425,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a group of checkboxs using a grid layout.
 	 * 
-	 * @param rows
-	 *            the number of rows
-	 * @param columns
-	 *            the number of columns
-	 * @param labels
-	 *            the labels
-	 * @param defaultValues
-	 *            the initial states
+	 * @param rows          the number of rows
+	 * @param columns       the number of columns
+	 * @param labels        the labels
+	 * @param defaultValues the initial states
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues) {
 		addCheckboxGroup(rows, columns, labels, defaultValues, null);
@@ -454,17 +437,12 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a group of checkboxs using a grid layout.
 	 * 
-	 * @param rows
-	 *            the number of rows
-	 * @param columns
-	 *            the number of columns
-	 * @param labels
-	 *            the labels
-	 * @param defaultValues
-	 *            the initial states
-	 * @param headings
-	 *            the column headings Example:
-	 *            http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
+	 * @param rows          the number of rows
+	 * @param columns       the number of columns
+	 * @param labels        the labels
+	 * @param defaultValues the initial states
+	 * @param headings      the column headings Example:
+	 *                      http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
 		JPanel panel = new JPanel();
@@ -530,16 +508,11 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a radio button group.
 	 * 
-	 * @param label
-	 *            group label (or null)
-	 * @param items
-	 *            radio button labels
-	 * @param rows
-	 *            number of rows
-	 * @param columns
-	 *            number of columns
-	 * @param defaultItem
-	 *            button initially selected
+	 * @param label       group label (or null)
+	 * @param items       radio button labels
+	 * @param rows        number of rows
+	 * @param columns     number of columns
+	 * @param defaultItem button initially selected
 	 */
 	public void addRadioButtonGroup(String label, String[] items, int rows, int columns, String defaultItem) {
 		addToSameRow = false;
@@ -578,12 +551,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds a popup menu.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param items
-	 *            the menu items
-	 * @param defaultItem
-	 *            the menu item initially selected
+	 * @param label       the label
+	 * @param items       the menu items
+	 * @param defaultItem the menu item initially selected
 	 */
 	public void addChoice(String label, String[] items, String defaultItem) {
 		String label2 = label;
@@ -672,14 +642,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/**
 	 * Adds one or two (side by side) text areas.
 	 * 
-	 * @param text1
-	 *            initial contents of the first text area
-	 * @param text2
-	 *            initial contents of the second text area or null
-	 * @param rows
-	 *            the number of rows
-	 * @param columns
-	 *            the number of columns
+	 * @param text1   initial contents of the first text area
+	 * @param text2   initial contents of the second text area or null
+	 * @param rows    the number of rows
+	 * @param columns the number of columns
 	 */
 	public void addTextAreas(String text1, String text2, int rows, int columns) {
 		if (textArea1 != null)
@@ -713,14 +679,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * if (maxValue-minValue)<=5.0 and either defaultValue or minValue are
 	 * non-integer.
 	 * 
-	 * @param label
-	 *            the label
-	 * @param minValue
-	 *            the minimum value of the slider
-	 * @param maxValue
-	 *            the maximum value of the slider
-	 * @param defaultValue
-	 *            the initial value of the slider
+	 * @param label        the label
+	 * @param minValue     the minimum value of the slider
+	 * @param maxValue     the maximum value of the slider
+	 * @param defaultValue the initial value of the slider
 	 */
 	public void addSlider(String label, double minValue, double maxValue, double defaultValue) {
 		if (defaultValue < minValue)
@@ -1027,8 +989,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 * dialog. For other listeners, the OK button will not cause a call to
 	 * dialogItemChanged; the CANCEL button will never cause such a call.
 	 * 
-	 * @param dl
-	 *            the Object that wants to listen.
+	 * @param dl the Object that wants to listen.
 	 */
 	public void addDialogListener(DialogListener dl) {
 		if (dialogListeners == null)
@@ -1087,8 +1048,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 					errorMessage = "\"" + theText + "\" is an invalid number";
 					value = Double.NaN;
 					if (macro) {
-						IJ.error("Macro Error", "Numeric value expected in run() function\n \n" + "   Dialog box title: \"" + getTitle() + "\"\n" + "   Key: \"" + label.toLowerCase(Locale.US) + "\"\n"
-								+ "   Value or variable name: \"" + theText + "\"");
+						IJ.error("Macro Error", "Numeric value expected in run() function\n \n" + "   Dialog box title: \"" + getTitle() + "\"\n" + "   Key: \"" + label.toLowerCase(Locale.US) + "\"\n" + "   Value or variable name: \"" + theText + "\"");
 					}
 				}
 			}
@@ -1716,14 +1676,14 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	public void paint(Graphics g) {
-		super.paint(g);		
+		super.paint(g);
 		if (firstPaint && IJ.isMacOSX() && IJ.isJava18()) { // fix for incompletely drawn dialogs on Macs
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					IJ.wait(50);
 					Dimension size = getSize();
-					if (size!=null)
-						setSize(size.width+2,size.height+2);
+					if (size != null)
+						setSize(size.width + 2, size.height + 2);
 					firstPaint = false;
 				}
 			});
@@ -1746,9 +1706,12 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	}
 
 	void showHelp() {
-		if (helpURL.startsWith("<html>"))
-			new HTMLDialog(this, "", helpURL);
-		else {
+		if (helpURL.startsWith("<html>")) {
+			if (this instanceof NonBlockingGenericDialog)
+				new HTMLDialog("", helpURL, false); // non blocking
+			else
+				new HTMLDialog(this, "", helpURL); // modal
+		} else {
 			String macro = "run('URL...', 'url=" + helpURL + "');";
 			new MacroRunner(macro);
 		}

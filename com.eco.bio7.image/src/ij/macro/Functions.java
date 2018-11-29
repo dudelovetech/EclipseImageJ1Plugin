@@ -3148,6 +3148,11 @@ public class Functions implements MacroConstants, Measurements {
 							if (pattern.equalsIgnoreCase("cp")) {
 								((ColorPicker) thisWin).close();
 							}
+						}						
+						if (thisWin instanceof ThresholdAdjuster) {//Threshold
+							if (pattern.equalsIgnoreCase("Threshold")) {
+								((ThresholdAdjuster) thisWin).close();
+							}
 						}
 						if (thisWin instanceof Editor) {//macros editor, loaded text files
 							Editor ed = (Editor) thisWin;
@@ -4472,6 +4477,8 @@ public class Functions implements MacroConstants, Measurements {
 			BatchProcessor.saveOutput(state);
 		else if (arg1.startsWith("converttomicrons"))
 			Prefs.convertToMicrons = state;
+		else if (arg1.startsWith("supportmacroundo"))
+			Prefs.supportMacroUndo = state;
 		else if (arg1.equals("inverty"))
 			getImage().getCalibration().setInvertY(state);
 		else
@@ -6499,6 +6506,8 @@ public class Functions implements MacroConstants, Measurements {
 			return new Variable(getResultsTable(getTitleArg()).getColumnHeadings());
 		else if (name.equals("showRowNumbers"))
 			return showRowNumbers();
+		else if (name.equals("sort"))
+			return sortTable();
 		else if (name.equals("hideRowNumbers")) {
 			getResultsTable(getTitleArg()).showRowNumbers(false);
 			return new Variable();
@@ -6629,6 +6638,18 @@ public class Functions implements MacroConstants, Measurements {
 		boolean show = (int)getFirstArg()!=0;
 		ResultsTable rt = getResultsTable(getTitle());
 		rt.showRowNumbers(show);
+		return new Variable();
+	}
+
+	private Variable sortTable() {
+		String column = getFirstString();
+		ResultsTable rt = getResultsTable(getTitle());
+		try {
+			rt.sort(column);
+		} catch (Exception e) {
+			interp.error(e.getMessage());
+		}
+		rt.show(rt.getTitle());
 		return new Variable();
 	}
 

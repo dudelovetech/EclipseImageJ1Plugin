@@ -9,8 +9,6 @@ import ij.macro.Interpreter;
 import java.awt.*;
 import java.util.*;
 
-import javax.swing.JCheckBox;
-
 public class PlugInFilterRunner implements Runnable, DialogListener {
 	private String command;					// the command, can be but need not be the name of the PlugInFilter
 	private Object theFilter;					// the instance of the PlugInFilter
@@ -123,7 +121,8 @@ public class PlugInFilterRunner implements Runnable, DialogListener {
 				if ((flags&PlugInFilter.NO_CHANGES)==0&&(flags&PlugInFilter.KEEP_THRESHOLD)==0)
 					ip.resetBinaryThreshold();
 			} else {  //  stack
-				Undo.reset();	 // no undo for processing a complete stack
+				if ((flags&PlugInFilter.NO_UNDO_RESET)==0)
+					Undo.reset();	 // no undo for processing a complete stack
 				IJ.resetEscape();
 				int slicesToDo = processedAsPreview!=0 ? slices-1 : slices;
 				nPasses *= slicesToDo;

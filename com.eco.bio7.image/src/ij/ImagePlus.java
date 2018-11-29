@@ -605,7 +605,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		if (newProperties != null)
 			newProperties = (Properties) (newProperties.clone());
 		if (imp.getWindow() != null)
-			imp = imp.duplicate();
+			imp = imp.duplicateAll();
 		ImageStack stack2 = imp.getStack();
 		if (imp.isHyperStack())
 			setOpenAsHyperStack(true);
@@ -1121,7 +1121,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				Menus.updateWindowMenuItem(this, this.title, title);
 			String virtual = stack != null && stack.isVirtual() ? " (V)" : "";
 			String global = getGlobalCalibration() != null ? " (G)" : "";
-			scale="";
+			scale = "";
 			double magnification = win.getCanvas().getMagnification();
 			if (magnification != 1.0) {
 				double percent = magnification * 100.0;
@@ -1147,15 +1147,35 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		this.title = title;
 		if (titleChanged && listeners.size() > 0)
 			notifyListeners(UPDATED);
-		
+
 	}
 
+	/** Returns the width of this image in pixels. */
 	public int getWidth() {
 		return width;
 	}
 
+	/** Returns the height of this image in pixels. */
 	public int getHeight() {
 		return height;
+	}
+
+	/** Returns the size of this image in bytes. */
+	public double getSizeInBytes() {
+		double size = ((double) getWidth() * getHeight() * getStackSize());
+		int type = getType();
+		switch (type) {
+		case ImagePlus.GRAY16:
+			size *= 2.0;
+			break;
+		case ImagePlus.GRAY32:
+			size *= 4.0;
+			break;
+		case ImagePlus.COLOR_RGB:
+			size *= 4.0;
+			break;
+		}
+		return size;
 	}
 
 	/** If this is a stack, returns the number of slices, else returns 1. */
@@ -1981,7 +2001,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		if (updateDisplay)
 			draw();
-		roi.notifyListeners(RoiListener.CREATED);
+		if (roi != null)
+			roi.notifyListeners(RoiListener.CREATED);
 	}
 
 	/** Creates a rectangular selection. */
@@ -2372,6 +2393,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	/**
 	 * Returns a copy of this image or stack, cropped if there is an ROI.
 	 * 
+	 * @see #duplicateAll
 	 * @see #crop
 	 * @see ij.plugin.Duplicator#run
 	 */
@@ -2380,9 +2402,24 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
+	 * Returns a copy of this image or stack.
+	 * 
+	 * @see #duplicate
+	 * @see #crop
+	 */
+	public ImagePlus duplicateAll() {
+		Roi roi = getRoi();
+		deleteRoi();
+		ImagePlus imp2 = (new Duplicator()).run(this);
+		setRoi(roi);
+		return imp2;
+	}
+
+	/**
 	 * Returns a copy this image or stack slice, cropped if there is an ROI.
 	 * 
 	 * @see #duplicate
+	 * @see #duplicateAll
 	 * @see ij.plugin.Duplicator#crop
 	 */
 	public ImagePlus crop() {
