@@ -44,7 +44,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	protected long[] histogram;
 	protected LookUpTable lut;
 	protected Rectangle frame = null;
-	protected Button list, save, copy, log, live, rgb;
+	protected JButton list, save, copy, log, live, rgb;
 	protected Label value, count;
 	protected static String defaultDirectory = null;
 	protected int decimalPlaces;
