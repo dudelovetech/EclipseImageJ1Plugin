@@ -332,6 +332,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				current.add(bottomPanel);
 			}
 		});
+		CanvasView.getCanvas_view().getCurrent().validate();
 	}
 
 	/**

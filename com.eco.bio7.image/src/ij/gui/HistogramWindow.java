@@ -242,6 +242,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 				current.add(buttons);
 			}
 		});
+		CanvasView.getCanvas_view().getCurrent().validate();
 
 	}
 
