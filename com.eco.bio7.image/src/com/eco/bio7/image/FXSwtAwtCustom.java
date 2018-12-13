@@ -46,7 +46,7 @@ public class FXSwtAwtCustom {
 	protected Scene scene;
 
 	protected Stage stage2;
-	
+
 	SwingFxSwtView fxView;
 
 	public FXSwtAwtCustom(JPanel Jpanel, CustomDetachedImageJView view) {
@@ -54,12 +54,11 @@ public class FXSwtAwtCustom {
 		this.jpanel = Jpanel;
 		ve = new Vector();
 		ve.add(Jpanel);
-		
+
 	}
 
-
 	public void addTab(final String title) {
-       /*Add JavaFX to embed the ImageJ canvas!*/
+		/* Add JavaFX to embed the ImageJ canvas! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		if (javaFXEmbedded) {
@@ -73,14 +72,13 @@ public class FXSwtAwtCustom {
 					top.setLayout(new FillLayout());
 					comp.setData(ve);
 					fxView.embedd(top, jpanel);
-					
 
 				}
 			});
 		}
 
 		else {
-			/*Add SWT_AWT to embed the ImageJ canvas!*/
+			/* Add SWT_AWT to embed the ImageJ canvas! */
 			Display dis = view.getCustomViewParent().getDisplay();
 			dis.syncExec(new Runnable() {
 				public void run() {
@@ -92,8 +90,25 @@ public class FXSwtAwtCustom {
 					}
 
 					view.getCustomViewParent().setData(ve);
+					frame = SWT_AWT.new_Frame(top);
 
-					
+					SwtAwt.setSwtAwtFocus(frame, top);
+
+					panel = new JApplet() {
+						public void update(java.awt.Graphics g) {
+							// Do not erase the background
+							paint(g);
+						}
+					};
+
+					frame.add(panel);
+
+					JRootPane root = new JRootPane();
+					panel.add(root);
+					contentPane = root.getContentPane();
+
+					contentPane.add(jpanel);
+
 					view.getCustomViewParent().layout();
 
 				}
