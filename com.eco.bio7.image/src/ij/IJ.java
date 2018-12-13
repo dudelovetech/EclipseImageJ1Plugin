@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+
 /** This class consists of static utility methods. */
 public class IJ {
 
@@ -77,6 +78,7 @@ public class IJ {
 	private static DecimalFormatSymbols dfs;
 	private static boolean trustManagerCreated;
 	private static String smoothMacro;
+	private static Interpreter macroInterpreter;
 
 	static {
 		osname = System.getProperty("os.name");
@@ -165,7 +167,7 @@ public class IJ {
 	 * Runs the specified macro or script file in the current thread. The file is
 	 * assumed to be in the macros folder unless <code>name</code> is a full path.
 	 * The optional string argument (<code>arg</code>) can be retrieved in the
-	 * called macro or script (v1.42k or later) using the getArgument() function.
+	 * called macro or script using the getArgument() function. 
 	 * Returns any string value returned by the macro, or null. Scripts always
 	 * return null. The equivalent macro function is runMacro().
 	 */
@@ -335,7 +337,15 @@ public class IJ {
 		macroRunning = false;
 		Macro.setOptions(null);
 		testAbort();
+		macroInterpreter = null;
 		// IJ.log("run2: "+command+" "+Thread.currentThread().hashCode());
+	}
+	
+	/** The macro interpreter uses this method to run commands. */
+	public static void run(Interpreter interpreter, String command, String options) {
+		macroInterpreter = interpreter;
+		run(command, options);
+		macroInterpreter = null;
 	}
 
 	/**
@@ -623,7 +633,12 @@ public class IJ {
 
 	/** Displays a "no images are open" dialog box. */
 	public static void noImage() {
-		error("No Image", "There are no images open.");
+		String msg = "There are no images open.";
+		if (macroInterpreter!=null) {
+			macroInterpreter.abort(msg);
+			macroInterpreter = null;
+		} else
+			error("No Image", msg);
 	}
 
 	/** Displays an "out of memory" message to the "Log" window. */
@@ -713,6 +728,11 @@ public class IJ {
 	 */
 
 	public static void error(String msg) {
+		if (macroInterpreter!=null) {
+			macroInterpreter.abort(msg);
+			macroInterpreter = null;
+			return;
+		}
 		error(null, msg);
 		if (Thread.currentThread().getName().endsWith("JavaScript"))
 			throw new RuntimeException(Macro.MACRO_CANCELED);
@@ -1035,7 +1055,7 @@ public class IJ {
 
 	public static void setKeyUp(int key) {
 		if (debugMode)
-			IJ.log("setKeyUp: " + key);
+			//if (debugMode) IJ.log("setKeyUp: "+key);
 		switch (key) {
 		case KeyEvent.VK_CONTROL:
 			controlDown = false;
@@ -2470,7 +2490,7 @@ public class IJ {
 	}
 
 	static void abort() {
-		if (ij != null || Interpreter.isBatchMode())
+		if ((ij!=null || Interpreter.isBatchMode()) && macroInterpreter==null)
 			throw new RuntimeException(Macro.MACRO_CANCELED);
 	}
 

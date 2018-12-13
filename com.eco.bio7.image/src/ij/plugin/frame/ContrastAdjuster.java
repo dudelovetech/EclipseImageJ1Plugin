@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ij.*;
@@ -36,7 +37,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable, ActionLi
 	boolean doAutoAdjust, doReset, doSet, doApplyLut;
 
 	JPanel panel, tPanel;
-	Button autoB, resetB, setB, applyB;
+	JButton autoB, resetB, setB, applyB;
 	int previousImageID;
 	int previousType;
 	int previousSlice = 1;
@@ -296,7 +297,7 @@ public class ContrastAdjuster extends PlugInDialog implements Runnable, ActionLi
 	}
 
 	public synchronized void actionPerformed(ActionEvent e) {
-		Button b = (Button) e.getSource();
+		JButton b = (JButton) e.getSource();
 		if (b == null)
 			return;
 		if (b == resetB)

@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ij.*;
@@ -48,7 +49,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 	boolean doAutoAdjust,doReset,doApplyLut,doStateChange,doSet,doBackground; //actions required from user interface
 
 	JPanel panel;
-	Button autoB, resetB, applyB, setB;
+	JButton autoB, resetB, applyB, setB;
 	int previousImageID;
 	int previousImageType;
 	int previousRoiHashCode;
@@ -279,7 +280,7 @@ public class ThresholdAdjuster extends PlugInDialog implements PlugIn, Measureme
 	}
 
 	public synchronized void actionPerformed(ActionEvent e) {
-		Button b = (Button)e.getSource();
+		JButton b = (JButton)e.getSource();
 		if (b==null) return;
 		if (b==resetB)
 			doReset = true;

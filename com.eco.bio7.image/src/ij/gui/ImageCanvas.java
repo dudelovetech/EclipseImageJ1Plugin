@@ -227,8 +227,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	/* Changed for Bio7! */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (IJ.debugMode)
-			IJ.log("ImageCanvas.paint: " + imp);
+		//if (IJ.debugMode)
+		//	IJ.log("ImageCanvas.paint: " + imp);
 		painted = true;
 		Roi roi = imp.getRoi();
 		if (roi != null || overlay != null || showAllOverlay != null || Prefs.paintDoubleBuffered || (IJ.isLinux() && magnification < 0.25)) {
@@ -264,8 +264,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			Rectangle maxWindow = CanvasView.getCanvas_view().getCurrent().getBounds();
 			if (maxWindow.width / magnification < imageWidth || maxWindow.height / magnification < imageHeight)
 				drawZoomIndicator(g);
-			if (IJ.debugMode)
-				showFrameRate(g);
+			//if (IJ.debugMode)
+				//showFrameRate(g);
 		} catch (OutOfMemoryError e) {
 			IJ.outOfMemory("Paint");
 		}
@@ -328,8 +328,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			labelColor = Color.white;
 		initGraphics(overlay, g, labelColor, Roi.getColor());
 		int n = overlay.size();
-		if (IJ.debugMode)
-			IJ.log("drawOverlay: " + n);
+		//if (IJ.debugMode)
+			//IJ.log("drawOverlay: " + n);
 		int currentImage = imp != null ? imp.getCurrentSlice() : -1;
 		int stackSize = imp.getStackSize();
 		if (stackSize == 1)
@@ -582,8 +582,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				drawRoi(roi, offScreenGraphics);
 			if (srcRect.width < imageWidth || srcRect.height < imageHeight)
 				drawZoomIndicator(offScreenGraphics);
-			if (IJ.debugMode)
-				showFrameRate(offScreenGraphics);
+			//if (IJ.debugMode)
+				//showFrameRate(offScreenGraphics);
 			g.drawImage(offScreenImage, 0, 0, null);
 		} catch (OutOfMemoryError e) {
 			IJ.outOfMemory("Paint");

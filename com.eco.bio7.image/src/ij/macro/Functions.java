@@ -620,10 +620,7 @@ public class Functions implements MacroConstants, Measurements {
 			arg2 = getString();
 			interp.getRightParen();
 		}
-		if (arg2!=null)
-			IJ.run(arg1, arg2);
-		else
-			IJ.run(arg1);
+		IJ.run(this.interp, arg1, arg2);
 		resetImage();
 		IJ.setKeyUp(IJ.ALL_KEYS);
 		shiftKeyDown = altKeyDown = false;
@@ -3496,7 +3493,7 @@ public class Functions implements MacroConstants, Measurements {
 			s = sb.toString();
 		}
 		interp.getRightParen();
-		IJ.log(s);
+		interp.log(s);
 		interp.inPrint = false;
 	}
 
@@ -5668,7 +5665,7 @@ public class Functions implements MacroConstants, Measurements {
 			if (i!=len-1)
 				sb.append(", ");
 		}
-		IJ.log(sb.toString());
+		interp.log(sb.toString());
 		return null;
 	}
 
@@ -6231,6 +6228,10 @@ public class Functions implements MacroConstants, Measurements {
 				rt.show("Results");
 		} else if (name.equals("flatten")) {
 			IJ.runPlugIn("ij.plugin.OverlayCommands", "flatten");
+			return Double.NaN;
+		} else if (name.equals("setFontSize")) {
+			overlay.setLabelFont(new Font("SansSerif", Font.PLAIN, (int)getArg()));
+			overlay.drawLabels(true);
 			return Double.NaN;
 		} else
 			interp.error("Unrecognized function name");
