@@ -409,7 +409,7 @@ public class CanvasView extends ViewPart {
 		});
 
 		tabFolder.setBorderVisible(true);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
 
 		// tabFolder.setSelectionBackground(new Color[] {
