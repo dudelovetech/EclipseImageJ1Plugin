@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.core.resources,
  com.eco.bio7.image,
- com.eco.bio7.imagej2
+ com.eco.bio7.imagej2;resolution:=optional
 Eclipse-LazyStart: true
 Import-Package: org.eclipse.ui.views.contentoutline
 Export-Package: com.eco.bio7.ijmacro.editor,
