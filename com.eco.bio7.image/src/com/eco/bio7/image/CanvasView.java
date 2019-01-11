@@ -313,6 +313,8 @@ public class CanvasView extends ViewPart {
 		dt.setTransfer(new Transfer[] { FileTransfer.getInstance() });
 		dt.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
+				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 
 				FileTransfer ft = FileTransfer.getInstance();
 				if (ft.isSupportedType(event.currentDataType)) {
@@ -324,8 +326,19 @@ public class CanvasView extends ViewPart {
 							@Override
 							protected IStatus run(IProgressMonitor monitor) {
 								monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
+								if (javaFXEmbedded) {
 
-								openFile(new File(fileList[x].toString()));
+									openFile(new File(fileList[x].toString()));
+
+								} else {
+									SwingUtilities.invokeLater(new Runnable() {
+										// !!
+										public void run() {
+
+											openFile(new File(fileList[x].toString()));
+										}
+									});
+								}
 
 								monitor.done();
 								return Status.OK_STATUS;
@@ -360,7 +373,7 @@ public class CanvasView extends ViewPart {
 					if (splitShortcut[0].equals("" + e.character)) {
 						IJ.doCommand(splitShortcut[1]);
 					}
-                                        /*Also allow the F keys for a shortcut!*/
+					/* Also allow the F keys for a shortcut! */
 					if (splitShortcut[0].equals("F1") && e.keyCode == SWT.F1) {
 						IJ.doCommand(splitShortcut[1]);
 					} else if (splitShortcut[0].equals("F2") && e.keyCode == SWT.F2) {
@@ -409,7 +422,7 @@ public class CanvasView extends ViewPart {
 		});
 
 		tabFolder.setBorderVisible(true);
-		//tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		// tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
 
 		// tabFolder.setSelectionBackground(new Color[] {
