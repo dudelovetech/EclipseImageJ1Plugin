@@ -4,8 +4,6 @@ import ij.process.*;
 import ij.gui.*;
 import java.awt.*;
 
-import com.eco.bio7.image.IJTabs;
-
 /** Implements the conversion commands in the Image/Type submenu. */
 public class Converter implements PlugIn {
 
@@ -57,15 +55,11 @@ public class Converter implements PlugIn {
 				// do stack conversions
 		    	if (stack.isRGB() && item.equals("RGB Color")) {
 					new ImageConverter(imp).convertRGBStackToRGB();
-					/*Changed for Bio7!*/
-					//if (win!=null) new ImageWindow(imp, imp.getCanvas()); // replace StackWindow with ImageWindow
+					if (win!=null) new ImageWindow(imp, imp.getCanvas()); // replace StackWindow with ImageWindow
 		    	} else if (stack.isHSB() && item.equals("RGB Color")) {
-		    		/*Changed for Bio7!*/
-					IJTabs.deleteActiveTab();
 					new ImageConverter(imp).convertHSBToRGB();
 					if (win!=null) new ImageWindow(imp, imp.getCanvas());
 		    	} else if (stack.isLab() && item.equals("RGB Color")) {
-		    		/*Changed for Bio7 in class ij.process.ImageConverter!*/
 					new ImageConverter(imp).convertLabToRGB();
 					if (win!=null) new ImageWindow(imp, imp.getCanvas());
 				} else if (item.equals("8-bit"))
@@ -73,7 +67,7 @@ public class Converter implements PlugIn {
 				else if (item.equals("16-bit"))
 					new StackConverter(imp).convertToGray16();
 				else if (item.equals("32-bit"))
-					new StackConverter(imp).convertToGray32();
+					new ImageConverter(imp).convertToGray32();
 				else if (item.equals("RGB Color"))
 					new StackConverter(imp).convertToRGB();
 				else if (item.equals("RGB Stack"))
@@ -99,13 +93,9 @@ public class Converter implements PlugIn {
 				else if (item.equals("32-bit"))
 					ic.convertToGray32();
 				else if (item.equals("RGB Stack")) {
-					/*Changed for Bio7!*/
-					IJTabs.deleteActiveTab();
 			    	Undo.reset(); // Reversible; no need for Undo
 					ic.convertToRGBStack();
 		    	} else if (item.equals("HSB Stack")) {
-		    		/*Changed for Bio7!*/
-		    		IJTabs.deleteActiveTab();
 			    	Undo.reset();
 					ic.convertToHSB();
 		    	} else if (item.equals("Lab Stack")) {

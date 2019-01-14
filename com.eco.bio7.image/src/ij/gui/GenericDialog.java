@@ -88,6 +88,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	private Vector imagePanels;
 	private static GenericDialog instance;
 	private boolean firstPaint = true;
+	private boolean fontSizeSet;
 
 	/**
 	 * Creates a new GenericDialog with the specified title. Uses the current image
@@ -1384,6 +1385,13 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			add(buttons, c);
 			if (IJ.isMacOSX() && IJ.isJava18())
 				instance = this;
+			Font font = getFont();
+			if (IJ.debugMode)
+				IJ.log("GenericDialog font: " + fontSizeSet + " " + font);
+			if (!fontSizeSet && font != null && Prefs.getTextScale() != 1.0) {
+				fontSizeSet = true;
+				setFont(font.deriveFont((float) (font.getSize() * Prefs.getTextScale())));
+			}
 			pack();
 			setup();
 			if (centerDialog)
@@ -1403,6 +1411,12 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			recorderOn = false;
 		}
 		resetCounters();
+	}
+
+	@Override
+	public void setFont(Font font) {
+		super.setFont(!fontSizeSet && Prefs.getTextScale() != 1.0 ? font.deriveFont((float) (font.getSize() * Prefs.getTextScale())) : font);
+		fontSizeSet = true;
 	}
 
 	/** Reset the counters before reading the dialog parameters */

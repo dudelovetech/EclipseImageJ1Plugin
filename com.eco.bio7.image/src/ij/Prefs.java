@@ -49,21 +49,20 @@ public class Prefs {
 	public static final String DIV_BY_ZERO_VALUE = "div-by-zero";
 	public static final String NOISE_SD = "noise.sd";
 	public static final String MENU_SIZE = "menu.size";
+	public static final String TEXT_SCALE = "text.scale";
 	public static final String THREADS = "threads";
 	public static final String KEY_PREFIX = ".";
 
-	private static final int USE_POINTER = 1 << 0, ANTIALIASING = 1 << 1, INTERPOLATE = 1 << 2, ONE_HUNDRED_PERCENT = 1 << 3, BLACK_BACKGROUND = 1 << 4, JFILE_CHOOSER = 1 << 5, UNUSED = 1 << 6,
-			BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10, USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12,
-			INTEL_BYTE_ORDER = 1 << 13, DOUBLE_BUFFER = 1 << 14, NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18,
-			NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20, ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25,
-			DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27, NO_CLICK_TO_GC = 1 << 28, AVOID_RESLICE_INTERPOLATION = 1 << 29, KEEP_UNDO_BUFFERS = 1 << 30;
+	private static final int USE_POINTER = 1 << 0, ANTIALIASING = 1 << 1, INTERPOLATE = 1 << 2, ONE_HUNDRED_PERCENT = 1 << 3, BLACK_BACKGROUND = 1 << 4, JFILE_CHOOSER = 1 << 5, UNUSED = 1 << 6, BLACK_CANVAS = 1 << 7, WEIGHTED = 1 << 8, AUTO_MEASURE = 1 << 9, REQUIRE_CONTROL = 1 << 10,
+			USE_INVERTING_LUT = 1 << 11, ANTIALIASED_TOOLS = 1 << 12, INTEL_BYTE_ORDER = 1 << 13, DOUBLE_BUFFER = 1 << 14, NO_POINT_LABELS = 1 << 15, NO_BORDER = 1 << 16, SHOW_ALL_SLICE_ONLY = 1 << 17, COPY_HEADERS = 1 << 18, NO_ROW_NUMBERS = 1 << 19, MOVE_TO_MISC = 1 << 20,
+			ADD_TO_MANAGER = 1 << 21, RUN_SOCKET_LISTENER = 1 << 22, MULTI_POINT_MODE = 1 << 23, ROTATE_YZ = 1 << 24, FLIP_XZ = 1 << 25, DONT_SAVE_HEADERS = 1 << 26, DONT_SAVE_ROW_NUMBERS = 1 << 27, NO_CLICK_TO_GC = 1 << 28, AVOID_RESLICE_INTERPOLATION = 1 << 29,
+			KEEP_UNDO_BUFFERS = 1 << 30;
 	public static final String OPTIONS = "prefs.options";
 
 	public static final String vistaHint = ""; // no longer used
 
-	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4,
-			REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7, DO_NOT_SAVE_WINDOW_LOCS = 1 << 8, JFILE_CHOOSER_CHANGED = 1 << 9,
-			CANCEL_BUTTON_ON_RIGHT = 1 << 10;
+	private static final int USE_SYSTEM_PROXIES = 1 << 0, USE_FILE_CHOOSER = 1 << 1, SUBPIXEL_RESOLUTION = 1 << 2, ENHANCED_LINE_TOOL = 1 << 3, SKIP_RAW_DIALOG = 1 << 4, REVERSE_NEXT_PREVIOUS_ORDER = 1 << 5, AUTO_RUN_EXAMPLES = 1 << 6, SHOW_ALL_POINTS = 1 << 7, DO_NOT_SAVE_WINDOW_LOCS = 1 << 8,
+			JFILE_CHOOSER_CHANGED = 1 << 9, CANCEL_BUTTON_ON_RIGHT = 1 << 10;
 	public static final String OPTIONS2 = "prefs.options2";
 
 	/** file.separator system property */
@@ -129,6 +128,8 @@ public class Prefs {
 	public static boolean multiPointMode;
 	/** Open DICOMs as 32-bit float images */
 	public static boolean openDicomsAsFloat;
+	/** Ignore Rescale Slope when opening DICOMs */
+	public static boolean ignoreRescaleSlope;
 	/** Plot rectangular selectons vertically */
 	public static boolean verticalProfile;
 	/** Rotate YZ orthogonal views 90 degrees */
@@ -214,6 +215,7 @@ public class Prefs {
 	static int threads;
 	static int transparentIndex = -1;
 	private static boolean resetPreferences;
+	private static double textScale = 1.0;
 
 	/**
 	 * Finds and loads the ImageJ configuration file, "IJ_Props.txt".
@@ -258,13 +260,16 @@ public class Prefs {
 		imagesURL = props.getProperty("images.location");
 		loadPreferences();
 		loadOptions();
+		textScale = get(TEXT_SCALE, 1.0);
 		return null;
 	}
 
 	/*
-	 * static void dumpPrefs(String title) { IJ.log(""); IJ.log(title); Enumeration
-	 * e = ijPrefs.keys(); while (e.hasMoreElements()) { String key = (String)
-	 * e.nextElement(); IJ.log(key+": "+ijPrefs.getProperty(key)); } }
+	 * static void dumpPrefs(String title) { IJ.log(""); IJ.log(title); static void
+	 * dumpPrefs() { System.out.println(""); Enumeration e = ijPrefs.keys(); while
+	 * (e.hasMoreElements()) { String key = (String) e.nextElement();
+	 * IJ.log(key+": "+ijPrefs.getProperty(key));
+	 * System.out.println(key+": "+ijPrefs.getProperty(key)); } }
 	 */
 
 	static String loadAppletProps(InputStream f, Applet applet) {
@@ -516,7 +521,7 @@ public class Prefs {
 	static void loadOptions() {
 		// Changed for Bio7. On Win 10 we use the SWT file dialog by default. No need to
 		// switch to JFileChooser!
-		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE +(!IJ.isMacOSX()?RUN_SOCKET_LISTENER:0)+BLACK_BACKGROUND;
+		int defaultOptions = ANTIALIASING + AVOID_RESLICE_INTERPOLATION + ANTIALIASED_TOOLS + MULTI_POINT_MODE + (!IJ.isMacOSX() ? RUN_SOCKET_LISTENER : 0) + BLACK_BACKGROUND;
 		int options = getInt(OPTIONS, defaultOptions);
 		usePointerCursor = (options & USE_POINTER) != 0;
 		// antialiasedText = (options&ANTIALIASING)!=0;
@@ -564,20 +569,16 @@ public class Prefs {
 	}
 
 	static void saveOptions(Properties prefs) {
-		int options = (usePointerCursor ? USE_POINTER : 0) + (antialiasedText ? ANTIALIASING : 0) + (interpolateScaledImages ? INTERPOLATE : 0) + (open100Percent ? ONE_HUNDRED_PERCENT : 0)
-				+ (blackBackground ? BLACK_BACKGROUND : 0) + (useJFileChooser ? JFILE_CHOOSER : 0) + (blackCanvas ? BLACK_CANVAS : 0) + (weightedColor ? WEIGHTED : 0)
-				+ (requireControlKey ? REQUIRE_CONTROL : 0) + (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0)
-				+ (intelByteOrder ? INTEL_BYTE_ORDER : 0) + (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0)
-				+ (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0) + (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0) + (moveToMisc ? MOVE_TO_MISC : 0)
-				+ (runSocketListener ? RUN_SOCKET_LISTENER : 0) + (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0)
-				+ (dontSaveHeaders ? DONT_SAVE_HEADERS : 0) + (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0) + (noClickToGC ? NO_CLICK_TO_GC : 0)
-				+ (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0) + (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
+		int options = (usePointerCursor ? USE_POINTER : 0) + (antialiasedText ? ANTIALIASING : 0) + (interpolateScaledImages ? INTERPOLATE : 0) + (open100Percent ? ONE_HUNDRED_PERCENT : 0) + (blackBackground ? BLACK_BACKGROUND : 0) + (useJFileChooser ? JFILE_CHOOSER : 0)
+				+ (blackCanvas ? BLACK_CANVAS : 0) + (weightedColor ? WEIGHTED : 0) + (requireControlKey ? REQUIRE_CONTROL : 0) + (useInvertingLut ? USE_INVERTING_LUT : 0) + (antialiasedTools ? ANTIALIASED_TOOLS : 0) + (intelByteOrder ? INTEL_BYTE_ORDER : 0)
+				+ (doubleBuffer ? DOUBLE_BUFFER : 0) + (noPointLabels ? NO_POINT_LABELS : 0) + (noBorder ? NO_BORDER : 0) + (showAllSliceOnly ? SHOW_ALL_SLICE_ONLY : 0) + (copyColumnHeaders ? COPY_HEADERS : 0) + (noRowNumbers ? NO_ROW_NUMBERS : 0) + (moveToMisc ? MOVE_TO_MISC : 0)
+				+ (runSocketListener ? RUN_SOCKET_LISTENER : 0) + (multiPointMode ? MULTI_POINT_MODE : 0) + (rotateYZ ? ROTATE_YZ : 0) + (flipXZ ? FLIP_XZ : 0) + (dontSaveHeaders ? DONT_SAVE_HEADERS : 0) + (dontSaveRowNumbers ? DONT_SAVE_ROW_NUMBERS : 0)
+				+ (noClickToGC ? NO_CLICK_TO_GC : 0) + (avoidResliceInterpolation ? AVOID_RESLICE_INTERPOLATION : 0) + (keepUndoBuffers ? KEEP_UNDO_BUFFERS : 0);
 		prefs.put(OPTIONS, Integer.toString(options));
 
-		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0)
-				+ (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0) + (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0)
-				+ (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0) + (doNotSaveWindowLocations ? DO_NOT_SAVE_WINDOW_LOCS : 0)
-				+ (jFileChooserSettingChanged ? JFILE_CHOOSER_CHANGED : 0) + (dialogCancelButtonOnRight ? CANCEL_BUTTON_ON_RIGHT : 0);
+		int options2 = (useSystemProxies ? USE_SYSTEM_PROXIES : 0) + (useFileChooser ? USE_FILE_CHOOSER : 0) + (subPixelResolution ? SUBPIXEL_RESOLUTION : 0) + (enhancedLineTool ? ENHANCED_LINE_TOOL : 0) + (skipRawDialog ? SKIP_RAW_DIALOG : 0)
+				+ (reverseNextPreviousOrder ? REVERSE_NEXT_PREVIOUS_ORDER : 0) + (autoRunExamples ? AUTO_RUN_EXAMPLES : 0) + (showAllPoints ? SHOW_ALL_POINTS : 0) + (doNotSaveWindowLocations ? DO_NOT_SAVE_WINDOW_LOCS : 0) + (jFileChooserSettingChanged ? JFILE_CHOOSER_CHANGED : 0)
+				+ (dialogCancelButtonOnRight ? CANCEL_BUTTON_ON_RIGHT : 0);
 		prefs.put(OPTIONS2, Integer.toString(options2));
 	}
 
@@ -766,6 +767,19 @@ public class Prefs {
 
 	public static String defaultResultsExtension() {
 		return get("options.ext", ".csv");
+	}
+
+	/** Sets the GenericDialog and Command Finder text scale (0.5 to 2.0). */
+	public static void setTextScale(double scale) {
+		if (scale >= 0.5 && scale <= 2.0) {
+			textScale = scale;
+			set(TEXT_SCALE, textScale);
+		}
+	}
+
+	/** Returns the GenericDialog and Command Finder text scale. */
+	public static double getTextScale() {
+		return textScale;
 	}
 
 }

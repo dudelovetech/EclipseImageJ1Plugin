@@ -133,6 +133,7 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 	private ImageProcessor redirectIP;
 	private PolygonFiller pf;
 	private Roi saveRoi;
+	private int saveSlice;
 	private int beginningCount;
 	private Rectangle r;
 	private ImageProcessor mask;
@@ -234,6 +235,7 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 		processStack = (flags&DOES_STACKS)!=0;
 		slice = 0;
 		saveRoi = imp.getRoi();
+		saveSlice = imp.getCurrentSlice();
 		if (saveRoi!=null && saveRoi.getType()!=Roi.RECTANGLE && saveRoi.isArea())
 			polygon = saveRoi.getPolygon();
 		imp.startTiming();
@@ -259,6 +261,7 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 		if (slice==imp.getStackSize()) {
 			imp.updateAndDraw();
 			if (saveRoi!=null) imp.setRoi(saveRoi);
+			if (processStack) imp.setSlice(saveSlice);
 		}
 	}
 	
@@ -874,6 +877,8 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 				roi.setImage(imp);
 			stats.xstart=x; stats.ystart=y;
 			saveResults(stats, roi);
+			if (addToManager)
+				addToRoiManager(roi, mask, particleCount);				
 			if (showChoice!=NOTHING)
 				drawParticle(drawIP, roi, stats, mask);
 		}
@@ -910,46 +915,59 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 			rt.addValue("XStart", stats.xstart);
 			rt.addValue("YStart", stats.ystart);
 		}
-		if (addToManager) {
-			if (roiManager==null) {
-				if (Macro.getOptions()!=null && Interpreter.isBatchMode())
-					roiManager = Interpreter.getBatchModeRoiManager();
-				if (roiManager==null) {
-					Frame frame = WindowManager.getFrame("ROI Manager");
-					if (frame==null)
-						IJ.run("ROI Manager...");
-					frame = WindowManager.getFrame("ROI Manager");
-					if (frame==null || !(frame instanceof RoiManager))
-						{addToManager=false; return;}
-					roiManager = (RoiManager)frame;
-				}
-				if (resetCounter)
-					roiManager.runCommand("reset");
-			}
-			if (imp.getStackSize()>1) {
-				int n = imp.getCurrentSlice();
-				if (hyperstack) {
-					int[] pos = imp.convertIndexToPosition(n);
-					roi.setPosition(pos[0],pos[1],pos[2]);
-				} else
-					roi.setPosition(n);
-			}
-			if (lineWidth!=1)
-				roi.setStrokeWidth(lineWidth);
-			roiManager.add(imp, roi, rt.size());
-		}
 		if (showResultsWindow && showResults)
 			rt.addResults();
 	}
 	
+	/** Adds the ROI to the ROI Manager. */
+	private void addToRoiManager(Roi roi, ImageProcessor mask, int particleNumber) {
+		if (roiManager==null) {
+			if (Macro.getOptions()!=null && Interpreter.isBatchMode())
+				roiManager = Interpreter.getBatchModeRoiManager();
+			if (roiManager==null) {
+				Frame frame = WindowManager.getFrame("ROI Manager");
+				if (frame==null)
+					IJ.run("ROI Manager...");
+				frame = WindowManager.getFrame("ROI Manager");
+				if (frame==null || !(frame instanceof RoiManager))
+					{addToManager=false; return;}
+				roiManager = (RoiManager)frame;
+			}
+			if (resetCounter)
+				roiManager.runCommand("reset");
+		}
+		
+		if (floodFill && mask!=null) {
+			mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
+			double xbase=roi.getXBase(), ybase=roi.getYBase();
+			Roi roi2 = new ThresholdToSelection().convert(mask);
+			if (roi2!=null && (roi2 instanceof ShapeRoi)) {
+				double perim = roi.getLength();
+				roi = roi2;
+				roi.setLocation(xbase, ybase);
+				((ShapeRoi)roi).setPaPerim(perim);
+			}
+		}
+		if (imp.getStackSize()>1) {
+			int n = imp.getCurrentSlice();
+			if (hyperstack) {
+				int[] pos = imp.convertIndexToPosition(n);
+				roi.setPosition(pos[0],pos[1],pos[2]);
+			} else
+				roi.setPosition(n);
+		}
+		if (lineWidth!=1)
+			roi.setStrokeWidth(lineWidth);
+		roiManager.add(imp, roi, particleNumber);
+	}
+	
 	/** Draws a selected particle in a separate image.	This is
 		another method subclasses may want to override. */
-	protected void drawParticle(ImageProcessor drawIP, Roi roi,
-	ImageStatistics stats, ImageProcessor mask) {
+	protected void drawParticle(ImageProcessor drawIP, Roi roi, ImageStatistics stats, ImageProcessor mask) {
 		switch (showChoice) {
 			case MASKS: drawFilledParticle(drawIP, roi, mask); break;
 			case OUTLINES: case BARE_OUTLINES: case OVERLAY_OUTLINES: case OVERLAY_MASKS:
-				drawOutline(drawIP, roi, rt.size()); break;
+				drawOutline(drawIP, roi, mask, rt.size()); break;
 			case ELLIPSES: drawEllipse(drawIP, stats, rt.size()); break;
 			case ROI_MASKS: drawRoiFilledParticle(drawIP, roi, mask, rt.size()); break;
 			default:
@@ -961,14 +979,24 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 		ip.fill(mask);
 	}
 
-	void drawOutline(ImageProcessor ip, Roi roi, int count) {
+	void drawOutline(ImageProcessor ip, Roi roi, ImageProcessor mask, int count) {
 		if (showChoice==OVERLAY_OUTLINES || showChoice==OVERLAY_MASKS) {
 			if (overlay==null) {
 				overlay = new Overlay();
 				overlay.drawLabels(true);
 				overlay.setLabelFont(new Font("SansSerif", Font.PLAIN, fontSize));
 			}
-			Roi roi2 = (Roi)roi.clone();
+			Roi roi2 = null;
+			if (floodFill && mask!=null) {
+				mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
+				roi2 = new ThresholdToSelection().convert(mask);
+				if (roi2!=null && (roi2 instanceof ShapeRoi)) {
+					roi2.setLocation(roi.getXBase(), roi.getYBase());
+					((ShapeRoi)roi2).setPaPerim(roi.getLength());
+				} else
+					roi2 = (Roi)roi.clone();
+			} else
+				roi2 = (Roi)roi.clone();
 			roi2.setStrokeColor(Color.cyan);
 			if (lineWidth!=1)
 				roi2.setStrokeWidth(lineWidth);
