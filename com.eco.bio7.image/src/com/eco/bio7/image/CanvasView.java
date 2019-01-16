@@ -447,10 +447,11 @@ public class CanvasView extends ViewPart {
 							win.bio7TabClose();
 						}
 					});
-					CTabItem cTabItem = (CTabItem) event.item;
-					if (cTabItem.getControl().isDisposed() == false) {
-						cTabItem.getControl().dispose();
-					}
+					/*
+					 * CTabItem cTabItem = (CTabItem) event.item; if
+					 * (cTabItem.getControl().isDisposed() == false) {
+					 * cTabItem.getControl().dispose(); }
+					 */
 
 				} else {
 					java.awt.EventQueue.invokeLater(new Runnable() {

@@ -96,10 +96,10 @@ public class IJTabs {
 			final int tabcount = i;
 			if (javaFXEmbedded) {
 				if (items[tabcount].isDisposed() == false) {
-					if (items[tabcount].getControl().isDisposed() == false) {
-						items[tabcount].getControl().dispose();
+					//if (items[tabcount].getControl().isDisposed() == false) {
+						//items[tabcount].getControl().dispose();
 						items[tabcount].dispose();
-					}
+					//}
 				}
 
 			} else {
