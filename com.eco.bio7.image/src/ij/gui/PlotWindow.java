@@ -143,7 +143,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		super(createImage(title, xLabel, yLabel, xValues, yValues));
 		plot = staticPlot;
 		// Changed for Bio7!
-		// ((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas)getCanvas()).setPlot(plot);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	public PlotWindow(ImagePlus imp, Plot plot) {
 		super(imp);
 		// Changed for Bio7!
-		// ((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas)getCanvas()).setPlot(plot);
 		this.plot = plot;
 		draw();
 	}
@@ -169,7 +169,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	PlotWindow(Plot plot) {
 		super(plot.getImagePlus());
 		// Changed for Bio7!
-		// ((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas)getCanvas()).setPlot(plot);
 		this.plot = plot;
 		draw();
 	}
