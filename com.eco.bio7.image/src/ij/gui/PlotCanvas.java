@@ -236,6 +236,39 @@ public class PlotCanvas extends ImageCanvas {
 		else
 			super.mouseReleased(e);
 	}
+	
+	/*Changed for Bio7! We have no visible PlotWindow so we implement 
+	 * the mouse listener here!
+	 * */
+	
+	public void mouseWheelMoved(MouseWheelEvent e) {
+	ImageCanvas ic=imp.getCanvas();
+	if (plot.isFrozen() || !(ic instanceof PlotCanvas)) { // frozen plots are like normal images
+		super.mouseWheelMoved(e);
+		return;
+	}
+	int rotation = e.getWheelRotation();
+	int amount = e.getScrollAmount();
+	if (e.getX() < plot.leftMargin || e.getX() > plot.leftMargin + plot.frameWidth)// n__
+		return;
+	if (e.getY() < plot.topMargin || e.getY() > plot.topMargin + plot.frameHeight)
+		return;
+	boolean ctrl = (e.getModifiers() & Event.CTRL_MASK) != 0;
+	if (amount < 1)
+		amount = 1;
+	if (rotation == 0)
+		return;
+	if (ctrl || IJ.shiftKeyDown()) {
+		double zoomFactor = rotation < 0 ? Math.pow(2, 0.2) : Math.pow(0.5, 0.2);
+		Point loc = ic.getCursorLoc();
+		int x = ic.screenX(loc.x);
+		int y = ic.screenY(loc.y);
+		((PlotCanvas) ic).zoom(x, y, zoomFactor);
+	} else if (IJ.spaceBarDown())
+		plot.scroll(rotation * amount * Math.max(ic.imageWidth / 50, 1), 0);
+	else
+		plot.scroll(0, rotation * amount * Math.max(ic.imageHeight / 50, 1));
+	}
 
     /** Returns the index of the arrow for modifying the range when the mouse click was
      *  at such an arrow, otherwise -1 */
