@@ -102,9 +102,13 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 				if (ref.equals(ref2)) {
 
-					WindowManager.setTempCurrentImage(plus);
-					//The following function causes a deadlock when called here!
-					//WindowManager.setCurrentWindow(win);
+					// Wrap to avoid deadlock of awt frame access!
+					java.awt.EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							WindowManager.setTempCurrentImage(plus);
+							WindowManager.setCurrentWindow(win);
+						}
+					});
 
 					CanvasView.setCurrent(viewPanel);
 					ImageJ.setCustomView(customView);
