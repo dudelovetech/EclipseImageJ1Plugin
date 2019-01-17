@@ -72,7 +72,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	 */
 	public boolean running2;
 
-	//private ImageWindow windowInstance;// Changed for Bio7!
+	// private ImageWindow windowInstance;// Changed for Bio7!
 
 	public ImageWindow(String title) {
 		super(title);
@@ -80,8 +80,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 
 	public ImageWindow(ImagePlus imp) {
 		this(imp, null);
-		///* Changed for Bio7! */
-		//windowInstance = this;
+		/// * Changed for Bio7! */
+		// windowInstance = this;
 	}
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {
@@ -91,7 +91,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		ij = IJ.getInstance();
 		this.imp = imp;
 		if (ic == null) {
-			ic = (this instanceof PlotWindow) ? new PlotCanvas(imp) :new PlotCanvas(imp);
+			ic = (this instanceof PlotWindow) ? new PlotCanvas(imp) : new ImageCanvas(imp);
 			newCanvas = true;
 		}
 		this.ic = ic;
@@ -104,7 +104,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		 * setFocusTraversalKeysEnabled(false); if (!(this instanceof StackWindow))
 		 * addMouseWheelListener(this);
 		 */
-		//setResizable(true);
+		// setResizable(true);
 		if (!(this instanceof HistogramWindow && IJ.isMacro() && Interpreter.isBatchMode())) {
 			WindowManager.addWindow(this);
 			imp.setWindow(this);
@@ -115,7 +115,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 			else
 				ic.update(previousWindow.getCanvas());
 
-			if (!(this instanceof StackWindow|| this instanceof PlotWindow)) { // layout now unless components will be added later
+			if (!(this instanceof StackWindow || this instanceof PlotWindow)) { // layout now unless components will be added later
 				b = new SwtAwtImageJ(null, null, null, ic, imp, this);
 				/* Add the panel to the tab folder with the image */
 				b.addTab(imp.getTitle());
@@ -145,7 +145,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 			}
 
 			else {
-				
+
 				if (!(this instanceof StackWindow)) {
 					b = new SwtAwtImageJ(null, null, null, ic, imp, this);
 					/* Add the panel to the tab folder with the image */
@@ -458,7 +458,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				for (int i = 0; i < items.length; i++) {
 
 					Vector ve = (Vector) items[i].getData();
-					
+
 					final ImageWindow win2 = (ImageWindow) ve.get(1);
 
 					/* Search for the tab which embeds this instance! */
