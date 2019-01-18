@@ -349,7 +349,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	void showStatus(final String s) {
 		statusLine.setText(s);
 		Display display = PlatformUI.getWorkbench().getDisplay();
-		/*Mac only seems to work with async method!*/
+		/*MacOSX only seems to work with async method!*/
 		if (Util.getOS().equals("Mac")) {
 			display.asyncExec(new Runnable() {
 
