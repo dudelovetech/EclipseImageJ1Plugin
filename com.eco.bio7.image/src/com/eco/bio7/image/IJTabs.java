@@ -87,15 +87,19 @@ public class IJTabs {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
-
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				WindowManager.closeAllWindows();
+			}
+		});
 		for (int i = 0; i < items.length; i++) {
 			final int tabcount = i;
 			if (javaFXEmbedded) {
 				if (items[tabcount].isDisposed() == false) {
-					if (items[tabcount].getControl().isDisposed() == false) {
-						items[tabcount].getControl().dispose();
+					//if (items[tabcount].getControl().isDisposed() == false) {
+						//items[tabcount].getControl().dispose();
 						items[tabcount].dispose();
-					}
+					//}
 				}
 
 			} else {
@@ -112,11 +116,7 @@ public class IJTabs {
 			}
 
 		}
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				WindowManager.closeAllWindows();
-			}
-		});
+		
 	}
 
 	/**

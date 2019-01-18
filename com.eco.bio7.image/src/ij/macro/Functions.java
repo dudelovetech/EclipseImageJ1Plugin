@@ -3216,12 +3216,13 @@ public class Functions implements MacroConstants, Measurements {
 				boolean F = flags.contains("F");//front
 				boolean C = flags.contains("C");//changed
 				boolean kill = M && !(C && keep);
-				if (others) {
+				if (others)
 					kill = !F && !(C && keep);
-				}
 
 				if (kill) {
 					ImagePlus imp = WindowManager.getImage(ids[jj]);
+					if (imp==null)
+						continue;
 					ImageWindow win = imp.getWindow();
 					if (win != null) {
 						imp.changes = false;
@@ -6229,9 +6230,35 @@ public class Functions implements MacroConstants, Measurements {
 		} else if (name.equals("flatten")) {
 			IJ.runPlugIn("ij.plugin.OverlayCommands", "flatten");
 			return Double.NaN;
-		} else if (name.equals("setFontSize")) {
-			overlay.setLabelFont(new Font("SansSerif", Font.PLAIN, (int)getArg()));
+		} else if (name.equals("setLabelFontSize")) {
+			int fontSize = (int)getFirstArg();
+			String options = null;
+			if (interp.nextToken()!=')')
+				options = getLastString();
+			else
+				interp.getRightParen();
+			overlay.setLabelFontSize(fontSize, options);
+			return Double.NaN;
+		} else if (name.equals("setLabelColor")) {
+			interp.getLeftParen();
+			Color color = getColor();
+			if (interp.nextToken()==',') {
+				interp.getComma();
+				Color ignore = getColor();
+				overlay.drawBackgrounds(true);
+			}
+			interp.getRightParen();
+			overlay.setLabelColor(color);
 			overlay.drawLabels(true);
+			return Double.NaN;
+		} else if (name.equals("setStrokeColor")) {
+			interp.getLeftParen();
+			Color color = getColor();
+			interp.getRightParen();
+			overlay.setStrokeColor(color);
+			return Double.NaN;
+		} else if (name.equals("setStrokeWidth")) {
+			overlay.setStrokeWidth(getArg());
 			return Double.NaN;
 		} else
 			interp.error("Unrecognized function name");
@@ -6518,9 +6545,66 @@ public class Functions implements MacroConstants, Measurements {
 		} else if (name.startsWith("showArray")) {
 			showArray();
 			return new Variable();
-		} else
+		} else if (name.equals("getSelectionStart"))	
+			return getSelectionStart();
+		else if (name.equals("getSelectionEnd"))
+			return getSelectionEnd();
+		else if (name.equals("setSelection"))
+			return setSelection();
+		else
 			interp.error("Unrecognized function name");
 		return new Variable();
+	}
+	
+	private Variable setSelection() {
+		interp.getLeftParen();
+		double from = interp.getExpression();
+		interp.getComma();
+		double to = interp.getExpression();
+		String title = getTitle();
+		if (title != null){
+			Frame f = WindowManager.getFrame(title);
+			if (f!=null && (f instanceof TextWindow)){
+				TextWindow tWin = (TextWindow)f;
+				if (from == -1 && to == -1)
+					tWin.getTextPanel().resetSelection();
+				else
+					tWin.getTextPanel().setSelection((int)from, (int)to);
+				return new Variable();
+			}
+		}
+		interp.error("Title of table missing or not found");
+		return new Variable();
+	}
+	
+	private Variable getSelectionStart() {
+		int selStart = -1;
+		String title = getTitleArg();
+		if (title != null){
+			Frame f = WindowManager.getFrame(title);
+			if (f!=null && (f instanceof TextWindow)){
+				TextWindow tWin = (TextWindow)f;	
+				selStart = tWin.getTextPanel().getSelectionStart();
+				return new Variable(selStart);
+			}
+		}
+		interp.error("Title of table missing or not found");
+		return new Variable(selStart);
+	}
+	
+	private Variable getSelectionEnd() {
+		int selEnd = -1;
+		String title = getTitleArg();
+		if (title != null){
+			Frame f = WindowManager.getFrame(title);
+			if (f!=null && (f instanceof TextWindow)){
+				TextWindow tWin = (TextWindow)f;	
+				selEnd = tWin.getTextPanel().getSelectionEnd();
+				return new Variable(selEnd);
+			}
+		}
+		interp.error("Title of table missing or not found");
+		return new Variable(selEnd);
 	}
 	
 	private Variable setTableValue() {
@@ -6619,7 +6703,13 @@ public class Functions implements MacroConstants, Measurements {
 	private Variable getColumn() {
 		String col = getFirstString();
 		ResultsTable rt = getResultsTable(getTitle());	
-		return new Variable(rt.getColumnAsVariables(col));
+		Variable column = null;
+		try {
+			column =  new Variable(rt.getColumnAsVariables(col));
+		} catch (Exception e) {
+			interp.error(e.getMessage());
+		}
+		return column;
 	}
 
 	private Variable renameColumn() {

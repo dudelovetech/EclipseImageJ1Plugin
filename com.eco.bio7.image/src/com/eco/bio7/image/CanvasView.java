@@ -26,7 +26,9 @@ import javax.swing.plaf.metal.MetalTheme;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -56,9 +58,12 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -70,6 +75,7 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
+
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -257,6 +263,7 @@ public class CanvasView extends ViewPart {
 			}
 
 			public void partClosed(IWorkbenchPart part) {
+
 				if (part instanceof CanvasView) {
 					CTabItem[] items = tabFolder.getItems();
 
@@ -314,29 +321,53 @@ public class CanvasView extends ViewPart {
 		dt.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 
+				/*
+				 * IPreferenceStore store = Activator.getDefault().getPreferenceStore(); boolean
+				 * javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+				 */
+
 				FileTransfer ft = FileTransfer.getInstance();
 				if (ft.isSupportedType(event.currentDataType)) {
 					fileList = (String[]) event.data;
-					for (int i = 0; i < fileList.length; i++) {
+					Job job = new Job("Open...") {
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							monitor.beginTask("Opening...", fileList.length);
+							for (int i = 0; i < fileList.length; i++) {
 
-						final int x = i;
-						Job job = new Job("Open...") {
-							@Override
-							protected IStatus run(IProgressMonitor monitor) {
-								monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
+								final int x = i;
 
 								openFile(new File(fileList[x].toString()));
+								/*
+								 * if (javaFXEmbedded) {
+								 * 
+								 * openFile(new File(fileList[x].toString()));
+								 * 
+								 * } else { SwingUtilities.invokeLater(new Runnable() { // !! public void run()
+								 * {
+								 * 
+								 * openFile(new File(fileList[x].toString())); } }); }
+								 */
 
-								monitor.done();
-								return Status.OK_STATUS;
+								monitor.worked(1);
+
 							}
+							monitor.done();
+							return Status.OK_STATUS;
+						}
 
-						};
+					};
+					job.addJobChangeListener(new JobChangeAdapter() {
+						public void done(IJobChangeEvent event) {
+							if (event.getResult().isOK()) {
 
-						// job.setUser(true);
-						job.schedule();
+							} else {
 
-					}
+							}
+						}
+					});
+					// job.setUser(true);
+					job.schedule();
 
 				}
 			}
@@ -360,7 +391,7 @@ public class CanvasView extends ViewPart {
 					if (splitShortcut[0].equals("" + e.character)) {
 						IJ.doCommand(splitShortcut[1]);
 					}
-                                        /*Also allow the F keys for a shortcut!*/
+					/* Also allow the F keys for a shortcut! */
 					if (splitShortcut[0].equals("F1") && e.keyCode == SWT.F1) {
 						IJ.doCommand(splitShortcut[1]);
 					} else if (splitShortcut[0].equals("F2") && e.keyCode == SWT.F2) {
@@ -409,7 +440,7 @@ public class CanvasView extends ViewPart {
 		});
 
 		tabFolder.setBorderVisible(true);
-		//tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		// tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
 
 		// tabFolder.setSelectionBackground(new Color[] {
@@ -434,10 +465,11 @@ public class CanvasView extends ViewPart {
 							win.bio7TabClose();
 						}
 					});
-					CTabItem cTabItem = (CTabItem) event.item;
-					if (cTabItem.getControl().isDisposed() == false) {
-						cTabItem.getControl().dispose();
-					}
+					/*
+					 * CTabItem cTabItem = (CTabItem) event.item; if
+					 * (cTabItem.getControl().isDisposed() == false) {
+					 * cTabItem.getControl().dispose(); }
+					 */
 
 				} else {
 					java.awt.EventQueue.invokeLater(new Runnable() {
@@ -475,13 +507,17 @@ public class CanvasView extends ViewPart {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				Vector ve = (Vector) e.item.getData();
+				Vector<?> ve = (Vector<?>) e.item.getData();
 				plu = (ImagePlus) ve.get(0);
 
 				win = (ImageWindow) ve.get(1);
-
-				WindowManager.setTempCurrentImage(plu);
-				WindowManager.setCurrentWindow(win);
+				//Wrap to avoid deadlock of awt frame access!
+				java.awt.EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						WindowManager.setTempCurrentImage(plu);
+						WindowManager.setCurrentWindow(win);
+					}
+				});
 
 				/* import to set current Panel! */
 				current = (JPanel) ve.get(2);
@@ -508,8 +544,14 @@ public class CanvasView extends ViewPart {
 						plu = (ImagePlus) ve.get(0);
 
 						win = (ImageWindow) ve.get(1);
-						WindowManager.setTempCurrentImage(plu);
-						WindowManager.setCurrentWindow(win);
+						
+						//Wrap to avoid deadlock of awt frame access!
+						java.awt.EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								WindowManager.setTempCurrentImage(plu);
+								WindowManager.setCurrentWindow(win);
+							}
+						});
 
 						// important to set current Panel!
 						current = (JPanel) ve.get(2); // current.requestFocus();

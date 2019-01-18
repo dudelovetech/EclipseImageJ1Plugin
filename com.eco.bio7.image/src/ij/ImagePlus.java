@@ -1054,8 +1054,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/**
 	 * Returns an ImageStatistics object generated using the specified measurement
-	 * options and histogram bin count. Note: except for float images, the number of
-	 * bins is currently fixed at 256.
+	 * options and histogram bin count.
 	 */
 	public ImageStatistics getStatistics(int mOptions, int nBins) {
 		return getStatistics(mOptions, nBins, 0.0, 0.0);
@@ -1063,25 +1062,27 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/**
 	 * Returns an ImageStatistics object generated using the specified measurement
-	 * options, histogram bin count and histogram range. Note: for 8-bit and RGB
-	 * images, the number of bins is fixed at 256 and the histogram range is always
-	 * 0-255.
+	 * options, histogram bin count and histogram range.
 	 */
 	public ImageStatistics getStatistics(int mOptions, int nBins, double histMin, double histMax) {
+		ImageProcessor ip2 = ip;
+		int bitDepth = getBitDepth();
+		if (nBins != 256 && (bitDepth == 8 || bitDepth == 24))
+			ip2 = ip.convertToShort(false);
 		if (roi != null && roi.isArea())
-			ip.setRoi(roi);
+			ip2.setRoi(roi);
 		else
-			ip.resetRoi();
-		ip.setHistogramSize(nBins);
+			ip2.resetRoi();
+		ip2.setHistogramSize(nBins);
 		Calibration cal = getCalibration();
 		if (getType() == GRAY16 && !(histMin == 0.0 && histMax == 0.0)) {
 			histMin = cal.getRawValue(histMin);
 			histMax = cal.getRawValue(histMax);
 		}
-		ip.setHistogramRange(histMin, histMax);
-		ImageStatistics stats = ImageStatistics.getStatistics(ip, mOptions, cal);
-		ip.setHistogramSize(256);
-		ip.setHistogramRange(0.0, 0.0);
+		ip2.setHistogramRange(histMin, histMax);
+		ImageStatistics stats = ImageStatistics.getStatistics(ip2, mOptions, cal);
+		ip2.setHistogramSize(256);
+		ip2.setHistogramRange(0.0, 0.0);
 		return stats;
 	}
 
@@ -2276,7 +2277,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		case GRAY8:
 		case COLOR_256:
 			LookUpTable lut = createLut();
-			if (imageType == COLOR_256 || !lut.isGrayscale())
+			boolean customLut = !lut.isGrayscale() || (ip != null && !ip.isDefaultLut());
+			if (imageType == COLOR_256 || customLut)
 				fi.fileType = FileInfo.COLOR8;
 			else
 				fi.fileType = FileInfo.GRAY8;
@@ -2292,7 +2294,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				fi.fileType = fi.GRAY16_UNSIGNED;
 			if (!compositeImage) {
 				lut = createLut();
-				if (!lut.isGrayscale())
+				if (!lut.isGrayscale() || (ip != null && !ip.isDefaultLut()))
 					addLut(lut, fi);
 			}
 			break;
@@ -2300,7 +2302,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			fi.fileType = fi.GRAY32_FLOAT;
 			if (!compositeImage) {
 				lut = createLut();
-				if (!lut.isGrayscale())
+				if (!lut.isGrayscale() || (ip != null && !ip.isDefaultLut()))
 					addLut(lut, fi);
 			}
 			break;
@@ -2386,7 +2388,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		this.ignoreFlush = ignoreFlush;
 	}
 
-	/** Returns a copy of this image or stack.
+	/**
+	 * Returns a copy of this image or stack.
 	 * 
 	 * @see #duplicateAll
 	 * @see #crop
@@ -3181,6 +3184,36 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
+	}
+
+	/** Plots a 256 bin histogram of this image and returns the PlotWindow. */
+	public PlotWindow plotHistogram() {
+		return plotHistogram(256);
+	}
+
+	/**
+	 * Plots a histogram of this image using the specified number of bins and
+	 * returns the PlotWindow.
+	 */
+	public PlotWindow plotHistogram(int bins) {
+		ImageStatistics stats = getStatistics(AREA + MEAN + MODE + MIN_MAX, bins);
+		Plot plot = new Plot("Hist_" + getTitle(), "Value", "Frequency");
+		plot.setColor("black", "#999999");
+		plot.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		double[] y = stats.histogram();
+		int n = y.length;
+		double[] x = new double[n];
+		int bits = getBitDepth();
+		boolean eightBit = bits == 8 || bits == 24;
+		double min = !eightBit ? stats.min : 0;
+		for (int i = 0; i < n; i++)
+			x[i] = min + i * stats.binSize;
+		plot.add("bar", x, y);
+		if (bins != 256)
+			plot.addLegend(bins + " bins", "auto");
+		if (eightBit)
+			plot.setLimits(0, 256, 0, Double.NaN);
+		return plot.show();
 	}
 
 	public String toString() {

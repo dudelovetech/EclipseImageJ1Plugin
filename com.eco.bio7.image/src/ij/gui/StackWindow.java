@@ -29,9 +29,9 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	private SwtAwtImageJ b;// Changed for Bio7!
 
 	public StackWindow(ImagePlus imp) {
-		// this(imp, null);
-		/* Changed for Bio7! */
-		this(imp, new ImageCanvas(imp));
+		 this(imp, null);
+		///* Changed for Bio7! */
+		//this(imp, new ImageCanvas(imp));
 	}
 
 	public StackWindow(ImagePlus imp, ImageCanvas ic) {
