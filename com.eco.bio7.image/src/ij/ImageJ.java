@@ -194,8 +194,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusBar.setForeground(Color.black);
 		statusBar.setBackground(getSystemColour());// Changed for Bio7!
 		statusLine = new JLabel();
-		int scale = (int)Math.round(Prefs.getGuiScale());
-		statusLine.setFont(new Font("SansSerif", Font.PLAIN, 13*scale));
+		int scale = (int) Math.round(Prefs.getGuiScale());
+		statusLine.setFont(new Font("SansSerif", Font.PLAIN, 13 * scale));
 		// Changed for Bio7!
 		if (Util.isThemeBlack()) {
 			statusLine.setForeground(Color.white);
@@ -206,7 +206,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusLine.addKeyListener(this);
 		statusLine.addMouseListener(this);
 		statusBar.add("Center", statusLine);
-		progressBar = new ProgressBar(ProgressBar.WIDTH*scale, ProgressBar.HEIGHT*scale);
+		progressBar = new ProgressBar(ProgressBar.WIDTH * scale, ProgressBar.HEIGHT * scale);
 		progressBar.addKeyListener(this);
 		progressBar.addMouseListener(this);
 		statusBar.add("East", progressBar);
@@ -349,18 +349,34 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	void showStatus(final String s) {
 		statusLine.setText(s);
 		Display display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() {
+		/*Mac only seems to work with async method!*/
+		if (Util.getOS().equals("Mac")) {
+			display.asyncExec(new Runnable() {
 
-			public void run() {
-				if (CanvasView.getCanvas_view() != null) {
-					CanvasView.getCanvas_view().setstatusline(s);
-				}
+				public void run() {
+					if (CanvasView.getCanvas_view() != null) {
+						CanvasView.getCanvas_view().setstatusline(s);
+					}
 
-				if (customImageJView != null) {
-					customImageJView.setstatusline(s);
+					if (customImageJView != null) {
+						customImageJView.setstatusline(s);
+					}
 				}
-			}
-		});
+			});
+		} else {
+			display.syncExec(new Runnable() {
+
+				public void run() {
+					if (CanvasView.getCanvas_view() != null) {
+						CanvasView.getCanvas_view().setstatusline(s);
+					}
+
+					if (customImageJView != null) {
+						customImageJView.setstatusline(s);
+					}
+				}
+			});
+		}
 	}
 
 	/*
@@ -503,15 +519,14 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		ImagePlus imp = WindowManager.getCurrentImage();
 		boolean isStack = (imp != null) && (imp.getStackSize() > 1);
 
-		if (imp!=null && !meta && ((keyChar>=32 && keyChar<=255) || keyChar=='\b' || keyChar=='\n')) {
+		if (imp != null && !meta && ((keyChar >= 32 && keyChar <= 255) || keyChar == '\b' || keyChar == '\n')) {
 			Roi roi = imp.getRoi();
-			if (roi!=null && roi instanceof TextRoi) {
-				if (imp.getOverlay()!=null && (control || alt || meta)
-				&& (keyCode==KeyEvent.VK_BACK_SPACE || keyCode==KeyEvent.VK_DELETE)) {
+			if (roi != null && roi instanceof TextRoi) {
+				if (imp.getOverlay() != null && (control || alt || meta) && (keyCode == KeyEvent.VK_BACK_SPACE || keyCode == KeyEvent.VK_DELETE)) {
 					if (deleteOverlayRoi(imp))
-							return;
+						return;
 				}
-				if ((flags & KeyEvent.META_MASK)!=0 && IJ.isMacOSX())
+				if ((flags & KeyEvent.META_MASK) != 0 && IJ.isMacOSX())
 					return;
 				if (alt) {
 					switch (keyChar) {
@@ -539,7 +554,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				else
 					cmd = (String) macroShortcuts.get(new Integer(keyCode));
 				if (cmd != null) {
-					
+
 					commandName = cmd;
 					MacroInstaller.runMacroShortcut(cmd);
 					return;
