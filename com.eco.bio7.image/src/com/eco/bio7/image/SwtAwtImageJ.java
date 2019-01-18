@@ -104,10 +104,10 @@ public class SwtAwtImageJ {
 			Display dis = Util.getDisplay();
 			//new AwtDialogListener(Util.getDisplay());
 			if (Util.getOS().equals("Mac")) {
-				/*On Mac we have to use async else we get no keyboard focus!
+				/*On Mac we had to use async (no sync) else we got no keyboard focus!
 				 *We also have to change the StackEditor for Mac to avoid a deadlock when converting a stack
 				 *to images!*/
-				dis.asyncExec(new Runnable() {
+				dis.syncExec(new Runnable() {
 
 					public void run() {
 
