@@ -55,6 +55,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -160,6 +161,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	private IJMacroConfiguration ijMacroConfig;
 
 	private ImageJForumCopy imagejForumCopy;
+	
+	private static Shell tempShell;
 
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
@@ -811,16 +814,19 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	 * @param editor
 	 */
 	public static void activateEditorPage(final IEditorPart editor) {
-		IEditorSite site = editor.getEditorSite();
-		final IWorkbenchPage page = site.getPage();
-		Display display = site.getShell().getDisplay();
-		display.syncExec(new Runnable() {
-			public void run() {
-				page.activate(editor);
+		/*
+		 * IEditorSite site = editor.getEditorSite(); final IWorkbenchPage page =
+		 * site.getPage(); Display display = site.getShell().getDisplay();
+		 * display.syncExec(new Runnable() { public void run() { page.activate(editor);
+		 * } }); if (editor != page.getActiveEditor()) throw new
+		 * RuntimeException("Editor couldn't activated");
+		 */
+		if (tempShell != null) {
+			if (tempShell.isDisposed() == false) {
+				tempShell.dispose();
 			}
-		});
-		if (editor != page.getActiveEditor())
-			throw new RuntimeException("Editor couldn't activated");
+		}
+		tempShell = new Shell();
 	}
 
 	private ISelectionListener listener = new ISelectionListener() {
