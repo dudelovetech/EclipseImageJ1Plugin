@@ -254,7 +254,7 @@ public class CanvasView extends ViewPart {
 		getViewSite().getPage().addPartListener(new IPartListener() {
 			public void partActivated(IWorkbenchPart part) {
 				if (part instanceof CanvasView) {
-					tabFolder.setFocus();
+					//tabFolder.setFocus();
 				}
 			}
 
