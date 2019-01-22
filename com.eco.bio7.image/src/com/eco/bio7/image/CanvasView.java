@@ -253,22 +253,34 @@ public class CanvasView extends ViewPart {
 
 		getViewSite().getPage().addPartListener(new IPartListener() {
 			public void partActivated(IWorkbenchPart part) {
-				/*Focus necessary to made the key shortcuts work without an opened image.
-				 *Wrapped in invokeLater to not deadlock when drag and drop many images
-				 *on the GUI. syncExec to access the tabFolder!*/
+				/*
+				 * Focus necessary to made the key shortcuts work without an opened image.
+				 * Wrapped in invokeLater to not deadlock when drag and drop many images on the
+				 * GUI. syncExec to access the tabFolder!
+				 */
 				if (part instanceof CanvasView) {
 					SwingUtilities.invokeLater(new Runnable() {
 
 						public void run() {
 
 							Display dis = Util.getDisplay();
-							dis.syncExec(new Runnable() {
+							if (Util.getOS().equals("Mac")) {
+								dis.asyncExec(new Runnable() {
 
-								public void run() {
+									public void run() {
 
-									tabFolder.setFocus();
-								}
-							});
+										tabFolder.setFocus();
+									}
+								});
+							} else {
+								dis.syncExec(new Runnable() {
+
+									public void run() {
+
+										tabFolder.setFocus();
+									}
+								});
+							}
 
 						}
 					});
