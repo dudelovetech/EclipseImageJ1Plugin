@@ -253,8 +253,26 @@ public class CanvasView extends ViewPart {
 
 		getViewSite().getPage().addPartListener(new IPartListener() {
 			public void partActivated(IWorkbenchPart part) {
+				/*Focus necessary to made the key shortcuts work without an opened image.
+				 *Wrapped in invokeLater to not deadlock when drag and drop many images
+				 *on the GUI. syncExec to access the tabFolder!*/
 				if (part instanceof CanvasView) {
-					tabFolder.setFocus();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						public void run() {
+
+							Display dis = Util.getDisplay();
+							dis.syncExec(new Runnable() {
+
+								public void run() {
+
+									tabFolder.setFocus();
+								}
+							});
+
+						}
+					});
+
 				}
 			}
 
@@ -511,7 +529,7 @@ public class CanvasView extends ViewPart {
 				plu = (ImagePlus) ve.get(0);
 
 				win = (ImageWindow) ve.get(1);
-				//Wrap to avoid deadlock of awt frame access!
+				// Wrap to avoid deadlock of awt frame access!
 				java.awt.EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						WindowManager.setTempCurrentImage(plu);
@@ -544,8 +562,8 @@ public class CanvasView extends ViewPart {
 						plu = (ImagePlus) ve.get(0);
 
 						win = (ImageWindow) ve.get(1);
-						
-						//Wrap to avoid deadlock of awt frame access!
+
+						// Wrap to avoid deadlock of awt frame access!
 						java.awt.EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								WindowManager.setTempCurrentImage(plu);
