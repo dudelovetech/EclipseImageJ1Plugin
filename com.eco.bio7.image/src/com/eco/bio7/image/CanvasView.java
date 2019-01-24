@@ -262,7 +262,7 @@ public class CanvasView extends ViewPart {
 						public void run() {
 
 							Display dis = Util.getDisplay();
-							dis.syncExec(new Runnable() {
+							dis.asyncExec(new Runnable() {
 
 								public void run() {
 
