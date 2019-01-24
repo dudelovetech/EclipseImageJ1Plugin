@@ -1296,6 +1296,7 @@ public class Interpreter implements MacroConstants {
 	}
 		
 	void showError(String title, String msg, String[] variables) {
+		Macro.setOptions(null);
 		GenericDialog gd = new GenericDialog(title);
 		gd.setInsets(6,5,0);
 		gd.addMessage(msg);

@@ -21,7 +21,6 @@ public class MultiLineLabel extends JPanel {
         init(label);
     }
     
-
     public MultiLineLabel(String label, int minimumWidth) {
         init(label);
         min_width = minimumWidth;

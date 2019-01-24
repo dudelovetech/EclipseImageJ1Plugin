@@ -711,7 +711,7 @@ public class IJ {
 						if (isMacro() && hd.escapePressed())
 							throw new RuntimeException(Macro.MACRO_CANCELED);
 					} else {
-						MessageDialog md = new MessageDialog(ij, title, msg);
+						MessageDialog md = new MessageDialog(ij, title, msg); 
 						if (isMacro() && md.escapePressed())
 							throw new RuntimeException(Macro.MACRO_CANCELED);
 					}
@@ -728,11 +728,6 @@ public class IJ {
 	 */
 
 	public static void error(String msg) {
-		if (macroInterpreter!=null) {
-			macroInterpreter.abort(msg);
-			macroInterpreter = null;
-			return;
-		}
 		error(null, msg);
 		if (Thread.currentThread().getName().endsWith("JavaScript"))
 			throw new RuntimeException(Macro.MACRO_CANCELED);
@@ -746,6 +741,11 @@ public class IJ {
 	 * ImageJ window is not present.
 	 */
 	public static void error(String title, String msg) {
+		if (macroInterpreter!=null) {
+			macroInterpreter.abort(msg);
+			macroInterpreter = null;
+			return;
+		}
 		if (msg != null && msg.endsWith(Macro.MACRO_CANCELED))
 			return;
 		String title2 = title != null ? title : "ImageJ";
@@ -1773,6 +1773,14 @@ public class IJ {
 				abort();
 		}
 		return img;
+	}
+	
+	/**The macro interpreter uses this method to call getImage().*/
+	public static ImagePlus getImage(Interpreter interpreter) {
+		macroInterpreter = interpreter;
+		ImagePlus imp =  getImage();
+		macroInterpreter = null;
+		return imp;
 	}
 
 	/**
