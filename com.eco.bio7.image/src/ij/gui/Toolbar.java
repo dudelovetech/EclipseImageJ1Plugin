@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -127,7 +128,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	private static int arcSize = (int) Prefs.get(CORNER_DIAMETER, 20);
 	private int lineType = LINE;
 	private static boolean legacyMode;
-	private static int scale;
+	private static double dscale = 1.0;
+	private static int scale = 1;
 	private static int buttonWidth;
 	private static int buttonHeight;
 	private static int gapSize;
@@ -144,12 +146,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 	public static final int SPARE1 = UNUSED, SPARE2 = CUSTOM1, SPARE3 = CUSTOM2, SPARE4 = CUSTOM3, SPARE5 = CUSTOM4, SPARE6 = CUSTOM5, SPARE7 = CUSTOM6, SPARE8 = CUSTOM7, SPARE9 = 22;
 
 	public Toolbar() {
-		scale = (int) Math.round(Prefs.getGuiScale());
-		buttonWidth = BUTTON_WIDTH * scale;
-		buttonHeight = BUTTON_HEIGHT * scale;
-		gapSize = GAP_SIZE * scale;
-		offset = OFFSET * scale;
-		ps = new Dimension(buttonWidth * NUM_BUTTONS - (buttonWidth - gapSize), buttonHeight);
+		init();
 		down = new boolean[MAX_TOOLS];
 		resetButtons();
 		down[0] = true;
@@ -168,6 +165,25 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		addPopupMenus();
 		/* Changed for Bio7! */
 		Prefs.antialiasedTools = true;
+	}
+	
+	public void init() {
+		dscale = Prefs.getGuiScale();
+		scale = (int)Math.round(dscale);
+		if ((dscale>=1.5&&dscale<2.0) || (dscale>=2.5&&dscale<3.0))
+			dscale = scale;
+		if (dscale>1.0) {
+			buttonWidth = (int)((BUTTON_WIDTH-2)*dscale);
+			buttonHeight = (int)((BUTTON_HEIGHT-2)*dscale);
+			offset = (int)((OFFSET-1)*dscale);
+			//IJ.log(dscale+" "+BUTTON_WIDTH+" "+buttonWidth+" "+offset);
+		} else {
+			buttonWidth = BUTTON_WIDTH;
+			buttonHeight = BUTTON_HEIGHT;
+			offset = OFFSET;
+		}
+		gapSize = GAP_SIZE;
+		ps = new Dimension(buttonWidth*NUM_BUTTONS-(buttonWidth-gapSize), buttonHeight);
 	}
 
 	void addPopupMenus() {
@@ -550,6 +566,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		icon = icons[tool];
 		if (icon == null)
 			return;
+		if (scale>1)
+			((Graphics2D)g).setStroke(new BasicStroke(scale));
 		this.icon = icon;
 		int x1, y1, x2, y2;
 		pc = 0;
@@ -576,6 +594,8 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				g.fillOval(x + v(), y + v(), v(), v());
 				break; // filled oval
 			case 'C': // set color
+				int saveScale = scale;
+				scale = 1;
 				int v1 = v(), v2 = v(), v3 = v();
 				int red = v1 * 16, green = v2 * 16, blue = v3 * 16;
 				if (red > 255)
@@ -586,13 +606,12 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 					blue = 255;
 				Color color = v1 == 1 && v2 == 2 && v3 == 3 ? foregroundColor : new Color(red, green, blue);
 				g.setColor(color);
+				scale = saveScale;
 				break;
 			case 'L':
 				g.drawLine(x + v(), y + v(), x + v(), y + v());
 				break; // line
-			case 'D':
-				g.fillRect(x + v(), y + v(), 1, 1);
-				break; // dot
+			case 'D':  g.fillRect(x+v(), y+v(), scale, scale); break; // dot
 			case 'P': // polyline
 				Polygon p = new Polygon();
 				p.addPoint(x + v(), y + v());
@@ -1266,7 +1285,9 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 				}
 			}
 			setTool2(newTool);
-			boolean isRightClick = e.isPopupTrigger() || e.isMetaDown();
+			//boolean isRightClick = e.isPopupTrigger()||e.isMetaDown();
+			int flags = e.getModifiers();
+			boolean isRightClick = e.isPopupTrigger()||(!IJ.isMacintosh()&&(flags&Event.META_MASK)!=0);
 			if (current == RECTANGLE && isRightClick) {
 				rectItem.setState(rectType == RECT_ROI);
 				roundRectItem.setState(rectType == ROUNDED_RECT_ROI);
@@ -1751,8 +1772,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			icons[getNumTools() - 1] = icons[getNumTools() - 2];
 			names[getNumTools() - 2] = null;
 			icons[getNumTools() - 2] = null;
-			ps = new Dimension(buttonWidth * NUM_BUTTONS - (BUTTON_WIDTH - gapSize) + nExtraTools * BUTTON_WIDTH, buttonHeight);
-			IJ.getInstance().pack();
+			ps = new Dimension(buttonWidth*NUM_BUTTONS-(buttonWidth-gapSize)+nExtraTools*buttonWidth, buttonHeight);			IJ.getInstance().pack();
 			tool = getNumTools() - 2;
 		}
 		if (tool == -1) {

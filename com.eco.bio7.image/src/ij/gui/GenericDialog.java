@@ -632,8 +632,11 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.anchor = GridBagConstraints.WEST;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		if (font != null)
+		if (font != null) {
+			if (Prefs.getGuiScale() > 1.0)
+				font = font.deriveFont((float) (font.getSize() * Prefs.getGuiScale()));
 			theLabel.setFont(font);
+		}
 		if (color != null)
 			theLabel.setForeground(color);
 		add(theLabel, c);
@@ -1388,9 +1391,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			Font font = getFont();
 			if (IJ.debugMode)
 				IJ.log("GenericDialog font: " + fontSizeSet + " " + font);
-			if (!fontSizeSet && font!=null && Prefs.getGuiScale()!=1.0) {
+			if (!fontSizeSet && font != null && Prefs.getGuiScale() != 1.0) {
 				fontSizeSet = true;
-				setFont(font.deriveFont((float)(font.getSize()*Prefs.getGuiScale())));
+				setFont(font.deriveFont((float) (font.getSize() * Prefs.getGuiScale())));
 			}
 			pack();
 			setup();
@@ -1415,7 +1418,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 
 	@Override
 	public void setFont(Font font) {
-		super.setFont(!fontSizeSet&&Prefs.getGuiScale()!=1.0?font.deriveFont((float)(font.getSize()*Prefs.getGuiScale())):font);
+		super.setFont(!fontSizeSet && Prefs.getGuiScale() != 1.0 ? font.deriveFont((float) (font.getSize() * Prefs.getGuiScale())) : font);
 		fontSizeSet = true;
 	}
 

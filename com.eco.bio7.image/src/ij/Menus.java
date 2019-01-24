@@ -47,7 +47,7 @@ public class Menus {
 	public static final char UTILITIES_MENU = 'u';
 
 	public static final int WINDOW_MENU_ITEMS = 6; // fixed items at top of
-													// Window menu
+							// Window menu
 
 	public static final int NORMAL_RETURN = 0;
 	public static final int COMMAND_IN_USE = -1;
@@ -78,24 +78,24 @@ public class Menus {
 	private static Hashtable macroShortcuts;
 	private static Vector pluginsPrefs; // commands saved in IJ_Prefs
 	static int windowMenuItems2; // non-image windows listed in Window menu +
-									// separator
+					// separator
 	private String error;
 	private String jarError;
 	private String pluginError;
 	private boolean isJarErrorHeading;
 	private static boolean installingJars, duplicateCommand;
 	private static Vector jarFiles; // JAR files in plugins folder with "_" in
-									// their name
+					// their name
 	private Map menuEntry2jarFile = new HashMap();
 	private static Vector macroFiles; // Macros and scripts in the plugins
-										// folder
+						// folder
 	private static int userPluginsIndex; // First user plugin or submenu in
-											// Plugins menu
+						// Plugins menu
 	private static boolean addSorted;
 	private static int defaultFontSize = IJ.isWindows() ? 15 : 0;
-	private static int scale = (int)Math.round(Prefs.getGuiScale());
 	private static int fontSize = Prefs.getInt(Prefs.MENU_SIZE, defaultFontSize);
 	private static Font menuFont;
+	private static double scale = 1.0;
 
 	static boolean jnlp; // true when using Java WebStart
 	public static int setMenuBarCount;
@@ -110,6 +110,9 @@ public class Menus {
 	}
 
 	String addMenuBar() {
+		scale = Prefs.getGuiScale();
+		if ((scale >= 1.5 && scale < 2.0) || (scale >= 2.5 && scale < 3.0))
+			scale = (int) Math.round(scale);
 		nPlugins = nMacros = userPluginsIndex = 0;
 		addSorted = installingJars = duplicateCommand = false;
 		error = null;
@@ -273,8 +276,8 @@ public class Menus {
 		file.addSeparator();
 		addPlugInItem(file, "Quit", "ij.plugin.Commands(\"quit\")", 0, false);
 
-		//System.out.println("MenuBar.setFont: "+fontSize+" "+scale+"  "+getFont());
-		if (fontSize!=0 || scale>1)
+		// System.out.println("MenuBar.setFont: "+fontSize+" "+scale+" "+getFont());
+		if (fontSize != 0 || scale > 1.0)
 			mbar.setFont(getFont());
 		if (ij != null) {
 			ij.setMenuBar(mbar);
@@ -618,7 +621,7 @@ public class Menus {
 			}
 			String prefsValue = value;
 			value = value.substring(2, value.length()); // remove menu code and
-														// coma
+									// coma
 			className = value.substring(value.lastIndexOf(',') + 1, value.length());
 			boolean found = className.startsWith("ij.");
 			if (!found && pluginList != null) { // does this plugin exist?
@@ -690,13 +693,13 @@ public class Menus {
 		String command = name.replace('_', ' ');
 		if (command.endsWith(".js") || command.endsWith(".py"))
 			command = command.substring(0, command.length() - 3); // remove
-																	// ".js" or
-																	// ".py"
+										// ".js" or
+										// ".py"
 		else
 			command = command.substring(0, command.length() - 4); // remove
-																	// ".txt",
-																	// ".ijm" or
-																	// ".bsh"
+										// ".txt",
+										// ".ijm" or
+										// ".bsh"
 		command.trim();
 		if (pluginsTable.get(command) != null) // duplicate command?
 			command = command + " Macro";
@@ -1248,7 +1251,7 @@ public class Menus {
 		int count = 0;
 		MenuItem mi;
 		popup = new PopupMenu("");
-		if (fontSize!=0 || scale>1)
+		if (fontSize != 0 || scale > 1.0)
 			popup.setFont(getFont());
 
 		while (true) {
@@ -1760,15 +1763,16 @@ public class Menus {
 	 */
 	public static int getFontSize() {
 		return fontSize;
-		//return IJ.isMacintosh()?0:fontSize;
+		// return IJ.isMacintosh()?0:fontSize;
 	}
 
 	public static Font getFont() {
-		if (menuFont==null) {
-			int size = fontSize==0?12:fontSize;
-			size *= scale;
-			menuFont =  new Font("SanSerif", Font.PLAIN, size);
+		if (menuFont == null) {
+			int size = fontSize == 0 ? 12 : fontSize;
+			size = (int) Math.round(size * scale);
+			menuFont = new Font("SanSerif", Font.PLAIN, size);
 		}
+		// System.out.println("Menus.getFont: "+scale+" "+fontSize+" "+menuFont);
 		return menuFont;
 	}
 
@@ -1802,6 +1806,15 @@ public class Menus {
 		IJ.resetClassLoader();
 		IJ.runPlugIn("ij.plugin.ClassChecker", "");
 		IJ.showStatus("Menus updated: " + m.nPlugins + " commands, " + m.nMacros + " macros");
+	}
+
+	public static void updateFont() {
+		scale = (int) Math.round(Prefs.getGuiScale());
+		Font font = getFont();
+		mbar.setFont(font);
+		if (ij != null)
+			ij.setMenuBar(mbar);
+		popup.setFont(font);
 	}
 
 }
