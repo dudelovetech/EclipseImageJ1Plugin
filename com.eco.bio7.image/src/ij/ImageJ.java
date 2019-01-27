@@ -351,18 +351,14 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		/* MacOSX only seems to work with async method! */
 		if (Util.getOS().equals("Mac")) {
-			display.asyncExec(new Runnable() {
-
-				public void run() {
-					if (CanvasView.getCanvas_view() != null) {
-						CanvasView.getCanvas_view().setstatusline(s);
-					}
-
-					if (customImageJView != null) {
-						customImageJView.setstatusline(s);
-					}
-				}
-			});
+			/*
+			 * display.asyncExec(new Runnable() {
+			 * 
+			 * public void run() { if (CanvasView.getCanvas_view() != null) {
+			 * CanvasView.getCanvas_view().setstatusline(s); }
+			 * 
+			 * if (customImageJView != null) { customImageJView.setstatusline(s); } } });
+			 */
 		} else {
 			display.syncExec(new Runnable() {
 
