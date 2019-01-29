@@ -28,7 +28,6 @@
       <import plugin="org.eclipse.core.resources" version="3.12.0" match="greaterOrEqual"/>
       <import plugin="com.eco.bio7.image"/>
       <import plugin="org.eclipse.ui.views"/>
-      <import plugin="com.eco.bio7.imagej2" version="1.0.4" match="greaterOrEqual"/>
    </requires>
 
    <plugin
