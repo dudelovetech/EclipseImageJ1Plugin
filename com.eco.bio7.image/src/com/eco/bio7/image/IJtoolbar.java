@@ -45,15 +45,10 @@ public class IJtoolbar extends ViewPart {
 			public void partActivated(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
 
-					SwingUtilities.invokeLater(new Runnable() {
-						// !!
-						public void run() {
-							if (jpp != null) {
-								jpp.doLayout();
-								jpp.repaint();
-							}
-						}
-					});
+					/*
+					 * SwingUtilities.invokeLater(new Runnable() { // !! public void run() { if (jpp
+					 * != null) { jpp.doLayout(); jpp.repaint(); } } });
+					 */
 
 				}
 
@@ -62,15 +57,10 @@ public class IJtoolbar extends ViewPart {
 			public void partBroughtToTop(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
 
-					SwingUtilities.invokeLater(new Runnable() {
-						// !!
-						public void run() {
-							if (jpp != null) {
-								jpp.doLayout();
-								jpp.repaint();
-							}
-						}
-					});
+					/*
+					 * SwingUtilities.invokeLater(new Runnable() { // !! public void run() { if (jpp
+					 * != null) { jpp.doLayout(); jpp.repaint(); } } });
+					 */
 				}
 
 			}
@@ -102,8 +92,8 @@ public class IJtoolbar extends ViewPart {
 		/*
 		 * On MacOSX the javaFX integration works fine and avoids some errors!
 		 */
-
-		if (Util.getOS().equals("Mac")) { //
+               boolean enable=false;
+		if (enable) { //
 			SwingUtilities.invokeLater(new Runnable() {
 				// !!
 				public void run() {
