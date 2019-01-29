@@ -264,12 +264,9 @@ public class CanvasView extends ViewPart {
 						public void run() {
 
 							Display dis = Util.getDisplay();
-<<<<<<< HEAD
-							dis.asyncExec(new Runnable() {
-=======
+
 							if (Util.getOS().equals("Mac")) {
 								dis.asyncExec(new Runnable() {
->>>>>>> branch 'master' of https://github.com/Bio7/EclipseImageJ1Plugin.git
 
 									public void run() {
 
