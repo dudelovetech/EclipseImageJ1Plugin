@@ -93,7 +93,7 @@ public class IJtoolbar extends ViewPart {
 		 * On MacOSX the javaFX integration works fine and avoids some errors!
 		 */
                boolean enable=false;
-		if (enable) { //
+		if (Util.getOS().equals("Mac")) { //
 			SwingUtilities.invokeLater(new Runnable() {
 				// !!
 				public void run() {

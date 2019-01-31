@@ -34,8 +34,7 @@ public class IJTabs {
 	/**
 	 * Activates the tab with the specified number.
 	 * 
-	 * @param number
-	 *            the number of the tab.
+	 * @param number the number of the tab.
 	 */
 	public static void setActive(final int number) {
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
@@ -96,10 +95,10 @@ public class IJTabs {
 			final int tabcount = i;
 			if (javaFXEmbedded) {
 				if (items[tabcount].isDisposed() == false) {
-					//if (items[tabcount].getControl().isDisposed() == false) {
-						//items[tabcount].getControl().dispose();
-						items[tabcount].dispose();
-					//}
+					// if (items[tabcount].getControl().isDisposed() == false) {
+					// items[tabcount].getControl().dispose();
+					items[tabcount].dispose();
+					// }
 				}
 
 			} else {
@@ -116,14 +115,13 @@ public class IJTabs {
 			}
 
 		}
-		
+
 	}
 
 	/**
 	 * Closes the tab with the specified number in the ImageJ view.
 	 * 
-	 * @param number
-	 *            the number of the tab as an integer value.
+	 * @param number the number of the tab as an integer value.
 	 */
 	public static void deleteTab(int number) {
 		final int nrdel = number;
@@ -150,7 +148,9 @@ public class IJTabs {
 					});
 					if (items[nrdel].getControl().isDisposed() == false) {
 						items[nrdel].getControl().dispose();
-						items[nrdel].dispose();
+						if (items[nrdel].isDisposed() == false) {
+							items[nrdel].dispose();
+						}
 					}
 
 				} else {
@@ -194,8 +194,7 @@ public class IJTabs {
 	/**
 	 * Hides the tab with the specified number in the ImageJ view.
 	 * 
-	 * @param number
-	 *            the tab number.
+	 * @param number the tab number.
 	 */
 	public static void hideTabNumber(int number) {
 
