@@ -57,6 +57,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		b = new SwtAwtImageJ(cSelector, zSelector, tSelector, ic, imp, this);// Add
 		// the panel to the tab folder with the image!
 		b.addTab(imp.getTitle());
+		imp.setWindow(this);
 		pack();
 		ic = imp.getCanvas();
 		if (ic != null)
