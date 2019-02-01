@@ -586,6 +586,7 @@ public class CanvasView extends ViewPart {
 
 						// important to set current Panel!
 						current = (JPanel) ve.get(2); // current.requestFocus();
+						plu.getCanvas().repaint();
 					}
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {

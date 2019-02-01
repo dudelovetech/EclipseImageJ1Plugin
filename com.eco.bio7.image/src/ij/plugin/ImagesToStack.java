@@ -1,5 +1,11 @@
 package ij.plugin;
 import ij.plugin.frame.Recorder;
+
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.widgets.Display;
+
+import com.eco.bio7.image.CanvasView;
+
 import ij.*;
 import ij.gui.*;
 import ij.process.*;
@@ -31,13 +37,16 @@ public class ImagesToStack implements PlugIn {
 	private int stackType;
 	private ImagePlus[] images;
 	private String name = "Stack";
+	private int counttab;// Changed for Bio7!
 	
 	/** Converts the images in 'images' to a stack, using the 
 		default settings ("copy center" and "titles as labels"). */
 	public static ImagePlus run(ImagePlus[] images) {
 		ImagesToStack itos = new ImagesToStack();
 		int count = itos.findMinMaxSize(images, images.length);
-		return itos.convert(images, count);
+		/* Changed for Bio7! */
+		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
+		return itos.convert(images, count,items);
 	}
 
 	public void run(String arg) {
@@ -47,7 +56,10 @@ public class ImagesToStack implements PlugIn {
 	public void convertImagesToStack() {
 		boolean scale = false;
 		int[] wList = WindowManager.getIDList();
-		if (wList==null) {
+		/* Changed for Bio7! */
+		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
+		Display dis = CanvasView.getParent2().getDisplay();
+		if (wList == null) {
 			IJ.error("No images are open.");
 			return;
 		}
@@ -132,19 +144,22 @@ public class ImagesToStack implements PlugIn {
 			width = maxWidth;
 			height = maxHeight;
 		}
-		ImagePlus stack = convert(images, count);
+		ImagePlus stack = convert(images, count,items);
 		if (stack!=null)
 			stack.show();
 	}
 	
-	private ImagePlus convert(ImagePlus[] images, int count) {		
+	private ImagePlus convert(ImagePlus[] images, int count,CTabItem[] items) {		
 		double min = Double.MAX_VALUE;
 		double max = -Double.MAX_VALUE;
 		ImageStack stack = new ImageStack(width, height);
 		FileInfo fi = images[0].getOriginalFileInfo();
 		if (fi!=null && fi.directory==null) fi = null;
 		Overlay overlay = new Overlay();
-		for (int i=0; i<count; i++) {
+		/* Changed for Bio7! - using the amount of open Tabs! */
+		for (int i = 0; i < items.length; i++) {
+
+			counttab = i;
 			ImageProcessor ip = images[i].getProcessor();
 			boolean invertedLut = ip.isInvertedLut();
 			if (ip.getMin()<min) min = ip.getMin();
@@ -210,6 +225,8 @@ public class ImagesToStack implements PlugIn {
 			if (i==0 && invertedLut && !allInvertedLuts)
 				stack.setColorModel(null);
 			if (!keep) {
+				/* Changed for Bio7! */
+
 				images[i].changes = false;
 				images[i].close();
 			}
