@@ -127,7 +127,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				/* Add the panel to the tab folder with the image */
 				b.addTab(imp.getTitle());
 				imp.setWindow(this);
-				//pack();
+				pack();
 				//show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -163,6 +163,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 					/* Add the panel to the tab folder with the image */
 					b.addTab(imp.getTitle());
 					imp.setWindow(this);
+					pack();
 				}
 
 			}
