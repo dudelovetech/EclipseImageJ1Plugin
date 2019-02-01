@@ -59,9 +59,9 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		b.addTab(imp.getTitle());
 		imp.setWindow(this);
 		pack();
-		ic = imp.getCanvas();
-		if (ic != null)
-			ic.setMaxBounds();
+		/*
+		 * ic = imp.getCanvas(); if (ic != null) ic.setMaxBounds();
+		 */
 		// show();
 		int previousSlice = imp.getCurrentSlice();
 		if (previousSlice > 1 && previousSlice <= imp.getStackSize())
