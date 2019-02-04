@@ -8,6 +8,14 @@ import ij.plugin.frame.Editor;
 import ij.io.OpenDialog;
 import java.io.*;
 import java.util.*;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+
 import java.awt.event.KeyEvent;
 import java.awt.Menu;
 
@@ -43,11 +51,33 @@ public class Executer implements Runnable {
 				previousCommand = cmd;
 		}
 		IJ.resetEscape();
-		thread = new Thread(this, cmd);
-		thread.setPriority(Math.max(thread.getPriority() - 2, Thread.MIN_PRIORITY));
+		//thread = new Thread(this, cmd);
+		//thread.setPriority(Math.max(thread.getPriority() - 2, Thread.MIN_PRIORITY));
 		if (imp != null)
-			WindowManager.setTempCurrentImage(thread, imp);
-		thread.start();
+			WindowManager.setTempCurrentImage( imp);
+		//thread.start();
+		Job job = new Job("Execute ImageJ Command...") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Opening...",IProgressMonitor.UNKNOWN);
+				Executer.this.run();
+				
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.addJobChangeListener(new JobChangeAdapter() {
+			public void done(IJobChangeEvent event) {
+				if (event.getResult().isOK()) {
+
+				} else {
+
+				}
+			}
+		});
+		// job.setUser(true);
+		job.schedule();
 	}
 
 	public void run() {

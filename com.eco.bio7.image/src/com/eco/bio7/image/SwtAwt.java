@@ -25,12 +25,13 @@ public class SwtAwt {
      * @param embedded Composite containing embedded swing components
      */
 	
-	public  static void setSwtAwtFocus(final Frame frame, final Composite embedded) {
-	        if (System.getProperty("java.version").startsWith("1.8")) {
+	public  static void setSwtAwtFocus(final Frame frame, final Composite embedded,Display display) {
+	        //if (System.getProperty("java.version").startsWith("1.8")) {
 	            frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	                @Override
 	                public void windowActivated(java.awt.event.WindowEvent e) {
-	                    embedded.getDisplay().asyncExec(new Runnable() {
+	                	System.out.println("activated");
+	                    display.syncExec(new Runnable() {
 	                        @Override
 	                        public void run() {
 	                            if (Display.getCurrent().getFocusControl() == embedded) {
@@ -76,7 +77,7 @@ public class SwtAwt {
 	                    });
 	                }
 	            });
-	        }
+	        //}
 	    }
 }
 

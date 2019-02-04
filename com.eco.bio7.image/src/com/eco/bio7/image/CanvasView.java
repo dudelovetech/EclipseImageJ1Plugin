@@ -115,7 +115,7 @@ public class CanvasView extends ViewPart {
 
 	protected String[] fileList;
 
-	protected ImagePlus plu;
+	public ImagePlus plu;
 
 	protected ImageWindow win;
 

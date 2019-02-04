@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 public class IJtoolbar extends ViewPart {
 
 	private JPanel jpp;
+	private Frame frame;
 
 	public IJtoolbar() {
 
@@ -93,7 +94,7 @@ public class IJtoolbar extends ViewPart {
 		 * On MacOSX the javaFX integration works fine and avoids some errors!
 		 */
                boolean enable=false;
-		if (Util.getOS().equals("Mac")) { //
+		if (enable) { //
 			SwingUtilities.invokeLater(new Runnable() {
 				// !!
 				public void run() {
@@ -120,14 +121,14 @@ public class IJtoolbar extends ViewPart {
 		else {
 			Composite top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 
-			Frame frame = SWT_AWT.new_Frame(top);
+			 frame = SWT_AWT.new_Frame(top);
 
 			/*
 			 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
 			 * ef.addWindowListener(new WindowAdapter() { public void
 			 * windowActivated(WindowEvent e) { ef.synthesizeWindowActivation(true); } });
 			 */
-			SwtAwt.setSwtAwtFocus(frame, top);
+			//SwtAwt.setSwtAwtFocus(frame, parent,Util.getDisplay());
 			Panel panel = new JApplet() {
 				public void update(java.awt.Graphics g) {
 

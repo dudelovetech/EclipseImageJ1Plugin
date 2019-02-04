@@ -92,7 +92,7 @@ public class FXSwtAwtCustom {
 					view.getCustomViewParent().setData(ve);
 					frame = SWT_AWT.new_Frame(top);
 
-					SwtAwt.setSwtAwtFocus(frame, top);
+					SwtAwt.setSwtAwtFocus(frame, top,Util.getDisplay());
 
 					panel = new JApplet() {
 						public void update(java.awt.Graphics g) {

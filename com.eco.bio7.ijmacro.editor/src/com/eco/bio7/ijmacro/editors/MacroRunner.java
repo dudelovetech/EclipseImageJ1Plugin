@@ -7,6 +7,14 @@ import ij.macro.Interpreter;
 import ij.macro.Program;
 
 import java.io.*;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+
 import java.awt.*;
 import ij.plugin.frame.Editor;
 																																																																																																																																																					   
@@ -100,9 +108,31 @@ public class MacroRunner implements Runnable {
 		this.address = address;
 		this.name = name;
 		this.editor = editor;
-		thread = new Thread(this, name+"_Macro$");
-		thread.setPriority(Math.max(thread.getPriority()-2, Thread.MIN_PRIORITY));
-		thread.start();
+		//thread = new Thread(this, name+"_Macro$");
+		//thread.setPriority(Math.max(thread.getPriority()-2, Thread.MIN_PRIORITY));
+		//thread.start();
+		Job job = new Job("Execute Macro Command...") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Opening...",IProgressMonitor.UNKNOWN);
+				MacroRunner.this.run();
+				
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.addJobChangeListener(new JobChangeAdapter() {
+			public void done(IJobChangeEvent event) {
+				if (event.getResult().isOK()) {
+
+				} else {
+
+				}
+			}
+		});
+		// job.setUser(true);
+		job.schedule();
 	}
 
 	/** Runs tokenized macro on current thread if pgm.queueCommands is true. */

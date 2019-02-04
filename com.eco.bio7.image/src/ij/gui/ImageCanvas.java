@@ -821,6 +821,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		srcRect = new Rectangle(0, 0, imageWidth, imageHeight);
 		setSize(width, height);
 		getParent().doLayout();
+		/*Changed for Bio7*/
+		CanvasView.getCurrent().validate();
 	}
 
 	void setMaxBounds() {
@@ -913,8 +915,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 		/* changed for Bio7! */
 
-		// CanvasView.getCurrent().validate();
-		// adjustSourceRect(newMag, sx, sy);
+		CanvasView.getCurrent().validate();
+		adjustSourceRect(newMag, sx, sy);
 		/*
 		 * if (srcRect.width<imageWidth || srcRect.height<imageHeight) resetMaxBounds();
 		 */

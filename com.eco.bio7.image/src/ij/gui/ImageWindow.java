@@ -96,29 +96,28 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		}
 		this.ic = ic;
 		ImageWindow previousWindow = imp.getWindow();
-		
-		  setLayout(new ImageLayout(ic)); 
-		  add(ic); 
-		  addFocusListener(this);
-		  addWindowListener(this); 
-		  addWindowStateListener(this); 
-		  addKeyListener(ij);
-		 
-		
-		  setFocusTraversalKeysEnabled(false); 
-		  if (!(this instanceof StackWindow))
-			  addMouseWheelListener(this);
-		 
-		  setResizable(true);
+
+		setLayout(new ImageLayout(ic));
+		add(ic);
+		addFocusListener(this);
+		addWindowListener(this);
+		addWindowStateListener(this);
+		addKeyListener(ij);
+
+		setFocusTraversalKeysEnabled(false);
+		if (!(this instanceof StackWindow))
+			addMouseWheelListener(this);
+
+		setResizable(true);
 		if (!(this instanceof HistogramWindow && IJ.isMacro() && Interpreter.isBatchMode())) {
 			WindowManager.addWindow(this);
 			imp.setWindow(this);
 		}
 		if (previousWindow != null) {
-			/*Hide the tab without to close the image!*/
+			/* Hide the tab without to close the image! */
 			IJTabs.hideTab();
 			if (newCanvas)
-				 setLocationAndSize(false);
+				setLocationAndSize(false);
 			else
 				ic.update(previousWindow.getCanvas());
 
@@ -128,15 +127,18 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				b.addTab(imp.getTitle());
 				imp.setWindow(this);
 				pack();
-				//show();
+				// show();
 			}
 			if (ic.getMagnification() != 0.0)
 				imp.setTitle(imp.getTitle());
 			boolean unlocked = imp.lockSilently();
 			boolean changes = imp.changes;
 			imp.changes = false;
-			/*Changed for Bio7. We have to call the default ImageJ close function which is renamed to bio7TabClose
-			 *because we have hidden the tab already (close searches for the tab and closes it)!*/
+			/*
+			 * Changed for Bio7. We have to call the default ImageJ close function which is
+			 * renamed to bio7TabClose because we have hidden the tab already (close
+			 * searches for the tab and closes it)!
+			 */
 			previousWindow.bio7TabClose();
 			imp.changes = changes;
 			if (unlocked)
@@ -257,6 +259,14 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		// Dimension ijSize = ij!=null?ij.getSize():new Dimension(0,0);
 		// bounds.y += bounds.y;
 		// bounds.height -= bounds.height;
+		return bounds;
+	}
+
+	public Rectangle getBounds() {
+
+		/* Changed for Bio7! */
+		Rectangle bounds = CanvasView.getCanvas_view().getCurrent().getBounds();
+
 		return bounds;
 	}
 
