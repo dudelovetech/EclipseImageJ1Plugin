@@ -28,6 +28,7 @@ public class Executer implements Runnable {
 
 	private String command;
 	private Thread thread;
+	private Job job;
 
 	/**
 	 * Create an Executer to run the specified menu command in this thread using the
@@ -56,10 +57,11 @@ public class Executer implements Runnable {
 		if (imp != null)
 			WindowManager.setTempCurrentImage( imp);
 		//thread.start();
-		Job job = new Job("Execute ImageJ Command...") {
+		 job = new Job("Execute ImageJ Command...") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Opening...",IProgressMonitor.UNKNOWN);
+				
 				Executer.this.run();
 				
 				monitor.done();
@@ -153,7 +155,7 @@ public class Executer implements Runnable {
 					IJ.log(s);
 			}
 		} finally {
-			if (thread != null)
+			if (thread != null||job!=null)
 				WindowManager.setTempCurrentImage(null);
 		}
 	}
