@@ -134,7 +134,12 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				/* Add the panel to the tab folder with the image */
 				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
-				//pack();
+				/*The next seems to be important for Mac. Else at the first zoom level the image disapears!*/
+				java.awt.EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						pack();
+					}
+				});
 				// show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -173,7 +178,13 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 					/* Add the panel to the tab folder with the image */
 					swtAwtMain.addTab(imp.getTitle());
 					imp.setWindow(this);
-					//pack();
+					/*The next seems to be important for Mac. Else at the first zoom level the image disapears!*/
+					java.awt.EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							pack();
+						}
+					});
+					
 				}
 
 			}
