@@ -259,25 +259,23 @@ public class CanvasView extends ViewPart {
 				 * GUI. syncExec to access the tabFolder!
 				 */
 				if (part instanceof CanvasView) {
+					if (Util.getOS().equals("Mac")) {
+					CanvasView.tabFolder.setVisible(false);
+					
+					CanvasView.tabFolder.setVisible(true);
+					}
 					/*
-					 * SwingUtilities.invokeLater(new Runnable() {
+					 * CTabItem ciTemp = new CTabItem(CanvasView.tabFolder, SWT.CLOSE,
+					 * CanvasView.insertMark + 1); // CanvasView.tabFolder.showItem(ci); CTabItem
+					 * selItem = CanvasView.tabFolder.getSelection();
+					 * CanvasView.tabFolder.setSelection(ciTemp);
 					 * 
-					 * public void run() {
-					 * 
-					 * Display dis = Util.getDisplay();
-					 * 
-					 * if (Util.getOS().equals("Mac")) { dis.asyncExec(new Runnable() {
-					 * 
-					 * public void run() {
-					 * 
-					 * tabFolder.setFocus(); } }); } else { dis.syncExec(new Runnable() {
-					 * 
-					 * public void run() {
-					 * 
-					 * tabFolder.setFocus(); } }); }
-					 * 
-					 * } });
+					 * ciTemp.dispose(); if (selItem != null) {
+					 * CanvasView.tabFolder.showItem(selItem);
+					 * CanvasView.tabFolder.setSelection(selItem); }
 					 */
+
+					
 
 				}
 			}

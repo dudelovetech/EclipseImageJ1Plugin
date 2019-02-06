@@ -1229,27 +1229,21 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				ImageWindow wind = imp.getWindow();
-				Frame frameSwtAwt = wind.getSwtAwtMain().getFrame();
-				if (frameSwtAwt != null) {
+				if (wind != null) {
+					Frame frameSwtAwt = wind.getSwtAwtMain().getFrame();
+					if (frameSwtAwt != null) {
 
-					if (frameSwtAwt != null)
-						frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
-					ImageCanvas.this.repaint();
-					frameSwtAwt.doLayout();
+						if (frameSwtAwt != null)
+							// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+							// WindowEvent.WINDOW_ACTIVATED));
+							frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_GAINED_FOCUS));
+						
+						if (ImageCanvas.this.isFocusOwner() == false) {
+							ImageCanvas.this.requestFocus();
 
-					if (ImageCanvas.this.isFocusOwner() == false) {
-						ImageCanvas.this.requestFocus();
-
+						}
 					}
 				}
-			}
-		});
-		Display dis = Util.getDisplay();
-		dis.syncExec(new Runnable() {
-
-			public void run() {
-				CanvasView.tabFolder.layout(true);
-				CanvasView.tabFolder.redraw();
 			}
 		});
 
