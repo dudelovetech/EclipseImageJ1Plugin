@@ -20,7 +20,10 @@ import java.awt.geom.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 
+import org.eclipse.swt.widgets.Display;
+
 import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.Util;
 
 /** This is a Canvas used to display images in a Window. */
 public class ImageCanvas extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener, Cloneable {
@@ -114,6 +117,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		addMouseWheelListener(this);
 		addKeyListener(ij); // ImageJ handles keyboard shortcuts
 		setFocusTraversalKeysEnabled(false);
+		setFocusable(true);
 	}
 
 	void updateImage(ImagePlus imp) {
@@ -821,7 +825,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		srcRect = new Rectangle(0, 0, imageWidth, imageHeight);
 		setSize(width, height);
 		getParent().doLayout();
-		/*Changed for Bio7*/
+		/* Changed for Bio7 */
 		CanvasView.getCurrent().validate();
 	}
 
@@ -1222,10 +1226,32 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 	public void mousePressed(MouseEvent e) {
 		/* Changed for Bio7! */
-		if (this.isFocusOwner() == false) {
-			this.requestFocus();
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				ImageWindow wind = imp.getWindow();
+				Frame frameSwtAwt = wind.getSwtAwtMain().getFrame();
+				if (frameSwtAwt != null) {
 
-		}
+					if (frameSwtAwt != null)
+						frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+					ImageCanvas.this.repaint();
+					frameSwtAwt.doLayout();
+
+					if (ImageCanvas.this.isFocusOwner() == false) {
+						ImageCanvas.this.requestFocus();
+
+					}
+				}
+			}
+		});
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				CanvasView.tabFolder.layout(true);
+				CanvasView.tabFolder.redraw();
+			}
+		});
 
 		showCursorStatus = true;
 		int toolID = Toolbar.getToolId();

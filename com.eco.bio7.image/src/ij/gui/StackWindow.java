@@ -26,7 +26,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	boolean hyperStack;
 	int nChannels = 1, nSlices = 1, nFrames = 1;
 	int c = 1, z = 1, t = 1;
-	private SwtAwtImageJ b;// Changed for Bio7!
+	public SwtAwtImageJ swtAwtMainFrameStackWindow;// Changed for Bio7!
 
 	public StackWindow(ImagePlus imp) {
 		 this(imp, null);
@@ -54,9 +54,11 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 			ic.setMaxBounds();
 		// show();
 		/* We also add the slice selector here! */
-		b = new SwtAwtImageJ(cSelector, zSelector, tSelector, ic, imp, this);// Add
+		swtAwtMainFrameStackWindow = new SwtAwtImageJ(cSelector, zSelector, tSelector, ic, imp, this);// Add
 		// the panel to the tab folder with the image!
-		b.addTab(imp.getTitle());
+		swtAwtMainFrameStackWindow.addTab(imp.getTitle());
+		/*Here e set the SwtAwtImageJ!*/
+		super.setSwtAwtMain(this.swtAwtMainFrameStackWindow);
 		imp.setWindow(this);
 		pack();
 		/*

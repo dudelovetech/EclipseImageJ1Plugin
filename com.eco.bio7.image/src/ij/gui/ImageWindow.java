@@ -56,7 +56,15 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	private static boolean centerOnScreen;
 	private static Point nextLocation;
 	public static long setMenuBarTime;
-	private SwtAwtImageJ b;// Changed for Bio7!
+	public SwtAwtImageJ swtAwtMain;// Changed for Bio7!
+
+	public SwtAwtImageJ getSwtAwtMain() {
+		return swtAwtMain;
+	}
+
+	public void setSwtAwtMain(SwtAwtImageJ swtAwtMainFrame) {
+		this.swtAwtMain = swtAwtMainFrame;
+	}
 
 	private int textGap = centerOnScreen ? 0 : TEXT_GAP;
 
@@ -122,9 +130,9 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				ic.update(previousWindow.getCanvas());
 
 			if (!(this instanceof StackWindow || this instanceof PlotWindow)) { // layout now unless components will be added later
-				b = new SwtAwtImageJ(null, null, null, ic, imp, this);
+				swtAwtMain = new SwtAwtImageJ(null, null, null, ic, imp, this);
 				/* Add the panel to the tab folder with the image */
-				b.addTab(imp.getTitle());
+				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
 				pack();
 				// show();
@@ -161,9 +169,9 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 			else {
 
 				if (!(this instanceof StackWindow)) {
-					b = new SwtAwtImageJ(null, null, null, ic, imp, this);
+					swtAwtMain = new SwtAwtImageJ(null, null, null, ic, imp, this);
 					/* Add the panel to the tab folder with the image */
-					b.addTab(imp.getTitle());
+					swtAwtMain.addTab(imp.getTitle());
 					imp.setWindow(this);
 					pack();
 				}
@@ -262,13 +270,14 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		return bounds;
 	}
 
-	public Rectangle getBounds() {
-
-		/* Changed for Bio7! */
-		Rectangle bounds = CanvasView.getCanvas_view().getCurrent().getBounds();
-
-		return bounds;
-	}
+	/*
+	 * public Rectangle getBounds() {
+	 * 
+	 * Changed for Bio7! Rectangle bounds =
+	 * CanvasView.getCanvas_view().getCurrent().getBounds();
+	 * 
+	 * return bounds; }
+	 */
 
 	private Rectangle getSecondaryMonitorBounds(int xloc, int yloc) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

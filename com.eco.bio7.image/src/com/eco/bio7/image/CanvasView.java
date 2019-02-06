@@ -115,7 +115,7 @@ public class CanvasView extends ViewPart {
 
 	protected String[] fileList;
 
-	public ImagePlus plu;
+	protected ImagePlus plu;
 
 	protected ImageWindow win;
 
@@ -259,32 +259,25 @@ public class CanvasView extends ViewPart {
 				 * GUI. syncExec to access the tabFolder!
 				 */
 				if (part instanceof CanvasView) {
-					SwingUtilities.invokeLater(new Runnable() {
-
-						public void run() {
-
-							Display dis = Util.getDisplay();
-
-							if (Util.getOS().equals("Mac")) {
-								dis.asyncExec(new Runnable() {
-
-									public void run() {
-
-										tabFolder.setFocus();
-									}
-								});
-							} else {
-								dis.syncExec(new Runnable() {
-
-									public void run() {
-
-										tabFolder.setFocus();
-									}
-								});
-							}
-
-						}
-					});
+					/*
+					 * SwingUtilities.invokeLater(new Runnable() {
+					 * 
+					 * public void run() {
+					 * 
+					 * Display dis = Util.getDisplay();
+					 * 
+					 * if (Util.getOS().equals("Mac")) { dis.asyncExec(new Runnable() {
+					 * 
+					 * public void run() {
+					 * 
+					 * tabFolder.setFocus(); } }); } else { dis.syncExec(new Runnable() {
+					 * 
+					 * public void run() {
+					 * 
+					 * tabFolder.setFocus(); } }); }
+					 * 
+					 * } });
+					 */
 
 				}
 			}

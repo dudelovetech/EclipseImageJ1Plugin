@@ -34,9 +34,10 @@ public class IJtoolbar extends ViewPart {
 
 	private JPanel jpp;
 	private Frame frame;
+	public static IJtoolbar instance;
 
 	public IJtoolbar() {
-
+          instance=this;
 	}
 
 	public void createPartControl(Composite parent) {

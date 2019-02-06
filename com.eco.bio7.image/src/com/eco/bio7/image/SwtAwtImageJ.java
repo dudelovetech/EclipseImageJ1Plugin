@@ -47,7 +47,15 @@ public class SwtAwtImageJ {
 
 	private java.awt.Container contentPane;
 
-	private java.awt.Frame frame;
+	public java.awt.Frame frame;
+
+	public java.awt.Frame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(java.awt.Frame frame) {
+		this.frame = frame;
+	}
 
 	private ImageCanvas im;
 
@@ -153,7 +161,7 @@ public class SwtAwtImageJ {
 		ci.setControl(top);
 
 		frame = SWT_AWT.new_Frame(top);
-		//SwtAwt.setSwtAwtFocus(frame, top,Util.getDisplay());
+		//SwtAwt.setSwtAwtFocus(frame, CanvasView.getCanvas_view().parent2);
 		panel = new JApplet() {
 			public void update(java.awt.Graphics g) {
 				// Do not erase the background
@@ -184,6 +192,7 @@ public class SwtAwtImageJ {
 		}
 
 		ve.add(a); // Add to the vector for access
+		ve.add(frame);
 		CanvasView.tabFolder.setLayout(null);
 		CanvasView.tabFolder.showItem(ci);
 		CanvasView.tabFolder.setSelection(ci);
