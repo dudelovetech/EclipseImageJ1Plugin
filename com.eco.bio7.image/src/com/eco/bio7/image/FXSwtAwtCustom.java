@@ -31,6 +31,10 @@ public class FXSwtAwtCustom {
 
 	private Composite top;
 
+	public Composite getTop() {
+		return top;
+	}
+
 	private java.awt.Container contentPane;
 
 	private java.awt.Frame frame;
@@ -55,6 +59,9 @@ public class FXSwtAwtCustom {
 		ve = new Vector();
 		ve.add(Jpanel);
 
+	}
+	public java.awt.Frame getFrame() {
+		return frame;
 	}
 
 	public void addTab(final String title) {

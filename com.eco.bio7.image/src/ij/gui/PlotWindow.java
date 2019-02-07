@@ -305,7 +305,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		LayoutManager lm = getLayout();
 		if (lm instanceof ImageLayout)
 			((ImageLayout) lm).ignoreNonImageWidths(true); // don't expand size to make the panel fit
-		pack();
+		/*Changed for Bio7. Pack causes deadlock on MacOSX with detached view!*/
+		//pack();
 
 		ImageProcessor ip = plot.getProcessor();
 		boolean ipIsColor = ip instanceof ColorProcessor;

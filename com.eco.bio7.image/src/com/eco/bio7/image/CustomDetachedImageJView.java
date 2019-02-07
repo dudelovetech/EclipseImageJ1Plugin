@@ -10,7 +10,9 @@
  *******************************************************************************/
 package com.eco.bio7.image;
 
+import java.awt.Frame;
 import java.awt.Panel;
+import java.awt.event.WindowEvent;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -30,6 +32,7 @@ import org.eclipse.ui.part.ViewPart;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
+import ij.gui.ImageCanvas;
 import ij.gui.ImageWindow;
 
 /**
@@ -64,6 +67,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	private CustomDetachedImageJView customView;
 
 	protected ImageJPartListener2 palist;
+
+	protected FXSwtAwtCustom swt;
 
 	public CustomDetachedImageJView getCustomView() {
 		return customView;
@@ -107,11 +112,34 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 						public void run() {
 							WindowManager.setTempCurrentImage(plus);
 							WindowManager.setCurrentWindow(win);
+							if (Util.getOS().equals("Mac")) {
+								if (swt != null) {
+									Frame frameSwtAwt = swt.getFrame();
+									if (frameSwtAwt != null) {
+
+										if (frameSwtAwt != null)
+											//frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+										 frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+										 WindowEvent.WINDOW_GAINED_FOCUS));
+										 
+									}
+								}
+
+							}
 						}
 					});
 
 					CanvasView.setCurrent(viewPanel);
 					ImageJ.setCustomView(customView);
+				}
+			}
+			if (Util.getOS().equals("Mac")) {
+				if (swt != null) {
+					Composite top = swt.getTop();
+					if (top != null&&top.isDisposed()==false) {
+						top.setVisible(false);
+						top.setVisible(true);
+					}
 				}
 			}
 		}
@@ -200,7 +228,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					customView = (CustomDetachedImageJView) activated;
 					customView.setPartName(name);
 					display.update();
-					FXSwtAwtCustom swt = new FXSwtAwtCustom(viewPanel, customView);
+					swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
 					ImageJ.setCustomView(customView);
 

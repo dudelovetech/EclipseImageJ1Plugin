@@ -17,6 +17,9 @@ import javax.swing.SwingUtilities;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.PlatformUI;
+
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.ImageWindow;
@@ -114,6 +117,14 @@ public class IJTabs {
 				});
 			}
 
+		}
+		/*Close all detached views if available!*/
+		IViewReference [] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+		for (int i = 0; i < viewRefs.length; i++) {
+			String id=viewRefs[i].getId();
+			if(id.equals("com.eco.bio7.image.detachedImage")) {
+				viewRefs[i].getPage().hideView(viewRefs[i]);
+			}
 		}
 
 	}

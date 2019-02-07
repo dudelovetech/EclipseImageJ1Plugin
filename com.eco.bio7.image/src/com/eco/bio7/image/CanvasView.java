@@ -12,7 +12,9 @@
 package com.eco.bio7.image;
 
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.UUID;
 import java.util.Vector;
@@ -81,6 +83,7 @@ import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
+import ij.gui.ImageCanvas;
 import ij.gui.ImageWindow;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
@@ -260,10 +263,40 @@ public class CanvasView extends ViewPart {
 				 */
 				if (part instanceof CanvasView) {
 					if (Util.getOS().equals("Mac")) {
-					CanvasView.tabFolder.setVisible(false);
-					
-					CanvasView.tabFolder.setVisible(true);
+
+						// Wrap to avoid deadlock of awt frame access!
+						java.awt.EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								if (win != null) {
+									Frame frameSwtAwt = win.getSwtAwtMain().getFrame();
+									if (frameSwtAwt != null) {
+
+										if (frameSwtAwt != null)
+											// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+											// WindowEvent.WINDOW_ACTIVATED));
+											frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+
+									}
+								}
+							}
+						});
+						if (CanvasView.tabFolder != null && CanvasView.tabFolder.isDisposed() == false) {
+							CanvasView.tabFolder.setVisible(false);
+
+							CanvasView.tabFolder.setVisible(true);
+						}
 					}
+					/*If we have no images open we allow the key shortcuts from the tabfolder*/
+					Display dis = Util.getDisplay();
+
+					dis.syncExec(new Runnable() {
+
+						public void run() {
+
+							tabFolder.setFocus();
+						}
+
+					});
 					/*
 					 * CTabItem ciTemp = new CTabItem(CanvasView.tabFolder, SWT.CLOSE,
 					 * CanvasView.insertMark + 1); // CanvasView.tabFolder.showItem(ci); CTabItem
@@ -274,8 +307,6 @@ public class CanvasView extends ViewPart {
 					 * CanvasView.tabFolder.showItem(selItem);
 					 * CanvasView.tabFolder.setSelection(selItem); }
 					 */
-
-					
 
 				}
 			}
