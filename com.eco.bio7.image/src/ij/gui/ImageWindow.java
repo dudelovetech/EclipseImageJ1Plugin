@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.Properties;
 import java.util.Vector;
+
+import javax.swing.JFrame;
+
 import java.awt.event.*;
 
 import org.eclipse.swt.custom.CTabItem;
@@ -23,7 +26,7 @@ import ij.macro.Interpreter;
 import ij.util.*;
 
 /** A frame for displaying images. */
-public class ImageWindow extends Frame implements FocusListener, WindowListener, WindowStateListener, MouseWheelListener {
+public class ImageWindow extends JFrame implements FocusListener, WindowListener, WindowStateListener, MouseWheelListener {
 
 	public static final int MIN_WIDTH = 128;
 	public static final int MIN_HEIGHT = 32;
@@ -135,11 +138,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
 				/*The next seems to be important for Mac. Else at the first zoom level the image disapears!*/
-				java.awt.EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						pack();
-					}
-				});
+				
 				// show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -460,7 +459,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	 * return bounds; }
 	 */
 
-	public void paint(Graphics g) {
+	public void paintComponents(Graphics g) {
+		super.paintComponents(g);
 		drawInfo(g);
 		Rectangle r = ic.getBounds();
 		int extraWidth = MIN_WIDTH - r.width;
