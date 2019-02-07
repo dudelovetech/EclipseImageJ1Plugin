@@ -11,6 +11,7 @@ import java.awt.event.*;
 
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.IJTabs;
@@ -93,6 +94,22 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 		this(imp, null);
 		/// * Changed for Bio7! */
 		// windowInstance = this;
+	}
+	/* Changed for Bio7 setting the tab title and not the JFrame title! */
+	public void setTitle(String title) {
+		
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+				if (CanvasView.tabFolder.getItemCount() > 0) {
+
+					CanvasView.tabFolder.getSelection().setText(title);
+
+				}
+			}
+		});
 	}
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {

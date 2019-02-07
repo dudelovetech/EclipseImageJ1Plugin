@@ -1234,8 +1234,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 					if (frameSwtAwt != null) {
 
 						if (frameSwtAwt != null)
-							// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
-							// WindowEvent.WINDOW_ACTIVATED));
+							frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+							WindowEvent.WINDOW_ACTIVATED));
 							//frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_GAINED_FOCUS));
 						
 						if (ImageCanvas.this.isFocusOwner() == false) {

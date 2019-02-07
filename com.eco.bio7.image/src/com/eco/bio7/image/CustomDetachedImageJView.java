@@ -118,9 +118,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 									if (frameSwtAwt != null) {
 
 										if (frameSwtAwt != null)
-											//frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
-										 frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
-										 WindowEvent.WINDOW_GAINED_FOCUS));
+											frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+										 //frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+										// WindowEvent.WINDOW_GAINED_FOCUS));
 										 
 									}
 								}

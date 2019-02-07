@@ -286,17 +286,7 @@ public class CanvasView extends ViewPart {
 							CanvasView.tabFolder.setVisible(true);
 						}
 					}
-					/*If we have no images open we allow the key shortcuts from the tabfolder*/
-					Display dis = Util.getDisplay();
-
-					dis.syncExec(new Runnable() {
-
-						public void run() {
-
-							tabFolder.setFocus();
-						}
-
-					});
+					
 					/*
 					 * CTabItem ciTemp = new CTabItem(CanvasView.tabFolder, SWT.CLOSE,
 					 * CanvasView.insertMark + 1); // CanvasView.tabFolder.showItem(ci); CTabItem
@@ -318,6 +308,7 @@ public class CanvasView extends ViewPart {
 			public void partClosed(IWorkbenchPart part) {
 
 				if (part instanceof CanvasView) {
+					System.out.println("tab closed");
 					CTabItem[] items = tabFolder.getItems();
 
 					for (int i = 0; i < items.length; i++) {
@@ -609,6 +600,18 @@ public class CanvasView extends ViewPart {
 						// important to set current Panel!
 						current = (JPanel) ve.get(2); // current.requestFocus();
 						plu.getCanvas().repaint();
+						
+						/*If we have no images open we allow the key shortcuts from the tabfolder*/
+						Display dis = Util.getDisplay();
+
+						dis.syncExec(new Runnable() {
+
+							public void run() {
+
+								tabFolder.setFocus();
+							}
+
+						});
 					}
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {

@@ -41,7 +41,7 @@ public class SwtAwtImageJ {
 
 	private JApplet panel;
 
-	private Composite top;
+	public Composite top;
 
 	private CTabItem ci;
 

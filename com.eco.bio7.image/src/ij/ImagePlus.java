@@ -1126,19 +1126,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				scale = " (" + IJ.d2s(percent, digits) + "%)";
 			}
 			win.setTitle(title + virtual + global + scale);
-			/* Changed for Bio7! */
-
-			Display display = PlatformUI.getWorkbench().getDisplay();
-			display.syncExec(new Runnable() {
-
-				public void run() {
-					if (CanvasView.tabFolder.getItemCount() > 0) {
-
-						CanvasView.tabFolder.getSelection().setText(title + virtual + global + scale);
-
-					}
-				}
-			});
+			
 		}
 		boolean titleChanged = !title.equals(this.title);
 		this.title = title;
