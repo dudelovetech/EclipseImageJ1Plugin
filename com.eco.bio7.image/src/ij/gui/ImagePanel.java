@@ -24,8 +24,8 @@ public class ImagePanel extends JPanel {
 		return new Dimension(width, height);
 	}
 
-	public void paintComponents(Graphics g) {
-		super.paintComponents(g);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(img.getProcessor().createImage(), 0, 0, null);
 	}
 
