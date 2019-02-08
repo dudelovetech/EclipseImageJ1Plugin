@@ -11,25 +11,16 @@
 
 package com.eco.bio7.image;
 
-import ij.IJ;
-import javafx.application.Platform;
-
-import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Panel;
-import javax.swing.JApplet;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
+
+import ij.IJ;
 
 public class IJtoolbar extends ViewPart {
 
@@ -91,8 +82,7 @@ public class IJtoolbar extends ViewPart {
 			}
 
 			public void partClosed(IWorkbenchPartReference partRef) {
-				System.out.println("part closed");
-
+				
 				Display dis = Util.getDisplay();
 				dis.syncExec(new Runnable() {
 

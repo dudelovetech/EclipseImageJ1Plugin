@@ -18,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.UUID;
 import java.util.Vector;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -25,6 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -57,15 +59,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -77,13 +75,11 @@ import com.eco.bio7.ImageJPluginActions.ImageJImageAction;
 import com.eco.bio7.ImageJPluginActions.ImageJPluginsAction;
 import com.eco.bio7.ImageJPluginActions.ImageJProcessAction;
 import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
-
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
-import ij.gui.ImageCanvas;
 import ij.gui.ImageWindow;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
@@ -91,7 +87,6 @@ import ij.io.Opener;
 import ij.plugin.CommandLister;
 import ij.plugin.DragAndDrop;
 import ij.plugin.FolderOpener;
-import ij.plugin.Hotkeys;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;
