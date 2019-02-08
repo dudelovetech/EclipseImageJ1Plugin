@@ -119,9 +119,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 										if (frameSwtAwt != null)
 											frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
-										 //frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+										// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
 										// WindowEvent.WINDOW_GAINED_FOCUS));
-										 
+
 									}
 								}
 
@@ -136,7 +136,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 			if (Util.getOS().equals("Mac")) {
 				if (swt != null) {
 					Composite top = swt.getTop();
-					if (top != null&&top.isDisposed()==false) {
+					if (top != null && top.isDisposed() == false) {
 						top.setVisible(false);
 						top.setVisible(true);
 					}
@@ -160,7 +160,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 						public void run() {
 							if (WindowManager.getImageCount() > 0) {
 								if (win != null) {
-									win.bio7TabClose();
+									if (win.getImagePlus() != null) {
+										win.bio7TabClose();
+									}
 								}
 							}
 						}

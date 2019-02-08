@@ -26,15 +26,15 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
 
 public class IJtoolbar extends ViewPart {
 
-	private JPanel jpp;
-	private Frame frame;
-	private Composite top;
+	private IJtoolbarSwtAwt toolBar;
+	private Composite topIJtoolbarSwtAwt;
 	public static IJtoolbar instance;
 
 	public IJtoolbar() {
@@ -48,8 +48,19 @@ public class IJtoolbar extends ViewPart {
 			public void partActivated(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
 					if (Util.getOS().equals("Mac")) {
-						top.setVisible(false);
-						top.setVisible(true);
+						if (topIJtoolbarSwtAwt != null && topIJtoolbarSwtAwt.isDisposed() == false) {
+
+							Display dis = Util.getDisplay();
+							dis.asyncExec(new Runnable() {
+
+								public void run() {
+
+									toolBar.top.setVisible(false);
+									toolBar.top.setVisible(true);
+								}
+							});
+						}
+
 					}
 
 					/*
@@ -63,6 +74,13 @@ public class IJtoolbar extends ViewPart {
 
 			public void partBroughtToTop(IWorkbenchPartReference partRef) {
 				if (partRef.getId().equals("com.eco.bio7.ijtoolbar")) {
+					if (Util.getOS().equals("Mac")) {
+						if (topIJtoolbarSwtAwt != null && topIJtoolbarSwtAwt.isDisposed() == false) {
+							toolBar.top.setVisible(false);
+							toolBar.top.setVisible(true);
+						}
+
+					}
 
 					/*
 					 * SwingUtilities.invokeLater(new Runnable() { // !! public void run() { if (jpp
@@ -73,7 +91,18 @@ public class IJtoolbar extends ViewPart {
 			}
 
 			public void partClosed(IWorkbenchPartReference partRef) {
+				System.out.println("part closed");
 
+				Display dis = Util.getDisplay();
+				dis.syncExec(new Runnable() {
+
+					public void run() {
+						/*
+						 * Composite top = toolBar.getTop(); Shell shell = toolBar.getParent();
+						 * top.setParent(shell);
+						 */
+					}
+				});
 			}
 
 			public void partDeactivated(IWorkbenchPartReference partRef) {
@@ -106,7 +135,7 @@ public class IJtoolbar extends ViewPart {
 				public void run() {
 					// jpp.repaint();
 
-					jpp = new JPanel();
+					JPanel jpp = new JPanel();
 					jpp.setLayout(new GridLayout(2, 1));
 					jpp.add(IJ.getInstance().toolbar);
 					jpp.add(IJ.getInstance().statusBar);
@@ -125,59 +154,26 @@ public class IJtoolbar extends ViewPart {
 		 * On Windows and Linux we use the SWT_AWT bridge!
 		 */
 		else {
-			createSwtAwtComp(parent);
-			// }
-		}
+			Display dis = Util.getDisplay();
+			dis.syncExec(new Runnable() {
 
-	}
-
-	private void createSwtAwtComp(Composite parent) {
-		top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
-
-		frame = SWT_AWT.new_Frame(top);
-
-		/*
-		 * final sun.awt.EmbeddedFrame ef = (sun.awt.EmbeddedFrame) frame;
-		 * ef.addWindowListener(new WindowAdapter() { public void
-		 * windowActivated(WindowEvent e) { ef.synthesizeWindowActivation(true); } });
-		 */
-		// SwtAwt.setSwtAwtFocus(frame, parent,Util.getDisplay());
-		Panel panel = new JApplet() {
-			public void update(java.awt.Graphics g) {
-
-				paint(g);
-			}
-		};
-
-		frame.add(panel);
-		JRootPane roote = new JRootPane();
-		panel.add(roote);
-		java.awt.Container contentPane = roote.getContentPane();
-		jpp = new JPanel();
-		jpp.setLayout(new GridLayout(2, 1));
-		if (IJ.getInstance() != null) {
-			jpp.add(IJ.getInstance().toolbar);
-			jpp.add(IJ.getInstance().statusBar);
-
-			contentPane.add(jpp);
-
-		} else {
-			Display display = Util.getDisplay();
-			display.syncExec(new Runnable() {
 				public void run() {
-					MessageBox messageBox = new MessageBox(Util.getShell(),
-
-							SWT.ICON_WARNING);
-					messageBox.setText("Info!");
-					messageBox.setMessage("The ImageJ-Canvas view has to be alive!");
-					messageBox.open();
+					toolBar = new IJtoolbarSwtAwt();
+					topIJtoolbarSwtAwt = toolBar.getTop();
+					topIJtoolbarSwtAwt.setParent(parent);
 				}
 			});
 		}
+
 	}
 
 	public void setFocus() {
 
+	}
+
+	public void dispose() {
+		toolBar.getParent().dispose();
+		super.dispose();
 	}
 
 }

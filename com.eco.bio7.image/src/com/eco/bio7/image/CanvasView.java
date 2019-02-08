@@ -263,6 +263,8 @@ public class CanvasView extends ViewPart {
 				 */
 				if (part instanceof CanvasView) {
 					if (Util.getOS().equals("Mac")) {
+						
+						
 
 						// Wrap to avoid deadlock of awt frame access!
 						java.awt.EventQueue.invokeLater(new Runnable() {
@@ -601,32 +603,16 @@ public class CanvasView extends ViewPart {
 						current = (JPanel) ve.get(2); // current.requestFocus();
 						plu.getCanvas().repaint();
 						
-						/*If we have no images open we allow the key shortcuts from the tabfolder*/
-						Display dis = Util.getDisplay();
-
-						dis.syncExec(new Runnable() {
-
-							public void run() {
-
-								tabFolder.setFocus();
-							}
-
-						});
+						
 					}
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {
+					CanvasView.tabFolder.setFocus();
+
 
 					// IJ.getInstance().doCommand("Rename...");
 				}
-			}
-
-		});
-		tabFolder.addMouseListener(new MouseAdapter() {
-
-			public void mouseDown(MouseEvent mouseevent)
-
-			{
-				if (mouseevent.button == 3 && mouseevent.count > 1) {
+				else if (mouseevent.button == 3 && mouseevent.count > 1) {
 					CTabFolder ctab = (CTabFolder) mouseevent.widget;
 					if (ctab.getItemCount() > 0) {
 						Vector ve = (Vector) ctab.getSelection().getData();
@@ -651,6 +637,7 @@ public class CanvasView extends ViewPart {
 			}
 
 		});
+		
 
 	}
 
