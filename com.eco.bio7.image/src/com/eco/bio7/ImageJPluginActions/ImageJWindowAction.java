@@ -68,19 +68,18 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 		}
 		fMenu = new Menu(parent);
 
-		fMenu.addMenuListener(new MenuListener() {
-			public void menuHidden(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuShown(MenuEvent e) {
-
-				menuItemFx.dispose();
-
-				createJavaFXOptionMenu();
-			}
-		});
+		/*
+		 * fMenu.addMenuListener(new MenuListener() { public void menuHidden(MenuEvent
+		 * e) {
+		 * 
+		 * }
+		 * 
+		 * @Override public void menuShown(MenuEvent e) {
+		 * 
+		 * menuItemFx.dispose();
+		 * 
+		 * createJavaFXOptionMenu(); } });
+		 */
 
 		MenuItem menuItem = new MenuItem(fMenu, SWT.PUSH);
 
@@ -203,12 +202,12 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 
 			}
 		});
-		new MenuItem(fMenu, SWT.SEPARATOR);
+		//new MenuItem(fMenu, SWT.SEPARATOR);
 		/*
 		 * Create the dynamic menu which is later disposed and recreated every time the
 		 * menu is shown!
 		 */
-		menuItemFx = new MenuItem(fMenu, SWT.CHECK);
+		//menuItemFx = new MenuItem(fMenu, SWT.CHECK);
 
 		return fMenu;
 	}

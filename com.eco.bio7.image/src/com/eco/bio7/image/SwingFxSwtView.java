@@ -46,6 +46,10 @@ public class SwingFxSwtView {
 	public Composite top;
 
 	public void embedd(Composite top, JComponent comp) {
+		/*Extra for ImageJ plugin!*/
+		if (javafx.application.Platform.isImplicitExit()) {
+			javafx.application.Platform.setImplicitExit(false);
+		}
 		this.top = top;
 		canvas = new JavaFXUtil().createFXCanvas(top, SWT.NORMAL);
 		canvas.setData("false");
