@@ -171,26 +171,19 @@ public class OpenDialog {
 
 	/* Changed for Bio7 Linux to Swt! */
 	void open(String title, final String path, final String fileName) {
-		Frame parent = IJ.getInstance();
-		if (parent == null) {
-			if (sharedFrame == null)
-				sharedFrame = new Frame();
-			parent = sharedFrame;
-		}
-
-		if (IJ.isMacOSX() && IJ.isJava18()) {
-			ImageJ ij = IJ.getInstance();
-			if (ij != null && ij.isActive())
-				parent = ij;
-			else
-				parent = null;
-		}
+		/*
+		 * Frame parent = IJ.getInstance(); if (parent == null) { if (sharedFrame ==
+		 * null) sharedFrame = new Frame(); parent = sharedFrame; }
+		 * 
+		 * if (IJ.isMacOSX() && IJ.isJava18()) { ImageJ ij = IJ.getInstance(); if (ij !=
+		 * null && ij.isActive()) parent = ij; else parent = null; }
+		 */
 
 		Display display = Util.getDisplay();
 		display.syncExec(new Runnable() {
 
 			public void run() {
-				Shell s = new Shell(SWT.ON_TOP);
+				Shell s = new Shell(SWT.EMBEDDED);
 				fd = new org.eclipse.swt.widgets.FileDialog(s, SWT.OPEN);
 				fd.setText("Load");
 				if (path != null)

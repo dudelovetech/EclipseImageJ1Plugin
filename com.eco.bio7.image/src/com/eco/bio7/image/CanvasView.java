@@ -423,6 +423,7 @@ public class CanvasView extends ViewPart {
 
 		tabFolder.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				
 				for (int i = 0; i < shortcuts.length; i++) {
 
 					String[] splitShortcut = shortcuts[i].split("\t");
@@ -580,7 +581,6 @@ public class CanvasView extends ViewPart {
 					CTabFolder ctab = (CTabFolder) mouseevent.widget;
 
 					if (ctab.getItemCount() <= 0) {
-						Display dis = Util.getDisplay();
 
 						CanvasView.tabFolder.setFocus();
 
