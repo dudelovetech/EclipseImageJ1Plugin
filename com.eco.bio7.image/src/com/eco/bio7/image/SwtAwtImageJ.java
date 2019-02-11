@@ -15,8 +15,6 @@ import java.util.Vector;
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-
-import org.eclipse.albireo.internal.AwtDialogListener;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
