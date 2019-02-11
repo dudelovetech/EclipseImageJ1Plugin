@@ -138,7 +138,7 @@ public class CanvasView extends ViewPart {
 		canvas_view = this;
 
 		this.getViewSite();
-		javafx.application.Platform.setImplicitExit(false);
+		//javafx.application.Platform.setImplicitExit(false);
 
 	}
 
