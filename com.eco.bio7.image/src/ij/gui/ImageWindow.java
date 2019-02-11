@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import java.awt.event.*;
 
@@ -333,20 +334,15 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 	/**
 	 * Override Container getInsets() to make room for some text above the image.
 	 */
-	public Insets getInsets() {
-		Insets insets = super.getInsets();
-		if (imp == null)
-			return insets;
-		double mag = ic.getMagnification();
-		int extraWidth = (int) ((MIN_WIDTH - imp.getWidth() * mag) / 2.0);
-		if (extraWidth < 0)
-			extraWidth = 0;
-		int extraHeight = (int) ((MIN_HEIGHT - imp.getHeight() * mag) / 2.0);
-		if (extraHeight < 0)
-			extraHeight = 0;
-		insets = new Insets(insets.top + textGap + extraHeight, insets.left + extraWidth, insets.bottom + extraHeight, insets.right + extraWidth);
-		return insets;
-	}
+	/*
+	 * public Insets getInsets() { Insets insets = super.getInsets(); if (imp ==
+	 * null) return insets; double mag = ic.getMagnification(); int extraWidth =
+	 * (int) ((MIN_WIDTH - imp.getWidth() * mag) / 2.0); if (extraWidth < 0)
+	 * extraWidth = 0; int extraHeight = (int) ((MIN_HEIGHT - imp.getHeight() * mag)
+	 * / 2.0); if (extraHeight < 0) extraHeight = 0; insets = new Insets(insets.top
+	 * + textGap + extraHeight, insets.left + extraWidth, insets.bottom +
+	 * extraHeight, insets.right + extraWidth); return insets; }
+	 */
 
 	/** Draws the subtitle. */
 	public void drawInfo(Graphics g) {
@@ -619,39 +615,49 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 	static ImagePlus getClipboard() {
 		return ImagePlus.getClipboard();
 	}
+	
+	public Rectangle getBounds() {
+		Rectangle rec;
+		JPanel pan=CanvasView.getCanvas_view().getCurrent();
+		if(pan!=null) {
+			rec=CanvasView.getCanvas_view().getCurrent().getBounds();
+		}
+		else {
+			rec=new Rectangle(400,400);
+		}
+		
+		return rec;
+		
+	}
 
 	public Rectangle getMaximumBounds() {
-		Rectangle maxWindow = GUI.getMaxWindowBounds();
-		if (imp == null)
-			return maxWindow;
-		double width = imp.getWidth();
-		double height = imp.getHeight();
-		double iAspectRatio = width / height;
-
-		maxWindowBounds = maxWindow;
-		if (iAspectRatio / ((double) maxWindow.width / maxWindow.height) > 0.75) {
-			maxWindow.y += 22; // uncover ImageJ menu bar
-			maxWindow.height -= 22;
+		Rectangle rec;
+		JPanel pan=CanvasView.getCanvas_view().getCurrent();
+		if(pan!=null) {
+			rec=CanvasView.getCanvas_view().getCurrent().getBounds();
 		}
-		Dimension extraSize = getExtraSize();
-		double maxWidth = maxWindow.width - extraSize.width;
-		double maxHeight = maxWindow.height - extraSize.height;
-		double mAspectRatio = maxWidth / maxHeight;
-		int wWidth, wHeight;
-		double mag;
-		if (iAspectRatio >= mAspectRatio) {
-			mag = maxWidth / width;
-			wWidth = maxWindow.width;
-			wHeight = (int) (height * mag + extraSize.height);
-		} else {
-			mag = maxHeight / height;
-			wHeight = maxWindow.height;
-			wWidth = (int) (width * mag + extraSize.width);
+		else {
+			rec=new Rectangle(400,400);
 		}
-		int xloc = (int) (maxWidth - wWidth) / 2;
-		if (xloc < 0)
-			xloc = 0;
-		return new Rectangle(xloc, maxWindow.y, wWidth, wHeight);
+		
+		
+		/*
+		 * Rectangle maxWindow = GUI.getMaxWindowBounds(); if (imp == null) return
+		 * maxWindow; double width = imp.getWidth(); double height = imp.getHeight();
+		 * double iAspectRatio = width / height;
+		 * 
+		 * maxWindowBounds = maxWindow; if (iAspectRatio / ((double) maxWindow.width /
+		 * maxWindow.height) > 0.75) { maxWindow.y += 22; // uncover ImageJ menu bar
+		 * maxWindow.height -= 22; } Dimension extraSize = getExtraSize(); double
+		 * maxWidth = maxWindow.width - extraSize.width; double maxHeight =
+		 * maxWindow.height - extraSize.height; double mAspectRatio = maxWidth /
+		 * maxHeight; int wWidth, wHeight; double mag; if (iAspectRatio >= mAspectRatio)
+		 * { mag = maxWidth / width; wWidth = maxWindow.width; wHeight = (int) (height *
+		 * mag + extraSize.height); } else { mag = maxHeight / height; wHeight =
+		 * maxWindow.height; wWidth = (int) (width * mag + extraSize.width); } int xloc
+		 * = (int) (maxWidth - wWidth) / 2; if (xloc < 0) xloc = 0;
+		 */
+		return rec;
 	}
 
 	Dimension getExtraSize() {

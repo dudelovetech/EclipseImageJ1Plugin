@@ -824,7 +824,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			return;
 		srcRect = new Rectangle(0, 0, imageWidth, imageHeight);
 		setSize(width, height);
-		getParent().doLayout();
+		//getParent().validate();
 		/* Changed for Bio7 */
 		CanvasView.getCurrent().validate();
 	}
@@ -879,52 +879,60 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	 * screen coordinates.
 	 */
 	public void zoomIn(int sx, int sy) {
-		if (magnification >= 32)
-			return;
+		if (magnification>=32) return;
 		scaleToFit = false;
-		boolean mouseMoved = sqr(sx - lastZoomSX) + sqr(sy - lastZoomSY) > MAX_MOUSEMOVE_ZOOM * MAX_MOUSEMOVE_ZOOM;
+	    boolean mouseMoved = sqr(sx-lastZoomSX) + sqr(sy-lastZoomSY) > MAX_MOUSEMOVE_ZOOM*MAX_MOUSEMOVE_ZOOM;
 		lastZoomSX = sx;
 		lastZoomSY = sy;
-		if (mouseMoved || zoomTargetOX < 0) {
-			boolean cursorInside = sx >= 0 && sy >= 0 && sx < dstWidth && sy < dstHeight;
-			zoomTargetOX = offScreenX(cursorInside ? sx : dstWidth / 2); // where
-											// to
-											// zoom,
-											// offscreen
-											// (image)
-											// coordinates
-			zoomTargetOY = offScreenY(cursorInside ? sy : dstHeight / 2);
+		if (mouseMoved || zoomTargetOX<0) {
+		    boolean cursorInside = sx >= 0 && sy >= 0 && sx < dstWidth && sy < dstHeight;
+		    zoomTargetOX = offScreenX(cursorInside ? sx : dstWidth/2); //where to zoom, offscreen (image) coordinates
+		    zoomTargetOY = offScreenY(cursorInside ? sy : dstHeight/2);
 		}
 		double newMag = getHigherZoomLevel(magnification);
-		int newWidth = (int) (imageWidth * newMag);
-		int newHeight = (int) (imageHeight * newMag);
-		Dimension newSize = canEnlarge(newWidth, newHeight);
-		if (newSize != null) {
+		int newWidth = (int)(imageWidth*newMag);
+		int newHeight = (int)(imageHeight*newMag);
+		Rectangle dim = CanvasView.getCurrent().getBounds();
+		Dimension newSize = new Dimension(newWidth, newHeight);	
+		System.out.println(newWidth+" "+dim.width+" "+newHeight+" "+dim.height);
+		if(newWidth<dim.width&&newHeight<dim.height) {
+			
 			setSize(newSize.width, newSize.height);
-			if (newSize.width != newWidth || newSize.height != newHeight) {
-				setMagnification(newMag);
-				/* Changed for Bio7! */
-				CanvasView.getCurrent().validate();
+			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+			
+			if (newSize.width!=newWidth || newSize.height!=newHeight)
 				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
-			} else {
+			else
 				setMagnification(newMag);
-				/* Changed for Bio7! */
-				CanvasView.getCurrent().validate();
-			}
-
-			imp.getWindow().pack();
-		} else // can't enlarge window
+			CanvasView.getCurrent().validate();
+		}
+		else if(newWidth>=dim.width&&newHeight<dim.height) {
+			setSize(newSize.width, newSize.height);
+			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+			setMagnification(newMag);
+			CanvasView.getCurrent().validate();
+		}
+		else if(newWidth<dim.width&&newHeight>=dim.height) {
+			setSize(newSize.width, newSize.height);
+			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+			setMagnification(newMag);
+			CanvasView.getCurrent().validate();
+		}
+		
+		
+		
+		//Dimension newSize = canEnlarge(newWidth, newHeight);
+		 else // can't enlarge window
+			setSize(dim.width, dim.height);
+			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 			adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
+		        //CanvasView.getCurrent().validate();
 		repaint();
-
-		/* changed for Bio7! */
-
+		if (srcRect.width<imageWidth || srcRect.height<imageHeight)
+			resetMaxBounds();
+		//fitToWindow();
 		CanvasView.getCurrent().validate();
-		adjustSourceRect(newMag, sx, sy);
-		/*
-		 * if (srcRect.width<imageWidth || srcRect.height<imageHeight) resetMaxBounds();
-		 */
-	}
+}
 
 	/** Centers the viewable area on offscreen (image) coordinates x, y */
 	void adjustSourceRect(double newMag, int x, int y) {
