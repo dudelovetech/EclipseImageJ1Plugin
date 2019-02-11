@@ -422,7 +422,7 @@ public class IJ {
 	public static boolean macroRunning() {
 		return macroRunning;
 	}
-
+ 
 	/**
 	 * Returns true if a macro is running, or if the run(), open() or newImage()
 	 * method is executing.

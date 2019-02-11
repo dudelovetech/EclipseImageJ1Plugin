@@ -175,7 +175,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 		if (dscale>1.0) {
 			buttonWidth = (int)((BUTTON_WIDTH-2)*dscale);
 			buttonHeight = (int)((BUTTON_HEIGHT-2)*dscale);
-			offset = (int)((OFFSET-1)*dscale);
+			offset = (int)Math.round((OFFSET-1)*dscale);
 			//IJ.log(dscale+" "+BUTTON_WIDTH+" "+buttonWidth+" "+offset);
 		} else {
 			buttonWidth = BUTTON_WIDTH;

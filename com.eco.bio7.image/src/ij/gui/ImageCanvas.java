@@ -894,7 +894,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		int newHeight = (int)(imageHeight*newMag);
 		Rectangle dim = CanvasView.getCurrent().getBounds();
 		Dimension newSize = new Dimension(newWidth, newHeight);	
-		System.out.println(newWidth+" "+dim.width+" "+newHeight+" "+dim.height);
+		//System.out.println(newWidth+" "+dim.width+" "+newHeight+" "+dim.height);
 		if(newWidth<dim.width&&newHeight<dim.height) {
 			
 			setSize(newSize.width, newSize.height);

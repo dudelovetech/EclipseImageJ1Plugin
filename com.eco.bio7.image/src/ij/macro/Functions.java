@@ -723,32 +723,24 @@ public class Functions implements MacroConstants, Measurements {
 		if (interp.token==')')
 			IJ.makeLine(x1d, y1d, x2d, y2d);
 		else {
-			int x1 = (int)Math.round(x1d);
-			int y1 = (int)Math.round(y1d);
-			int x2 = (int)Math.round(x2d);
-			int y2 = (int)Math.round(y2d);
-			int max = 200;
-			int[] x = new int[max];
-			int[] y = new int[max];
-			x[0]=x1; y[0]=y1; x[1]=x2; y[1]=y2;
-			int n = 2;
-			while (interp.token==',' && n<max) {
-				x[n] = (int)Math.round(interp.getExpression());
-				if (n==2 && interp.nextToken()==')') {
+			Polygon points = new Polygon();
+			points.addPoint((int)Math.round(x1d),(int)Math.round(y1d));
+			points.addPoint((int)Math.round(x2d),(int)Math.round(y2d));
+			while (interp.token==',') {
+				int x = (int)Math.round(interp.getExpression());
+				if (points.npoints==2 && interp.nextToken()==')') {
 					interp.getRightParen();
 					Roi line = new Line(x1d, y1d, x2d, y2d);
-					line.updateWideLine((float)x[n]);
+					line.updateWideLine((float)x);
 					getImage().setRoi(line);
 					return;
 				}
 				interp.getComma();
-				y[n] = (int)Math.round(interp.getExpression());
+				int y = (int)Math.round(interp.getExpression());
+				points.addPoint(x,y);
 				interp.getToken();
-				n++;
 			}
-			if (n==max && interp.token!=')')
-				interp.error("More than "+max+" points");
-			getImage().setRoi(new PolygonRoi(x, y, n, Roi.POLYLINE));
+			getImage().setRoi(new PolygonRoi(points, Roi.POLYLINE));
 		}
 		resetImage();
 	}
@@ -4039,28 +4031,22 @@ public class Functions implements MacroConstants, Measurements {
 	}
 
 	private void makePolygon() {
-		int max = 200;
-		int[] x = new int[max];
-		int[] y = new int[max];
-		x[0] = (int)Math.round(getFirstArg());
-		y[0] = (int)Math.round(getNextArg());
+		Polygon points = new Polygon();
+		points.addPoint((int)Math.round(getFirstArg()), (int)Math.round(getNextArg()));
 		interp.getToken();
-		int n = 1;
-		while (interp.token==',' && n<max) {
-			x[n] = (int)Math.round(interp.getExpression());
+		while (interp.token==',') {
+			int x = (int)Math.round(interp.getExpression());
 			interp.getComma();
-			y[n] = (int)Math.round(interp.getExpression());
+			int y = (int)Math.round(interp.getExpression());
+			points.addPoint(x,y);
 			interp.getToken();
-			n++;
 		}
-		if (n<3)
+		if (points.npoints<3)
 			interp.error("Fewer than 3 points");
-		if (n==max && interp.token!=')')
-			interp.error("More than "+max+" points");
 		ImagePlus imp = getImage();
 		Roi previousRoi = imp.getRoi();
 		if (shiftKeyDown||altKeyDown) imp.saveRoi();
-		imp.setRoi(new PolygonRoi(x, y, n, Roi.POLYGON));
+		imp.setRoi(new PolygonRoi(points, Roi.POLYGON));
 		Roi roi = imp.getRoi();
 		if (previousRoi!=null && roi!=null)
 			updateRoi(roi);
@@ -4479,6 +4465,8 @@ public class Functions implements MacroConstants, Measurements {
 			Prefs.supportMacroUndo = state;
 		else if (arg1.equals("inverty"))
 			getImage().getCalibration().setInvertY(state);
+		else if (arg1.equals("scaleconversions"))
+			ImageConverter.setDoScaling(state);
 		else
 			interp.error("Invalid option");
 	}
@@ -5580,7 +5568,7 @@ public class Functions implements MacroConstants, Measurements {
 			return getRankPositions();
 		else if (name.equals("getStatistics"))
 			return getArrayStatistics();
-		else if (name.equals("getSequence"))
+		else if (name.equals("sequence") || name.equals("getSequence"))
 			return getSequence();
 		else if (name.equals("fill"))
 			return fillArray();
@@ -6867,7 +6855,7 @@ public class Functions implements MacroConstants, Measurements {
 		h.setValue(r.height);
 	}
 
-	void toScaled() {       //pixel coordinates to calibrated coordinates
+	void toScaled() {   //pixel coordinates to calibrated coordinates
 		ImagePlus imp = getImage();
 		Plot plot = (Plot)(getImage().getProperty(Plot.PROPERTY_KEY)); //null if not a plot window
 		int height = imp.getHeight();
@@ -6904,13 +6892,12 @@ public class Functions implements MacroConstants, Measurements {
 				yv.setValue(plot == null ? cal.getY(y,height) : plot.descaleY((int)(y+0.5)));
 				if (threeArgs)
 					zv.setValue(cal.getZ(zv.getValue()));
-			} else {
-				xv.setValue(plot == null ? x*cal.pixelWidth : plot.descaleX((int)(x+0.5)));
-			}
+			} else //oneArg; convert horizontal length (not the x coordinate, no offset)
+				xv.setValue(x * cal.pixelWidth) ;							
 		}
 	}
 
-	void toUnscaled() {     //calibrated coordinates to pixel coordinates
+	void toUnscaled() {   //calibrated coordinates to pixel coordinates
 		ImagePlus imp = getImage();
 		Plot plot = (Plot)(getImage().getProperty(Plot.PROPERTY_KEY)); //null if not a plot window
 		int height = imp.getHeight();
@@ -6947,9 +6934,8 @@ public class Functions implements MacroConstants, Measurements {
 				yv.setValue(plot == null ? cal.getRawY(y,height) : plot.scaleYtoPxl(y));
 				if (threeArgs)
 					zv.setValue(cal.getRawZ(zv.getValue()));
-			} else {
-				xv.setValue(plot == null ? x/cal.pixelWidth : plot.scaleXtoPxl(x));
-			}
+			} else  //oneArg; convert horizontal length (not the x coordinate, no offset)
+				xv.setValue(x/cal.pixelWidth);				
 		}
 	}
 
