@@ -258,8 +258,6 @@ public class CanvasView extends ViewPart {
 				 */
 				if (part instanceof CanvasView) {
 					if (Util.getOS().equals("Mac")) {
-						
-						
 
 						// Wrap to avoid deadlock of awt frame access!
 						java.awt.EventQueue.invokeLater(new Runnable() {
@@ -283,7 +281,7 @@ public class CanvasView extends ViewPart {
 							CanvasView.tabFolder.setVisible(true);
 						}
 					}
-					
+
 					/*
 					 * CTabItem ciTemp = new CTabItem(CanvasView.tabFolder, SWT.CLOSE,
 					 * CanvasView.insertMark + 1); // CanvasView.tabFolder.showItem(ci); CTabItem
@@ -572,6 +570,7 @@ public class CanvasView extends ViewPart {
 			public void mouseDown(MouseEvent mouseevent)
 
 			{
+
 				/*
 				 * Important to select the correct image and window when creating the new ImageJ
 				 * view!The listener for the right-click on the tabitem will care about that!
@@ -580,7 +579,14 @@ public class CanvasView extends ViewPart {
 
 					CTabFolder ctab = (CTabFolder) mouseevent.widget;
 
-					if (ctab.getItemCount() > 0) {
+					if (ctab.getItemCount() <= 0) {
+						Display dis = Util.getDisplay();
+
+						CanvasView.tabFolder.setFocus();
+
+					}
+
+					else if (ctab.getItemCount() > 0) {
 						Vector ve = (Vector) ctab.getSelection().getData();
 						plu = (ImagePlus) ve.get(0);
 
@@ -597,17 +603,13 @@ public class CanvasView extends ViewPart {
 						// important to set current Panel!
 						current = (JPanel) ve.get(2); // current.requestFocus();
 						plu.getCanvas().repaint();
-						
-						
+
 					}
 
 				} else if (mouseevent.count == 2 && mouseevent.button == 1) {
-					CanvasView.tabFolder.setFocus();
-
 
 					// IJ.getInstance().doCommand("Rename...");
-				}
-				else if (mouseevent.button == 3 && mouseevent.count > 1) {
+				} else if (mouseevent.button == 3 && mouseevent.count > 1) {
 					CTabFolder ctab = (CTabFolder) mouseevent.widget;
 					if (ctab.getItemCount() > 0) {
 						Vector ve = (Vector) ctab.getSelection().getData();
@@ -632,7 +634,6 @@ public class CanvasView extends ViewPart {
 			}
 
 		});
-		
 
 	}
 
