@@ -24,14 +24,14 @@ import com.eco.bio7.image.Util;
 /** Compiles and runs plugins using the javac compiler. */
 public class Compiler implements PlugIn, FilenameFilter {
 
-	private static final int TARGET14 = 0, TARGET15 = 1, TARGET16 = 2, TARGET17 = 3, TARGET18 = 4, TARGET19 = 5;
-	private static final String[] targets = { "1.4", "1.5", "1.6", "1.7", "1.8", "1.9" };
+	private static final int TARGET14 = 0, TARGET15 = 1, TARGET16 = 2, TARGET17 = 3, TARGET18 = 4, TARGET19 = 5, TARGET110 = 6, TARGET111 = 7;
+	private static final String[] targets = { "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "10", "11" };
 	private static final String TARGET_KEY = "javac.target";
 	private static CompilerTool compilerTool;
 	private static String dir, name;
 	private static Editor errors;
 	private static boolean generateDebuggingInfo;
-	private static int target = (int) Prefs.get(TARGET_KEY, TARGET16);
+	private static int target = (int) Prefs.get(TARGET_KEY, TARGET111);
 	private static boolean checkForUpdateDone;
 
 	public void run(String arg) {
@@ -300,6 +300,10 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	void validateTarget() {
+		if (target > TARGET111)
+			target = TARGET111;
+		if (target > TARGET110)
+			target = TARGET110;
 		if (target > TARGET19)
 			target = TARGET19;
 		if (target < TARGET16)
