@@ -55,7 +55,7 @@ public class Compiler implements PlugIn, FilenameFilter {
 		}
 	}
 
-	void compileAndRun(String path) {
+	public void compileAndRun(String path) {
 		if (!open(path, "Compile and Run Plugin..."))
 			return;
 		if (name.endsWith(".class")) {

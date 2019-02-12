@@ -904,7 +904,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
 			else
 				setMagnification(newMag);
-			CanvasView.getCurrent().validate();
+				CanvasView.getCurrent().validate();
 		}
 		else if(newWidth>dim.width&&newHeight<dim.height) {
 			setSize(newSize.width, newSize.height);
@@ -917,9 +917,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 			setMagnification(newMag);
 			CanvasView.getCurrent().validate();
-		}
-		
-		
+		}	
 		
 		//Dimension newSize = canEnlarge(newWidth, newHeight);
 		 else // can't enlarge window
