@@ -300,11 +300,11 @@ public class Compiler implements PlugIn, FilenameFilter {
 	}
 
 	void validateTarget() {
-		if (target > TARGET19)
+		if (target == TARGET19)
 			target = TARGET19;
-		if (target > TARGET110)
+		if (target == TARGET110)
 			target = TARGET110;
-		if (target > TARGET111)
+		if (target >= TARGET111)
 			target = TARGET111;
 		if (target < TARGET16)
 			target = TARGET16;
