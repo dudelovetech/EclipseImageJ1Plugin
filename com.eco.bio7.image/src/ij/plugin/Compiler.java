@@ -133,7 +133,7 @@ public class Compiler implements PlugIn, FilenameFilter {
 
 		IJ.showStatus("compiling " + path);
 		String classpath = getClassPath(path) + ";" + binPath;
-		// System.out.println(classpath);
+		 System.out.println(classpath);
 
 		Vector options = new Vector();
 		if (generateDebuggingInfo)

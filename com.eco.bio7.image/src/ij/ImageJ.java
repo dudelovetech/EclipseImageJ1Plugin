@@ -142,8 +142,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	private int tabsAfter;
 	private org.eclipse.swt.graphics.Point p;
 	private static boolean batchMode;
-
 	boolean hotkey;
+	private static Color primaryColor;
+
+	public static Color getPrimarySWTToAwtColor() {
+		return primaryColor;
+	}
 
 	/** Creates a new ImageJ frame that runs as an application. */
 	public ImageJ() {
@@ -187,7 +191,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		toolbar = new Toolbar();
 		toolbar.addKeyListener(this);
 		add("Center", toolbar);
-
+                primaryColor=getSystemColour();
 		// Status bar
 		statusBar = new JPanel();
 		statusBar.setLayout(new BorderLayout());

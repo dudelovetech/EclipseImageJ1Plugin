@@ -75,7 +75,9 @@ public class IJtoolbarSwtAwt {
 
 							SWT.ICON_WARNING);
 					messageBox.setText("Info!");
-					messageBox.setMessage("The ImageJ-Canvas view has to be alive!");
+					messageBox.setMessage("Please reopen the ImageJ-Toolbar view!\n\n"
+							    + "Only a detached toolbar will be reopened automatically\n"
+							    + "in a saved and restored Eclipse session.");
 					messageBox.open();
 				}
 			});

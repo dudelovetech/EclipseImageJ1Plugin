@@ -274,6 +274,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	/** Displays the plot. */
 	public void draw() {
 		JPanel bottomPanel = new JPanel();
+		Color primarySWTToAwtColor = ImageJ.getPrimarySWTToAwtColor();
+		bottomPanel.setBackground(primarySWTToAwtColor);
 		int hgap = IJ.isMacOSX() ? 1 : 5;
 
 		list = new JButton(" List ");
@@ -295,7 +297,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		coordinates.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
 		// Changed for Bio7!
-		// coordinates.setBackground(new Color(220, 220, 220));
+		coordinates.setBackground(primarySWTToAwtColor);
 
 		bottomPanel.add(coordinates);
 		add(bottomPanel);
