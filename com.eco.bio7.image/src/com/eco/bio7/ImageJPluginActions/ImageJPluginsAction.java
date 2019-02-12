@@ -138,7 +138,7 @@ public class ImageJPluginsAction extends Action implements IMenuCreator {
 						if (editorInput instanceof IFileEditorInput) {
 							IFile ifile = ((IFileEditorInput) editorInput).getFile();
 							String ext = ifile.getFileExtension();
-							if (ext.equals("js") || ext.equals("py") || ext.equals("bsh")) {
+							if (ext.equals("js") || ext.equals("py") || ext.equals("bsh")||ext.equals("ijm")||ext.equals("txt")) {
 								String path = ifile.getRawLocation().toString();
 								Display display = PlatformUI.getWorkbench().getDisplay();
 								display.syncExec(new Runnable() {
