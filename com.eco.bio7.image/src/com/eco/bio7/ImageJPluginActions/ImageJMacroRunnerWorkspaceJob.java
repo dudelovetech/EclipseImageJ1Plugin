@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2005-2017 M. Austenfeld
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     M. Austenfeld
- *******************************************************************************/
-package com.eco.bio7.ijmacro.editor.actions;
+package com.eco.bio7.ImageJPluginActions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,32 +9,38 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
-import ij.IJ;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import ij.plugin.Macro_Runner;
 
-public class ImageJMacroWorkspaceJob extends WorkspaceJob implements IJobChangeListener {
+public class ImageJMacroRunnerWorkspaceJob extends WorkspaceJob implements IJobChangeListener {
 
-	private String content;
 	private IPreferenceStore store;
 	private String path;
 	private Process process;
+	private boolean evalExt;
+	private String ijpath;
+	private String javaArgs;
 
-	public ImageJMacroWorkspaceJob(String content, String path) {
-		super("ImageJ macro in progress....");
-		this.content = content;
+	public ImageJMacroRunnerWorkspaceJob(String path) {
+		super("ImageJ selected interpreter in progress....");
 		this.path = path;
-		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+		store = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.eco.bio7.ijmacro.editor");
 
 	}
 
 	public IStatus runInWorkspace(IProgressMonitor monitor) {
-		monitor.beginTask("ImageJ macro is running.....", IProgressMonitor.UNKNOWN);
-		boolean evalExt = store.getBoolean("EVALUATE_EXTERNAL");
-		String ijpath = store.getString("LOCATION_EXTERNAL");
-		String javaArgs = store.getString("OPTIONS_EXTERNA");
-		if (evalExt) {
+		monitor.beginTask("ImageJ selected interpreter  is running.....", IProgressMonitor.UNKNOWN);
+		if (store == null) {
+			evalExt = false;
+		} else {
+			evalExt = store.getBoolean("EVALUATE_EXTERNAL");
+			ijpath = store.getString("LOCATION_EXTERNAL");
+			javaArgs = store.getString("OPTIONS_EXTERNA");
+		}
 
+		if (evalExt) {
 			try {
 				process = new ProcessBuilder(ijpath, javaArgs, path).start();
 
@@ -72,7 +68,7 @@ public class ImageJMacroWorkspaceJob extends WorkspaceJob implements IJobChangeL
 			}
 
 		} else {
-			IJ.runMacro(content);
+			new Macro_Runner().run(path);
 		}
 
 		if (monitor.isCanceled()) {

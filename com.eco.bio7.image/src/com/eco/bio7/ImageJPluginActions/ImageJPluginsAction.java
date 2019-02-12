@@ -13,6 +13,8 @@ package com.eco.bio7.ImageJPluginActions;
 
 import java.util.Hashtable;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
@@ -31,7 +33,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import com.eco.bio7.image.Util;
-import ij.plugin.Macro_Runner;
 
 public class ImageJPluginsAction extends Action implements IMenuCreator {
 
@@ -138,14 +139,21 @@ public class ImageJPluginsAction extends Action implements IMenuCreator {
 						if (editorInput instanceof IFileEditorInput) {
 							IFile ifile = ((IFileEditorInput) editorInput).getFile();
 							String ext = ifile.getFileExtension();
-							if (ext.equals("js") || ext.equals("py") || ext.equals("bsh")||ext.equals("ijm")||ext.equals("txt")) {
+							if (ext.equals("js") || ext.equals("py") || ext.equals("bsh") || ext.equals("ijm")||ext.equals("txt")) {
 								String path = ifile.getRawLocation().toString();
-								Display display = PlatformUI.getWorkbench().getDisplay();
-								display.syncExec(new Runnable() {
-									public void run() {
-										new Macro_Runner().run(path);
+
+								ImageJMacroRunnerWorkspaceJob job = new ImageJMacroRunnerWorkspaceJob(path);
+
+								job.addJobChangeListener(new JobChangeAdapter() {
+									public void done(IJobChangeEvent event) {
+										if (event.getResult().isOK()) {
+
+										}
 									}
 								});
+
+								job.schedule();
+
 							}
 
 							else {
