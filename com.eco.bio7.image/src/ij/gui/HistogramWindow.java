@@ -64,7 +64,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	private String blankLabel;
 	private boolean stackHistogram;
 	protected Vector ve;
-
+	Color systemColour = ImageJ.getPrimarySWTToAwtColor();
 	/** Displays a histogram using the title "Histogram of ImageName". */
 	public HistogramWindow(ImagePlus imp) {
 		super(NewImage.createRGBImage("Histogram of " + imp.getShortTitle(), WIN_WIDTH, WIN_HEIGHT, 1, NewImage.FILL_WHITE));
@@ -200,38 +200,47 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		 * in Bio7!
 		 */
 		JPanel buttons = new JPanel();
+		buttons.setBackground(systemColour);
 		buttons.setLayout(new GridLayout(10, 4, 0, 0));
 		int hgap = IJ.isMacOSX() || isRGB ? 1 : 5;
 		buttons.setLayout(new FlowLayout(FlowLayout.RIGHT, hgap, 0));
 		int trim = IJ.isMacOSX() ? 6 : 0;
 		list = new TrimmedButton("List", trim);
+		list.setBackground(systemColour);
 		list.addActionListener(this);
 		buttons.add(list);
 		copy = new TrimmedButton("Copy", trim);
+		copy.setBackground(systemColour);
 		copy.addActionListener(this);
 		buttons.add(copy);
 		log = new TrimmedButton("Log", trim);
+		log.setBackground(systemColour);
 		log.addActionListener(this);
 		buttons.add(log);
 		if (!stackHistogram) {
 			live = new TrimmedButton("Live", trim);
+			live.setBackground(systemColour);
 			live.addActionListener(this);
 			buttons.add(live);
 		}
 		if (imp != null && isRGB && !stackHistogram) {
 			rgb = new TrimmedButton("RGB", trim);
+			rgb.setBackground(systemColour);
 			rgb.addActionListener(this);
 			buttons.add(rgb);
 		}
 		if (!(IJ.isMacOSX() && isRGB)) {
 			JPanel valueAndCount = new JPanel();
+			valueAndCount.setBackground(systemColour);
 			valueAndCount.setLayout(new GridLayout(2, 1, 0, 0));
 			blankLabel = IJ.isMacOSX() ? "           " : "                ";
 			value = new Label(blankLabel);
+			value.setBackground(systemColour);
 			Font font = new Font("Monospaced", Font.PLAIN, 12);
 			value.setFont(font);
 			valueAndCount.add(value);
 			count = new Label(blankLabel);
+			count.setBackground(systemColour);
 			count.setFont(font);
 			valueAndCount.add(count);
 			buttons.add(valueAndCount);
