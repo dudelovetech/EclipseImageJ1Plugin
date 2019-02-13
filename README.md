@@ -1,6 +1,29 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52m (1.52m12):
+
+1. Updated ImageJ version 1.52m (1.52m12)
+2. Improved the ImageJ canvas (Plot canvas and Image canvas are now opened as intended)
+3. The ImageJ canvas replace method now works as intended (see, e.g., IJ_webcam capture plugin)
+4. Improved plot canvas (zooming, actions, etc. are now working as intended)
+5. Plot action buttons are now added below each plot (see screenshot below)
+6. Added new actions (in the plugins menu) to interpret the current opened Eclipse editor sources (BeanShell, JavaScript, Jython and ImageJ macro) using the ImageJ interpreters (using, e.g., PyDev for Jython).
+7. Added a new Java compile action (in the plugins menu) to compile the current opened Eclipse editor source (see screenshot below). To compile dynamically with ImageJ please use or adjust the ImageJ plugins path in the Eclipse preferences.
+8. MouseWheel actions are now working as intended (use STRG+MouseWheel to zoom!)
+9. Improved stability for drag and drop actions of multiple image files
+10. Improved stability for MacOSX
+11. Reorganized Eclipse plugins and features
+12. ImageJ2 can now be optionally installed and is not bundled by default (now optional dependent of ImageJ). Customization is possible (plugin can be populated with maven command in Eclipse)
+13. Added the latest ImageJ macro function templates
+14. JavaFX (embed Swing in JavaFX and SWT panel) can now be optionally installed (but is not necessary by default)
+15. Removed the outdated Albireo plugin dependency
+16. Added key listeners for the tab when all images are closed (ImageJ keys!)
+17. Improved the ImageJ macro hoover (workaround for SWT_AWT)
+18. Added a workaround for repaint issues in MacOSX when switching perspectives with SWT_AWT
+19. Added a workaround for MacOSX to receive key events again after focus lost (sometimes you need to press the mouse two times when the perspectives have been switched)
+20. Fixed several rare occuring deadlock events on MacOSX
+
 ### New in 1.52h (1.52h5):
 
 1. Updated to ImageJ 1.52h (1.52h5)
