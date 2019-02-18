@@ -61,7 +61,7 @@ public class StackEditor implements PlugIn {
 				stack.setSliceLabel((String) obj, 1);
 			id = imp.getID();
 			/* Changed for Bio7! */
-			IJTabs.deleteActiveTab();
+			//IJTabs.deleteActiveTab();
 		}
 		ImageProcessor ip = imp.getProcessor();
 		int n = imp.getCurrentSlice();
