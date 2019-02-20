@@ -2,7 +2,7 @@
 <feature
       id="com.eco.bio7.image.feature"
       label="ImageJ Plugin"
-      version="1.52.1212.qualifier"
+      version="1.52.1220.qualifier"
       provider-name="Bio7">
 
    <description url="https://github.com/Bio7/EclipseImageJ1Plugin">
