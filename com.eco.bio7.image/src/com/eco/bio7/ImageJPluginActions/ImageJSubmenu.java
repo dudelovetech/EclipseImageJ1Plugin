@@ -146,7 +146,7 @@ public class ImageJSubmenu {
 						/* Don't show unused actions! */
 						String labelMenuItem = mItem.getLabel();
 
-						if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Refresh Menus") || labelMenuItem.equals("Update ImageJ...")) {
+						if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ...")) {
 
 							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
 							String lab = mItem.getLabel();
