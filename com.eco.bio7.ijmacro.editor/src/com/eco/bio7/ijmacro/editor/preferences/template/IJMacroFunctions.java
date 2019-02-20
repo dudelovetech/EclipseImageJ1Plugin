@@ -218,7 +218,8 @@ public class IJMacroFunctions {
 			"indexOf(string, substring)####Returns the index within string of the first occurrence of substring. See also: lastIndexOf, startsWith, endsWith, substring, toLowerCase, replace, matches."+linSeparator + 
 			"indexOf(string, substring, fromIndex)####Returns the index within string of the first occurrence of substring, with the search starting at fromIndex."+linSeparator + 
 			"is(\"animated\")####Returns true if the current image is an animated stack."+linSeparator+
-			"is(\"applet\")####Returns true if ImageJ is running as an applet. Requires v1.39p."+linSeparator + 
+			"is(\"applet\")####Returns true if ImageJ is running as an applet. Requires v1.39p."+linSeparator +
+			"is(\"area\")####Returns 'true' if this is an area selection. Requires v1.39p."+linSeparator + 
 			"is(\"Batch Mode\")####Returns true if the macro interpreter is running in batch mode. Requires v1.39p."+linSeparator + 
 			"is(\"Caps Lock Set\")####Returns true if the caps lock key is set. Always return false on some platforms. Requires v1.42e."+linSeparator + 
 			"is(\"binary\")####Returns true if the current image is binary (8-bit with only 0 and 255 values)"+linSeparator+
@@ -228,7 +229,8 @@ public class IJMacroFunctions {
 			"is(\"global scale\")####Returns true if there is global spatial calibration."+linSeparator + 
 			"is(\"grayscale\"####Returns true if the current image is grayscale, or an RGB image with identical R, G and B channels."+linSeparator+
 			"is(\"Inverting LUT\")####Returns true if the current image is using an inverting lookup table."+linSeparator + 
-			"is(\"locked\")####Returns true if the current image is locked."+linSeparator + 
+			"is(\"locked\")####Returns true if the current image is locked."+linSeparator +
+			"is(\"line\")####Returns 'true' if this is a line selection."+linSeparator +
 			"is(\"Virtual Stack\")####Returns true if the current image is a virtual stack. Requires v1.39q."+linSeparator + 
 			"isActive(id)####Returns true if the image with the specified ID is active."+linSeparator + 
 			"isKeyDown(key)####Returns true if the specified key is pressed, where key must be \"shift\", \"alt\" or \"space\". See also: setKeyDown."+linSeparator + 
