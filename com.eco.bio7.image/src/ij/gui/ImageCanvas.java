@@ -1436,7 +1436,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		 * to transfer back the focus to SWT. This could also solve the problem of a
 		 * broken editor hoover in the Bio7 editors!
 		 */
-		if (Util.getOS().equals("Mac") || Util.getOS().equals("Linux")) {
+		if (Util.getOS().equals("Linux")) {
 			Display dis = Util.getDisplay();
 			dis.syncExec(new Runnable() {
 
