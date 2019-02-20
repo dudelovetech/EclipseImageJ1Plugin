@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.Util;
@@ -60,6 +61,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	private int mousePressedX, mousePressedY;
 	private long mousePressedTime;
 	private boolean overOverlayLabel;
+	private Shell tempShell;
 
 	/**
 	 * If the mouse moves less than this in screen pixels, successive zoom
@@ -824,7 +826,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			return;
 		srcRect = new Rectangle(0, 0, imageWidth, imageHeight);
 		setSize(width, height);
-		//getParent().validate();
+		// getParent().validate();
 		/* Changed for Bio7 */
 		CanvasView.getCurrent().validate();
 	}
@@ -879,58 +881,57 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	 * screen coordinates.
 	 */
 	public void zoomIn(int sx, int sy) {
-		if (magnification>=32) return;
+		if (magnification >= 32)
+			return;
 		scaleToFit = false;
-	    boolean mouseMoved = sqr(sx-lastZoomSX) + sqr(sy-lastZoomSY) > MAX_MOUSEMOVE_ZOOM*MAX_MOUSEMOVE_ZOOM;
+		boolean mouseMoved = sqr(sx - lastZoomSX) + sqr(sy - lastZoomSY) > MAX_MOUSEMOVE_ZOOM * MAX_MOUSEMOVE_ZOOM;
 		lastZoomSX = sx;
 		lastZoomSY = sy;
-		if (mouseMoved || zoomTargetOX<0) {
-		    boolean cursorInside = sx >= 0 && sy >= 0 && sx < dstWidth && sy < dstHeight;
-		    zoomTargetOX = offScreenX(cursorInside ? sx : dstWidth/2); //where to zoom, offscreen (image) coordinates
-		    zoomTargetOY = offScreenY(cursorInside ? sy : dstHeight/2);
+		if (mouseMoved || zoomTargetOX < 0) {
+			boolean cursorInside = sx >= 0 && sy >= 0 && sx < dstWidth && sy < dstHeight;
+			zoomTargetOX = offScreenX(cursorInside ? sx : dstWidth / 2); // where to zoom, offscreen (image) coordinates
+			zoomTargetOY = offScreenY(cursorInside ? sy : dstHeight / 2);
 		}
 		double newMag = getHigherZoomLevel(magnification);
-		int newWidth = (int)(imageWidth*newMag);
-		int newHeight = (int)(imageHeight*newMag);
+		int newWidth = (int) (imageWidth * newMag);
+		int newHeight = (int) (imageHeight * newMag);
 		Rectangle dim = CanvasView.getCurrent().getBounds();
-		Dimension newSize = new Dimension(newWidth, newHeight);	
-		//System.out.println(newWidth+" "+dim.width+" "+newHeight+" "+dim.height);
-		if(newWidth<dim.width&&newHeight<dim.height) {
-			
+		Dimension newSize = new Dimension(newWidth, newHeight);
+		// System.out.println(newWidth+" "+dim.width+" "+newHeight+" "+dim.height);
+		if (newWidth < dim.width && newHeight < dim.height) {
+
 			setSize(newSize.width, newSize.height);
-			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-			
-			if (newSize.width!=newWidth || newSize.height!=newHeight)
+			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
+			if (newSize.width != newWidth || newSize.height != newHeight)
 				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
 			else
 				setMagnification(newMag);
-				CanvasView.getCurrent().validate();
-		}
-		else if(newWidth>dim.width&&newHeight<dim.height) {
+			CanvasView.getCurrent().validate();
+		} else if (newWidth > dim.width && newHeight < dim.height) {
 			setSize(newSize.width, newSize.height);
-			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+			setMagnification(newMag);
+			CanvasView.getCurrent().validate();
+		} else if (newWidth < dim.width && newHeight > dim.height) {
+			setSize(newSize.width, newSize.height);
+			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 			setMagnification(newMag);
 			CanvasView.getCurrent().validate();
 		}
-		else if(newWidth<dim.width&&newHeight>dim.height) {
-			setSize(newSize.width, newSize.height);
-			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-			setMagnification(newMag);
-			CanvasView.getCurrent().validate();
-		}	
-		
-		//Dimension newSize = canEnlarge(newWidth, newHeight);
-		 else // can't enlarge window
+
+		// Dimension newSize = canEnlarge(newWidth, newHeight);
+		else // can't enlarge window
 			setSize(dim.width, dim.height);
-			setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-			adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
-		        //CanvasView.getCurrent().validate();
+		setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+		adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
+		// CanvasView.getCurrent().validate();
 		repaint();
-		if (srcRect.width<imageWidth || srcRect.height<imageHeight)
+		if (srcRect.width < imageWidth || srcRect.height < imageHeight)
 			resetMaxBounds();
-		//fitToWindow();
+		// fitToWindow();
 		CanvasView.getCurrent().validate();
-}
+	}
 
 	/** Centers the viewable area on offscreen (image) coordinates x, y */
 	void adjustSourceRect(double newMag, int x, int y) {
@@ -1240,10 +1241,10 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 					if (frameSwtAwt != null) {
 
 						if (frameSwtAwt != null)
-							frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
-							WindowEvent.WINDOW_ACTIVATED));
-							//frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_GAINED_FOCUS));
-						
+							frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+						// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
+						// WindowEvent.WINDOW_GAINED_FOCUS));
+
 						if (ImageCanvas.this.isFocusOwner() == false) {
 							ImageCanvas.this.requestFocus();
 
@@ -1429,6 +1430,30 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			setCursor(defaultCursor);
 		IJ.showStatus("");
 		mouseExited = true;
+		/*
+		 * Change for Bio7! On Linux the editors don't receive key events when the
+		 * ImageCanvas receives focus. We workaround this by open and close a SWT Shell
+		 * to transfer back the focus to SWT. This could also solve the problem of a
+		 * broken editor hoover in the Bio7 editors!
+		 */
+		if (Util.getOS().equals("Mac") || Util.getOS().equals("Linux")) {
+			Display dis = Util.getDisplay();
+			dis.syncExec(new Runnable() {
+
+				public void run() {
+
+					if (tempShell != null) {
+						if (tempShell.isDisposed() == false) {
+							tempShell.dispose();
+						}
+					}
+					tempShell = new Shell();
+					tempShell.setVisible(true);
+					tempShell.setVisible(false);
+				}
+			});
+		}
+
 	}
 
 	public void mouseDragged(MouseEvent e) {

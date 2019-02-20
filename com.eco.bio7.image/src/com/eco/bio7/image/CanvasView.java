@@ -303,7 +303,7 @@ public class CanvasView extends ViewPart {
 			public void partClosed(IWorkbenchPart part) {
 
 				if (part instanceof CanvasView) {
-					System.out.println("tab closed");
+					
 					CTabItem[] items = tabFolder.getItems();
 
 					for (int i = 0; i < items.length; i++) {
