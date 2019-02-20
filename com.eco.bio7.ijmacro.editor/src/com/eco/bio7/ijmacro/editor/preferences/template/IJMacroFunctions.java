@@ -219,7 +219,7 @@ public class IJMacroFunctions {
 			"indexOf(string, substring, fromIndex)####Returns the index within string of the first occurrence of substring, with the search starting at fromIndex."+linSeparator + 
 			"is(\"animated\")####Returns true if the current image is an animated stack."+linSeparator+
 			"is(\"applet\")####Returns true if ImageJ is running as an applet. Requires v1.39p."+linSeparator +
-			"is(\"area\")####Returns 'true' if this is an area selection. Requires v1.39p."+linSeparator + 
+			"is(\"area\")####Returns 'true' if this is an area selection."+linSeparator + 
 			"is(\"Batch Mode\")####Returns true if the macro interpreter is running in batch mode. Requires v1.39p."+linSeparator + 
 			"is(\"Caps Lock Set\")####Returns true if the caps lock key is set. Always return false on some platforms. Requires v1.42e."+linSeparator + 
 			"is(\"binary\")####Returns true if the current image is binary (8-bit with only 0 and 255 values)"+linSeparator+
