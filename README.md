@@ -4,10 +4,10 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 ### New in 1.52m (1.52m20):
 
 1. Updated ImageJ version 1.52m (1.52m20)
-2. Added new  macro function definitions
+2. Added new macro function definitions
 3. Zoom factor is displayed in the image tabs
 4. Workaround a SWT key focus loss with ImageJ on Linux (occurred on Ubuntu 18.10)
-5. Fixed an exception when adding an image ("Add Slice")to a stack or size 1
+5. Fixed an exception when adding an image ("Add Slice")to a stack of size 1
 6. Detached images are now closed, too when using the "File->Close All" view menu action
 
 ### New in 1.52m (1.52m12):
