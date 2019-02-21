@@ -13,6 +13,8 @@ import java.util.*;
 
 import javax.swing.JFrame;
 
+import com.eco.bio7.image.IJTabs;
+
 import ij.gui.*;
 
 /** This class consists of static methods used to manage ImageJ's windows. */
@@ -316,7 +318,7 @@ public class WindowManager {
 			addImageWindow((ImageWindow) win);
 		else {
 			/* Changed for Bio7! */
-			// Menus.insertWindowMenuItem(win);
+			Menus.insertWindowMenuItem(win);
 			nonImageList.add(win);
 		}
 	}
@@ -331,7 +333,7 @@ public class WindowManager {
 		if (imp == null)
 			return;
 		checkForDuplicateName(imp);
-		imageList.add(win);
+		imageList.add(win);		
 		Menus.addWindowMenuItem(imp);
 		setCurrentWindow(win);
 	}
@@ -578,13 +580,16 @@ public class WindowManager {
 	}
 
 	/** Activates a window selected from the Window menu. */
-	synchronized static void activateWindow(String menuItemLabel, MenuItem item) {
+	public synchronized static void activateWindow(String menuItemLabel, MenuItem item) {
 		for (int i = 0; i < nonImageList.size(); i++) {
 			Object win = nonImageList.get(i);
 			String title = win instanceof Frame ? ((Frame) win).getTitle() : ((Dialog) win).getTitle();
 			if (menuItemLabel.equals(title)) {
-				if (win instanceof Frame)
+				if (win instanceof Frame) {
 					toFront((Frame) win);
+					/*Changed for Bio7!*/
+				       // IJTabs.setActiveTab(menuItemLabel); 
+				}
 				else
 					((Dialog) win).toFront();
 				((CheckboxMenuItem) item).setState(false);
@@ -606,6 +611,8 @@ public class WindowManager {
 			return;
 		setCurrentWindow(win1);
 		toFront(win1);
+		/*Changed for Bio7!*/
+		//IJTabs.setActiveTabWindow(win1); 
 		int index = imageList.indexOf(win1);
 		int n = Menus.window.getItemCount();
 		int start = Menus.WINDOW_MENU_ITEMS + Menus.windowMenuItems2;

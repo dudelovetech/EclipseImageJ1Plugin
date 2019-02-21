@@ -11,10 +11,12 @@
 
 package com.eco.bio7.image;
 
+import java.awt.Window;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewReference;
@@ -118,11 +120,11 @@ public class IJTabs {
 			}
 
 		}
-		/*Close all detached views if available!*/
-		IViewReference [] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+		/* Close all detached views if available! */
+		IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
 		for (int i = 0; i < viewRefs.length; i++) {
-			String id=viewRefs[i].getId();
-			if(id.equals("com.eco.bio7.image.detachedImage")) {
+			String id = viewRefs[i].getId();
+			if (id.equals("com.eco.bio7.image.detachedImage")) {
 				viewRefs[i].getPage().hideView(viewRefs[i]);
 			}
 		}
@@ -332,6 +334,39 @@ public class IJTabs {
 							}
 						}
 					});
+
+				}
+
+			}
+		});
+	}
+
+	public static void setActiveTabWindow(Window win) {
+
+		
+		Display dis = CanvasView.getParent2().getDisplay();
+		dis.syncExec(new Runnable() {
+
+			private int count;
+
+			public void run() {
+				CTabFolder tabFolder = CanvasView.getCanvas_view().tabFolder;
+				CTabItem[] items = tabFolder.getItems();
+				for (int i = 0; i < items.length; i++) {
+					count = i;
+					Vector<?> ve = (Vector<?>) items[i].getData();
+
+					final ImageWindow win2 = (ImageWindow) ve.get(1);
+
+					
+					/* Search for the tab which embeds this instance! */
+					if (win==win2) {
+						// calls the selection!
+						tabFolder.setSelection(items[count]);
+						// System.out.println("closed");
+						return;
+
+					}
 
 				}
 

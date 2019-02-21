@@ -27,10 +27,13 @@ import javax.net.ssl.*;
 import java.security.cert.*;
 import java.security.KeyStore;
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+
+import com.eco.bio7.image.IJTabs;
 
 
 /** This class consists of static utility methods. */
@@ -1536,13 +1539,18 @@ public class IJ {
 			ImageWindow win = imp.getWindow();
 			if (win != null) {
 				win.toFront();
+				/*Changed for Bio7 to open the specified tab!*/
+				IJTabs.setActiveTabWindow(win);
+				
 				WindowManager.setWindow(win);
 			}
 			long start = System.currentTimeMillis();
 			// timeout after 1 second unless current thread is event dispatch thread
 			// thread
 			String thread = Thread.currentThread().getName();
-			int timeout = thread != null && thread.indexOf("EventQueue") != -1 ? 0 : 1000;
+			/*We run in an Eclipse job here so we don't have an "EventQueue"*/
+			//int timeout = thread != null && thread.indexOf("EventQueue") != -1 ? 0 : 1000;
+			int timeout = thread != null  ? 0 : 1000;
 			if (IJ.isMacOSX() && IJ.isJava18() && timeout > 0)
 				timeout = 250; // work around OS X/Java 8 window activation bug
 			while (true) {
@@ -1588,8 +1596,14 @@ public class IJ {
 	}
 
 	static void selectWindow(Window win) {
-		if (win instanceof Frame)
+		/*Changed for Bio7 to JFrame!*/
+		if (win instanceof JFrame) {
+			((JFrame) win).toFront();
+		       // IJTabs.setActiveTabWindow(win);
+		}
+		else if (win instanceof Frame) {
 			((Frame) win).toFront();
+		}
 		else
 			((Dialog) win).toFront();
 		long start = System.currentTimeMillis();
@@ -1597,7 +1611,7 @@ public class IJ {
 			wait(10);
 			if (WindowManager.getActiveWindow() == win)
 				return; // specified window is now in front
-			if ((System.currentTimeMillis() - start) > 1000) {
+			if ((System.currentTimeMillis() - start) > 100) {
 				WindowManager.setWindow(win);
 				return; // 1 second timeout
 			}

@@ -46,11 +46,11 @@ public class ImageJSubmenu {
 
 			if (menu.getLabel().equals(label))
 
-				recurseSubMenu(menu, mainMenu);
+				recurseSubMenu(menu, mainMenu, label);
 		}
 	}
 
-	private void recurseSubMenu(java.awt.Menu menu, Menu mainMenu) {
+	private void recurseSubMenu(java.awt.Menu menu, Menu mainMenu, String mainMenuLabel) {
 		int items = menu.getItemCount();
 		if (items == 0)
 			return;
@@ -67,7 +67,7 @@ public class ImageJSubmenu {
 				/* Push Menu on the stack! */
 				mainMenuStack.push(menuSub);
 
-				recurseSubMenu((java.awt.Menu) mItem, menuSub);
+				recurseSubMenu((java.awt.Menu) mItem, menuSub, mainMenuLabel);
 
 				mainMenuStack.pop();
 
@@ -87,7 +87,13 @@ public class ImageJSubmenu {
 
 						public void widgetSelected(SelectionEvent e) {
 							String cmd = mItem.getActionCommand();
-							IJ.doCommand(cmd);
+
+							if (mainMenuLabel.equals("Window")) {
+								WindowManager.activateWindow(cmd, mItem);
+							} else {
+
+								IJ.doCommand(cmd);
+							}
 
 						}
 
@@ -146,26 +152,36 @@ public class ImageJSubmenu {
 						/* Don't show unused actions! */
 						String labelMenuItem = mItem.getLabel();
 
-						if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ...")) {
-
-							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
-							String lab = mItem.getLabel();
-
-							it.setText(lab);
-
-							it.addSelectionListener(new SelectionListener() {
-
-								public void widgetSelected(SelectionEvent e) {
-									IJ.showMessage("Disabled for the Eclipse ImageJ plugin!");
-
-								}
-
-								public void widgetDefaultSelected(SelectionEvent e) {
-
-								}
-							});
-
+						/*
+						 * if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ..."))
+						 * {
+						 * 
+						 * MenuItem it = new MenuItem(currentSubMenu, SWT.NONE); String lab =
+						 * mItem.getLabel();
+						 * 
+						 * it.setText(lab);
+						 * 
+						 * it.addSelectionListener(new SelectionListener() {
+						 * 
+						 * public void widgetSelected(SelectionEvent e) {
+						 * IJ.showMessage("Disabled for the Eclipse ImageJ plugin!");
+						 * 
+						 * }
+						 * 
+						 * public void widgetDefaultSelected(SelectionEvent e) {
+						 * 
+						 * } });
+						 * 
+						 * }
+						 */
+						/*Exclude the following menu items!*/
+						if(labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ...")||labelMenuItem.equals("Show All") ||
+								labelMenuItem.startsWith("Main Window [")|| labelMenuItem.startsWith("Put Behind [tab]")||
+								labelMenuItem.startsWith("Cascade")|| labelMenuItem.startsWith("Tile")) {
+							
 						}
+						
+						
 
 						else if (labelMenuItem.equals("Close All")) {
 							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);
@@ -188,13 +204,18 @@ public class ImageJSubmenu {
 
 						}
 						/*
-						 * else if(labelMenuItem.equals("Open...")){ MenuItem it = new MenuItem(currentSubMenu, SWT.PUSH); String lab = mItem.getLabel(); if (mItem.getShortcut() != null) {
-						 * //System.out.println(mItem.getShortcut() + "  :  " + mItem.getShortcut().getKey()); it.setAccelerator(mItem.getShortcut().getKey());
-						 * it.setText(lab+"\t"+mItem.getShortcut()); } else{ it.setText(lab); } it.addSelectionListener(new SelectionListener() {
+						 * else if(labelMenuItem.equals("Open...")){ MenuItem it = new
+						 * MenuItem(currentSubMenu, SWT.PUSH); String lab = mItem.getLabel(); if
+						 * (mItem.getShortcut() != null) { //System.out.println(mItem.getShortcut() +
+						 * "  :  " + mItem.getShortcut().getKey());
+						 * it.setAccelerator(mItem.getShortcut().getKey());
+						 * it.setText(lab+"\t"+mItem.getShortcut()); } else{ it.setText(lab); }
+						 * it.addSelectionListener(new SelectionListener() {
 						 * 
 						 * 
 						 * 
-						 * public void widgetSelected(SelectionEvent e) { SwingUtilities.invokeLater(new Runnable() { public void run() {
+						 * public void widgetSelected(SelectionEvent e) { SwingUtilities.invokeLater(new
+						 * Runnable() { public void run() {
 						 * 
 						 * IJ.getInstance().doCommand("Open..."); } });
 						 * 
@@ -211,7 +232,8 @@ public class ImageJSubmenu {
 							String lab = mItem.getLabel();
 							/* Create shortcuts if available! */
 							if (mItem.getShortcut() != null) {
-								// System.out.println(mItem.getShortcut() + " : " + mItem.getShortcut().getKey());
+								// System.out.println(mItem.getShortcut() + " : " +
+								// mItem.getShortcut().getKey());
 								it.setAccelerator(mItem.getShortcut().getKey());
 								it.setText(lab + "\t" + mItem.getShortcut());
 							} else {

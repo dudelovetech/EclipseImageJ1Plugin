@@ -245,10 +245,11 @@ public class Menus {
 		addPluginsMenu();
 
 		Menu window = getMenu("Window");
+		/*Changed for Bio7. We have a tabbed structure!*/
 		addPlugInItem(window, "Show All", "ij.plugin.WindowOrganizer(\"show\")", KeyEvent.VK_CLOSE_BRACKET, false);
 		String key = IJ.isWindows() ? "enter" : "return";
 		addPlugInItem(window, "Main Window [" + key + "]", "ij.plugin.WindowOrganizer(\"imagej\")", 0, false);
-		addPlugInItem(window, "Put Behind [tab]", "ij.plugin.Commands(\"tab\")", 0, false);
+	        addPlugInItem(window, "Put Behind [tab]", "ij.plugin.Commands(\"tab\")", 0, false);
 		addPlugInItem(window, "Cascade", "ij.plugin.WindowOrganizer(\"cascade\")", 0, false);
 		addPlugInItem(window, "Tile", "ij.plugin.WindowOrganizer(\"tile\")", 0, false);
 		window.addSeparator();
