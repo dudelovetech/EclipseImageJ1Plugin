@@ -144,15 +144,16 @@ public class CanvasView extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
-		if(Util.getOS().equals("Win")) {
-			new AwtDialogListener(parent.getDisplay());	
-		}
+		
 		
 		osname = System.getProperty("os.name");
 		isWin = osname.startsWith("Windows");
 		isMac = !isWin && osname.startsWith("Mac");
 		isLinux = osname.startsWith("Linux");
-
+		
+		if(isWin) {
+			new AwtDialogListener(parent.getDisplay());	
+		}
 		setComponentFont(parent.getDisplay());
 		if (isWin) {
 
