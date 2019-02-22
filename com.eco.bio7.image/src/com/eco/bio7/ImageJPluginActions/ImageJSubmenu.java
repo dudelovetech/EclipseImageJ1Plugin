@@ -101,7 +101,11 @@ public class ImageJSubmenu {
 							if (mainMenuLabel.equals("Window")) {
 
 								/* Add the opened dialogs to the menu! */
-								WindowManager.activateWindow(cmd, mItem);
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+										WindowManager.activateWindow(cmd, mItem);									}
+								});
+								
 
 							} else {
 
