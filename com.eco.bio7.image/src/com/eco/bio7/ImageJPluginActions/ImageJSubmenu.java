@@ -80,7 +80,6 @@ public class ImageJSubmenu {
 					if (mainMenuLabel.equals("Window")) {
 						/* Don't add images to the menu. We have already a list in the tabs menu! */
 						String idString = mItem.getActionCommand();
-						System.out.println(idString);
 						int id = (int) Tools.parseDouble(idString, 0);
 						ImagePlus imp = WindowManager.getImage(id);
 						if (imp != null) {

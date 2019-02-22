@@ -196,7 +196,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 						menuItems[i].dispose();
 					}
 				}
-				new MenuItem(fMenu, SWT.SEPARATOR);
+				//new MenuItem(fMenu, SWT.SEPARATOR);
 				new ImageJSubmenu().addSubMenus(fMenu, "Window");
 
 			}
