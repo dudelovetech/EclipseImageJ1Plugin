@@ -25,13 +25,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-class SwtFocusHandler implements FocusListener, KeyListener {
+public class SwtFocusHandler implements FocusListener, KeyListener {
 
     private final Composite composite;
     private final Display display;
     private AwtFocusHandler awtHandler;
     
-    SwtFocusHandler(Composite composite) {
+    public SwtFocusHandler(Composite composite) {
         assert composite != null;
         assert Display.getCurrent() != null;     // On SWT event thread
         
