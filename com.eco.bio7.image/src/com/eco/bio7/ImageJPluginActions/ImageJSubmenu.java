@@ -29,6 +29,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.Menus;
 import ij.WindowManager;
+import ij.util.Tools;
 
 /**
  * @author M. Austenfeld A class to built the ImageJ plugin SWT menus.
@@ -76,6 +77,16 @@ public class ImageJSubmenu {
 				Menu currentSubMenu = mainMenuStack.peek();
 
 				if (mItem instanceof CheckboxMenuItem) {
+					if (mainMenuLabel.equals("Window")) {
+						/* Don't add images to the menu. We have already a list in the tabs menu! */
+						String idString = mItem.getActionCommand();
+						System.out.println(idString);
+						int id = (int) Tools.parseDouble(idString, 0);
+						ImagePlus imp = WindowManager.getImage(id);
+						if (imp != null) {
+							break;
+						}
+					}
 
 					MenuItem it = new MenuItem(currentSubMenu, SWT.CHECK);
 
@@ -89,7 +100,10 @@ public class ImageJSubmenu {
 							String cmd = mItem.getActionCommand();
 
 							if (mainMenuLabel.equals("Window")) {
+
+								/* Add the opened dialogs to the menu! */
 								WindowManager.activateWindow(cmd, mItem);
+
 							} else {
 
 								IJ.doCommand(cmd);
@@ -174,14 +188,11 @@ public class ImageJSubmenu {
 						 * 
 						 * }
 						 */
-						/*Exclude the following menu items!*/
-						if(labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ...")||labelMenuItem.equals("Show All") ||
-								labelMenuItem.startsWith("Main Window [")|| labelMenuItem.startsWith("Put Behind [tab]")||
-								labelMenuItem.startsWith("Cascade")|| labelMenuItem.startsWith("Tile")) {
-							
+						/* Exclude the following menu items! */
+						if (labelMenuItem.equals("Quit") || labelMenuItem.equals("Update ImageJ...") || labelMenuItem.equals("Show All") || labelMenuItem.startsWith("Main Window [") || labelMenuItem.startsWith("Put Behind [tab]") || labelMenuItem.startsWith("Cascade")
+								|| labelMenuItem.startsWith("Tile")) {
+
 						}
-						
-						
 
 						else if (labelMenuItem.equals("Close All")) {
 							MenuItem it = new MenuItem(currentSubMenu, SWT.NONE);

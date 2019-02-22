@@ -87,6 +87,7 @@ import ij.io.Opener;
 import ij.plugin.CommandLister;
 import ij.plugin.DragAndDrop;
 import ij.plugin.FolderOpener;
+import com.eco.bio7.image.swtawtutil.*;
 
 public class CanvasView extends ViewPart {
 	public static int insertMark = -1;
@@ -143,7 +144,7 @@ public class CanvasView extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
-
+		new AwtDialogListener(parent.getDisplay());
 		osname = System.getProperty("os.name");
 		isWin = osname.startsWith("Windows");
 		isMac = !isWin && osname.startsWith("Mac");
