@@ -96,9 +96,10 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 		/// * Changed for Bio7! */
 		// windowInstance = this;
 	}
+
 	/* Changed for Bio7 setting the tab title and not the JFrame title! */
 	public void setTitle(String title) {
-		
+
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
 		Display dis = CanvasView.getParent2().getDisplay();
 		dis.syncExec(new Runnable() {
@@ -112,10 +113,9 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 
 					/* Search for the tab which embeds this instance! */
 					if (ImageWindow.this.equals(win2)) {
-						// calls bio7Tabclose!
+						// Rename the tab!
 						CanvasView.tabFolder.getItem(i).setText(title);
-						//IJTabs.deleteTab(i);
-						// System.out.println("closed");
+
 						return;
 
 					}
@@ -125,9 +125,6 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 			}
 		});
 
-		
-                
-		
 	}
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {
@@ -172,8 +169,11 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 				/* Add the panel to the tab folder with the image */
 				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
-				/*The next seems to be important for Mac. Else at the first zoom level the image disapears!*/
-				
+				/*
+				 * The next seems to be important for Mac. Else at the first zoom level the
+				 * image disapears!
+				 */
+
 				// show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -212,13 +212,16 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 					/* Add the panel to the tab folder with the image */
 					swtAwtMain.addTab(imp.getTitle());
 					imp.setWindow(this);
-					/*The next seems to be important for Mac. Else at the first zoom level the image disapears!*/
+					/*
+					 * The next seems to be important for Mac. Else at the first zoom level the
+					 * image disapears!
+					 */
 					java.awt.EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							pack();
 						}
 					});
-					
+
 				}
 
 			}
@@ -403,7 +406,7 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 			s += "; ";
 		} else {
 			String label = (String) imp.getProperty("Label");
-			if (label!=null && label.length()>0) {
+			if (label != null && label.length() > 0) {
 				int newline = label.indexOf('\n');
 				if (newline > 0)
 					label = label.substring(0, newline);
@@ -412,7 +415,7 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 					label = label.substring(0, len - 4);
 				if (label.length() > 60)
 					label = label.substring(0, 60);
-				s = "\""+label + "\"; ";
+				s = "\"" + label + "\"; ";
 			}
 		}
 		int type = imp.getType();
@@ -632,32 +635,29 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 	static ImagePlus getClipboard() {
 		return ImagePlus.getClipboard();
 	}
-	
+
 	public Rectangle getBounds() {
 		Rectangle rec;
-		JPanel pan=CanvasView.getCanvas_view().getCurrent();
-		if(pan!=null) {
-			rec=CanvasView.getCanvas_view().getCurrent().getBounds();
+		JPanel pan = CanvasView.getCanvas_view().getCurrent();
+		if (pan != null) {
+			rec = CanvasView.getCanvas_view().getCurrent().getBounds();
+		} else {
+			rec = new Rectangle(400, 400);
 		}
-		else {
-			rec=new Rectangle(400,400);
-		}
-		
+
 		return rec;
-		
+
 	}
 
 	public Rectangle getMaximumBounds() {
 		Rectangle rec;
-		JPanel pan=CanvasView.getCanvas_view().getCurrent();
-		if(pan!=null) {
-			rec=CanvasView.getCanvas_view().getCurrent().getBounds();
+		JPanel pan = CanvasView.getCanvas_view().getCurrent();
+		if (pan != null) {
+			rec = CanvasView.getCanvas_view().getCurrent().getBounds();
+		} else {
+			rec = new Rectangle(400, 400);
 		}
-		else {
-			rec=new Rectangle(400,400);
-		}
-		
-		
+
 		/*
 		 * Rectangle maxWindow = GUI.getMaxWindowBounds(); if (imp == null) return
 		 * maxWindow; double width = imp.getWidth(); double height = imp.getHeight();
