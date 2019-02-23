@@ -28,6 +28,7 @@ import com.eco.bio7.image.IJTabs;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.Menus;
+import ij.Prefs;
 import ij.WindowManager;
 import ij.util.Tools;
 
@@ -88,9 +89,19 @@ public class ImageJSubmenu {
 					}
 
 					MenuItem it = new MenuItem(currentSubMenu, SWT.CHECK);
+					it.setSelection(false);
+					if ("Autorun Examples".equals(mItem.getLabel())) {
+						if (Prefs.autoRunExamples) {
+
+							it.setSelection(true);
+
+						} else {
+
+							it.setSelection(false);
+						}
+					}
 
 					String lab = mItem.getLabel();
-					it.setSelection(false);
 
 					it.setText(lab);
 					it.addSelectionListener(new SelectionListener() {
@@ -98,16 +109,32 @@ public class ImageJSubmenu {
 						public void widgetSelected(SelectionEvent e) {
 							String cmd = mItem.getActionCommand();
 
-							if (mainMenuLabel.equals("Window")) {
+							if ("Autorun Examples".equals(cmd)) { // Examples>Autorun Examples
+
+								if (Prefs.autoRunExamples) {
+									Prefs.autoRunExamples = false;
+									it.setSelection(false);
+
+								} else {
+									Prefs.autoRunExamples = true;
+									it.setSelection(true);
+								}
+								
+
+							}
+
+							else if (mainMenuLabel.equals("Window")) {
 
 								/* Add the opened dialogs to the menu! */
 								SwingUtilities.invokeLater(new Runnable() {
 									public void run() {
-										WindowManager.activateWindow(cmd, mItem);									}
+										WindowManager.activateWindow(cmd, mItem);
+									}
 								});
-								
 
-							} else {
+							}
+
+							else {
 
 								IJ.doCommand(cmd);
 							}
@@ -118,42 +145,44 @@ public class ImageJSubmenu {
 
 						}
 					});
+					if (label.equals("8-bit") || label.equals("16-bit") || label.equals("32-bit") || label.equals("8-bit Color") ||
+							label.equals("RGB Color") || label.equals("RGB Stack") || label.equals("HSB Stack") || label.equals("Lab Stack")) {
+						ImagePlus imp = WindowManager.getCurrentImage();
+						if (imp != null) {
 
-					ImagePlus imp = WindowManager.getCurrentImage();
-					if (imp != null) {
+							if (IJ.getImage().getType() == 0 && label.equals("8-bit")) {
 
-						if (IJ.getImage().getType() == 0 && label.equals("8-bit")) {
+								it.setSelection(true);
+								menuBit = it;
 
-							it.setSelection(true);
-							menuBit = it;
+							} else if (IJ.getImage().getType() == 1 && label.equals("16-bit")) {
+								it.setSelection(true);
+								menuBit = it;
+							} else if (IJ.getImage().getType() == 2 && label.equals("32-bit")) {
+								it.setSelection(true);
+								menuBit = it;
+							} else if (IJ.getImage().getType() == 3 && label.equals("8-bit Color")) {
+								it.setSelection(true);
+								menuBit = it;
+							}
 
-						} else if (IJ.getImage().getType() == 1 && label.equals("16-bit")) {
-							it.setSelection(true);
-							menuBit = it;
-						} else if (IJ.getImage().getType() == 2 && label.equals("32-bit")) {
-							it.setSelection(true);
-							menuBit = it;
-						} else if (IJ.getImage().getType() == 3 && label.equals("8-bit Color")) {
-							it.setSelection(true);
-							menuBit = it;
-						}
+							else if (IJ.getImage().getType() == 4 && label.equals("RGB Color")) {
+								it.setSelection(true);
+								menuBit = it;
+							} else if (imp.getStack().isRGB() && label.equals("RGB Stack")) {
+								it.setSelection(true);
+								menuBit.setSelection(false);
+							} else if (imp.getStack().isHSB() && label.equals("HSB Stack")) {
+								it.setSelection(true);
+								menuBit.setSelection(false);
+							} else if (imp.getStack().isLab() && label.equals("Lab Stack")) {
+								it.setSelection(true);
+								menuBit.setSelection(false);
+							}
 
-						else if (IJ.getImage().getType() == 4 && label.equals("RGB Color")) {
-							it.setSelection(true);
-							menuBit = it;
-						} else if (imp.getStack().isRGB() && label.equals("RGB Stack")) {
-							it.setSelection(true);
-							menuBit.setSelection(false);
-						} else if (imp.getStack().isHSB() && label.equals("HSB Stack")) {
-							it.setSelection(true);
-							menuBit.setSelection(false);
-						} else if (imp.getStack().isLab() && label.equals("Lab Stack")) {
-							it.setSelection(true);
-							menuBit.setSelection(false);
-						}
-
-						else {
-							it.setSelection(false);
+							else {
+								it.setSelection(false);
+							}
 						}
 					}
 

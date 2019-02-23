@@ -99,18 +99,35 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 	/* Changed for Bio7 setting the tab title and not the JFrame title! */
 	public void setTitle(String title) {
 		
-
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() {
+		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
+		Display dis = CanvasView.getParent2().getDisplay();
+		dis.syncExec(new Runnable() {
 
 			public void run() {
-				if (CanvasView.tabFolder.getItemCount() > 0) {
+				for (int i = 0; i < items.length; i++) {
 
-					CanvasView.tabFolder.getSelection().setText(title);
+					Vector ve = (Vector) items[i].getData();
+
+					final ImageWindow win2 = (ImageWindow) ve.get(1);
+
+					/* Search for the tab which embeds this instance! */
+					if (ImageWindow.this.equals(win2)) {
+						// calls bio7Tabclose!
+						CanvasView.tabFolder.getItem(i).setText(title);
+						//IJTabs.deleteTab(i);
+						// System.out.println("closed");
+						return;
+
+					}
 
 				}
+
 			}
 		});
+
+		
+                
+		
 	}
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {
