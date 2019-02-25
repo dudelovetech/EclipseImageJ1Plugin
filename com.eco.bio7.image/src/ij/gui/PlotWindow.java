@@ -143,7 +143,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		super(createImage(title, xLabel, yLabel, xValues, yValues));
 		plot = staticPlot;
 		// Changed for Bio7!
-		((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas) getCanvas()).setPlot(plot);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	public PlotWindow(ImagePlus imp, Plot plot) {
 		super(imp);
 		// Changed for Bio7!
-		((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas) getCanvas()).setPlot(plot);
 		this.plot = plot;
 		draw();
 	}
@@ -169,7 +169,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 	PlotWindow(Plot plot) {
 		super(plot.getImagePlus());
 		// Changed for Bio7!
-		((PlotCanvas)getCanvas()).setPlot(plot);
+		((PlotCanvas) getCanvas()).setPlot(plot);
 		this.plot = plot;
 		draw();
 	}
@@ -307,8 +307,8 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		LayoutManager lm = getLayout();
 		if (lm instanceof ImageLayout)
 			((ImageLayout) lm).ignoreNonImageWidths(true); // don't expand size to make the panel fit
-		/*Changed for Bio7. Pack causes deadlock on MacOSX with detached view!*/
-		//pack();
+		/* Changed for Bio7. Pack causes deadlock on MacOSX with detached view! */
+		// pack();
 
 		ImageProcessor ip = plot.getProcessor();
 		boolean ipIsColor = ip instanceof ColorProcessor;
@@ -329,6 +329,7 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 		Display display = Util.getDisplay();
 		display.syncExec(new Runnable() {
 			public void run() {
+				CanvasView.parent2.layout();
 				CTabFolder ctab = CanvasView.getCanvas_view().tabFolder;
 				ve = (Vector<?>) ctab.getSelection().getData();
 				JPanel current = (JPanel) ve.get(2);
@@ -494,10 +495,10 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				plot.setFormatFlags(Plot.getDefaultFlags());
 				plot.setFrameSize(plotWidth, plotHeight); // updates the image only when size changed
 				plot.updateImage();
-				/*Changed for Bio7*/
-				CanvasView view=CanvasView.getCanvas_view();
-				if(view!=null) {
-				view.updatePlotCanvas();
+				/* Changed for Bio7 */
+				CanvasView view = CanvasView.getCanvas_view();
+				if (view != null) {
+					view.updatePlotCanvas();
 				}
 			} else if (b == menuItems[HI_RESOLUTION])
 				new PlotDialog(plot, PlotDialog.HI_RESOLUTION).showDialog(this);
