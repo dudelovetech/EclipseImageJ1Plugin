@@ -494,6 +494,11 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				plot.setFormatFlags(Plot.getDefaultFlags());
 				plot.setFrameSize(plotWidth, plotHeight); // updates the image only when size changed
 				plot.updateImage();
+				/*Changed for Bio7*/
+				CanvasView view=CanvasView.getCanvas_view();
+				if(view!=null) {
+				view.updatePlotCanvas();
+				}
 			} else if (b == menuItems[HI_RESOLUTION])
 				new PlotDialog(plot, PlotDialog.HI_RESOLUTION).showDialog(this);
 			else if (b == menuItems[PROFILE_PLOT_OPTIONS])

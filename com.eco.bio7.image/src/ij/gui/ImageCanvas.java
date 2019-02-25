@@ -881,6 +881,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	 * screen coordinates.
 	 */
 	public void zoomIn(int sx, int sy) {
+		
 		if (magnification >= 32)
 			return;
 		scaleToFit = false;
@@ -907,17 +908,17 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
 			else
 				setMagnification(newMag);
-			CanvasView.getCurrent().validate();
+			
 		} else if (newWidth > dim.width && newHeight < dim.height) {
 			setSize(newSize.width, newSize.height);
 			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 			setMagnification(newMag);
-			CanvasView.getCurrent().validate();
+			
 		} else if (newWidth < dim.width && newHeight > dim.height) {
 			setSize(newSize.width, newSize.height);
 			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 			setMagnification(newMag);
-			CanvasView.getCurrent().validate();
+			
 		}
 
 		// Dimension newSize = canEnlarge(newWidth, newHeight);
@@ -930,7 +931,16 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		if (srcRect.width < imageWidth || srcRect.height < imageHeight)
 			resetMaxBounds();
 		// fitToWindow();
-		CanvasView.getCurrent().validate();
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				/* Call parent layout before the  layout! */
+				CanvasView.parent2.layout();
+
+			}
+		});
+		CanvasView.getCurrent().doLayout();
 	}
 
 	/** Centers the viewable area on offscreen (image) coordinates x, y */
@@ -1052,7 +1062,16 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				repaint();
 			/* Changes for Bio7! */
 			// CanvasView.getCurrent().invalidate();
-			CanvasView.getCurrent().validate();
+			Display dis = Util.getDisplay();
+			dis.syncExec(new Runnable() {
+
+				public void run() {
+					/* Call parent layout before the  layout! */
+					CanvasView.parent2.layout();
+
+				}
+			});
+			CanvasView.getCurrent().doLayout();
 			// adjustSourceRect(newMag, sx, sy);
 
 			return;
@@ -1084,7 +1103,16 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		setMaxBounds();
 		repaint();
 		/* Changes for Bio7! */
-		CanvasView.getCurrent().validate();
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				/* Call parent layout before the  layout! */
+				CanvasView.parent2.layout();
+
+			}
+		});
+		CanvasView.getCurrent().doLayout();
 		// adjustSourceRect(newMag, sx, sy);
 	}
 

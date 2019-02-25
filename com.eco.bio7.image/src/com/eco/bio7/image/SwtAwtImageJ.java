@@ -143,6 +143,7 @@ public class SwtAwtImageJ {
 	}
 
 	private void createSwingTabDisplay(final String title) {
+		
 		ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
 		// ci.setData(plus);// add a reference to the image for use
 		// as
@@ -195,6 +196,7 @@ public class SwtAwtImageJ {
 		CanvasView.tabFolder.showItem(ci);
 		CanvasView.tabFolder.setSelection(ci);
 		CanvasView.setCurrent(a);
+		CanvasView.getCanvas_view().win=win;
 		// CanvasView.getCurrent().doLayout();
 		a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated
@@ -242,6 +244,7 @@ public class SwtAwtImageJ {
 		CanvasView.tabFolder.showItem(ci);
 		CanvasView.tabFolder.setSelection(ci);
 		CanvasView.setCurrent(a);
+		CanvasView.getCanvas_view().win=win;
 		// CanvasView.getCurrent().doLayout();
 		a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated

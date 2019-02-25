@@ -81,6 +81,7 @@ import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
+import ij.gui.Plot;
 import ij.gui.PlotCanvas;
 import ij.gui.PlotWindow;
 import ij.io.DirectoryChooser;
@@ -143,6 +144,65 @@ public class CanvasView extends ViewPart {
 		this.getViewSite();
 		// javafx.application.Platform.setImplicitExit(false);
 
+	}
+
+	public void updatePlotCanvas() {
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				/* Call parent layout before the plot layout! */
+				parent2.layout();
+
+			}
+		});
+		current.doLayout();
+	}
+
+	private void resizePlotWindow(Composite parent, ImageWindow win) {
+		if (parent.isDisposed() == false) {
+			Rectangle rec = parent.getClientArea();
+
+			if (win != null) {
+
+				// System.out.println("right");
+				// Wrap to avoid deadlock of awt frame access!
+				Display dis = Util.getDisplay();
+				dis.syncExec(new Runnable() {
+
+					public void run() {
+						/* Call parent layout before the plot layout! */
+						parent.layout();
+
+					}
+				});
+				java.awt.EventQueue.invokeLater(new Runnable() {
+					public void run() {
+
+						if (win instanceof PlotWindow) {
+							PlotWindow plo = (PlotWindow) win;
+							if (plo != null) {
+								Plot plot = plo.getPlot();
+								if (plot != null) {
+									plot.setFrameSize(rec.width, rec.height);
+									int correctionX = plot.leftMargin + plot.rightMargin;
+									int correctionY = plot.topMargin + plot.bottomMargin;
+									plot.setSize(rec.width - correctionX, rec.height - correctionY);
+									// System.out.println(rec.width+" "+rec.height);
+									// plo.doLayout();
+									current.doLayout();
+								}
+							}
+						}
+
+						// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
+					}
+				});
+
+				// pc.getParent().doLayout();
+
+			}
+		}
 	}
 
 	public void createPartControl(Composite parent) {
@@ -255,40 +315,15 @@ public class CanvasView extends ViewPart {
 
 					}
 				}
-				ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
-				if (currentPlotWindow != null) {
+                                /*Here we resize the ImageJ plot window!*/
+				//ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 
-					// System.out.println("right");
-					// Wrap to avoid deadlock of awt frame access!
-					Display dis = Util.getDisplay();
-					dis.syncExec(new Runnable() {
+				if (win != null) {
 
-						public void run() {
-							/* Call parent layout before the plot layout! */
-							parent.layout();
-							
-						}
-					});
-					java.awt.EventQueue.invokeLater(new Runnable() {
-						public void run() {
-
-							if (currentPlotWindow instanceof PlotWindow) {
-								PlotWindow plo = (PlotWindow) currentPlotWindow;
-								plo.getPlot().setFrameSize(rec.width, rec.height);
-								plo.getPlot().setSize(rec.width - 50, rec.height - 80);
-								// System.out.println(rec.width+" "+rec.height);
-								plo.doLayout();
-								current.doLayout();
-							}
-
-							// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
-						}
-					});
-
-					// pc.getParent().doLayout();
-
+					resizePlotWindow(parent, win);
 				}
 			}
+
 		});
 
 		getViewSite().getPage().addPartListener(new IPartListener() {
@@ -604,6 +639,8 @@ public class CanvasView extends ViewPart {
 				/* import to set current Panel! */
 				current = (JPanel) ve.get(2);
 				// current.requestFocus();
+
+				// resizePlotWindow(parent, win);
 
 			}
 
