@@ -81,6 +81,8 @@ import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
+import ij.gui.PlotCanvas;
+import ij.gui.PlotWindow;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.io.Opener;
@@ -139,20 +141,23 @@ public class CanvasView extends ViewPart {
 		canvas_view = this;
 
 		this.getViewSite();
-		//javafx.application.Platform.setImplicitExit(false);
+		// javafx.application.Platform.setImplicitExit(false);
 
 	}
 
 	public void createPartControl(Composite parent) {
-		
-		
+
 		osname = System.getProperty("os.name");
 		isWin = osname.startsWith("Windows");
 		isMac = !isWin && osname.startsWith("Mac");
 		isLinux = osname.startsWith("Linux");
-		
-		if(isWin) {
-			new AwtDialogListener(parent.getDisplay());	
+		/*
+		 * A a dialog listener for modal dialogs. Works only for Windows. On Mac dialogs
+		 * are modal in maximized mode! On Linux modal dialogs are not available by
+		 * default!
+		 */
+		if (isWin) {
+			new AwtDialogListener(parent.getDisplay());
 		}
 		setComponentFont(parent.getDisplay());
 		if (isWin) {
@@ -250,7 +255,39 @@ public class CanvasView extends ViewPart {
 
 					}
 				}
+				ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
+				if (currentPlotWindow != null) {
 
+					// System.out.println("right");
+					// Wrap to avoid deadlock of awt frame access!
+					Display dis = Util.getDisplay();
+					dis.syncExec(new Runnable() {
+
+						public void run() {
+							/* Call parent layout before the plot layout! */
+							parent.layout();
+							
+						}
+					});
+					java.awt.EventQueue.invokeLater(new Runnable() {
+						public void run() {
+
+							if (currentPlotWindow instanceof PlotWindow) {
+								PlotWindow plo = (PlotWindow) currentPlotWindow;
+								plo.getPlot().setFrameSize(rec.width, rec.height);
+								plo.getPlot().setSize(rec.width - 50, rec.height - 80);
+								// System.out.println(rec.width+" "+rec.height);
+								plo.doLayout();
+								current.doLayout();
+							}
+
+							// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
+						}
+					});
+
+					// pc.getParent().doLayout();
+
+				}
 			}
 		});
 
@@ -308,7 +345,7 @@ public class CanvasView extends ViewPart {
 			public void partClosed(IWorkbenchPart part) {
 
 				if (part instanceof CanvasView) {
-					
+
 					CTabItem[] items = tabFolder.getItems();
 
 					for (int i = 0; i < items.length; i++) {
@@ -428,7 +465,7 @@ public class CanvasView extends ViewPart {
 
 		tabFolder.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				
+
 				for (int i = 0; i < shortcuts.length; i++) {
 
 					String[] splitShortcut = shortcuts[i].split("\t");

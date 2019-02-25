@@ -257,7 +257,9 @@ public class PlotDialog {
 			/** The following command is needed to have the high-resolution plot as front window. Otherwise, as the
 			 *	dialog is owned by the original PlotWindow, the WindowManager will see the original plot as active,
 			 *	but the user interface will show the high-res plot as foreground window */
-			EventQueue.invokeLater(new Runnable() {public void run() {IJ.selectWindow(hiresImp.getID());}});
+			
+			/*Changed for Bio7. Deadlock with activate tab function!*/
+			//EventQueue.invokeLater(new Runnable() {public void run() {IJ.selectWindow(hiresImp.getID());}});
 
 			if (Recorder.record) {
 				String options = !hiResAntiAliased ? "disable" : "";

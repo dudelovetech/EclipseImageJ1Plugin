@@ -12,9 +12,11 @@ import java.awt.event.*;
 
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.PlatformUI;
 
 import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.CustomDetachedImageJView;
 import com.eco.bio7.image.IJTabs;
 import com.eco.bio7.image.SwtAwtImageJ;
 
@@ -120,6 +122,11 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 
 					}
 
+				}
+
+				CustomDetachedImageJView customImageJView = ImageJ.customImageJView;
+				if (customImageJView != null) {
+					customImageJView.setPartName(title);
 				}
 
 			}

@@ -56,9 +56,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 	protected IViewPart activated;
 
-	private ImagePlus plus;
+	public ImagePlus plus;
 
-	private ImageWindow win;
+	public ImageWindow win;
 
 	private JPanel viewPanel;
 
@@ -82,6 +82,10 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 		this.plus = plu;
 		this.win = win;
 
+	}
+       /*Implement to overwrite function to set name!*/
+	public void setPartName(String partName) {
+		super.setPartName(partName);
 	}
 
 	public void createPartControl(Composite parent) {

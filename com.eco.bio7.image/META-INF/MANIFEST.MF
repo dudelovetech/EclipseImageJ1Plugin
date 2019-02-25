@@ -49,4 +49,5 @@ Export-Package: .,
  ij.text,
  ij.util
 Bundle-ActivationPolicy: lazy
+Import-Package: ij.gui
 
