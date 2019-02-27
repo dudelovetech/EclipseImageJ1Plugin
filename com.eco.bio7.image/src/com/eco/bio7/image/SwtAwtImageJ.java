@@ -47,14 +47,6 @@ public class SwtAwtImageJ {
 
 	public java.awt.Frame frame;
 
-	public java.awt.Frame getFrame() {
-		return frame;
-	}
-
-	public void setFrame(java.awt.Frame frame) {
-		this.frame = frame;
-	}
-
 	private ImageCanvas im;
 
 	private ImagePlus plus;
@@ -87,6 +79,14 @@ public class SwtAwtImageJ {
 
 	}
 
+	public java.awt.Frame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(java.awt.Frame frame) {
+		this.frame = frame;
+	}
+
 	public void addTab(final String title) {
 		/* Add JavaFX to embed the ImageJ canvas! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
@@ -108,11 +108,13 @@ public class SwtAwtImageJ {
 			/* Add SWT_AWT to embed the ImageJ canvas! */
 
 			Display dis = Util.getDisplay();
-			//new AwtDialogListener(Util.getDisplay());
+			// new AwtDialogListener(Util.getDisplay());
 			if (Util.getOS().equals("Mac")) {
-				/*On Mac we had to use async (no sync) else we got no keyboard focus!
-				 *We also have to change the StackEditor for Mac to avoid a deadlock when converting a stack
-				 *to images!*/
+				/*
+				 * On Mac we had to use async (no sync) else we got no keyboard focus! We also
+				 * have to change the StackEditor for Mac to avoid a deadlock when converting a
+				 * stack to images!
+				 */
 				dis.syncExec(new Runnable() {
 
 					public void run() {
@@ -143,7 +145,7 @@ public class SwtAwtImageJ {
 	}
 
 	private void createSwingTabDisplay(final String title) {
-		
+
 		ci = new CTabItem(CanvasView.tabFolder, SWT.CLOSE, CanvasView.insertMark + 1);
 		// ci.setData(plus);// add a reference to the image for use
 		// as
@@ -160,7 +162,7 @@ public class SwtAwtImageJ {
 		ci.setControl(top);
 
 		frame = SWT_AWT.new_Frame(top);
-		//SwtAwt.setSwtAwtFocus(frame, CanvasView.getCanvas_view().parent2);
+		// SwtAwt.setSwtAwtFocus(frame, CanvasView.getCanvas_view().parent2);
 		panel = new JApplet() {
 			public void update(java.awt.Graphics g) {
 				// Do not erase the background
@@ -196,7 +198,7 @@ public class SwtAwtImageJ {
 		CanvasView.tabFolder.showItem(ci);
 		CanvasView.tabFolder.setSelection(ci);
 		CanvasView.setCurrent(a);
-		CanvasView.getCanvas_view().win=win;
+		CanvasView.getCanvas_view().win = win;
 		// CanvasView.getCurrent().doLayout();
 		a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated
@@ -208,7 +210,7 @@ public class SwtAwtImageJ {
 		// for use as
 		// selected tab
 		ci.setData(ve);// add a vector with the data from
-						// the
+				// the
 		// ImageWindow and the Image!!
 		ci.setText(title);
 		ci.isShowing();
@@ -244,7 +246,7 @@ public class SwtAwtImageJ {
 		CanvasView.tabFolder.showItem(ci);
 		CanvasView.tabFolder.setSelection(ci);
 		CanvasView.setCurrent(a);
-		CanvasView.getCanvas_view().win=win;
+		CanvasView.getCanvas_view().win = win;
 		// CanvasView.getCurrent().doLayout();
 		a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated
