@@ -10,13 +10,22 @@
  *******************************************************************************/
 package com.eco.bio7.image;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -29,11 +38,15 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.ImageCanvas;
 import ij.gui.ImageWindow;
+import ij.gui.Plot;
+import ij.gui.PlotWindow;
 
 /**
  * This class provides some static methods for the creation of custom views
@@ -83,7 +96,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 		this.win = win;
 
 	}
-       /*Implement to overwrite function to set name!*/
+
+	/* Implement to overwrite function to set name! */
 	public void setPartName(String partName) {
 		super.setPartName(partName);
 	}
@@ -94,6 +108,47 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 		this.customViewParent = parent;
 
+		parent.addControlListener(new ControlAdapter() {
+			@Override
+			public synchronized void controlResized(final ControlEvent e) {
+				/*
+				 * Here we write the values in the com.eco.bio7 plugin preferences with the help
+				 * of scoped preferences!
+				 */
+				Rectangle rec = parent.getClientArea();
+
+				IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.eco.bio7");
+				if (store != null) {
+					String selection = store.getString("PLOT_DEVICE_SELECTION");
+					String pathTo = store.getString("pathTempR");
+					int correction = 0;
+					if (CanvasView.tabFolder.isDisposed() == false && CanvasView.tabFolder != null) {
+						/* Height correction for the plot! */
+						correction = CanvasView.tabFolder.getTabHeight();
+					}
+
+					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
+
+						store.setValue("DEVICE_DEFINITION",
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
+						store.setValue("DEVICE_DEFINITION",
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+
+					}
+				}
+				/* Here we resize the ImageJ plot window! */
+				ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
+
+				if (currentPlotWindow != null) {
+
+					CanvasView view = CanvasView.getCanvas_view();
+					view.resizePlotWindow(parent, currentPlotWindow);
+				}
+			}
+
+		});
+
 	}
 
 	public void setFocus() {
@@ -102,6 +157,8 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 	class ImageJPartListener2 implements IPartListener2 {
 		public void partActivated(IWorkbenchPartReference ref) {
+			
+			
 
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
@@ -110,7 +167,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 				ref2 = page.findViewReference("com.eco.bio7.image.detachedImage", secId);
 
 				if (ref.equals(ref2)) {
-
+					
 					// Wrap to avoid deadlock of awt frame access!
 					java.awt.EventQueue.invokeLater(new Runnable() {
 						public void run() {
@@ -137,6 +194,10 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					ImageJ.setCustomView(customView);
 				}
 			}
+			/*
+			 * Workaround a bug on Mac which causes empty views when a perspective has been
+			 * changed!
+			 */
 			if (Util.getOS().equals("Mac")) {
 				if (swt != null) {
 					Composite top = swt.getTop();
@@ -213,7 +274,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 	 */
 	public void setPanel(final JPanel jpanel, final String id, final String name) {
 		secId = id;
+
 		viewPanel = jpanel;
+
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		display.syncExec(new Runnable() {
 			public void run() {

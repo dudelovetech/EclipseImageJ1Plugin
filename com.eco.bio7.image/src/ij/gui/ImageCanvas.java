@@ -22,8 +22,14 @@ import javax.swing.JPanel;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import com.eco.bio7.image.CanvasView;
+import com.eco.bio7.image.CustomDetachedImageJView;
 import com.eco.bio7.image.Util;
 
 /** This is a Canvas used to display images in a Window. */
@@ -881,7 +887,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 	 * screen coordinates.
 	 */
 	public void zoomIn(int sx, int sy) {
-		
+
 		if (magnification >= 32)
 			return;
 		scaleToFit = false;
@@ -908,17 +914,17 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				adjustSourceRect(newMag, zoomTargetOX, zoomTargetOY);
 			else
 				setMagnification(newMag);
-			
+
 		} else if (newWidth > dim.width && newHeight < dim.height) {
 			setSize(newSize.width, newSize.height);
 			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 			setMagnification(newMag);
-			
+
 		} else if (newWidth < dim.width && newHeight > dim.height) {
 			setSize(newSize.width, newSize.height);
 			setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 			setMagnification(newMag);
-			
+
 		}
 
 		// Dimension newSize = canEnlarge(newWidth, newHeight);
@@ -935,7 +941,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-				/* Call parent layout before the  layout! */
+				/* Call parent layout before the layout! */
 				CanvasView.parent2.layout();
 
 			}
@@ -1066,7 +1072,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			dis.syncExec(new Runnable() {
 
 				public void run() {
-					/* Call parent layout before the  layout! */
+					/* Call parent layout before the layout! */
 					CanvasView.parent2.layout();
 
 				}
@@ -1107,7 +1113,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-				/* Call parent layout before the  layout! */
+				/* Call parent layout before the layout! */
 				CanvasView.parent2.layout();
 
 			}
@@ -1278,6 +1284,27 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 						}
 					}
+				}
+			}
+		});
+               /*Search for detached views and activate them on mouse pressed events!*/
+		Util.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				String secId = Integer.toString(ImageCanvas.this.getImage().getID());
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IViewReference ref2 = page.findViewReference("com.eco.bio7.image.detachedImage", secId);
+				if (ref2 != null) {
+					IViewPart activated = null;
+					try {
+
+						activated = page.showView("com.eco.bio7.image.detachedImage", secId, IWorkbenchPage.VIEW_ACTIVATE);
+					} catch (PartInitException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					CustomDetachedImageJView customView = (CustomDetachedImageJView) activated;
+					ImageJ.setCustomView(customView);
 				}
 			}
 		});

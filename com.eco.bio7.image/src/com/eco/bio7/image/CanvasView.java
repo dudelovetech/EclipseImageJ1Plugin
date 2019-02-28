@@ -11,6 +11,7 @@
 
 package com.eco.bio7.image;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -159,9 +160,9 @@ public class CanvasView extends ViewPart {
 		current.doLayout();
 	}
 
-	private void resizePlotWindow(Composite parent, ImageWindow win) {
+	void resizePlotWindow(Composite parent, ImageWindow win) {
 		if (parent.isDisposed() == false) {
-			Rectangle rec = parent.getClientArea();
+			
 
 			if (win != null) {
 
@@ -176,17 +177,21 @@ public class CanvasView extends ViewPart {
 
 					}
 				});
+				//Rectangle rec = parent.getClientArea();
 				java.awt.EventQueue.invokeLater(new Runnable() {
 					public void run() {
 
 						if (win instanceof PlotWindow) {
 							PlotWindow plo = (PlotWindow) win;
+							
 							if (plo != null) {
+								Dimension rec=CanvasView.getCurrent().getSize();
 								Plot plot = plo.getPlot();
 								if (plot != null) {
-									plot.setFrameSize(rec.width, rec.height);
 									int correctionX = plot.leftMargin + plot.rightMargin;
 									int correctionY = plot.topMargin + plot.bottomMargin;
+									plot.getImagePlus().getCanvas().setSize(rec.width+ correctionX, rec.height+ correctionY);
+									plot.setFrameSize(rec.width, rec.height);									
 									plot.setSize(rec.width - correctionX, rec.height - correctionY);
 									current.doLayout();
 								}
@@ -197,7 +202,7 @@ public class CanvasView extends ViewPart {
 					}
 				});
 
-				// pc.getParent().doLayout();
+				
 
 			}
 		}
@@ -697,7 +702,10 @@ public class CanvasView extends ViewPart {
 
 						CustomDetachedImageJView custom = new CustomDetachedImageJView();
 						/* Create ImageJ view with unique ID! */
-						String id = UUID.randomUUID().toString();
+						//String id = UUID.randomUUID().toString();
+						/* Create ImageJ view with unique image ID of the ImagePlus image! */
+						String id=Integer.toString(plu.getID());
+						//System.out.println(id);
 						// detachedSecViewIDs.add(id);
 						custom.setPanel(current, id, plu.getTitle());
 						custom.setData(plu, win);
