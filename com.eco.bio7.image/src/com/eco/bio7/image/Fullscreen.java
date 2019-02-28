@@ -153,7 +153,7 @@ public class Fullscreen extends JFrame {
 						int correctionX = plot.leftMargin + plot.rightMargin;
 						int correctionY = plot.topMargin + plot.bottomMargin;
 						plot.setSize(dim.width - correctionX, dim.height - correctionY);
-						//CanvasView.getCurrent().doLayout();
+					      //CanvasView.getCurrent().doLayout();
 					}
 				}
 			}
