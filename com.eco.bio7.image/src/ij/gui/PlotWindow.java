@@ -494,6 +494,10 @@ public class PlotWindow extends ImageWindow implements ActionListener, ItemListe
 				plot.setAxisLabelFont(Font.PLAIN, Prefs.getInt(PREFS_FONT_SIZE, FONT_SIZE));
 				plot.setFormatFlags(Plot.getDefaultFlags());
 				plot.setFrameSize(plotWidth, plotHeight); // updates the image only when size changed
+				int correctionX = plot.leftMargin + plot.rightMargin;
+				int correctionY = plot.topMargin + plot.bottomMargin;
+				/* Changed for Bio7. We have no window and have to resize the canvas! */
+				plot.getImagePlus().getCanvas().setSize(plotWidth+ correctionX, plotHeight+ correctionY);
 				plot.updateImage();
 				/* Changed for Bio7 */
 				CanvasView view = CanvasView.getCanvas_view();

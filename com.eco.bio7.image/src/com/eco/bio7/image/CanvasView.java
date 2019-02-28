@@ -188,8 +188,6 @@ public class CanvasView extends ViewPart {
 									int correctionX = plot.leftMargin + plot.rightMargin;
 									int correctionY = plot.topMargin + plot.bottomMargin;
 									plot.setSize(rec.width - correctionX, rec.height - correctionY);
-									// System.out.println(rec.width+" "+rec.height);
-									// plo.doLayout();
 									current.doLayout();
 								}
 							}
