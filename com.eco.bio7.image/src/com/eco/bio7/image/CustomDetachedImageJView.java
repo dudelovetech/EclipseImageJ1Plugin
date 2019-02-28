@@ -145,6 +145,9 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					CanvasView view = CanvasView.getCanvas_view();
 					view.resizePlotWindow(parent, currentPlotWindow);
 				}
+				else {
+					parent.layout();
+				}
 			}
 
 		});
