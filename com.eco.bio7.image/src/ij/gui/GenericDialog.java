@@ -115,6 +115,10 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/** Creates a new GenericDialog using the specified title and parent frame. */
 	public GenericDialog(String title, Frame parent) {
 		super(parent == null ? new Frame() : parent, title, true);
+		/*Workaround for modal dialogs with SWT_AWT!*/
+		if (Util.getOS().equals("Linux")) {
+			parent.setAlwaysOnTop(true);
+		}
 		if (Prefs.blackCanvas) {
 			setForeground(SystemColor.controlText);
 			setBackground(SystemColor.control);
