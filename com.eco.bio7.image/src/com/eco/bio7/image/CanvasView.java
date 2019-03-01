@@ -219,7 +219,7 @@ public class CanvasView extends ViewPart {
 		 * are modal in maximized mode! On Linux modal dialogs are not available by
 		 * default!
 		 */
-		if (isWin) {
+		if (isWin)  {
 			new AwtDialogListener(parent.getDisplay());
 		}
 		setComponentFont(parent.getDisplay());
