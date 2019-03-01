@@ -195,17 +195,13 @@ drop action.
 To increase the fonts on MacOSX in Eclipse globally add the following lines to the default MacOSX
 theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css or /Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4-dark_mac.css):
 
-{
 
- font-size:14;
+	{
+        font-size: 14px;      
+	}
 
-}
 
-
-Advanced:
-
-For a finer control do the following two changes you have to open the package folder of Eclipse (right-click on Eclipse.app then
-execute 'Show Package Contents'.
+Finer control (two steps):
 
 To increase the fonts on MacOSX delete the argument (twice available) in the Eclipse.ini
 file (Contents/Eclipse/eclipse.ini - see: https://wiki.eclipse.org/Eclipse.ini -):
