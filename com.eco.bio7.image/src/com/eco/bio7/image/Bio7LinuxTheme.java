@@ -71,7 +71,7 @@ public class Bio7LinuxTheme extends OceanTheme {
 	public void addCustomEntriesToTable(UIDefaults defaults) {
 		defaults.put("Button.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
+				new ColorUIResource(col), new ColorUIResource(col) }));
 		defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.0), new ColorUIResource(col),
 				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
@@ -97,7 +97,7 @@ public class Bio7LinuxTheme extends OceanTheme {
 				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
 		defaults.put("Slider.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.2), new ColorUIResource(col),
-				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
+				new ColorUIResource(col), new ColorUIResource(col) }));
 		defaults.put("ToggleButton.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.0),
 				new ColorUIResource(221, 232, 243), new ColorUIResource(col),
