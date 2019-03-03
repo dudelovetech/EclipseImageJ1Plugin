@@ -24,6 +24,7 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 public class FXSwtAwtCustom {
 
@@ -52,6 +53,8 @@ public class FXSwtAwtCustom {
 	protected Stage stage2;
 
 	SwingFxSwtView fxView;
+
+	protected Shell parent;
 
 	public FXSwtAwtCustom(JPanel Jpanel, CustomDetachedImageJView view) {
 		this.view = view;
@@ -89,8 +92,8 @@ public class FXSwtAwtCustom {
 			Display dis = view.getCustomViewParent().getDisplay();
 			dis.syncExec(new Runnable() {
 				public void run() {
-
-					top = new Composite(view.getCustomViewParent(), SWT.NO_BACKGROUND | SWT.EMBEDDED);
+					parent = new Shell(Util.getDisplay());
+					top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 					try {
 						System.setProperty("sun.awt.noerasebackground", "true");
 					} catch (NoSuchMethodError error) {

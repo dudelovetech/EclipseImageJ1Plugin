@@ -303,12 +303,19 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
 					ImageJ.setCustomView(customView);
+					Composite top=swt.getTop();
+					top.setParent(customView.getCustomViewParent());
 
 				}
 
 			}
 		});
 
+	}
+	
+	public void dispose() {
+		customViewParent.dispose();
+		super.dispose();
 	}
 
 	/**
