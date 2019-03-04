@@ -5,6 +5,8 @@ import ij.gui.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.JCheckBox;
+
 /** Displays the ImageJ Channels window. */
 public class Channels extends PlugInDialog implements PlugIn, ItemListener, ActionListener {
 
@@ -15,7 +17,7 @@ public class Channels extends PlugInDialog implements PlugIn, ItemListener, Acti
 	private static String moreLabel = "More "+'\u00bb';
 	//private String[] title = {"Red", "Green", "Blue"};
 	private Choice choice;
-	private Checkbox[] checkbox;
+	private JCheckBox[] checkbox;
 	private Button moreButton;
 	private static Channels instance;
 	private int id;
@@ -56,9 +58,9 @@ public class Channels extends PlugInDialog implements PlugIn, ItemListener, Acti
 		int nCheckBoxes = ci!=null?ci.getNChannels():3;
 		if (nCheckBoxes>CompositeImage.MAX_CHANNELS)
 			nCheckBoxes = CompositeImage.MAX_CHANNELS;
-		checkbox = new Checkbox[nCheckBoxes];
+		checkbox = new JCheckBox[nCheckBoxes];
 		for (int i=0; i<nCheckBoxes; i++) {
-			checkbox[i] = new Checkbox("Channel "+(i+1), true);
+			checkbox[i] = new JCheckBox("Channel "+(i+1), true);
 			c.insets = new Insets(0, 25, i<nCheckBoxes-1?0:10, 5);
 			c.gridy = y++;
 			add(checkbox[i], c);
@@ -108,7 +110,7 @@ public class Channels extends PlugInDialog implements PlugIn, ItemListener, Acti
 		}
 		boolean[] active = ci.getActiveChannels();
 		for (int i=0; i<checkbox.length; i++)
-			checkbox[i].setState(active[i]);
+			checkbox[i].setSelected(active[i]);
 		int index = 0;
 		switch (ci.getMode()) {
 			case IJ.COMPOSITE: index=0; break;
@@ -186,13 +188,13 @@ public class Channels extends PlugInDialog implements PlugIn, ItemListener, Acti
 					Recorder.record("Stack.setDisplayMode", mode);
 				}
 			}
-		} else if (source instanceof Checkbox) {
+		} else if (source instanceof JCheckBox) {
 			for (int i=0; i<checkbox.length; i++) {
-				Checkbox cb = (Checkbox)source;
+				JCheckBox cb = (JCheckBox)source;
 				if (cb==checkbox[i]) {
 					if (ci.getMode()==IJ.COMPOSITE) {
 						boolean[] active = ci.getActiveChannels();
-						active[i] = cb.getState();
+						active[i] = cb.isSelected();
 						if (Recorder.record) {
 							String str = "";
 							for (int c=0; c<ci.getNChannels(); c++)

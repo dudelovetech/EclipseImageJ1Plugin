@@ -368,6 +368,7 @@ public class IJMacroFunctions {
 			"Roi.getCoordinates(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates that define this selection."+linSeparator + 
 			"Roi.getContainedPoints(xpoints, ypoints)####Returns, as two arrays, the x and y coordinates of the pixels inside the current selection. Aborts the macro if there is no selection."+linSeparator + 
 			"Roi.getDefaultColor####Returns the current default selection color."+linSeparator + 
+			"Roi.getFeretPoints####Returns, as two arrays, the x and y coordinates of the Feret diameter points."+linSeparator + 
 			"Roi.getStrokeColor####Returns the selection stroke color."+linSeparator + 
 			"Roi.getFillColor####Returns the selection fill color."+linSeparator + 
 			"Roi.getName####Returns the selection name or an empty string if the selection does not have a name."+linSeparator + 
