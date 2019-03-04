@@ -8,7 +8,7 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 3. Reset Plot action scales plot to default values (context menu "Plot Size")
 4. Plot fullscreen scaling support
 5. Detached tab plot scaling support
-6. Now tabs are visible selected when a window or images is selected (before the selection occured, too but invisible for speed reasons)
+6. Now tabs are visible selected when a window or image is selected (before the selection occured, too but invisible for speed reasons)
 7. Implemented the Window components menu to make hidden components visible again (ROI Manager, Threshold, etc. - apparently works on MacOSX and Windows only)
 8. Implemented Refresh Menus (if you create and compile a new plugin in the plugins folder with Eclipse (dynamically without restart) you can refresh the menu to update the plugins menu dynamically without a restart!)
 9. Implemented the "Help->Examples->Autorun Examples" checkbox menu (true or false)
