@@ -46,7 +46,7 @@ public class Interpreter implements MacroConstants {
 	Functions func;
 	boolean inFunction;
 	String macroName;
-	public String argument;
+	String argument;
 	String returnValue;
 	boolean calledMacro; // macros envoked by eval() or runMacro()
 	boolean batchMacro; // macros envoked by Process/Batch commands
@@ -1245,7 +1245,7 @@ public class Interpreter implements MacroConstants {
 		}
 	}
 
-	public void error (String message) {
+	void error (String message) {
 		errorMessage = message;
 		if (ignoreErrors)
 			return;
@@ -1296,15 +1296,22 @@ public class Interpreter implements MacroConstants {
 	}
 		
 	void showError(String title, String msg, String[] variables) {
+		boolean noImages = msg.startsWith("There are no images open");
+		if (noImages)
+			title = "No Image";
 		Macro.setOptions(null);
 		GenericDialog gd = new GenericDialog(title);
 		gd.setInsets(6,5,0);
 		gd.addMessage(msg);
 		gd.setInsets(15,30,5);
-		gd.addCheckbox("Show \"Debug\" Window", showVariables);
+		if (!noImages)
+			gd.addCheckbox("Show \"Debug\" Window", showVariables);
 		gd.hideCancelButton();
 		gd.showDialog();
-		showVariables = gd.getNextBoolean();
+		if (!noImages)
+			showVariables = gd.getNextBoolean();
+		else
+			showVariables = false;
 		if (!gd.wasCanceled() && showVariables)
 			updateDebugWindow(variables, null);
 	}

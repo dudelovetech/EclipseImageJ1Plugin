@@ -94,7 +94,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	 * string.
 	 */
 	public static final String VERSION = "1.52m";
-	public static final String BUILD = "20";
+	public static final String BUILD = "28";
 	public static Color backgroundColor = new Color(237, 237, 237);
 	/** SansSerif, 12-point, plain font. */
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
@@ -795,18 +795,26 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	public void keyReleased(KeyEvent e) {
 		IJ.setKeyUp(e.getKeyCode());
 	}
-
+	/** called when escape pressed */
 	void abortPluginOrMacro(ImagePlus imp) {
 		if (imp != null) {
 			ImageWindow win = imp.getWindow();
 			if (win != null) {
 				win.running = false;
 				win.running2 = false;
+				Roi roi = imp.getRoi();
+				if (roi!=null && roi.getState()!=Roi.NORMAL) {
+					roi.abortModification(imp);
+					return;
+				} else {
+					win.running = false;
+					win.running2 = false;
+				}
 			}
 		}
 		Macro.abort();
 		Interpreter.abort();
-		if (Interpreter.getInstance() != null)
+		if (Interpreter.getInstance()!=null)
 			IJ.beep();
 	}
 

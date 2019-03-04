@@ -105,6 +105,12 @@ import java.nio.channels.FileChannel;
 		return f;
 	}
 	
+	/** Adds a number to all array elements */
+	public static void addToArray(float[] a, float value) {
+		for (int i=0; i<a.length; i++)
+			a[i] += value;
+	}
+	
 	/** Converts carriage returns to line feeds. */
 	public static String fixNewLines(String s) {
 		if (s==null)

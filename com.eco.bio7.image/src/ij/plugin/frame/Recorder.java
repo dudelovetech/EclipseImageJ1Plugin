@@ -90,6 +90,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		if (IJ.isLinux())
 			textArea.setBackground(Color.white);
 		add("Center", textArea);
+		GUI.scale(this);
 		pack();
 		GUI.center(this);
 		if (showFrame)

@@ -2008,7 +2008,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 */
 	public void createNewRoi(int sx, int sy) {
 		Roi previousRoi = roi;
-		deleteRoi();
+		deleteRoi();   //also saves the roi as <code>Roi.previousRoi</code> if non-null
+		if (Roi.previousRoi != null)
+			Roi.previousRoi.setImage(previousRoi== null ? null : this); //with 'this' it will be recalled in case of ESC
 		switch (Toolbar.getToolId()) {
 		case Toolbar.RECTANGLE:
 			if (Toolbar.getRectToolType() == Toolbar.ROTATED_RECT_ROI)

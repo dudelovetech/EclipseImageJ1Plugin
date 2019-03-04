@@ -655,8 +655,8 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	public void addTextAreas(String text1, String text2, int rows, int columns) {
 		if (textArea1 != null)
 			return;
-		JPanel panel = new JPanel();
-		Font font = new Font("SansSerif", Font.PLAIN, 14);
+		Panel panel = new Panel();
+		Font font = new Font("SansSerif", Font.PLAIN, (int)(14*Prefs.getGuiScale()));
 		textArea1 = new TextArea(text1, rows, columns, TextArea.SCROLLBARS_NONE);
 		if (IJ.isLinux())
 			textArea1.setBackground(Color.white);
