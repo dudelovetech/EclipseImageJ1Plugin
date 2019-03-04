@@ -195,10 +195,22 @@ drop action.
 To increase the fonts on MacOSX in Eclipse globally add the following lines to the default MacOSX
 theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css or /Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4-dark_mac.css):
 
+For the default CSS (the color attribute is for the text color!):
 
-	{
-        font-size: 14px;      
+	{ 
+		color:  #000000; 
+		font-size: 14px;      
 	}
+	
+For the dark CSS:
+
+	{ 	      
+		font-size: 14px;      
+	}
+	
+For a fine control  of the general font size of Eclipse and MacOSX in general use the Tinker software available here:
+
+<https://www.bresink.com/osx/TinkerTool-de.html>
 
 
 Finer control (two steps):
@@ -211,14 +223,13 @@ file (Contents/Eclipse/eclipse.ini - see: https://wiki.eclipse.org/Eclipse.ini -
 To increase only the ImageJ and Thumbnails view menus font add the following lines to the default MacOSX
 theme css file in Eclipse (/Contents/Eclipse/plugins/org.eclipse.ui.themes_xxx/css/e4_default_mac.css):
 
-    #com-eco-bio7-imagej.MToolBar {
-   
-        font-size: 14px;
-     }
-    #com-eco-bio7-thumbnails.MToolBar {
-   
-        font-size: 14px;
-     }
+	#com-eco-bio7-imagej.MToolBar {   
+		font-size: 14px;
+	}
+	
+	#com-eco-bio7-thumbnails.MToolBar {   
+		font-size: 14px;		
+	}
 
 Swing fonts on Retina displays (if necessary):
 
