@@ -353,6 +353,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	void showStatus(final String s) {
 		statusLine.setText(s);
 		Display display = Util.getDisplay();
+		/*
+		 * MacOSX only seems to work with async method! Also on Windows async works best
+		 * (avoids deadlocks when mouse moved in and out the canvas opening several
+		 * images at once in the background!).
+		 */
+
 		display.asyncExec(new Runnable() {
 
 			public void run() {
