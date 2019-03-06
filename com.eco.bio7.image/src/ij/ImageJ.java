@@ -191,7 +191,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		toolbar = new Toolbar();
 		toolbar.addKeyListener(this);
 		add("Center", toolbar);
-                primaryColor=getSystemColour();
+		primaryColor = getSystemColour();
 		// Status bar
 		statusBar = new JPanel();
 		statusBar.setLayout(new BorderLayout());
@@ -352,35 +352,20 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	/* Changed for Bio7! */
 	void showStatus(final String s) {
 		statusLine.setText(s);
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		/* MacOSX only seems to work with async method! */
-		if (Util.getOS().equals("Mac")) {
-			display.asyncExec(new Runnable() {
+		Display display = Util.getDisplay();
+		display.asyncExec(new Runnable() {
 
-				public void run() {
-					if (CanvasView.getCanvas_view() != null) {
-						CanvasView.getCanvas_view().setstatusline(s);
-					}
-
-					if (customImageJView != null) {
-						customImageJView.setstatusline(s);
-					}
+			public void run() {
+				if (CanvasView.getCanvas_view() != null) {
+					CanvasView.getCanvas_view().setstatusline(s);
 				}
-			});
-		} else {
-			display.asyncExec(new Runnable() {
 
-				public void run() {
-					if (CanvasView.getCanvas_view() != null) {
-						CanvasView.getCanvas_view().setstatusline(s);
-					}
-
-					if (customImageJView != null) {
-						customImageJView.setstatusline(s);
-					}
+				if (customImageJView != null) {
+					customImageJView.setstatusline(s);
 				}
-			});
-		}
+			}
+		});
+
 	}
 
 	/*
@@ -795,6 +780,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	public void keyReleased(KeyEvent e) {
 		IJ.setKeyUp(e.getKeyCode());
 	}
+
 	/** called when escape pressed */
 	void abortPluginOrMacro(ImagePlus imp) {
 		if (imp != null) {
@@ -803,7 +789,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				win.running = false;
 				win.running2 = false;
 				Roi roi = imp.getRoi();
-				if (roi!=null && roi.getState()!=Roi.NORMAL) {
+				if (roi != null && roi.getState() != Roi.NORMAL) {
 					roi.abortModification(imp);
 					return;
 				} else {
@@ -814,7 +800,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		}
 		Macro.abort();
 		Interpreter.abort();
-		if (Interpreter.getInstance()!=null)
+		if (Interpreter.getInstance() != null)
 			IJ.beep();
 	}
 
