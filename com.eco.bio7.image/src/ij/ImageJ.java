@@ -368,7 +368,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				}
 			});
 		} else {
-			display.syncExec(new Runnable() {
+			display.asyncExec(new Runnable() {
 
 				public void run() {
 					if (CanvasView.getCanvas_view() != null) {
