@@ -58,6 +58,8 @@ public class Zoom implements PlugIn {
 			if (win != null) {
 				win.maximize();
 				IJ.wait(100);
+				/* Changed for Bio7! */
+				CanvasView.getCurrent().doLayout();
 			}
 		} else if (arg.equals("scale"))
 			scaleToFit(imp);
@@ -88,7 +90,8 @@ public class Zoom implements PlugIn {
 	}
 
 	/**
-	 * Based on Albert Cardona's ZoomExact plugin: http://albert.rierol.net/software.html
+	 * Based on Albert Cardona's ZoomExact plugin:
+	 * http://albert.rierol.net/software.html
 	 */
 	void setZoom(ImagePlus imp, ImageCanvas ic) {
 		int width = imp.getWidth();
