@@ -165,12 +165,21 @@ public class CanvasView extends ViewPart {
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-				/* Call parent layout before the plot layout! */
+				/*
+				 * Call parent layout before the plot layout! Here we add a workaround to layout
+				 * the parent on high dpi displays and the SWT_AWT bridge by resizing the parent
+				 * forth and back which seem to retrigger a layout!
+				 **/
 				int x = parent2.getSize().x;
 				int y = parent2.getSize().y;
 				parent2.setSize(x - 1, y - 1);
 				parent2.setSize(x, y);
-				parent2.requestLayout();// see: https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
+				/*
+				 * For the following see: 
+				 * https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
+				 * */
+				parent2.requestLayout();
+							
 
 			}
 		});
