@@ -4,12 +4,18 @@ import java.io.File;
 import javax.swing.SwingUtilities;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
@@ -38,17 +44,42 @@ public class ImageJBio7OpenEditor extends EditorPart {
 			openFile(new File(fi));
 		} else {
 			// String dirPath = new File(fi).getParentFile().getPath().replace("\\", "/");
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
+//			SwingUtilities.invokeLater(new Runnable() {
+//				public void run() {
+//
+//					openFile(new File(fi));
+//				}
+//			});
+			Job job = new Job("Open...") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
 
 					openFile(new File(fi));
+
+					monitor.done();
+					return Status.OK_STATUS;
+				}
+
+			};
+			job.addJobChangeListener(new JobChangeAdapter() {
+				public void done(IJobChangeEvent event) {
+					if (event.getResult().isOK()) {
+
+					} else {
+
+					}
 				}
 			});
+			// job.setUser(true);
+			job.schedule();
 		}
 
 		openView("com.eco.bio7.imagej");
+		activateView("org.eclipse.ui.navigator.ProjectExplorer");
 
-		// RServe.openPDF(dirPath + "/", theName + ".pdf", useBrowser, openInJavaFXBrowser);
+		// RServe.openPDF(dirPath + "/", theName + ".pdf", useBrowser,
+		// openInJavaFXBrowser);
 	}
 
 	public void init(IEditorSite site, IEditorInput input) {
@@ -80,7 +111,7 @@ public class ImageJBio7OpenEditor extends EditorPart {
 		}
 
 		public void partDeactivated(IWorkbenchPartReference partRef) { // TODO
-																		// //
+										// //
 
 		}
 
@@ -134,8 +165,7 @@ public class ImageJBio7OpenEditor extends EditorPart {
 	/**
 	 * Opens the view with the specified id.
 	 * 
-	 * @param id
-	 *            the id as a string value.
+	 * @param id the id as a string value.
 	 */
 	public void openView(final String id) {
 
@@ -148,6 +178,28 @@ public class ImageJBio7OpenEditor extends EditorPart {
 				} catch (PartInitException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}
+
+			}
+		});
+
+	}
+
+	/**
+	 * Activates the view with the specified id.
+	 * 
+	 * @param id the id as a string value.
+	 */
+	public void activateView(final String id) {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+			public void run() {
+
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IViewPart viewPart = page.findView(id);
+				if (viewPart != null) {
+					page.activate(viewPart);
 				}
 
 			}
