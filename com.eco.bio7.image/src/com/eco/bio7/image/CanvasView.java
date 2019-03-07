@@ -160,9 +160,24 @@ public class CanvasView extends ViewPart {
 		current.doLayout();
 	}
 
+	public void recalculateLayout() {
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				/* Call parent layout before the plot layout! */
+				int x = parent2.getSize().x;
+				int y = parent2.getSize().y;
+				parent2.setSize(x - 1, y - 1);
+				parent2.setSize(x, y);
+				parent2.layout();
+
+			}
+		});
+	}
+
 	void resizePlotWindow(Composite parent, ImageWindow win) {
 		if (parent.isDisposed() == false) {
-			
 
 			if (win != null) {
 
@@ -177,21 +192,21 @@ public class CanvasView extends ViewPart {
 
 					}
 				});
-				//Rectangle rec = parent.getClientArea();
+				// Rectangle rec = parent.getClientArea();
 				java.awt.EventQueue.invokeLater(new Runnable() {
 					public void run() {
 
 						if (win instanceof PlotWindow) {
 							PlotWindow plo = (PlotWindow) win;
-							
+
 							if (plo != null) {
-								Dimension rec=CanvasView.getCurrent().getSize();
+								Dimension rec = CanvasView.getCurrent().getSize();
 								Plot plot = plo.getPlot();
 								if (plot != null) {
 									int correctionX = plot.leftMargin + plot.rightMargin;
 									int correctionY = plot.topMargin + plot.bottomMargin;
-									plot.getImagePlus().getCanvas().setSize(rec.width+ correctionX, rec.height+ correctionY);
-									plot.setFrameSize(rec.width, rec.height);									
+									plot.getImagePlus().getCanvas().setSize(rec.width + correctionX, rec.height + correctionY);
+									plot.setFrameSize(rec.width, rec.height);
 									plot.setSize(rec.width - correctionX, rec.height - correctionY);
 									current.doLayout();
 								}
@@ -201,8 +216,6 @@ public class CanvasView extends ViewPart {
 						// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
 					}
 				});
-
-				
 
 			}
 		}
@@ -219,7 +232,7 @@ public class CanvasView extends ViewPart {
 		 * are modal in maximized mode! On Linux modal dialogs are not available by
 		 * default!
 		 */
-		if (isWin)  {
+		if (isWin) {
 			new AwtDialogListener(parent.getDisplay());
 		}
 		setComponentFont(parent.getDisplay());
@@ -318,8 +331,8 @@ public class CanvasView extends ViewPart {
 
 					}
 				}
-                                /*Here we resize the ImageJ plot window!*/
-				//ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
+				/* Here we resize the ImageJ plot window! */
+				// ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 
 				if (win != null) {
 
@@ -702,10 +715,10 @@ public class CanvasView extends ViewPart {
 
 						CustomDetachedImageJView custom = new CustomDetachedImageJView();
 						/* Create ImageJ view with unique ID! */
-						//String id = UUID.randomUUID().toString();
+						// String id = UUID.randomUUID().toString();
 						/* Create ImageJ view with unique image ID of the ImagePlus image! */
-						String id=Integer.toString(plu.getID());
-						//System.out.println(id);
+						String id = Integer.toString(plu.getID());
+						// System.out.println(id);
 						// detachedSecViewIDs.add(id);
 						custom.setPanel(current, id, plu.getTitle());
 						custom.setData(plu, win);

@@ -10,6 +10,7 @@ import java.awt.event.*;
 
 import javax.swing.JScrollBar;
 
+import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.SwtAwtImageJ;
 
 /**
@@ -60,7 +61,10 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		/*Here e set the SwtAwtImageJ!*/
 		super.setSwtAwtMain(this.swtAwtMainFrameStackWindow);
 		imp.setWindow(this);
-		pack();
+		/*Necessary for highDPI layout SWT_AWT!*/
+		CanvasView canvasView = CanvasView.getCanvas_view();
+		canvasView.recalculateLayout();
+		//pack();
 		/*
 		 * ic = imp.getCanvas(); if (ic != null) ic.setMaxBounds();
 		 */
