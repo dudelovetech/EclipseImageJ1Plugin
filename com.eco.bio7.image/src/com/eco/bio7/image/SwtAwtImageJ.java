@@ -200,7 +200,7 @@ public class SwtAwtImageJ {
 		CanvasView.setCurrent(a);
 		CanvasView.getCanvas_view().win = win;
 		// CanvasView.getCurrent().doLayout();
-		a.doLayout();
+		//a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated
 	}
 
