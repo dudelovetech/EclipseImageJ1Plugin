@@ -489,7 +489,7 @@ public class CanvasView extends ViewPart {
 								 * 
 								 * openFile(new File(fileList[x].toString())); } }); }
 								 */
-
+								recalculateLayout();
 								monitor.worked(1);
 
 							}
