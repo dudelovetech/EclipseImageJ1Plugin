@@ -178,7 +178,7 @@ public class CanvasView extends ViewPart {
 				 * For the following see:
 				 * https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
 				 */
-				parent2.requestLayout();
+				//parent2.requestLayout();
 
 			}
 		});

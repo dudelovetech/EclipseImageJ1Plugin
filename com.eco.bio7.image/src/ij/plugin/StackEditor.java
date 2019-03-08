@@ -404,7 +404,7 @@ public class StackEditor implements PlugIn {
 							public void run() {
 								if (count == size)
 									lastImageID = imp2.getID();
-								imp2.show();
+								imp2.show(); 
 								
 
 							}
