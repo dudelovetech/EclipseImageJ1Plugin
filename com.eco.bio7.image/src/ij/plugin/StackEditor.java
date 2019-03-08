@@ -48,10 +48,10 @@ public class StackEditor implements PlugIn {
 		else if (arg.equals("delete"))
 			deleteSlice();
 		else if (arg.equals("toimages")) {
-			Job job = new Job("Open...") {
+			Job job = new Job("Convert stack to images...") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
+					monitor.beginTask("Converting...", IProgressMonitor.UNKNOWN);
 					convertStackToImages(imp);
 					monitor.done();
 					return Status.OK_STATUS;
