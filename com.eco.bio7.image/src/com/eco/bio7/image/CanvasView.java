@@ -17,8 +17,6 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -167,29 +165,6 @@ public class CanvasView extends ViewPart {
 		dis.syncExec(new Runnable() {
 
 			public void run() {
-				
-				
-
-				Method privateStringMethod = null;
-				try {
-					privateStringMethod = Composite.class.
-					        getDeclaredMethod("forceResize", null);
-				} catch (NoSuchMethodException | SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				privateStringMethod.setAccessible(true);
-
-				try {
-					String returnValue = (String)
-					        privateStringMethod.invoke(parent2, null);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
 				/*
 				 * Call parent layout before the plot layout! Here we add a workaround to layout
 				 * the parent on high dpi displays and the SWT_AWT bridge by resizing the parent
