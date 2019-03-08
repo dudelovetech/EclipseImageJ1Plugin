@@ -9,7 +9,6 @@ import ij.macro.Interpreter;
 import ij.io.FileInfo;
 
 import java.awt.*;
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -18,12 +17,6 @@ import java.util.concurrent.FutureTask;
 
 import javax.swing.SwingUtilities;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.eco.bio7.image.Activator;
@@ -47,12 +40,8 @@ public class StackEditor implements PlugIn {
 			addSlice();
 		else if (arg.equals("delete"))
 			deleteSlice();
-		else if (arg.equals("toimages")) {
-			
-		convertStackToImages(imp);
-					
-
-		}
+		else if (arg.equals("toimages"))
+			convertStackToImages(imp);
 	}
 
 	void addSlice() {
@@ -73,7 +62,7 @@ public class StackEditor implements PlugIn {
 				stack.setSliceLabel((String) obj, 1);
 			id = imp.getID();
 			/* Changed for Bio7! */
-			// IJTabs.deleteActiveTab();
+			//IJTabs.deleteActiveTab();
 		}
 		ImageProcessor ip = imp.getProcessor();
 		int n = imp.getCurrentSlice();
@@ -302,7 +291,12 @@ public class StackEditor implements PlugIn {
 		}
 		if (!imp.lock())
 			return;
+
 		ImageStack stack = imp.getStack();
+		/* Changed for Bio7! */
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
+
 		int size = stack.getSize();
 		if (size > 30 && !IJ.isMacro()) {
 			boolean ok = IJ.showMessageWithCancel("Convert to Images?", "Are you sure you want to convert this\nstack to " + size + " separate windows?");
@@ -311,13 +305,17 @@ public class StackEditor implements PlugIn {
 				return;
 			}
 		}
+		IJTabs.deleteActiveTab();
 		Calibration cal = imp.getCalibration();
 		CompositeImage cimg = imp.isComposite() ? (CompositeImage) imp : null;
 		if (imp.getNChannels() != imp.getStackSize())
 			cimg = null;
 		Overlay overlay = imp.getOverlay();
-		int lastImageID = 0;
+		/* Changed for Bio7! */
+		lastImageID = 0;
 		for (int i = 1; i <= size; i++) {
+			/* Changed for Bio7! */
+			final int count = i;
 			String label = stack.getShortSliceLabel(i);
 			String title = label != null && !label.equals("") ? label : getTitle(imp, i);
 			ImageProcessor ip = stack.getProcessor(i);
@@ -333,6 +331,7 @@ public class StackEditor implements PlugIn {
 			String info = stack.getSliceLabel(i);
 			if (info != null && !info.equals(label))
 				imp2.setProperty("Info", info);
+
 			imp2.setIJMenuBar(i == size);
 			if (overlay != null) {
 				Overlay overlay2 = new Overlay();
@@ -346,9 +345,81 @@ public class StackEditor implements PlugIn {
 				if (overlay2.size() > 0)
 					imp2.setOverlay(overlay2);
 			}
-			if (i == size)
-				lastImageID = imp2.getID();
-			imp2.show();
+
+			/* Changed for Bio7! */
+			if (javaFXEmbedded) {
+				try {
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+							public void run() {
+
+								try {
+									Util.runAndWait(new Runnable() {
+
+										public void run() {
+											if (count == size)
+												lastImageID = imp2.getID();
+											imp2.show();
+
+										}
+									});
+								} catch (InterruptedException | ExecutionException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}
+						});
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else {
+				try {
+					if (Util.getOS().equals("Mac")) {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+							public void run() {
+								Platform.runLater(new Runnable() {
+									public void run() {
+										if (count == size)
+											lastImageID = imp2.getID();
+										imp2.show();
+										CanvasView canvasView = CanvasView.getCanvas_view();
+										canvasView.recalculateLayout();
+									}
+								});
+
+							}
+						});
+
+					} else {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+							public void run() {
+								if (count == size)
+									lastImageID = imp2.getID();
+								imp2.show();
+								CanvasView canvasView = CanvasView.getCanvas_view();
+								canvasView.recalculateLayout();
+
+							}
+						});
+					}
+				} catch (InvocationTargetException e) {
+
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
+			}
 		}
 		imp.changes = false;
 		ImageWindow win = imp.getWindow();
