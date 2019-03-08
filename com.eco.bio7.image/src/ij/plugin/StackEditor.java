@@ -47,8 +47,30 @@ public class StackEditor implements PlugIn {
 			addSlice();
 		else if (arg.equals("delete"))
 			deleteSlice();
-		else if (arg.equals("toimages"))
-			convertStackToImages(imp);
+		else if (arg.equals("toimages")) {
+			Job job = new Job("Open...") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask("Opening...", IProgressMonitor.UNKNOWN);
+					convertStackToImages(imp);
+					monitor.done();
+					return Status.OK_STATUS;
+				}
+
+			};
+			job.addJobChangeListener(new JobChangeAdapter() {
+				public void done(IJobChangeEvent event) {
+					if (event.getResult().isOK()) {
+
+					} else {
+
+					}
+				}
+			});
+			// job.setUser(true);
+			job.schedule();
+
+		}
 	}
 
 	void addSlice() {
@@ -312,64 +334,40 @@ public class StackEditor implements PlugIn {
 		if (imp.getNChannels() != imp.getStackSize())
 			cimg = null;
 		Overlay overlay = imp.getOverlay();
-		ImagePlus imJob = imp;
-		CompositeImage cimgJob = cimg;
-		Job job = new Job("Convert to images...") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Opening...", size);
-				int lastImageID = 0;
-				for (int i = 1; i <= size; i++) {
-					String label = stack.getShortSliceLabel(i);
-					String title = label != null && !label.equals("") ? label : getTitle(imJob, i);
-					ImageProcessor ip = stack.getProcessor(i);
-					if (cimgJob != null) {
-						LUT lut = cimgJob.getChannelLut(i);
-						if (lut != null) {
-							ip.setColorModel(lut);
-							ip.setMinAndMax(lut.min, lut.max);
-						}
-					}
-					ImagePlus imp2 = new ImagePlus(title, ip);
-					imp2.setCalibration(cal);
-					String info = stack.getSliceLabel(i);
-					if (info != null && !info.equals(label))
-						imp2.setProperty("Info", info);
-					imp2.setIJMenuBar(i == size);
-					if (overlay != null) {
-						Overlay overlay2 = new Overlay();
-						for (int j = 0; j < overlay.size(); j++) {
-							Roi roi = overlay.get(j);
-							if (roi.getPosition() == i) {
-								roi.setPosition(0);
-								overlay2.add((Roi) roi.clone());
-							}
-						}
-						if (overlay2.size() > 0)
-							imp2.setOverlay(overlay2);
-					}
-					if (i == size)
-						lastImageID = imp2.getID();
-					imp2.show();
-					monitor.worked(1);
-				}
-				monitor.done();
-				return Status.OK_STATUS;
-			}
-
-		};
-		job.addJobChangeListener(new JobChangeAdapter() {
-			public void done(IJobChangeEvent event) {
-				if (event.getResult().isOK()) {
-
-				} else {
-
+		int lastImageID = 0;
+		for (int i = 1; i <= size; i++) {
+			String label = stack.getShortSliceLabel(i);
+			String title = label != null && !label.equals("") ? label : getTitle(imp, i);
+			ImageProcessor ip = stack.getProcessor(i);
+			if (cimg != null) {
+				LUT lut = cimg.getChannelLut(i);
+				if (lut != null) {
+					ip.setColorModel(lut);
+					ip.setMinAndMax(lut.min, lut.max);
 				}
 			}
-		});
-		// job.setUser(true);
-		job.schedule();
-
+			ImagePlus imp2 = new ImagePlus(title, ip);
+			imp2.setCalibration(cal);
+			String info = stack.getSliceLabel(i);
+			if (info != null && !info.equals(label))
+				imp2.setProperty("Info", info);
+			imp2.setIJMenuBar(i == size);
+			if (overlay != null) {
+				Overlay overlay2 = new Overlay();
+				for (int j = 0; j < overlay.size(); j++) {
+					Roi roi = overlay.get(j);
+					if (roi.getPosition() == i) {
+						roi.setPosition(0);
+						overlay2.add((Roi) roi.clone());
+					}
+				}
+				if (overlay2.size() > 0)
+					imp2.setOverlay(overlay2);
+			}
+			if (i == size)
+				lastImageID = imp2.getID();
+			imp2.show();
+		}
 		imp.changes = false;
 		ImageWindow win = imp.getWindow();
 		if (win != null)
