@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.eco.bio7.image.Activator;
+import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.IJTabs;
 import com.eco.bio7.image.Util;
 
@@ -390,6 +391,8 @@ public class StackEditor implements PlugIn {
 										if (count == size)
 											lastImageID = imp2.getID();
 										imp2.show();
+										CanvasView canvasView = CanvasView.getCanvas_view();
+										canvasView.recalculateLayout();
 									}
 								});
 
@@ -403,6 +406,8 @@ public class StackEditor implements PlugIn {
 								if (count == size)
 									lastImageID = imp2.getID();
 								imp2.show();
+								CanvasView canvasView = CanvasView.getCanvas_view();
+								canvasView.recalculateLayout();
 
 							}
 						});
