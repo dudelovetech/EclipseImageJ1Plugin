@@ -391,8 +391,7 @@ public class StackEditor implements PlugIn {
 										if (count == size)
 											lastImageID = imp2.getID();
 										imp2.show();
-										CanvasView canvasView = CanvasView.getCanvas_view();
-										canvasView.recalculateLayout();
+										
 									}
 								});
 
@@ -406,11 +405,12 @@ public class StackEditor implements PlugIn {
 								if (count == size)
 									lastImageID = imp2.getID();
 								imp2.show();
-								CanvasView canvasView = CanvasView.getCanvas_view();
-								canvasView.recalculateLayout();
+								
 
 							}
 						});
+						CanvasView canvasView = CanvasView.getCanvas_view();
+						canvasView.recalculateLayout();
 					}
 				} catch (InvocationTargetException e) {
 
