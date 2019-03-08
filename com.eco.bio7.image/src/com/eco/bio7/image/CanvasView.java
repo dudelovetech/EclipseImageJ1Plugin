@@ -172,15 +172,13 @@ public class CanvasView extends ViewPart {
 				 **/
 				int x = parent2.getSize().x;
 				int y = parent2.getSize().y;
-				parent2.setSize(x - 1, y - 1);
+				parent2.setSize(0,0);
 				parent2.setSize(x, y);
-				CanvasView.getCurrent().setSize(x, y);
 				/*
-				 * For the following see: 
+				 * For the following see:
 				 * https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
-				 * */
+				 */
 				parent2.requestLayout();
-							
 
 			}
 		});
@@ -490,7 +488,9 @@ public class CanvasView extends ViewPart {
 								 * 
 								 * openFile(new File(fileList[x].toString())); } }); }
 								 */
-								recalculateLayout();
+								if (Util.getOS().equals("Mac") == false) {
+									recalculateLayout();
+								}
 								monitor.worked(1);
 
 							}
