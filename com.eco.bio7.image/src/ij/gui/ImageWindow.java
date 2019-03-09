@@ -176,6 +176,16 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 				/* Add the panel to the tab folder with the image */
 				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
+				
+				/*
+				 * The next seems to be important for Mac. Else at the first zoom level the
+				 * image disapears!
+				 */
+				java.awt.EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						pack();
+					}
+				});
 				/*Necessary for highDPI layout SWT_AWT!*/
 				CanvasView canvasView = CanvasView.getCanvas_view();
 				canvasView.recalculateLayout();
@@ -183,7 +193,7 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 				 * The next seems to be important for Mac. Else at the first zoom level the
 				 * image disapears!
 				 */
-
+				
 				// show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -226,10 +236,11 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 					 * The next seems to be important for Mac. Else at the first zoom level the
 					 * image disapears!
 					 */
-					/*
-					 * java.awt.EventQueue.invokeLater(new Runnable() { public void run() { pack();
-					 * } });
-					 */
+					java.awt.EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							pack();
+						}
+					});
 					/*Necessary for highDPI layout SWT_AWT!*/
 					CanvasView canvasView = CanvasView.getCanvas_view();
 					canvasView.recalculateLayout();

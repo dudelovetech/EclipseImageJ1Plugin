@@ -61,6 +61,15 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		/*Here e set the SwtAwtImageJ!*/
 		super.setSwtAwtMain(this.swtAwtMainFrameStackWindow);
 		imp.setWindow(this);
+		/*
+		 * The next seems to be important for Mac. Else at the first zoom level the
+		 * image disapears!
+		 */
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				pack();
+			}
+		});
 		/*Necessary for highDPI layout SWT_AWT!*/
 		CanvasView canvasView = CanvasView.getCanvas_view();
 		canvasView.recalculateLayout();

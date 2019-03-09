@@ -172,7 +172,7 @@ public class CanvasView extends ViewPart {
 				 **/
 				int x = parent2.getSize().x;
 				int y = parent2.getSize().y;
-				parent2.setSize(0,0);
+				parent2.setSize(x-1,y-1);
 				parent2.setSize(x, y);
 				/*
 				 * For the following see:
