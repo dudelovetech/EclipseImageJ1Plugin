@@ -36,7 +36,8 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 	static final int HIST_HEIGHT = (int)(SCALE*128);
 	static final int XMARGIN = (int)(20*SCALE);
 	static final int YMARGIN = (int)(10*SCALE);
-	static final int WIN_WIDTH = HIST_WIDTH + (int)(44*SCALE);
+	/*Changed for Bio7! Correction for the width!*/
+	static final int WIN_WIDTH = HIST_WIDTH + (int)(41*SCALE);
 	static final int WIN_HEIGHT = HIST_HEIGHT + (int)(112*SCALE);
 	static final int BAR_HEIGHT = (int)(SCALE*12);
 	static final int INTENSITY1 = 0, INTENSITY2 = 1, RGB = 2, RED = 3, GREEN = 4, BLUE = 5;
@@ -269,9 +270,11 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		if (value == null || count == null)
 			return;
 		if ((frame != null) && x >= frame.x && x <= (frame.x + frame.width)) {
-			x = x - frame.x;
+			/*Changed for Bio7! We have no frame margin!*/
+			x = x+20 - frame.x;
 			x = (x - frame.x);
 			int index = (int)(x*(SCALE*histogram.length)/HIST_WIDTH/SCALE);
+			if(index<0) index=0;
 			if (index>255) index = 255;
 			String vlabel = null, clabel = null;
 			if (blankLabel.length() == 11) // OS X
