@@ -174,6 +174,7 @@ public class CanvasView extends ViewPart {
 				int y = parent2.getSize().y;
 				parent2.setSize(x-1,y-1);
 				parent2.setSize(x, y);
+				
 				/*
 				 * For the following see:
 				 * https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
