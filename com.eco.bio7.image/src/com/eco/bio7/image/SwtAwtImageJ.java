@@ -19,8 +19,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.DPIUtil;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -162,11 +160,7 @@ public class SwtAwtImageJ {
 		} catch (NoSuchMethodError error) {
 		}
 		ci.setControl(top);
-		Rectangle rec=DPIUtil.autoScaleDown(CanvasView.parent2.getClientArea());
-		System.out.println(CanvasView.parent2.getSize());
-		CanvasView.parent2.setSize(rec.width/2,rec.height/2);
-		top.setSize(CanvasView.parent2.getSize());
-		System.out.println(top.getSize());
+
 		frame = SWT_AWT.new_Frame(top);
 		// SwtAwt.setSwtAwtFocus(frame, CanvasView.getCanvas_view().parent2);
 		panel = new JApplet() {
