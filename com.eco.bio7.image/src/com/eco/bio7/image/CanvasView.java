@@ -168,7 +168,8 @@ public class CanvasView extends ViewPart {
 				/*
 				 * Call parent layout before the plot layout! Here we add a workaround to layout
 				 * the parent on high dpi displays and the SWT_AWT bridge by resizing the parent
-				 * forth and back which seem to retrigger a layout!
+				 * forth and back which seem to retrigger a layout Without HighDPI it also retriggers the
+				 * layout!!
 				 **/
 				int x = parent2.getSize().x;
 				int y = parent2.getSize().y;
