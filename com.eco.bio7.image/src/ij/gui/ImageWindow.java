@@ -51,10 +51,10 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 	long setMaxBoundsTime;
 	private boolean firstSmallWindow;
 	private int sliderHeight;
-
 	private static final int XINC = 12;
 	private static final int YINC = 16;
-	private static final int TEXT_GAP = 10;
+	private final double SCALE = Prefs.getGuiScale();
+	private int TEXT_GAP = 11;
 	private static int xbase = -1;
 	private static int ybase;
 	private static int xloc;
@@ -136,7 +136,10 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {
 		super(imp.getTitle());
-
+		if (SCALE>1.0) {
+			TEXT_GAP = (int)(TEXT_GAP*SCALE);
+			textGap = centerOnScreen?0:TEXT_GAP;
+		}
 		boolean openAsHyperStack = imp.getOpenAsHyperStack();
 		ij = IJ.getInstance();
 		this.imp = imp;
@@ -402,7 +405,12 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 					g.setColor(c);
 				}
 			}
-			Java2.setAntialiasedText(g, true);
+			Java2.setAntialiasedText(g, true);			
+			if (SCALE>1.0) {
+				Font font = new Font("SansSerif", Font.PLAIN, (int)(12*SCALE));
+				g.setFont(font);
+				GUI.scale(this);
+			}
 			g.drawString(createSubtitle(), insets.left + 5, insets.top + TEXT_GAP);
 		}
 	}

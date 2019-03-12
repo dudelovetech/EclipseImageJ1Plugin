@@ -114,7 +114,6 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		boolean isMacro = threadName.startsWith("Run$_");
 		if (threadName.contains("Popup Menu") || threadName.contains("Developer Menu"))
 			isMacro = false;
-		// IJ.log("setCommand: "+command+" "+threadName+" "+isMacro);
 		if (textArea == null || (isMacro && !recordInMacros))
 			return;
 		commandName = command;
@@ -499,7 +498,7 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 	/** Writes the current command and options to the Recorder window. */
 	public static void saveCommand() {
 		String name = commandName;
-		//IJ.log("saveCommand: "+name+"  "+scriptMode+"  "+commandOptions);
+		//IJ.log("saveCommand: "+name+"  "+isSaveAs()+" "+scriptMode+"  "+commandOptions);
 		if (name != null) {
 			if (commandOptions == null && (name.equals("Fill") || name.equals("Clear") || name.equals("Draw")))
 				commandOptions = "slice";
@@ -535,6 +534,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 				} else if (isSaveAs()) {
 					if (name.endsWith("..."))
 						name = name.substring(0, name.length() - 3);
+					if (name.equals("Save"))
+						name = "Tiff";
 					String path = strip(commandOptions);
 					String s = scriptMode ? "IJ.saveAs(imp, " : "saveAs(";
 					textArea.append(s + "\"" + name + "\", \"" + path + "\");\n");
@@ -630,7 +631,8 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 		return commandName.equals("Tiff...") || commandName.equals("Gif...") || commandName.equals("Jpeg...") || commandName.equals("Text Image...") || commandName.equals("ZIP...") || commandName.equals("Raw Data...") || commandName.equals("BMP...") || commandName.equals("PNG...")
 				|| commandName.equals("PGM...") || commandName.equals("FITS...") || commandName.equals("LUT...") || commandName.equals("Selection...") || commandName.equals("XY Coordinates...")
 				// || commandName.equals("Results...")
-				|| commandName.equals("Text... ");
+				|| commandName.equals("Text... ")
+				|| commandName.equals("Save");
 	}
 
 	static void appendNewImage(boolean hyperstack) {
