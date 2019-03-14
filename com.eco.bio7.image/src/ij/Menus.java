@@ -48,7 +48,6 @@ public class Menus {
 
 	public static final int WINDOW_MENU_ITEMS = 6; // fixed items at top of
 							// Window menu
-
 	public static final int NORMAL_RETURN = 0;
 	public static final int COMMAND_IN_USE = -1;
 	public static final int INVALID_SHORTCUT = -2;
