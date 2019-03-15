@@ -289,14 +289,14 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		draw();
 	}
-	
+
 	/** Use to update the image when the underlying virtual stack changes. */
 	public void updateVirtualSlice() {
 		ImageStack vstack = getStack();
 		if (vstack.isVirtual()) {
-			double min=getDisplayRangeMin(), max=getDisplayRangeMax();
+			double min = getDisplayRangeMin(), max = getDisplayRangeMax();
 			setProcessor(vstack.getProcessor(getCurrentSlice()));
-			setDisplayRange(min,max);
+			setDisplayRange(min, max);
 		} else
 			throw new IllegalArgumentException("Virtual stack required");
 	}
@@ -1137,7 +1137,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				scale = " (" + IJ.d2s(percent, digits) + "%)";
 			}
 			win.setTitle(title + virtual + global + scale);
-			
+
 		}
 		boolean titleChanged = !title.equals(this.title);
 		this.title = title;
@@ -1997,8 +1997,12 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		if (updateDisplay)
 			draw();
-		if (roi != null)
-			roi.notifyListeners(RoiListener.CREATED);
+		if (roi != null) {
+			if (roi.listenersNotified())
+				roi.notifyListeners(RoiListener.MODIFIED);
+			else
+				roi.notifyListeners(RoiListener.CREATED);
+		}
 	}
 
 	/** Creates a rectangular selection. */
@@ -2019,9 +2023,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 */
 	public void createNewRoi(int sx, int sy) {
 		Roi previousRoi = roi;
-		deleteRoi();   //also saves the roi as <code>Roi.previousRoi</code> if non-null
+		deleteRoi(); // also saves the roi as <code>Roi.previousRoi</code> if non-null
 		if (Roi.previousRoi != null)
-			Roi.previousRoi.setImage(previousRoi== null ? null : this); //with 'this' it will be recalled in case of ESC
+			Roi.previousRoi.setImage(previousRoi == null ? null : this); // with 'this' it will be recalled in case of ESC
 		switch (Toolbar.getToolId()) {
 		case Toolbar.RECTANGLE:
 			if (Toolbar.getRectToolType() == Toolbar.ROTATED_RECT_ROI)
@@ -2160,7 +2164,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	/** Implements the File/Revert command. */
 	public void revert() {
-		if (getStackSize()>1 && getStack().isVirtual()) {
+		if (getStackSize() > 1 && getStack().isVirtual()) {
 			int thisSlice = currentSlice;
 			currentSlice = 0;
 			setSlice(thisSlice);
