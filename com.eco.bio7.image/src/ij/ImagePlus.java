@@ -1997,12 +1997,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		if (updateDisplay)
 			draw();
-		if (roi != null) {
-			if (roi.listenersNotified())
-				roi.notifyListeners(RoiListener.MODIFIED);
-			else
-				roi.notifyListeners(RoiListener.CREATED);
-		}
+		if (roi!=null)
+			roi.notifyListeners(RoiListener.CREATED);
 	}
 
 	/** Creates a rectangular selection. */
