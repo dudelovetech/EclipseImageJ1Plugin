@@ -11,6 +11,7 @@
 
 package com.eco.bio7.image;
 
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.JApplet;
 import javax.swing.JPanel;
@@ -177,7 +178,11 @@ public class SwtAwtImageJ {
 		contentPane = root.getContentPane();
 
 		a = new JPanel();
-		a.setBackground(ImageJ.getSystemColour());
+
+		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+		frame.setBackground(swtBackgroundToAWT);
+		a.setBackground(swtBackgroundToAWT);
+
 		contentPane.add(a);
 		a.add(im);// Add the Image canvas to the JPanel
 		a.setLayout(new ImageLayout(im));
@@ -200,7 +205,7 @@ public class SwtAwtImageJ {
 		CanvasView.setCurrent(a);
 		CanvasView.getCanvas_view().win = win;
 		// CanvasView.getCurrent().doLayout();
-		//a.doLayout();
+		// a.doLayout();
 		plus.setActivated(); // notify ImagePlus that image has been activated
 	}
 

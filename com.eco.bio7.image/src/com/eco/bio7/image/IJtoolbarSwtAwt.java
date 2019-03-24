@@ -1,5 +1,6 @@
 package com.eco.bio7.image;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -22,10 +23,10 @@ public class IJtoolbarSwtAwt {
 	public Composite top;
 	public Frame frame;
 	public Shell parent;
-	
+
 	public Composite getTop() {
 		return top;
-	}	
+	}
 
 	public Shell getParent() {
 		return parent;
@@ -36,7 +37,7 @@ public class IJtoolbarSwtAwt {
 		parent = new Shell(Util.getDisplay());
 		top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 
-		 frame = SWT_AWT.new_Frame(top);
+		frame = SWT_AWT.new_Frame(top);
 		try {
 			System.setProperty("sun.awt.noerasebackground", "true");
 		} catch (NoSuchMethodError error) {
@@ -60,6 +61,11 @@ public class IJtoolbarSwtAwt {
 		panel.add(roote);
 		java.awt.Container contentPane = roote.getContentPane();
 		JPanel jpp = new JPanel();
+
+		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+		frame.setBackground(swtBackgroundToAWT);
+		jpp.setBackground(swtBackgroundToAWT);
+
 		jpp.setLayout(new GridLayout(2, 1));
 		if (IJ.getInstance() != null) {
 			jpp.add(IJ.getInstance().toolbar);
@@ -75,9 +81,7 @@ public class IJtoolbarSwtAwt {
 
 							SWT.ICON_WARNING);
 					messageBox.setText("Info!");
-					messageBox.setMessage("Please reopen the ImageJ-Toolbar view!\n\n"
-							    + "Only a detached toolbar will be reopened automatically\n"
-							    + "in a saved and restored Eclipse session.");
+					messageBox.setMessage("Please reopen the ImageJ-Toolbar view!\n\n" + "Only a detached toolbar will be reopened automatically\n" + "in a saved and restored Eclipse session.");
 					messageBox.open();
 				}
 			});
