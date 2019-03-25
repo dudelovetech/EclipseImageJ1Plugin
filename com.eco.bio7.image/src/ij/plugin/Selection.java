@@ -535,6 +535,7 @@ public class Selection implements PlugIn, Measurements {
 		ByteProcessor mask = imp.createRoiMask();
 		if (!Prefs.blackBackground)
 			mask.invertLut();
+		mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
 		ImagePlus maskImp = null;
 		Frame frame = WindowManager.getFrame("Mask");
 		if (frame!=null && (frame instanceof ImageWindow))
@@ -568,7 +569,16 @@ public class Selection implements PlugIn, Measurements {
 		ByteProcessor mask = imp.createThresholdMask();
 		if (!Prefs.blackBackground)
 			mask.invertLut();
-		new ImagePlus("mask",mask).show();
+		mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
+		ImagePlus maskImp = new ImagePlus("mask",mask);
+		Calibration cal = imp.getCalibration();
+		if (cal.scaled()) {
+			Calibration cal2 = maskImp.getCalibration();
+			cal2.pixelWidth = cal.pixelWidth;
+			cal2.pixelHeight = cal.pixelHeight;
+			cal2.setUnit(cal.getUnit());
+		}
+		maskImp.show();
 		Recorder.recordCall("mask = imp.createThresholdMask();");
 	}
 
@@ -591,7 +601,7 @@ public class Selection implements PlugIn, Measurements {
 		ip.setThreshold(threshold, threshold, ImageProcessor.NO_LUT_UPDATE);
 		IJ.runPlugIn("ij.plugin.filter.ThresholdToSelection", "");
 	}
-
+	
 	void invert(ImagePlus imp) {
 		Roi roi = imp.getRoi();
 		if (roi == null)

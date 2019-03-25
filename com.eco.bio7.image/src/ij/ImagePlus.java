@@ -676,8 +676,6 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		setProcessor2(title, ip, null);
 	}
-	
-	static int counter = 1;
 
 	void setProcessor2(String title, ImageProcessor ip, ImageStack newStack) {
 		// IJ.log("setProcessor2: "+ip+" "+this.ip+" "+newStack);
@@ -965,9 +963,9 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	}
 
 	/**
-	 * Returns an 8-bit binary (0 and 255) ROI or overlay mask that has the same
-	 * dimensions as this image. Creates an ROI mask If the image has both an ROI
-	 * and an overlay.
+	 * Returns an 8-bit binary (foreground=255, background=0) ROI or overlay mask
+	 * that has the same dimensions as this image. Creates an ROI mask If the image
+	 * has both both an ROI and an overlay. Set the threshold of the mask to 255.
 	 * 
 	 * @see #createThresholdMask
 	 * @see ij.gui.Roi#getMask
@@ -996,18 +994,22 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 					mask.fill(overlay2.get(i));
 			}
 		}
+		mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
 		return mask;
 	}
 
 	/**
-	 * Returns an 8-bit binary (0 and 255) threshold mask that has the same
-	 * dimensions as this image.
+	 * Returns an 8-bit binary threshold mask (foreground=255, background=0) that
+	 * has the same dimensions as this image. The threshold of the mask is set to
+	 * 255.
 	 * 
 	 * @see ij.plugin.Thresholder#createMask
 	 * @see ij.process.ImageProcessor#createMask
 	 */
 	public ByteProcessor createThresholdMask() {
-		return Thresholder.createMask(this);
+		ByteProcessor mask = Thresholder.createMask(this);
+		mask.setThreshold(255, 255, ImageProcessor.NO_LUT_UPDATE);
+		return mask;
 	}
 
 	/**
@@ -1999,7 +2001,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		}
 		if (updateDisplay)
 			draw();
-		if (roi!=null)
+		if (roi != null)
 			roi.notifyListeners(RoiListener.CREATED);
 	}
 
