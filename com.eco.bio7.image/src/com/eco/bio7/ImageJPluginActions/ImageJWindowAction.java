@@ -78,7 +78,6 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 			@Override
 			public void menuShown(MenuEvent e) {
 
-				
 				MenuItem menuItem = new MenuItem(fMenu, SWT.PUSH);
 
 				menuItem.setText("ImageJ-Toolbar");
@@ -96,65 +95,78 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 					}
 				});
 
-				/*
-				 * MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
-				 * 
-				 * menuItem1.setText("Bio7-Toolbar"); menuItem1.addSelectionListener(new
-				 * SelectionListener() {
-				 * 
-				 * public void widgetSelected(SelectionEvent e) {
-				 * 
-				 * IWorkbenchPage page =
-				 * PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				 * 
-				 * IViewReference ref = null; IWorkbenchPartSite part = null;
-				 * 
-				 * IPreferenceStore store = Activator.getDefault().getPreferenceStore(); int
-				 * xSize = store.getInt("IMAGE_METHODS_SIZE_X"); int ySize =
-				 * store.getInt("IMAGE_METHODS_SIZE_Y");
-				 * 
-				 * try { part = page.showView("com.eco.bio7.image_methods").getSite(); ref =
-				 * part.getPage().findViewReference("com.eco.bio7.image_methods"); } catch
-				 * (PartInitException e1) {
-				 * 
-				 * e1.printStackTrace(); }
-				 * 
-				 * EModelService s = (EModelService) part.getService(EModelService.class);
-				 * 
-				 * MPartSashContainerElement p = (MPart) part.getService(MPart.class);
-				 * 
-				 * String os = Util.getOS(); if (os != null) { Point pt =
-				 * CanvasView.getCanvas_view().tabFolder.getShell().getLocation(); Point pSize =
-				 * PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getSize(); if
-				 * (os.equals("Linux")) { if (p.getCurSharedRef() != null) { p =
-				 * p.getCurSharedRef();
-				 * 
-				 * s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize); }
-				 * 
-				 * } else if (os.equals("Windows")) { if (p.getCurSharedRef() != null) { p =
-				 * p.getCurSharedRef();
-				 * 
-				 * s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize); }
-				 * 
-				 * } else if (os.equals("Mac")) { if (p.getCurSharedRef() != null) { p =
-				 * p.getCurSharedRef();
-				 * 
-				 * s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize); }
-				 * 
-				 * }
-				 * 
-				 * } else { if (p.getCurSharedRef() != null) { p = p.getCurSharedRef();
-				 * 
-				 * s.detach(p, 100, 100, xSize, ySize); }
-				 * 
-				 * }
-				 * 
-				 * }
-				 * 
-				 * public void widgetDefaultSelected(SelectionEvent e) {
-				 * 
-				 * } }); new MenuItem(fMenu, SWT.SEPARATOR);
-				 */
+				MenuItem menuItem1 = new MenuItem(fMenu, SWT.PUSH);
+
+				menuItem1.setText("Bio7-Toolbar");
+				menuItem1.addSelectionListener(new SelectionListener() {
+
+					public void widgetSelected(SelectionEvent e) {
+
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+						IViewReference ref = null;
+						IWorkbenchPartSite part = null;
+
+						IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+						int xSize = store.getInt("IMAGE_METHODS_SIZE_X");
+						int ySize = store.getInt("IMAGE_METHODS_SIZE_Y");
+
+						try {
+							part = page.showView("com.eco.bio7.image_methods").getSite();
+							ref = part.getPage().findViewReference("com.eco.bio7.image_methods");
+						} catch (PartInitException e1) {
+
+							e1.printStackTrace();
+						}
+
+						EModelService s = (EModelService) part.getService(EModelService.class);
+
+						MPartSashContainerElement p = (MPart) part.getService(MPart.class);
+
+						String os = Util.getOS();
+						if (os != null) {
+							Point pt = CanvasView.getCanvas_view().tabFolder.getShell().getLocation();
+							Point pSize = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getSize();
+							if (os.equals("Linux")) {
+								if (p.getCurSharedRef() != null) {
+									p = p.getCurSharedRef();
+
+									s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
+								}
+
+							} else if (os.equals("Windows")) {
+								if (p.getCurSharedRef() != null) {
+									p = p.getCurSharedRef();
+
+									s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
+								}
+
+							} else if (os.equals("Mac")) {
+								if (p.getCurSharedRef() != null) {
+									p = p.getCurSharedRef();
+
+									s.detach(p, (pt.x + pSize.x / 2), pt.y + 30, xSize, ySize);
+								}
+
+							}
+
+						} else {
+							if (p.getCurSharedRef() != null) {
+								p = p.getCurSharedRef();
+
+								s.detach(p, 100, 100, xSize, ySize);
+							}
+
+						}
+
+					}
+
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+				new MenuItem(fMenu, SWT.SEPARATOR);
+
 				MenuItem menuItemDetachTab = new MenuItem(fMenu, SWT.PUSH);
 
 				menuItemDetachTab.setText("Detach Image");
@@ -196,7 +208,7 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 						menuItems[i].dispose();
 					}
 				}
-				//new MenuItem(fMenu, SWT.SEPARATOR);
+				// new MenuItem(fMenu, SWT.SEPARATOR);
 				new ImageJSubmenu().addSubMenus(fMenu, "Window");
 
 			}
