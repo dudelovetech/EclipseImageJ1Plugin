@@ -202,8 +202,8 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 				});
 
 				MenuItem[] menuItems = fMenu.getItems();
-				// Only delete the plugins menu items and menus!
-				for (int i = 2; i < menuItems.length; i++) {
+				// Only delete the plugins menu items and menus (seperator menu items counting, too!)!
+				for (int i = 4; i < menuItems.length; i++) {
 					if (menuItems[i] != null) {
 						menuItems[i].dispose();
 					}
