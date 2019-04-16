@@ -212,17 +212,16 @@ public class Prefs {
 	static Properties props = new Properties(ijPrefs);
 	static String prefsDir;
 	static String imagesURL;
-	static String homeDir; // ImageJ folder
+	static String ImageJDir;
 	static int threads;
 	static int transparentIndex = -1;
 	private static boolean resetPreferences;
 	private static double guiScale = 1.0;
 
-	/**
-	 * Finds and loads the ImageJ configuration file, "IJ_Props.txt".
-	 * 
-	 * @return an error message if "IJ_Props.txt" not found.
-	 */
+	/** Finds and loads the configuration file ("IJ_Props.txt")
+	 * and the preferences file ("IJ_Prefs.txt").
+	 * @return	an error message if "IJ_Props.txt" not found.
+	*/
 	public static String load(Object ij, Applet applet) {
 		/* Changed for Bio7! */
 
@@ -231,9 +230,9 @@ public class Prefs {
 		InputStream f = ij.getClass().getResourceAsStream(path + PROPS_NAME);
 		if (applet != null)
 			return loadAppletProps(f, applet);
-		if (homeDir == null)
+		if (ImageJDir == null)
 			/* /*Changed for Bio7! */
-			homeDir = path;// System.getProperty("user.dir");
+			ImageJDir = path;// System.getProperty("user.dir");
 		/*
 		 * String userHome = path;// System.getProperty("user.home"); if
 		 * (IJ.isWindows()) { prefsDir = homeDir; // ImageJ folder on Windows if
@@ -244,13 +243,13 @@ public class Prefs {
 		 */
 		if (f == null) {
 			try {
-				f = new FileInputStream(homeDir + "/" + PROPS_NAME);
+				f = new FileInputStream(ImageJDir + "/" + PROPS_NAME);
 			} catch (FileNotFoundException e) {
 				f = null;
 			}
 		}
 		if (f == null)
-			return PROPS_NAME + " not found in ij.jar or in " + homeDir;
+			return PROPS_NAME + " not found in ij.jar or in " + ImageJDir;
 		f = new BufferedInputStream(f);
 		try {
 			props.load(f);
@@ -307,7 +306,7 @@ public class Prefs {
 	 * path that ends with File.separator.
 	 */
 	public static String getHomeDir() {
-		return homeDir;
+		return ImageJDir;
 	}
 
 	/** Returns the path, ending in File.separator, to the ImageJ directory. */
@@ -315,7 +314,7 @@ public class Prefs {
 		/* Changed for Bio7! */
 		String path = Util.getImageJPath();
 		if (path == null)
-			return homeDir + File.separator;
+			return ImageJDir + File.separator;
 		else
 			return path + File.separator;
 	}
@@ -342,7 +341,7 @@ public class Prefs {
 	static void setHomeDir(String path) {
 		if (path.endsWith(File.separator))
 			path = path.substring(0, path.length() - 1);
-		homeDir = path;
+		ImageJDir = path;
 	}
 
 	/** Returns the default directory, if any, or null. */
@@ -426,13 +425,13 @@ public class Prefs {
 		return separator;
 	}
 
-	/** Opens the IJ_Prefs.txt file. */
+	/** Opens the ImageJ preferences file ("IJ_Prefs.txt") file. */
 	static void loadPreferences() {
 		String path = getPrefsDir() + separator + PREFS_NAME;
 		boolean ok = loadPrefs(path);
 		if (!ok) { // not found
 			if (IJ.isWindows())
-				path = homeDir + separator + PREFS_NAME; // ImageJ folder
+				path = ImageJDir + separator + PREFS_NAME; 
 			else
 				path = System.getProperty("user.home") + separator + PREFS_NAME; // User's
 													// home

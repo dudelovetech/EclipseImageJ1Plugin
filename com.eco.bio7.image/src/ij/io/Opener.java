@@ -672,7 +672,6 @@ public class Opener {
 	ImagePlus openPngUsingURL(String title, URL url) {
 		if (url == null)
 			return null;
-		// System.setProperty("jsse.enableSNIExtension","false");
 		Image img = null;
 		try {
 			InputStream in = url.openStream();
@@ -719,7 +718,7 @@ public class Opener {
 		} catch (Exception e) {
 			IJ.error("Open Using ImageIO", "" + e);
 		}
-		if (img == null)
+		if (img==null)
 			return null;
 		if (img.getColorModel().hasAlpha()) {
 			int width = img.getWidth();

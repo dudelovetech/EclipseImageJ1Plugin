@@ -1,10 +1,13 @@
 package ij.gui;
+
 import ij.*;
 import java.awt.event.*;
 import java.awt.EventQueue;
 
-/** This is an extension of GenericDialog that is non-model.
- *	@author Johannes Schindelin
+/**
+ * This is an extension of GenericDialog that is non-modal.
+ * 
+ * @author Johannes Schindelin
  */
 public class NonBlockingGenericDialog extends GenericDialog {
 
@@ -27,7 +30,8 @@ public class NonBlockingGenericDialog extends GenericDialog {
 		}
 		try {
 			wait();
-		} catch (InterruptedException e) { }
+		} catch (InterruptedException e) {
+		}
 	}
 
 	public synchronized void actionPerformed(ActionEvent e) {
@@ -35,19 +39,19 @@ public class NonBlockingGenericDialog extends GenericDialog {
 		if (!isVisible())
 			notify();
 	}
-	
+
 	public synchronized void keyPressed(KeyEvent e) {
 		super.keyPressed(e);
 		if (wasOKed() || wasCanceled())
 			notify();
 	}
 
-    public synchronized void windowClosing(WindowEvent e) {
+	public synchronized void windowClosing(WindowEvent e) {
 		super.windowClosing(e);
 		if (wasOKed() || wasCanceled())
 			notify();
-    }
-    
+	}
+
 	public void dispose() {
 		super.dispose();
 		WindowManager.removeWindow(this);

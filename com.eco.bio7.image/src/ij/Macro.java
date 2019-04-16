@@ -74,7 +74,7 @@ public class Macro {
 		abort = true;
 		if (Thread.currentThread().getName().endsWith("Macro$")) {
 			table.remove(Thread.currentThread());
-			/*Changed for Bio7 to get a message instead of the stack trace!*/
+			/* Changed for Bio7 to get a message instead of the stack trace! */
 			try {
 				throw new RuntimeException(MACRO_CANCELED);
 			} catch (Exception e) {
@@ -176,6 +176,14 @@ public class Macro {
 			key = key.substring(0, index);
 		key = key.toLowerCase(Locale.US);
 		return key;
+	}
+
+	/**
+	 * Evaluates 'code' and returns the output, or any error, as a String (e.g.,
+	 * Macro.eval("2+2") returns "4").
+	 */
+	public static String eval(String code) {
+		return new Interpreter().eval(code);
 	}
 
 }

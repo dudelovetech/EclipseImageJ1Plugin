@@ -40,14 +40,10 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 	/**
 	 * Opens a new single-column text window.
 	 * 
-	 * @param title
-	 *            the title of the window
-	 * @param text
-	 *            the text initially displayed in the window
-	 * @param width
-	 *            the width of the window in pixels
-	 * @param height
-	 *            the height of the window in pixels
+	 * @param title  the title of the window
+	 * @param text   the text initially displayed in the window
+	 * @param width  the width of the window in pixels
+	 * @param height the height of the window in pixels
 	 */
 	public TextWindow(String title, String text, int width, int height) {
 		this(title, "", text, width, height);
@@ -56,16 +52,11 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 	/**
 	 * Opens a new multi-column text window.
 	 * 
-	 * @param title
-	 *            title of the window
-	 * @param headings
-	 *            the tab-delimited column headings
-	 * @param text
-	 *            text initially displayed in the window
-	 * @param width
-	 *            width of the window in pixels
-	 * @param height
-	 *            height of the window in pixels
+	 * @param title    title of the window
+	 * @param headings the tab-delimited column headings
+	 * @param text     text initially displayed in the window
+	 * @param width    width of the window in pixels
+	 * @param height   height of the window in pixels
 	 */
 	public TextWindow(String title, String headings, String text, int width, int height) {
 		super(title);
@@ -79,16 +70,11 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 	/**
 	 * Opens a new multi-column text window.
 	 * 
-	 * @param title
-	 *            title of the window
-	 * @param headings
-	 *            tab-delimited column headings
-	 * @param text
-	 *            ArrayList containing the text to be displayed in the window
-	 * @param width
-	 *            width of the window in pixels
-	 * @param height
-	 *            height of the window in pixels
+	 * @param title    title of the window
+	 * @param headings tab-delimited column headings
+	 * @param text     ArrayList containing the text to be displayed in the window
+	 * @param width    width of the window in pixels
+	 * @param height   height of the window in pixels
 	 */
 	public TextWindow(String title, String headings, ArrayList text, int width, int height) {
 		super(title);
@@ -155,12 +141,9 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 	/**
 	 * Opens a new text window containing the contents of a text file.
 	 * 
-	 * @param path
-	 *            the path to the text file
-	 * @param width
-	 *            the width of the window in pixels
-	 * @param height
-	 *            the height of the window in pixels
+	 * @param path   the path to the text file
+	 * @param width  the width of the window in pixels
+	 * @param height the height of the window in pixels
 	 */
 	public TextWindow(String path, int width, int height) {
 		super("");
@@ -232,8 +215,8 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 	/**
 	 * Adds one or more lines of text to the window.
 	 * 
-	 * @param text
-	 *            The text to be appended. Multiple lines should be separated by \n.
+	 * @param text The text to be appended. Multiple lines should be separated by
+	 *             \n.
 	 */
 	public void append(String text) {
 		textPanel.append(text);
@@ -304,6 +287,8 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 		int id = e.getID();
 		if (id == WindowEvent.WINDOW_CLOSING)
 			close();
+		else if (id == WindowEvent.WINDOW_ACTIVATED)
+			WindowManager.setWindow(this);
 	}
 
 	public void itemStateChanged(ItemEvent e) {
