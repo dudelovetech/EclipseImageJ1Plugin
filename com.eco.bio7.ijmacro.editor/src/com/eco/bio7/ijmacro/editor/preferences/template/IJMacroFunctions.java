@@ -6,7 +6,9 @@ public class IJMacroFunctions {
 			"abs(n)####Returns the absolute value of n."+linSeparator +			
 			"acos(n)####Returns the inverse cosine (in radians) of n."+linSeparator +
 			"Array.concat(array1,array2)####Returns a new array created by joining two or more arrays or values (examples)."+linSeparator + 
-			"Array.copy(array)####Returns a copy of array."+linSeparator + 
+			"Array.copy(array)####Returns a copy of array."+linSeparator +
+			"Array.deleteValue()####Delete an array value."+linSeparator + 
+			"Array.deleteIndex()####Delete an array value using an index."+linSeparator +
 			"Array.fill(array, value)####Assigns the specified numeric value to each element of array."+linSeparator + 
 			"Array.findMaxima(array, tolerance)####Returns an array holding the peak positions (sorted with descending strength). 'Tolerance' is the minimum amplitude difference needed to separate two peaks. With v1.51n and later, there is an optional 'edgeMode' argument: 0=include edges, 1=exclude edges(default), 2=circular array."+linSeparator + 
 			"Array.findMinima(array, tolerance)####Returns an array holding the minima positions."+linSeparator + 
