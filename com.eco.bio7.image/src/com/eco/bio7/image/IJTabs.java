@@ -11,6 +11,7 @@
 
 package com.eco.bio7.image;
 
+import java.awt.Container;
 import java.awt.Window;
 import java.util.Vector;
 import javax.swing.JPanel;
@@ -423,8 +424,10 @@ public class IJTabs {
 						String secId = viewRefs[i].getSecondaryId();
 						CustomDetachedImageJView cdview = (CustomDetachedImageJView) view;
 						cdview.customViewParent.layout();
-						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
-						ip.getCanvas().getParent().doLayout();
+						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));						
+						Container parent = ip.getCanvas().getParent();
+						parent.doLayout();
+						parent.repaint();
 					}
 				}
 			}
