@@ -12,6 +12,7 @@ import java.awt.event.*;
 
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.PlatformUI;
 
@@ -124,9 +125,27 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 
 				}
 
-				CustomDetachedImageJView customImageJView = ImageJ.customImageJView;
-				if (customImageJView != null) {
-					customImageJView.setPartName(title);
+				/*
+				 * CustomDetachedImageJView customImageJView = ImageJ.customImageJView; if
+				 * (customImageJView != null) { customImageJView.setPartName(title); }
+				 */
+
+				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+				for (int i = 0; i < viewRefs.length; i++) {
+					String id = viewRefs[i].getId();
+					if (id.equals("com.eco.bio7.image.detachedImage")) {
+						IViewPart view = viewRefs[i].getView(false);
+						String secId = viewRefs[i].getSecondaryId();
+						CustomDetachedImageJView cdview = (CustomDetachedImageJView) view;
+						/* Get the image from the detached secondary view id (same id)! */
+						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
+						if (ip != null) {
+							if (ImageWindow.this.equals(ip.getWindow())) {
+								cdview.setPartName(title);
+							}
+						}
+
+					}
 				}
 
 			}
@@ -136,9 +155,9 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 
 	public ImageWindow(ImagePlus imp, ImageCanvas ic) {
 		super(imp.getTitle());
-		if (SCALE>1.0) {
-			TEXT_GAP = (int)(TEXT_GAP*SCALE);
-			textGap = centerOnScreen?0:TEXT_GAP;
+		if (SCALE > 1.0) {
+			TEXT_GAP = (int) (TEXT_GAP * SCALE);
+			textGap = centerOnScreen ? 0 : TEXT_GAP;
 		}
 		boolean openAsHyperStack = imp.getOpenAsHyperStack();
 		ij = IJ.getInstance();
@@ -179,7 +198,7 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 				/* Add the panel to the tab folder with the image */
 				swtAwtMain.addTab(imp.getTitle());
 				imp.setWindow(this);
-				
+
 				/*
 				 * The next seems to be important for Mac. Else at the first zoom level the
 				 * image disapears!
@@ -189,14 +208,14 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 						pack();
 					}
 				});
-				/*Necessary for highDPI layout SWT_AWT!*/
+				/* Necessary for highDPI layout SWT_AWT! */
 				CanvasView canvasView = CanvasView.getCanvas_view();
 				canvasView.recalculateLayout();
 				/*
 				 * The next seems to be important for Mac. Else at the first zoom level the
 				 * image disapears!
 				 */
-				
+
 				// show();
 			}
 			if (ic.getMagnification() != 0.0)
@@ -244,7 +263,7 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 							pack();
 						}
 					});
-					/*Necessary for highDPI layout SWT_AWT!*/
+					/* Necessary for highDPI layout SWT_AWT! */
 					CanvasView canvasView = CanvasView.getCanvas_view();
 					canvasView.recalculateLayout();
 
@@ -405,9 +424,9 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 					g.setColor(c);
 				}
 			}
-			Java2.setAntialiasedText(g, true);			
-			if (SCALE>1.0) {
-				Font font = new Font("SansSerif", Font.PLAIN, (int)(12*SCALE));
+			Java2.setAntialiasedText(g, true);
+			if (SCALE > 1.0) {
+				Font font = new Font("SansSerif", Font.PLAIN, (int) (12 * SCALE));
 				g.setFont(font);
 			}
 			g.drawString(createSubtitle(), insets.left + 5, insets.top + TEXT_GAP);

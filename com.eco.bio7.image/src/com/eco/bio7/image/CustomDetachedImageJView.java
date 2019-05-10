@@ -194,7 +194,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					});
 
 					CanvasView.setCurrent(viewPanel);
-					ImageJ.setCustomView(customView);
+					//ImageJ.setCustomView(customView);
 				}
 			}
 			/*
@@ -302,7 +302,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 					display.update();
 					swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
-					ImageJ.setCustomView(customView);
+					//ImageJ.setCustomView(customView);
 					Composite top=swt.getTop();
 					top.setParent(customView.getCustomViewParent());
 

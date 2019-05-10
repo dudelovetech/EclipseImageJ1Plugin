@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.PlatformUI;
 import com.eco.bio7.image.Activator;
 import com.eco.bio7.image.CanvasView;
@@ -100,7 +102,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	public static final Font SansSerif12 = new Font("SansSerif", Font.PLAIN, 12);
 	/** Address of socket where Image accepts commands */
 	public static final int DEFAULT_PORT = 57294;
- 
+
 	/** Run as normal application. */
 	public static final int STANDALONE = 0;
 
@@ -134,7 +136,6 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	private static String commandName;
 	/* Changed for Bio7! -> Bio7 variables! */
 	public static Fullscreen full;
-	public static CustomDetachedImageJView customImageJView;
 	private JPanel currentPanel;
 	private JPanel root;
 	private int index;
@@ -366,9 +367,28 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					CanvasView.getCanvas_view().setstatusline(s);
 				}
 
-				if (customImageJView != null) {
-					customImageJView.setstatusline(s);
+				/*
+				 * if (customImageJView != null) { customImageJView.setstatusline(s); }
+				 */
+				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+				for (int i = 0; i < viewRefs.length; i++) {
+					String id = viewRefs[i].getId();
+					if (id.equals("com.eco.bio7.image.detachedImage")) {
+						IViewPart view = viewRefs[i].getView(false);
+						String secId = viewRefs[i].getSecondaryId();
+						CustomDetachedImageJView cdview = (CustomDetachedImageJView) view;
+						/* Get the image from the detached secondary view id (same id)! */
+						ImagePlus plu = WindowManager.getImage(Integer.valueOf(secId));
+						if (plu != null) {
+							ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
+							if (WindowManager.getCurrentWindow().equals(ip.getWindow())) {
+								cdview.setstatusline(s);
+							}
+						}
+
+					}
 				}
+
 			}
 		});
 
@@ -1101,12 +1121,6 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		statusLine.setFont(new Font("SansSerif", Font.PLAIN, (int) (13 * scale)));
 		progressBar.init((int) (ProgressBar.WIDTH * scale), (int) (ProgressBar.HEIGHT * scale));
 		pack();
-	}
-
-	/* Changed for Bio7! */
-	public static void setCustomView(CustomDetachedImageJView customView) {
-		customImageJView = customView;
-
 	}
 
 }

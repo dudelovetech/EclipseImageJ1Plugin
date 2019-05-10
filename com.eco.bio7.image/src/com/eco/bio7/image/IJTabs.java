@@ -424,7 +424,6 @@ public class IJTabs {
 						cdview.customViewParent.layout();
 						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
 						ip.getCanvas().getParent().doLayout();
-						// cdview.win.ic.getParent().doLayout();
 					}
 				}
 			}
