@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.CustomDetachedImageJView;
+import com.eco.bio7.image.IJTabs;
 import com.eco.bio7.image.Util;
 
 /** This is a Canvas used to display images in a Window. */
@@ -716,24 +717,36 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 		return false;
 	}
 
-	/**Converts a screen x-coordinate to an offscreen x-coordinate (nearest pixel center).*/
+	/**
+	 * Converts a screen x-coordinate to an offscreen x-coordinate (nearest pixel
+	 * center).
+	 */
 	public int offScreenX(int sx) {
 		return srcRect.x + (int) (sx / magnification);
 	}
 
-	/**Converts a screen y-coordinate to an offscreen y-coordinate (nearest pixel center).*/
+	/**
+	 * Converts a screen y-coordinate to an offscreen y-coordinate (nearest pixel
+	 * center).
+	 */
 	public int offScreenY(int sy) {
 		return srcRect.y + (int) (sy / magnification);
 	}
-	
-	/**Converts a screen x-coordinate to an offscreen x-coordinate (Roi coordinate of nearest pixel border).*/
+
+	/**
+	 * Converts a screen x-coordinate to an offscreen x-coordinate (Roi coordinate
+	 * of nearest pixel border).
+	 */
 	public int offScreenX2(int sx) {
-		return srcRect.x + (int)Math.round(sx/magnification);
+		return srcRect.x + (int) Math.round(sx / magnification);
 	}
 
-	/**Converts a screen y-coordinate to an offscreen y-coordinate (Roi coordinate of nearest pixel border).*/
+	/**
+	 * Converts a screen y-coordinate to an offscreen y-coordinate (Roi coordinate
+	 * of nearest pixel border).
+	 */
 	public int offScreenY2(int sy) {
-		return srcRect.y + (int)Math.round(sy/magnification);
+		return srcRect.y + (int) Math.round(sy / magnification);
 	}
 
 	/**
@@ -957,6 +970,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			}
 		});
 		CanvasView.getCurrent().doLayout();
+		IJTabs.doSecondaryViewLayout();
 	}
 
 	/** Centers the viewable area on offscreen (image) coordinates x, y */
@@ -1004,8 +1018,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			r1.height = r1.height - dstHeight + newHeight;
 		}
 		Rectangle max = win.getMaxWindow(r1.x, r1.y);
-		boolean fitsHorizontally = r1.x+r1.width<max.x+max.width+max.width/12;
-		boolean fitsVertically = r1.y+r1.height<max.y+max.height+max.height/12;
+		boolean fitsHorizontally = r1.x + r1.width < max.x + max.width + max.width / 12;
+		boolean fitsVertically = r1.y + r1.height < max.y + max.height + max.height / 12;
 		if (fitsHorizontally && fitsVertically)
 			return new Dimension(newWidth, newHeight);
 		else if (fitsVertically && newHeight < dstWidth)
@@ -1129,6 +1143,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			}
 		});
 		CanvasView.getCurrent().doLayout();
+		IJTabs.doSecondaryViewLayout();
 		// adjustSourceRect(newMag, sx, sy);
 	}
 
@@ -1297,7 +1312,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 				}
 			}
 		});
-               /*Search for detached views and activate them on mouse pressed events!*/
+		/* Search for detached views and activate them on mouse pressed events! */
 		Util.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {

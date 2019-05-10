@@ -61,7 +61,7 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 
 	private static final String ID = "com.eco.bio7.custom_controls";
 
-	private Composite customViewParent;
+	public Composite customViewParent;
 
 	private Panel awtCurrent;
 

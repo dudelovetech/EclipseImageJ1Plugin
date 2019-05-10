@@ -19,6 +19,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.PlatformUI;
 
@@ -407,6 +408,27 @@ public class IJTabs {
 			}
 		});
 
+	}
+	/*A method to layout secondary ImageJ views (e.g. for orthogonal stack views)!*/
+	public static void doSecondaryViewLayout() {
+		Display dis = CanvasView.getParent2().getDisplay();
+		dis.syncExec(new Runnable() {
+			public void run() {
+				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+				for (int i = 0; i < viewRefs.length; i++) {
+					String id = viewRefs[i].getId();
+					if (id.equals("com.eco.bio7.image.detachedImage")) {
+						IViewPart view = viewRefs[i].getView(false);
+						String secId = viewRefs[i].getSecondaryId();
+						CustomDetachedImageJView cdview = (CustomDetachedImageJView) view;
+						cdview.customViewParent.layout();
+						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
+						ip.getCanvas().getParent().doLayout();
+						// cdview.win.ic.getParent().doLayout();
+					}
+				}
+			}
+		});
 	}
 
 }
