@@ -344,7 +344,6 @@ public class IJTabs {
 
 	public static void setActiveTabWindow(Window win) {
 
-		
 		Display dis = CanvasView.getParent2().getDisplay();
 		dis.syncExec(new Runnable() {
 
@@ -359,9 +358,8 @@ public class IJTabs {
 
 					final ImageWindow win2 = (ImageWindow) ve.get(1);
 
-					
 					/* Search for the tab which embeds this instance! */
-					if (win==win2) {
+					if (win == win2) {
 						// calls the selection!
 						tabFolder.setSelection(items[count]);
 						// System.out.println("closed");
@@ -409,7 +407,10 @@ public class IJTabs {
 		});
 
 	}
-	/*A method to layout secondary ImageJ views (e.g. for orthogonal stack views)!*/
+
+	/*
+	 * A method to layout secondary ImageJ views (e.g. for orthogonal stack views)!
+	 */
 	public static void doSecondaryViewLayout() {
 		Display dis = CanvasView.getParent2().getDisplay();
 		dis.syncExec(new Runnable() {

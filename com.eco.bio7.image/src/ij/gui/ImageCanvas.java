@@ -1328,8 +1328,8 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					//CustomDetachedImageJView customView = (CustomDetachedImageJView) activated;
-					//ImageJ.setCustomView(customView);
+					// CustomDetachedImageJView customView = (CustomDetachedImageJView) activated;
+					// ImageJ.setCustomView(customView);
 				}
 			}
 		});
