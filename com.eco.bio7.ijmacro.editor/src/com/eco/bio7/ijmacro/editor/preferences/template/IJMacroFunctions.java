@@ -194,6 +194,7 @@ public class IJMacroFunctions {
 			"getThreshold(lower, upper)####Returns the lower and upper threshold levels. Both variables are set to -1 if the active image is not thresholded. See also: setThreshold, getThreshold, resetThreshold."+linSeparator + 
 			"getTime()####Returns the current time in milliseconds. The granularity of the time varies considerably from one platform to the next. On Windows NT, 2K, XP it is about 10ms. On other Windows versions it can be as poor as 50ms. On many Unix platforms, including Mac OS X, it actually is 1ms. See also: getDateAndTime."+linSeparator + 
 			"getTitle()####Returns the title of the current image."+linSeparator +
+			"getv(x,y)####Returns calibrated values from 8-bit and 16-bit images, intensity values from RGB images and float values from 32-bit images."+linSeparator +
 			"getValue(\"color.foreground\")####Returns the current foreground color as a value that can be passed to the setColor(value) function. The value returned is the pixel value used by the Edit>Fill command and by drawing tools."+linSeparator + 
 			"getValue(\"color.background\")####Returns the current background color as a value that can be passed to the setColor(value) function. The value returned is the pixel value used by the Edit>Clear command."+linSeparator + 
 			"getValue(\"rgb.foreground\")####Returns the current foregound color as an RGB pixel value (example)."+linSeparator + 
@@ -538,6 +539,7 @@ public class IJMacroFunctions {
 			"Table.getSelectionStart(title)####Returns the index of first selected row in the table identified by \"title\", or - 1 if there is no selection."+linSeparator + 
 			"Table.getSelectionEnd(title)####Returns the index of last selected row in the table identified by \"title\", or -1 if there is no selection."+linSeparator + 
 			"Table.save(filePath)####saves the table."+linSeparator + 
+			"Table.setLocationAndSize()####Sets the location and size of a table."+linSeparator + 
 			"Table.open(filePath)####Opens a table."+linSeparator + 
 			"Table.deleteRows(index1, index2)####Deletes specified rows."+linSeparator + 
 			"Table.renameColumn(oldName, newName)####Renames a column."+linSeparator + 
