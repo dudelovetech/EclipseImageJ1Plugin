@@ -195,6 +195,7 @@ public class Functions implements MacroConstants, Measurements {
 		double value = 0.0;
 		switch (type) {
 			case GET_PIXEL: value = getPixel(); break;
+			case GETV: value = getPixelValue(); break;
 			case ABS: case COS: case EXP: case FLOOR: case LOG: case ROUND:
 			case SIN: case SQRT: case TAN: case ATAN: case ASIN: case ACOS:
 				value = math(type);
@@ -897,6 +898,12 @@ public class Functions implements MacroConstants, Measurements {
 				value = ip.getf((int)a1);
 		}
 		return value;
+	}
+	
+	double getPixelValue() {
+		int x = (int)getFirstArg();
+		int y = (int)getLastArg();
+		return getProcessor().getPixelValue(x,y);
 	}
 
 	void setZCoordinate() {
@@ -3325,7 +3332,7 @@ public class Functions implements MacroConstants, Measurements {
 			height = (int)getNextArg();
 		}
 		interp.getRightParen();
-		if (width==0&&height==0) {
+		if (width==0 && height==0) {
 			Window win = WindowManager.getActiveWindow();
 			if (win!=null)
 				win.setLocation(x, y);
@@ -4445,6 +4452,8 @@ public class Functions implements MacroConstants, Measurements {
 			Analyzer.setMeasurement(STD_DEV, state);
 		else if (arg1.equals("showrownumbers"))
 			ResultsTable.getResultsTable().showRowNumbers(state);
+		else if (arg1.equals("showrowindexes"))
+			ResultsTable.getResultsTable().showRowIndexes(state);
 		else if (arg1.startsWith("show"))
 			Analyzer.setOption(arg1, state);
 		else if (arg1.startsWith("bicubic"))
@@ -6092,6 +6101,7 @@ public class Functions implements MacroConstants, Measurements {
 			}
 		}
      	rt.show(title);
+		waitUntilActivated(title);
 		return null;
 	}
 
@@ -6586,7 +6596,9 @@ public class Functions implements MacroConstants, Measurements {
 		else if (name.equals("headings"))
 			return new Variable(getResultsTable(getTitleArg()).getColumnHeadings());
 		else if (name.equals("showRowNumbers"))
-			return showRowNumbers();
+			return showRowNumbers(true);
+		else if (name.equals("showRowIndexes"))
+			return showRowNumbers(false);
 		else if (name.equals("sort"))
 			return sortTable();
 		else if (name.equals("hideRowNumbers")) {
@@ -6604,11 +6616,33 @@ public class Functions implements MacroConstants, Measurements {
 			return getSelectionEnd();
 		else if (name.equals("setSelection"))
 			return setSelection();
+		else if (name.equals("setLocAndSize") || name.equals("setLocationAndSize"))
+			return setTableLocAndSize();
 		else
 			interp.error("Unrecognized function name");
 		return new Variable();
 	}
 	
+	private Variable setTableLocAndSize() {
+		double x = getFirstArg();
+		double y = getNextArg();
+		double width = getNextArg();
+		double height = getNextArg();
+		String title = getTitle();
+		if (title==null) {
+			ResultsTable rt = getResultsTable(title);
+			title = rt.getTitle();
+		}
+		Frame frame = WindowManager.getFrame(title);
+		if (frame!=null) {
+			Point loc = frame.getLocation();
+			Dimension size = frame.getSize();
+			frame.setLocation(Double.isNaN(x)?loc.x:(int)x, Double.isNaN(y)?loc.y:(int)y);
+			frame.setSize(Double.isNaN(width)?size.width:(int)width, Double.isNaN(height)?size.height:(int)height);
+		}
+		return new Variable();
+	}
+
 	private Variable setSelection() {
 		interp.getLeftParen();
 		double from = interp.getExpression();
@@ -6699,6 +6733,7 @@ public class Functions implements MacroConstants, Measurements {
 		if (getRT(title)==null) {
 			rt = new ResultsTable();
 			rt.show(title);
+			waitUntilActivated(title);
 		} else {
 			rt = getResultsTable(title);
 			rt.reset();
@@ -6708,6 +6743,20 @@ public class Functions implements MacroConstants, Measurements {
 		}
 		return new Variable();
 	}
+	
+	private void waitUntilActivated(String title) {
+		long start = System.currentTimeMillis();
+		while (true) {
+			IJ.wait(5);
+			Frame frame = WindowManager.getFrontWindow();
+			String title2 = frame!=null?frame.getTitle():null;
+			if (title.equals(title2))
+				return;
+			if ((System.currentTimeMillis()-start)>200)
+				break;
+		}
+	}
+
 	
 	private void toFront(String title) {
 		if (title==null)
@@ -6781,10 +6830,13 @@ public class Functions implements MacroConstants, Measurements {
 		return new Variable();
 	}
 
-	private Variable showRowNumbers() {
+	private Variable showRowNumbers(boolean numbers) {
 		boolean show = (int)getFirstArg()!=0;
 		ResultsTable rt = getResultsTable(getTitle());
-		rt.showRowNumbers(show);
+		if (numbers)
+			rt.showRowNumbers(show);
+		else
+			rt.showRowIndexes(show);
 		unUpdatedTable = rt;
 		return new Variable();
 	}

@@ -193,7 +193,7 @@ public class Prefs {
 	 * Enable this option to workaround a bug with some Linux window managers that
 	 * causes windows to wander down the screen.
 	 */
-	public static boolean doNotSaveWindowLocations = true;
+	public static boolean doNotSaveWindowLocations;
 
 	/** Use JFileChooser setting changed/ */
 	public static boolean jFileChooserSettingChanged;
@@ -217,6 +217,7 @@ public class Prefs {
 	static int transparentIndex = -1;
 	private static boolean resetPreferences;
 	private static double guiScale = 1.0;
+	private static Properties locKeys = new Properties();
 
 	/** Finds and loads the configuration file ("IJ_Props.txt")
 	 * and the preferences file ("IJ_Prefs.txt").
@@ -697,15 +698,20 @@ public class Prefs {
 		if (Double.isNaN(yloc))
 			return null;
 		Point p = new Point((int) xloc, (int) yloc);
-		Dimension screen = null;
-		if (IJ.debugMode)
-			screen = Toolkit.getDefaultToolkit().getScreenSize();
-		else
-			screen = IJ.getScreenSize();
-		if (p.x > screen.width - 100 || p.y > screen.height - 40)
-			return null;
-		else
+		Rectangle bounds = GUI.getScreenBounds(p); // get bounds of screen that contains p
+		if (bounds!=null && p.x+100<=bounds.x+bounds.width && p.y+ 40<=bounds.y+bounds.height) {
+			if (locKeys.get(key)==null) { // first time for this key? 
+				locKeys.setProperty(key, "");
+				Rectangle primaryScreen = GUI.getMaxWindowBounds();
+				ImageJ ij = IJ.getInstance();
+				Point ijLoc = ij!=null?ij.getLocation():null;
+				//System.out.println("getLoc: "+key+" "+(ijLoc!=null&&primaryScreen.contains(ijLoc)) + "  "+!primaryScreen.contains(p));
+				if ((ijLoc!=null&&primaryScreen.contains(ijLoc)) && !primaryScreen.contains(p))
+					return null; // return null if "ImageJ" window on primary screen and this location is not
+			}
 			return p;
+		} else
+			return null;
 	}
 
 	/** Save plugin preferences. */

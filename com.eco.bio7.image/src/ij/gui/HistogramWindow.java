@@ -275,7 +275,7 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 			x = (x - frame.x);
 			int index = (int)(x*(SCALE*histogram.length)/HIST_WIDTH/SCALE);
 			if(index<0) index=0;
-			if (index>255) index = 255;
+			if (index>=histogram.length) index = histogram.length-1;
 			String vlabel = null, clabel = null;
 			if (blankLabel.length() == 11) // OS X
 			{

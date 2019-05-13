@@ -1399,7 +1399,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			pack();
 			setup();
 			if (centerDialog)
-				GUI.center(this);
+				GUI.centerOnImageJScreen(this);
 			setVisible(true);
 			recorderOn = Recorder.record;
 			IJ.wait(25);

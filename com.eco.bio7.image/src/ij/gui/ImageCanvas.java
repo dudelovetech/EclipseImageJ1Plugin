@@ -1017,9 +1017,9 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 			r1.width = r1.width - dstWidth + newWidth;
 			r1.height = r1.height - dstHeight + newHeight;
 		}
-		Rectangle max = win.getMaxWindow(r1.x, r1.y);
-		boolean fitsHorizontally = r1.x + r1.width < max.x + max.width + max.width / 12;
-		boolean fitsVertically = r1.y + r1.height < max.y + max.height + max.height / 12;
+		Rectangle max = GUI.getMaxWindowBounds(win);
+		boolean fitsHorizontally = r1.x+r1.width<max.x+max.width;
+		boolean fitsVertically = r1.y+r1.height<max.y+max.height;
 		if (fitsHorizontally && fitsVertically)
 			return new Dimension(newWidth, newHeight);
 		else if (fitsVertically && newHeight < dstWidth)

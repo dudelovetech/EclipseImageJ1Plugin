@@ -128,7 +128,7 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 		} else {
 			setSize(width, height);
 			if (!IJ.debugMode)
-				GUI.center(this);
+				GUI.centerOnImageJScreen(this);
 		}
 		/* Changed for Bio7! */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
