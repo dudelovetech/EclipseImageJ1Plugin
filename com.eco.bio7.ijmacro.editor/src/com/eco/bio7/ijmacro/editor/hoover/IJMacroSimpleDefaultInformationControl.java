@@ -374,6 +374,10 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * @see IInformationControl#setInformation(String)
 	 */
 	public void setInformation(String content) {
+		System.out.println(content);
+		/*Remove the API template placeholder chars added in class IJMacroCompletionProcessor!*/
+		content=content.replace("${", "");
+		content=content.replace("}", "");		
 		Font font = JFaceResources.getFontRegistry().get("com.eco.bio7.ijmacro.editor.textfont");
 		fText.setFont(font);
 		String context = null;

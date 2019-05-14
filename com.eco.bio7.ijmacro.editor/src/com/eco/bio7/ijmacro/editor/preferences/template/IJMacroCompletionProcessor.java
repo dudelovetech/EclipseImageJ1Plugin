@@ -149,17 +149,18 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 					StringBuffer buf = new StringBuffer();
 					String[] args = contentOfBrackets.split(",");
 					for (int j = 0; j < args.length; j++) {
+						/*The ${} placeholder will be removed in the IJMacroSimpleDefaultInformationControl to get the context information!*/
 						buf.append("${" + args[j] + "}");
 						if (j < args.length - 1) {
 							buf.append(",");
 						}
 					}
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ");", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ")", true);
 				} else {
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + "", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
+				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + "", true);
 			}
 
 			Template template = tempLocalFunctions[i];
