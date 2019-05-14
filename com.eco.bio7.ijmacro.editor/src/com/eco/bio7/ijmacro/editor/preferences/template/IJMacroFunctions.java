@@ -202,7 +202,8 @@ public class IJMacroFunctions {
 			"getValue(\"font.size\")####Returns the size, in points, of the current font."+linSeparator + 
 			"getValue(\"font.height\")####Returns the height, in pixels, of the current font."+linSeparator + 
 			"getValue(\"selection.width\")####Returns the stroke width of the current selection."+linSeparator + 
-			"getValue(\"results.count\")####Returns the number of lines in the current results table. Unlike nResults, works with tables that are not named \"Results\". Requires 1.49t."+linSeparator+
+			"getValue(measurement)####Returns the measurement values where measurement is \"Area\", \"Mean\", \"Skew\", etc.."+linSeparator+
+			"getValue(\"rgb.foreground\")####Returns the current foregound color as an RGB pixel value (example)."+linSeparator + 
 			"getVoxelSize(width, height, depth, unit)####Returns the voxel size and unit of length (\"pixel\", \"mm\", etc.) of the current image or stack. See also: getPixelSize, setVoxelSize."+linSeparator + 
 			"getVersion()####Returns the ImageJ version number as a string (e.g., \"1.34s\"). See also: requires."+linSeparator + 
 			"getWidth()####Returns the width in pixels of the current image."+linSeparator + 
