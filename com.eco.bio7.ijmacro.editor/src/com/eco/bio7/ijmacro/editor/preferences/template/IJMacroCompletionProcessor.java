@@ -55,10 +55,8 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	/**
 	 * We watch for angular brackets since those are often part of XML templates.
 	 * 
-	 * @param viewer
-	 *            the viewer
-	 * @param offset
-	 *            the offset left of which the prefix is detected
+	 * @param viewer the viewer
+	 * @param offset the offset left of which the prefix is detected
 	 * @return the detected prefix
 	 */
 	private static final class ProposalComparator implements Comparator<Object> {
@@ -95,16 +93,14 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	 * Cut out angular brackets for relevance sorting, since the template name does
 	 * not contain the brackets.
 	 * 
-	 * @param template
-	 *            the template
-	 * @param prefix
-	 *            the prefix
+	 * @param template the template
+	 * @param prefix   the prefix
 	 * @return the relevance of the <code>template</code> for the given
 	 *         <code>prefix</code>
 	 */
 	protected int getRelevance(Template template, String prefix) {
-		//if (template.getName().toLowerCase().startsWith(prefix))
-		if (template.getName().startsWith(prefix))
+		 if (template.getName().toLowerCase().replace(".","").startsWith(prefix))
+		//if (template.getName().startsWith(prefix))
 			return 90;
 		return 0;
 	}
@@ -112,8 +108,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	/**
 	 * Simply return all templates.
 	 * 
-	 * @param contextTypeId
-	 *            the context type, ignored in this implementation
+	 * @param contextTypeId the context type, ignored in this implementation
 	 * @return all templates
 	 */
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
@@ -145,8 +140,28 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		for (int i = 0; i < splitted.length; i++) {
 			String[] funArray = splitted[i].split("####");
 
-			tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(),
-					funArray[0] + "${cursor}", true);
+			String str = funArray[0];
+			int firstBracket = str.indexOf('(');
+			if (firstBracket > -1) {
+				
+				String contentOfBrackets = str.substring(firstBracket + 1, str.indexOf(')'));
+				String contentBegin = str.substring(0, str.indexOf('('));
+				if (contentOfBrackets.isEmpty()==false) {
+					StringBuffer buf = new StringBuffer();
+					String[] args = contentOfBrackets.split(",");
+					for (int j = 0; j < args.length; j++) {
+						buf.append("${" + args[j] + "}");
+						if (j < args.length - 1) {
+							buf.append(",");
+						}
+					}
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ");", true);
+				} else {
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
+				}
+			} else {
+				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] +";", true);
+			}
 
 			Template template = tempLocalFunctions[i];
 			try {
@@ -192,22 +207,18 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	/**
 	 * Return the XML context type that is supported by this plug-in.
 	 * 
-	 * @param viewer
-	 *            the viewer, ignored in this implementation
-	 * @param region
-	 *            the region, ignored in this implementation
+	 * @param viewer the viewer, ignored in this implementation
+	 * @param region the region, ignored in this implementation
 	 * @return the supported XML context type
 	 */
 	protected TemplateContextType getContextType(ITextViewer viewer, IRegion region) {
-		return TemplateEditorUI.getDefault().getContextTypeRegistry()
-				.getContextType(IJMacroContextType.XML_CONTEXT_TYPE);
+		return TemplateEditorUI.getDefault().getContextTypeRegistry().getContextType(IJMacroContextType.XML_CONTEXT_TYPE);
 	}
 
 	/**
 	 * Always return the default image.
 	 * 
-	 * @param template
-	 *            the template, ignored in this implementation
+	 * @param template the template, ignored in this implementation
 	 * @return the default template image
 	 */
 	protected Image getImage(Template template) {

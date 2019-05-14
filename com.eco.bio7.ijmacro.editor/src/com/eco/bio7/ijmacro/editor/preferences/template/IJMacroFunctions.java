@@ -231,7 +231,7 @@ public class IJMacroFunctions {
 			"is(\"changes\")####Returns true if the current image's 'changes' flag is set."+linSeparator+
 			"is(\"composite\")####Returns true if the current image is a a multi-channel stack that uses the CompositeImage class. Requires v1.39r."+linSeparator + 
 			"is(\"global scale\")####Returns true if there is global spatial calibration."+linSeparator + 
-			"is(\"grayscale\"####Returns true if the current image is grayscale, or an RGB image with identical R, G and B channels."+linSeparator+
+			"is(\"grayscale\")####Returns true if the current image is grayscale, or an RGB image with identical R, G and B channels."+linSeparator+
 			"is(\"Inverting LUT\")####Returns true if the current image is using an inverting lookup table."+linSeparator + 
 			"is(\"locked\")####Returns true if the current image is locked."+linSeparator +
 			"is(\"line\")####Returns 'true' if this is a line selection."+linSeparator +
@@ -448,7 +448,7 @@ public class IJMacroFunctions {
 			"setColor(value)####Sets the drawing color. For 8 bit images, 0<=value<=255. For 16 bit images, 0<=value<=65535. For RGB images, use hex constants (e.g., 0xff0000 for red). This function does not change the foreground color used by run(\"Draw\") and run(\"Fill\")."+linSeparator + 
 			"setColor(string)####Sets the drawing color, where 'string' can be \"black\", \"blue\", \"cyan\", \"darkGray\", \"gray\", \"green\", \"lightGray\", \"magenta\", \"orange\", \"pink\", \"red\", \"white\", \"yellow\", or a hex value like \"#ff0000\"."+linSeparator+
 			"setFont(name, size[, style])####Sets the font used by the drawString function. The first argument is the font name. It should be \"SansSerif\", \"Serif\" or \"Monospaced\". The second is the point size. The optional third argument is a string containing \"bold\" or \"italic\", or both. The third argument can also contain the keyword \"antialiased\". For examples, run the TextDemo macro."+linSeparator + 
-			"setFont(\"user\"####Sets the font to the one defined in the Edit>Options>Fonts window. See also: getInfo(\"font.name\"), getValue(\"font.size\") and getValue(\"font.height\"). "+linSeparator + 			
+			"setFont(\"user\")####Sets the font to the one defined in the Edit>Options>Fonts window. See also: getInfo(\"font.name\"), getValue(\"font.size\") and getValue(\"font.height\"). "+linSeparator + 			
 			"setForegroundColor(r, g, b)####Sets the foreground color, where r, g, and b are >= 0 and <= 255. See also: setColor."+linSeparator + 
 			"setForegroundColor(rgb)####Sets the foreground color, where rgb is an RGB pixel value. See also: getValue(\"rgb.foreground\")."+linSeparator+
 			"setJustification(\"center\")####Specifies the justification used by drawString() and Plot.addText(). The argument can be \"left\", \"right\" or \"center\". The default is \"left\"."+linSeparator + 
