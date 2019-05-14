@@ -67,7 +67,7 @@ public class GUI {
 		});
 		
 		Dimension window = win.getSize(); if (window.width == 0) return;
-		win.setLocation(center.x- window.width/2, center.y- window.height/2);
+		win.setLocation(center.x- window.width/2, center.y- window.height/4);
 		
 	}
 
