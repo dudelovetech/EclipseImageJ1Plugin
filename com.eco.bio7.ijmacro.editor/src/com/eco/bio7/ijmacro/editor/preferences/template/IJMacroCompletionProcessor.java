@@ -99,9 +99,16 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	 *         <code>prefix</code>
 	 */
 	protected int getRelevance(Template template, String prefix) {
-		//if (template.getName().toLowerCase().replace(".", "").startsWith(prefix))
-			if (template.getName().startsWith(prefix)||template.getName().toLowerCase().startsWith(prefix))
-			return 90;
+		// if (template.getName().toLowerCase().replace(".", "").startsWith(prefix))
+		if (store.getBoolean("IJ_COMPLETION_CONTAINS")) {
+			if (template.getName().contains(prefix) || template.getName().toLowerCase().contains(prefix))
+				return 90;
+
+		} else {
+			if (template.getName().startsWith(prefix) || template.getName().toLowerCase().startsWith(prefix))
+
+				return 90;
+		}
 		return 0;
 	}
 
@@ -149,7 +156,10 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 					StringBuffer buf = new StringBuffer();
 					String[] args = contentOfBrackets.split(",");
 					for (int j = 0; j < args.length; j++) {
-						/*The ${} placeholder will be removed in the IJMacroSimpleDefaultInformationControl to get the context information!*/
+						/*
+						 * The ${} placeholder will be removed in the
+						 * IJMacroSimpleDefaultInformationControl to get the context information!
+						 */
 						buf.append("${" + args[j] + "}");
 						if (j < args.length - 1) {
 							buf.append(",");

@@ -47,7 +47,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		storeMacroEditor.setDefault("EVALUATE_EXTERNAL",false);
 		storeMacroEditor.setDefault("SHOW_INFOPOPUP",true);
 		storeMacroEditor.setDefault("MARK_WORDS", true);
-		
+		storeMacroEditor.setDefault("IJ_COMPLETION_CONTAINS", false);
 		storeMacroEditor.setDefault("TYPED_CODE_COMPLETION", false);
 		storeMacroEditor.setDefault("ACTIVATION_CHARS", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.");
 				

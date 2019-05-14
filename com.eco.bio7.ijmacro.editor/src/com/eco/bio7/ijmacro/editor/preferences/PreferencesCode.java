@@ -31,6 +31,8 @@ public class PreferencesCode extends FieldEditorPreferencePage implements IWorkb
 				new BooleanFieldEditor("SHOW_INFOPOPUP", "Show info popup (restart to apply!)", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Code completion/templates:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor("IJ_COMPLETION_CONTAINS", "Open code completion templates which contains typed prefix",
+				getFieldEditorParent()));
 		addField(new BooleanFieldEditor("TYPED_CODE_COMPLETION", "Open code completion/templates when typing",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor("ACTIVATION_CHARS", "Activation chars", -1,
