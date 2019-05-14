@@ -99,8 +99,8 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	 *         <code>prefix</code>
 	 */
 	protected int getRelevance(Template template, String prefix) {
-		if (template.getName().toLowerCase().replace(".", "").startsWith(prefix))
-			// if (template.getName().startsWith(prefix))
+		//if (template.getName().toLowerCase().replace(".", "").startsWith(prefix))
+			if (template.getName().startsWith(prefix)||template.getName().toLowerCase().startsWith(prefix))
 			return 90;
 		return 0;
 	}
@@ -155,12 +155,12 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 							buf.append(",");
 						}
 					}
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ")", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ");", true);
 				} else {
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + "", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + "", true);
+				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
 			}
 
 			Template template = tempLocalFunctions[i];
