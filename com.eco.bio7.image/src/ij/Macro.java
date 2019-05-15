@@ -95,7 +95,7 @@ public class Macro {
 	public static String getOptions() {
 		String threadName = Thread.currentThread().getName();
 		// IJ.log("getOptions: "+threadName+" "+Thread.currentThread().hashCode()); //ts
-		if (threadName.startsWith("Run$_") || threadName.startsWith("RMI TCP")) {
+		if (threadName.startsWith("Run$_") || threadName.contains("Interpret_Job")||threadName.startsWith("RMI TCP")) {
 			Object options = table.get(Thread.currentThread());
 			return options == null ? null : options + " ";
 		} else

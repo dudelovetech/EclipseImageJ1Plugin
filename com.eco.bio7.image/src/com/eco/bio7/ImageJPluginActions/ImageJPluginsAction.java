@@ -143,7 +143,7 @@ public class ImageJPluginsAction extends Action implements IMenuCreator {
 								String path = ifile.getRawLocation().toString();
 
 								ImageJMacroRunnerWorkspaceJob job = new ImageJMacroRunnerWorkspaceJob(path);
-
+								job.setName("IJMacro_Interpret_Job");
 								job.addJobChangeListener(new JobChangeAdapter() {
 									public void done(IJobChangeEvent event) {
 										if (event.getResult().isOK()) {
