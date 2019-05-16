@@ -705,23 +705,28 @@ public class IJ {
 	 */
 	public static void showMessage(String title, String msg) {
 		/* Changed for Bio7! */
-		SwingUtilities.invokeLater(new Runnable() {
-			// !!
-			public void run() {
-				if (ij != null) {
-					if (msg != null && (msg.startsWith("<html>") || msg.startsWith("<HTML>"))) {
-						HTMLDialog hd = new HTMLDialog(title, msg);
-						if (isMacro() && hd.escapePressed())
-							throw new RuntimeException(Macro.MACRO_CANCELED);
-					} else {
-						MessageDialog md = new MessageDialog(ij, title, msg); 
-						if (isMacro() && md.escapePressed())
-							throw new RuntimeException(Macro.MACRO_CANCELED);
-					}
-				} else
-					System.out.println(msg);
-			}
-		});
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				// !!
+				public void run() {
+					if (ij != null) {
+						if (msg != null && (msg.startsWith("<html>") || msg.startsWith("<HTML>"))) {
+							HTMLDialog hd = new HTMLDialog(title, msg);
+							if (isMacro() && hd.escapePressed())
+								throw new RuntimeException(Macro.MACRO_CANCELED);
+						} else {
+							MessageDialog md = new MessageDialog(ij, title, msg); 
+							if (isMacro() && md.escapePressed())
+								throw new RuntimeException(Macro.MACRO_CANCELED);
+						}
+					} else
+						System.out.println(msg);
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
