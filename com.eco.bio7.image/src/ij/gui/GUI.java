@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
+import com.eco.bio7.image.CanvasView;
 import com.eco.bio7.image.Util;
 
 /** This class consists of static GUI utility methods. */
@@ -27,16 +28,21 @@ public class GUI {
 			isWindows8 = osname.contains("unknown") || osname.contains("8");
 		}
 	}
-        /*Calculate the central point of the monitor which contains the Bio7 shell!*/
+
+	/*Calculate the central point of the monitor which contains the Bio7 shell!*/
 	public static Point getCenterPoint() {
 		Shell parentShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
 		Monitor[] monitors = parentShell.getDisplay().getMonitors();
 		Monitor activeMonitor = null;
 
-		org.eclipse.swt.graphics.Rectangle r = parentShell.getBounds();
+		/*We use the monitor which embeds the tabfolder!*/
+		org.eclipse.swt.graphics.Rectangle r = CanvasView.tabFolder.getBounds();
+                /*We have to calculate the monitor location!*/
+		org.eclipse.swt.graphics.Point p = CanvasView.tabFolder.toDisplay(r.x, r.y);
+
 		for (int i = 0; i < monitors.length; i++) {
-			if (monitors[i].getBounds().contains(r.x, r.y)) {
+			if (monitors[i].getBounds().contains(p.x, p.y)) {
 				activeMonitor = monitors[i];
 			}
 
@@ -44,7 +50,8 @@ public class GUI {
 		if (activeMonitor == null) {
 			activeMonitor = parentShell.getDisplay().getPrimaryMonitor();
 		}
-		//System.out.println("The resolution of the active monitor is " + activeMonitor.getBounds().width + " x " + activeMonitor.getBounds().height);
+		// System.out.println("The resolution of the active monitor is " +
+		// activeMonitor.getBounds().width + " x " + activeMonitor.getBounds().height);
 		// System.out.println(shellBounds);
 
 		org.eclipse.swt.graphics.Rectangle bounds = activeMonitor.getBounds();
@@ -65,10 +72,12 @@ public class GUI {
 				center = getCenterPoint();
 			}
 		});
-		
-		Dimension window = win.getSize(); if (window.width == 0) return;
-		win.setLocation(center.x- window.width/2, center.y- window.height/4);
-		
+
+		Dimension window = win.getSize();
+		if (window.width == 0)
+			return;
+		win.setLocation(center.x - window.width / 2, center.y - window.height / 4);
+
 	}
 
 	/**

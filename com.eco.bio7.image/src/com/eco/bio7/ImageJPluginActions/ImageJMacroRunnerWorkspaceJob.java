@@ -27,11 +27,6 @@ public class ImageJMacroRunnerWorkspaceJob extends WorkspaceJob implements IJobC
 		super("ImageJ selected interpreter in progress....");
 		this.path = path;
 		store = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.eco.bio7.ijmacro.editor");
-
-	}
-
-	public IStatus runInWorkspace(IProgressMonitor monitor) {
-		monitor.beginTask("ImageJ selected interpreter  is running.....", IProgressMonitor.UNKNOWN);
 		if (store == null) {
 			evalExt = false;
 		} else {
@@ -39,6 +34,12 @@ public class ImageJMacroRunnerWorkspaceJob extends WorkspaceJob implements IJobC
 			ijpath = store.getString("LOCATION_EXTERNAL");
 			javaArgs = store.getString("OPTIONS_EXTERNA");
 		}
+
+	}
+
+	public IStatus runInWorkspace(IProgressMonitor monitor) {
+		monitor.beginTask("ImageJ selected interpreter  is running.....", IProgressMonitor.UNKNOWN);
+		
 
 		if (evalExt) {
 			try {
