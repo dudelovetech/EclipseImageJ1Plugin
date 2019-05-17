@@ -165,12 +165,12 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 							buf.append(",");
 						}
 					}
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + "${cursor}" + buf.toString() + ");", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + buf.toString() + ");"+"${cursor}", true);
 				} else {
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";"+"${cursor}", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";", true);
+				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";"+"${cursor}", true);
 			}
 
 			Template template = tempLocalFunctions[i];

@@ -183,6 +183,22 @@
             commandId="com.eco.bio7.ijmacroeditor.refactor.rename">
            
       </handler>
+      
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.OpenFileDialog"
+            commandId="com.eco.bio7.ijmacro.editor.actions.openfiledialog">
+           
+      </handler>
+       <handler
+            class="com.eco.bio7.ijmacro.editor.actions.SaveFileDialog"
+            commandId="com.eco.bio7.ijmacro.editor.actions.opensavedialog">
+           
+      </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.OpenDirDialog"
+            commandId="com.eco.bio7.ijmacro.editor.actions.opendirdialog">
+           
+      </handler>
      
    </extension>
    <extension
@@ -308,6 +324,24 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="CTRL+ALT+W">
     </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.openfiledialog"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+ALT+O">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.opensavedialog"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+ALT+S">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.opendirdialog"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+SHIFT+ALT+D">
+    </key>
     
     
    
@@ -429,6 +463,21 @@
           id="com.eco.bio7.ijmacroeditor.refactor.rename"
           name="Rename">
     </command>
+    <command
+          description="Open file dialog"
+          id="com.eco.bio7.ijmacro.editor.actions.openfiledialog"
+          name="Open file dialog">
+    </command>
+    <command
+          description="Save file dialog"
+          id="com.eco.bio7.ijmacro.editor.actions.opensavedialog"
+          name="Save file dialog">
+    </command>
+    <command
+          description="Open directory dialog"
+          id="com.eco.bio7.ijmacro.editor.actions.opendirdialog"
+          name="Open directory dialog">
+    </command>
       
      
    </extension>
@@ -527,6 +576,36 @@
                style="push">
          </command>
       </menuContribution>
+      
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:#IJMacroContext?after=additions">
+         <menu
+               id="dialog.menu"
+               label="Editor File Dialogs"
+               tooltip="Filepath from Dialogs">
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.openfiledialog"
+                  label="Open File Dialog"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.opensavedialog"
+                  label="Open Save Dialog"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.opendirdialog"
+                  label="Open Directory Dialog"
+                  style="push">
+            </command>
+           
+         </menu>
+        
+         
+         
+      </menuContribution>
+      
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
