@@ -1,6 +1,24 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52o (1.52m30):
+
+1. Updated ImageJ plugin to version 1.52o30
+2. Improved automatic layout correction for synchronized detached views (e.g., orthogonal views)
+3. Improved titles of detached views to show correct titles and updates (e.g., coordinates of synchronized orthogonal views)
+4. Improved the centering of dialogs in a multi-monitor setup (dialogs are centered in the monitor which contains the ImageJ view tabfolder)
+5. Improved the code completion cursor location and arguments are now templates selectable with the tab key
+6. Improved the code completion sorting of templates
+7. Added a preference option to change the critera for code completion search to suggest function templates which contain the prefix
+8. Added new file, directory dialogs to insert paths at the current cursor location.
+9. Added a color and hex color dialog to select and insert color strings into the editor. Selected hex colors are displayed 
+in the color dialog (if created before with the dialog)
+10. Added new macro templates
+11. Fixed several bugs (e.g., opened dialog option popups in macros, deadlock with SWT dialog in a running macro)
+
+
+
+
 ### New in 1.52m (1.52m28):
 
 1. Updated ImageJ plugin to version 1.52m28
