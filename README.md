@@ -1,9 +1,9 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
-### New in 1.52o (1.52m30):
+### New in 1.52p (1.52p30):
 
-1. Updated ImageJ plugin to version 1.52o30
+1. Updated ImageJ plugin to version 1.52p30
 2. Improved automatic layout correction for synchronized detached views (e.g., orthogonal views)
 3. Improved titles of detached views to show correct titles and updates (e.g., coordinates of synchronized orthogonal views)
 4. Improved the centering of dialogs in a multi-monitor setup (dialogs are centered in the monitor which contains the ImageJ view tabfolder)
