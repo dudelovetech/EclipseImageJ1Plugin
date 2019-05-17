@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
 import javax.swing.JPanel;
@@ -1397,6 +1398,7 @@ public class Toolbar extends JPanel implements MouseListener, MouseMotionListene
 			list = f.list();
 			if (list == null)
 				return;
+			Arrays.sort(list);
 		} else
 			list = new String[0];
 		switchPopup.removeAll();
