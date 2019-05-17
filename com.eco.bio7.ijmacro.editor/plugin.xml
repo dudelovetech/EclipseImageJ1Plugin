@@ -199,6 +199,17 @@
             commandId="com.eco.bio7.ijmacro.editor.actions.opendirdialog">
            
       </handler>
+      
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.OpenColorDialog"
+            commandId="com.eco.bio7.ijmacro.editor.actions.opencolordialog">
+           
+      </handler>
+      <handler
+            class="com.eco.bio7.ijmacro.editor.actions.OpenColorDialogRGBToHex"
+            commandId="com.eco.bio7.ijmacro.editor.actions.openhexcolordialog">
+           
+      </handler>
      
    </extension>
    <extension
@@ -343,6 +354,19 @@
           sequence="CTRL+SHIFT+ALT+D">
     </key>
     
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.opencolordialog"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+ALT+SHIFT+C">
+    </key>
+    <key
+          commandId="com.eco.bio7.ijmacro.editor.actions.openhexcolordialog"
+          contextId="com.eco.bio7.ijmacro.editor.scope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="CTRL+ALT+SHIFT+H">
+    </key>
+    
     
    
     </extension>
@@ -478,6 +502,17 @@
           id="com.eco.bio7.ijmacro.editor.actions.opendirdialog"
           name="Open directory dialog">
     </command>
+    
+     <command
+          description="Open color dialog"
+          id="com.eco.bio7.ijmacro.editor.actions.opencolordialog"
+          name="Open color dialog">
+    </command>
+    <command
+          description="Open hex color dialog"
+          id="com.eco.bio7.ijmacro.editor.actions.openhexcolordialog"
+          name="Open hex color dialog">
+    </command>
       
      
    </extension>
@@ -582,8 +617,8 @@
             locationURI="popup:#IJMacroContext?after=additions">
          <menu
                id="dialog.menu"
-               label="Editor File Dialogs"
-               tooltip="Filepath from Dialogs">
+               label="File Dialogs"
+               tooltip="Filepath Dialogs">
             <command
                   commandId="com.eco.bio7.ijmacro.editor.actions.openfiledialog"
                   label="Open File Dialog"
@@ -591,7 +626,7 @@
             </command>
             <command
                   commandId="com.eco.bio7.ijmacro.editor.actions.opensavedialog"
-                  label="Open Save Dialog"
+                  label="Save File Dialog"
                   style="push">
             </command>
             <command
@@ -600,10 +635,26 @@
                   style="push">
             </command>
            
-         </menu>
-        
-         
-         
+         </menu>        
+      </menuContribution>
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:#IJMacroContext?after=additions">
+         <menu
+               id="color.dialog.menu"
+               label="Color Dialogs"
+               tooltip="Color Dialogs">
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.opencolordialog"
+                  label="Open Color Dialog"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.eco.bio7.ijmacro.editor.actions.openhexcolordialog"
+                  label="Open Hex Color Dialog"
+                  style="push">
+            </command>        
+         </menu>        
       </menuContribution>
       
    </extension>
