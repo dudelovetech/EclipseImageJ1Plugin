@@ -76,7 +76,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 			while (i > 0) {
 				char ch = document.getChar(i - 1);
 				/*
-				 * We need to extra include the '@' character for S4 class vars!
+				 * We need to extra include the '.' character!
 				 */
 				if (!Character.isJavaIdentifierPart(ch) && (ch == '.') == false)
 					break;
@@ -156,21 +156,28 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 					StringBuffer buf = new StringBuffer();
 					String[] args = contentOfBrackets.split(",");
 					for (int j = 0; j < args.length; j++) {
+						/*Arguments with quotes are Constants and will not work with placeholder. We handle them separately!*/
+						if (args[j].contains("\"")) {
+							buf.append(args[j]);
+						} 
 						/*
 						 * The ${} placeholder will be removed in the
 						 * IJMacroSimpleDefaultInformationControl to get the context information!
 						 */
-						buf.append("${" + args[j] + "}");
+						else {
+							buf.append("${" + args[j] + "}");
+						}
 						if (j < args.length - 1) {
 							buf.append(",");
 						}
 					}
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + buf.toString() + ");"+"${cursor}", true);
+					String argFun = buf.toString();
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + argFun + ");" + "${cursor}", true);
 				} else {
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";"+"${cursor}", true);
+					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";" + "${cursor}", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";"+"${cursor}", true);
+				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";" + "${cursor}", true);
 			}
 
 			Template template = tempLocalFunctions[i];
