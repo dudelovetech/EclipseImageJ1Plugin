@@ -201,9 +201,11 @@ public class IJMacroFunctions {
 			"getValue(\"rgb.background\")####Returns the current backgound color as an RGB pixel value."+linSeparator + 
 			"getValue(\"font.size\")####Returns the size,in points,of the current font."+linSeparator + 
 			"getValue(\"font.height\")####Returns the height,in pixels,of the current font."+linSeparator + 
-			"getValue(\"selection.width\")####Returns the stroke width of the current selection."+linSeparator + 
+			"getValue(\"selection.width\")####Returns the stroke width of the current selection."+linSeparator +
+			"getValue(\"selection.size\")####Returns the number of points of the current selection."+linSeparator +
 			"getValue(measurement)####Returns the measurement values where measurement is \"Area\",\"Mean\",\"Skew\",etc., see: http://wsr.imagej.net/macros/Colorize_ROIs_by_Measurement.txt."+linSeparator+
 			"getValue(\"rgb.foreground\")####Returns the current foregound color as an RGB pixel value (example)."+linSeparator + 
+			"getValue(\"rotation.angle\")####Returns the current rotation angle."+linSeparator + 
 			"getVoxelSize(width,height,depth,unit)####Returns the voxel size and unit of length (\"pixel\",\"mm\",etc.) of the current image or stack. See also: getPixelSize,setVoxelSize."+linSeparator + 
 			"getVersion()####Returns the ImageJ version number as a string (e.g.,\"1.34s\"). See also: requires."+linSeparator + 
 			"getWidth()####Returns the width in pixels of the current image."+linSeparator + 
