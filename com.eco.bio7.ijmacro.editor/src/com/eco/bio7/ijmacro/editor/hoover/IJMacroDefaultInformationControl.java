@@ -387,13 +387,13 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 			else {
 				finals2 = methodNameToSplitChar;
 			}
-			//System.out.println(finals2+" "+contentFromHoover);
+			
 			if (finals2.equals(contentFromHoover)) {
 
 				String[] temp = finals.split("####");
 				// String parsedStr = temp[1];//.replaceAll("(.{70})", "$1\n");
 				con.append(temp[0]);
-				con.append(System.lineSeparator() + System.lineSeparator() + temp[1]);
+				con.append(System.lineSeparator() + temp[1]);
 				con.append(System.lineSeparator());
 				con.append(System.lineSeparator());
 				 
