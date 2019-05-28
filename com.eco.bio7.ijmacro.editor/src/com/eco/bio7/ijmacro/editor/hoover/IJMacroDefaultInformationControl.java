@@ -144,7 +144,8 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 
 	private String contentFromHoover;
 
-	private String content = null;
+	private StringBuffer con = null;
+	private StringBuffer content = null;
 
 	/**
 	 * Creates a default information control with the given shell as parent. An
@@ -366,6 +367,8 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * @see IInformationControl#setInformation(String)
 	 */
 	public void setInformation(String contentFromHoover) {
+		con=new StringBuffer();
+		con.append(contentFromHoover+System.lineSeparator()+System.lineSeparator());
 		/* The given String for the browser only! */
 		this.contentFromHoover = contentFromHoover;
 		/* Here we split the functions array for our hoover popup! */
@@ -389,16 +392,21 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 
 				String[] temp = finals.split("####");
 				// String parsedStr = temp[1];//.replaceAll("(.{70})", "$1\n");
-				content = temp[0] + System.lineSeparator() + System.lineSeparator() + temp[1];
+				con.append(temp[0]);
+				con.append(System.lineSeparator() + System.lineSeparator() + temp[1]);
+				con.append(System.lineSeparator());
+				con.append(System.lineSeparator());
+				 
 			}
 
 		}
 		/* Return if we have no match! */
-		if (content == null) {
+		if (con == null) {
 			return;
 		}
+		String content=con.toString();
 		if (fPresenter == null) {
-			fText.setText(content);
+			fText.setText(content.toString());
 		} else {
 			fPresentation.clear();
 
