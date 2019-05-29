@@ -1,6 +1,13 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52p (1.52p36):
+
+1. Updated ImageJ plugin to version 1.52p36
+2. Improved code completion to find and set functions with fixed arguments.
+3. Improved hoover information to list all functions with identical name.
+4. Added new macro code completion templates.
+
 ### New in 1.52p (1.52p30):
 
 1. Updated ImageJ plugin to version 1.52p30
@@ -15,9 +22,6 @@ A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 in the color dialog (if created before with the dialog)
 10. Added new macro templates
 11. Fixed several bugs (e.g., opened dialog option popups in macros, deadlock with SWT dialog in a running macro)
-
-
-
 
 ### New in 1.52m (1.52m28):
 
