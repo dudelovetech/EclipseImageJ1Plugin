@@ -214,7 +214,7 @@ The ImageJ toolbar can be opened in the ImageJ-Canvas view menu (***Window->Imag
 Images can be dropped in a folder of Eclipse and can be opened from within Eclipse (special image icon available when image extension is detected) in the Eclipse ImageJ view. Unknown image formats (default extensions are used only) can be opened with (***Open with->Other->ImageJ Image Editor***) or simply by a drag and
 drop action.
 
-#### Key Commands (not visible in menu):
+#### Key Commands (also visible in the editor context menu):
 
 1. Insert text at selected line from Macro Recorder: (CTRL+SHIFT+R or CMD+SHIFT+R)
 2. Debug (CTRL+D or CMD+D)
