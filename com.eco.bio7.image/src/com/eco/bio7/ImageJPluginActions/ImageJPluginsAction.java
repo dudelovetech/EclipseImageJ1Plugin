@@ -32,6 +32,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
+
 import com.eco.bio7.image.Util;
 
 public class ImageJPluginsAction extends Action implements IMenuCreator {
