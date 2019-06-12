@@ -386,14 +386,14 @@ public class StackEditor implements PlugIn {
 						SwingUtilities.invokeAndWait(new Runnable() {
 
 							public void run() {
-								Platform.runLater(new Runnable() {
-									public void run() {
+								//Platform.runLater(new Runnable() {
+									//public void run() {
 										if (count == size)
 											lastImageID = imp2.getID();
 										imp2.show();
 										
-									}
-								});
+									//}
+								//});
 
 							}
 						});
