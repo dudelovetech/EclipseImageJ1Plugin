@@ -46,7 +46,7 @@ public class Interpreter implements MacroConstants {
 	Functions func;
 	boolean inFunction;
 	String macroName;
-	public String argument;
+	String argument;
 	String returnValue;
 	boolean calledMacro; // macros envoked by eval() or runMacro()
 	boolean batchMacro; // macros envoked by Process/Batch commands
@@ -834,7 +834,7 @@ public class Interpreter implements MacroConstants {
 			if (type==TABLE) {
 				int token2 = pgm.code[pc+4];
 				String name = pgm.table[token2>>TOK_SHIFT].str;
-				if (name.equals("getString")||name.equals("title")||name.equals("headings"))
+				if (name.equals("getString")||name.equals("title")||name.equals("headings")||name.equals("allHeadings"))
 					return Variable.STRING;
 				else if (name.equals("getColumn"))
 					return Variable.ARRAY;
@@ -1250,7 +1250,7 @@ public class Interpreter implements MacroConstants {
 		}
 	}
 
-	public void error (String message) {
+	void error (String message) {
 		errorMessage = message;
 		if (ignoreErrors)
 			return;

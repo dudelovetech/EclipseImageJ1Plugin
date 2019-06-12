@@ -252,7 +252,9 @@ public class IJ {
 			else if (thePlugIn instanceof PlugInFilter)
 				new PlugInFilterRunner(thePlugIn, commandName, arg);
 		} catch (ClassNotFoundException e) {
-			if (className.contains("_") && !suppressPluginNotFoundError)
+			if (className.startsWith("macro:"))
+				runMacro(className.substring(6));
+			else if (className.contains("_")  && !suppressPluginNotFoundError)
 				error("Plugin or class not found: \"" + className + "\"\n(" + e + ")");
 		} catch (NoClassDefFoundError e) {
 			int dotIndex = className.indexOf('.');
