@@ -387,7 +387,6 @@ public class Util {
 
 	// The source for the following method from:
 	// https://stackoverflow.com/questions/20767708/how-do-you-detect-a-retina-display-in-java#20767802
-
 	public static boolean isMacRetinaDisplay() {
 		if (getZoom() == 200) {
 			return true;
