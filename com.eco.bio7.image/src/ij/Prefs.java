@@ -218,6 +218,8 @@ public class Prefs {
 	private static boolean resetPreferences;
 	private static double guiScale = 1.0;
 	private static Properties locKeys = new Properties();
+	private static String propertiesPath; // location of custom IJ_Props.txt
+	private static String preferencesPath; // location of custom IJ_Prefs.txt
 
 	/** Finds and loads the configuration file ("IJ_Props.txt")
 	 * and the preferences file ("IJ_Prefs.txt").
@@ -245,6 +247,7 @@ public class Prefs {
 		if (f == null) {
 			try {
 				f = new FileInputStream(ImageJDir + "/" + PROPS_NAME);
+				propertiesPath = ImageJDir+"/"+PROPS_NAME;
 			} catch (FileNotFoundException e) {
 				f = null;
 			}
@@ -334,6 +337,7 @@ public class Prefs {
 			 * File.separator+".imagej";
 			 */
 			prefsDir = path;
+			preferencesPath = path+"/"+PREFS_NAME;
 		}
 		return prefsDir;
 	}
@@ -353,7 +357,7 @@ public class Prefs {
 			return getString(DIR_IMAGE);
 	}
 
-	/** Finds an string in IJ_Props or IJ_Prefs.txt. */
+	/** Finds a string in IJ_Props or IJ_Prefs.txt. */
 	public static String getString(String key) {
 		return props.getProperty(key);
 	}
@@ -790,5 +794,16 @@ public class Prefs {
 	public static double getGuiScale() {
 		return guiScale;
 	}
+	/** Returns the custom properties (IJ_Props.txt) file path. */
+	public static String getCustomPropsPath() {
+		return propertiesPath;
+	}
+
+	/** Returns the custom preferences (IJ_Prefs.txt) file path. */
+	public static String getCustomPrefsPath() {
+		return preferencesPath;
+	}
+
+
 
 }

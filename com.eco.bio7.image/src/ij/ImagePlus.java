@@ -105,6 +105,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	private boolean ignoreGlobalCalibration;
 	private boolean oneSliceStack;
 	public boolean setIJMenuBar = Prefs.setIJMenuBar;
+	private Plot plot;
 	private String scale = "";
 
 	/** Constructs an uninitialized ImagePlus. */
@@ -1023,6 +1024,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	 * IJ.log("Mean: " + stats.mean);
 	 * IJ.log("Max: " + stats.max);
 	 * </pre>
+	 * 
 	 * @return an {@link ij.process.ImageStatistics} object
 	 * @see #getAllStatistics
 	 * @see #getRawStatistics
@@ -1032,13 +1034,15 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return getStatistics(AREA + MEAN + STD_DEV + MODE + MIN_MAX + RECT);
 	}
 
-	/** This method returns complete calibrated statistics for this
-	 * image or ROI (with "Limit to threshold"), but it is up to 70 times
-	 * slower than getStatistics().
+	/**
+	 * This method returns complete calibrated statistics for this image or ROI
+	 * (with "Limit to threshold"), but it is up to 70 times slower than
+	 * getStatistics().
+	 * 
 	 * @return an {@link ij.process.ImageStatistics} object
 	 * @see #getStatistics
 	 * @see ij.process.ImageProcessor#getStatistics
-	*/
+	 */
 	public ImageStatistics getAllStatistics() {
 		return getStatistics(ALL_STATS + LIMIT);
 	}
@@ -1058,7 +1062,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	/**
 	 * Returns an ImageStatistics object generated using the specified measurement
 	 * options.
-	 * 	 
+	 * 
 	 * @see ij.measure.Measurements
 	 */
 	public ImageStatistics getStatistics(int mOptions) {
@@ -1083,14 +1087,14 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		if (nBins != 256 && (bitDepth == 8 || bitDepth == 24))
 			ip2 = ip.convertToShort(false);
 		Roi roi2 = roi;
-		if (roi2==null)
+		if (roi2 == null)
 			ip2.resetRoi();
 		else if (roi2.isArea())
-			ip2.setRoi(roi2);			
-		else if ((roi2 instanceof PointRoi) && roi2.size()==1) {
-				// needed to be consistent with ImageProcessor.getStatistics()
-				FloatPolygon p = roi2.getFloatPolygon();
-				ip2.setRoi((int)p.xpoints[0], (int)p.ypoints[0], 1, 1);
+			ip2.setRoi(roi2);
+		else if ((roi2 instanceof PointRoi) && roi2.size() == 1) {
+			// needed to be consistent with ImageProcessor.getStatistics()
+			FloatPolygon p = roi2.getFloatPolygon();
+			ip2.setRoi((int) p.xpoints[0], (int) p.ypoints[0], 1, 1);
 		}
 		ip2.setHistogramSize(nBins);
 		Calibration cal = getCalibration();
@@ -1885,7 +1889,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			if (roi != null)
 				roi.endPaste();
 			if (isProcessor()) {
-				if (currentSlice==0) currentSlice=1;
+				if (currentSlice == 0)
+					currentSlice = 1;
 				stack.setPixels(ip.getPixels(), currentSlice);
 			}
 			setCurrentSlice(n);
@@ -2123,6 +2128,23 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				ip.resetRoi();
 			draw();
 		}
+	}
+
+	public boolean okToDeleteRoi() {
+		if (roi != null && (roi instanceof PointRoi) && getWindow() != null && ((PointRoi) roi).promptBeforeDeleting()) {
+			int npoints = ((PolygonRoi) roi).getNCoordinates();
+			int counters = ((PointRoi) roi).getNCounters();
+			String msg = "Delete this multi-point selection (" + npoints + " points, " + counters + " counter" + (counters > 1 ? "s" : "") + ")?";
+			GenericDialog gd = new GenericDialog("Delete Points?");
+			gd.addMessage(msg + "\nRestore using Edit>Selection>Restore Selection.");
+			gd.addHelp(PointToolOptions.help);
+			gd.setOKLabel("Keep");
+			gd.setCancelLabel("Delete");
+			gd.showDialog();
+			if (gd.wasOKed())
+				return false;
+		}
+		return true;
 	}
 
 	/** Deletes the current region of interest. */
@@ -2428,32 +2450,39 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	public ImagePlus crop() {
 		return (new Duplicator()).crop(this);
 	}
-	
-	/** Returns a cropped copy this image or stack, where 'options'
-	 * can be "stack", "slice" or a range (e.g., "20-30").
+
+	/**
+	 * Returns a cropped copy this image or stack, where 'options' can be "stack",
+	 * "slice" or a range (e.g., "20-30").
+	 * 
 	 * @see #duplicate
 	 * @see #crop
 	 * @see ij.plugin.Duplicator#crop
-	*/
+	 */
 	public ImagePlus crop(String options) {
 		String msg = "crop: \"stack\", \"slice\" or a range (e.g., \"20-30\") expected";
 		int stackSize = getStackSize();
-		if (options==null || options.equals("stack"))
+		if (options == null || options.equals("stack"))
 			return (new Duplicator()).run(this);
-		else if (options.equals("slice") || stackSize==1)
+		else if (options.equals("slice") || stackSize == 1)
 			return crop();
 		else {
 			String[] range = Tools.split(options, " -");
-			if (range.length!=2)
+			if (range.length != 2)
 				throw new IllegalArgumentException(msg);
 			double s1 = Tools.parseDouble(range[0]);
 			double s2 = Tools.parseDouble(range[1]);
 			if (Double.isNaN(s1) || Double.isNaN(s2))
 				throw new IllegalArgumentException(msg);
-			if (s1<1) s1 = 1;
-			if (s2>stackSize) s2 = stackSize;
-			if (s1>s2) {s1=1; s2=stackSize;}
-			return new Duplicator().run(this, (int)s1, (int)s2);
+			if (s1 < 1)
+				s1 = 1;
+			if (s2 > stackSize)
+				s2 = stackSize;
+			if (s1 > s2) {
+				s1 = 1;
+				s2 = stackSize;
+			}
+			return new Duplicator().run(this, (int) s1, (int) s2);
 		}
 	}
 
@@ -3274,6 +3303,14 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 
 	public boolean isStack() {
 		return stack != null;
+	}
+
+	public void setPlot(Plot plot) {
+		this.plot = plot;
+	}
+
+	public Plot getPlot() {
+		return plot;
 	}
 
 }

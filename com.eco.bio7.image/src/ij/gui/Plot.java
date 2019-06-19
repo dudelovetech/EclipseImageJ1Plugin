@@ -1437,6 +1437,7 @@ public class Plot implements Cloneable {
 		}
 		if ((IJ.macroRunning() && IJ.getInstance()==null) || Interpreter.isBatchMode()) {
 			imp = getImagePlus();
+			imp.setPlot(this);
 			WindowManager.setTempCurrentImage(imp);
 			if (getMainCurveObject() != null) {
 				imp.setProperty("XValues", getXValues()); // Allows values to be retrieved by
