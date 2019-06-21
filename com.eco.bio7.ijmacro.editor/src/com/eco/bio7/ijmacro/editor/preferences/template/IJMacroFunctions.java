@@ -426,7 +426,7 @@ public class IJMacroFunctions {
 			"roiManager(\"show none\")####Removes the ROI Manager overlay."+linSeparator +  
 			"roiManager(\"sort\")####Sorts the ROI list in alphanumeric order."+linSeparator + 
 			"roiManager(\"split\")####Splits the current selection (it must be a composite selection) into its component parts and adds them to the ROI Manager."+linSeparator +  
-			"roiManager(\"update\")####Replaces the selected ROI on the list with the current selection."+
+			"roiManager(\"update\")####Replaces the selected ROI on the list with the current selection."+linSeparator +
 			"round(n)####Returns the closest integer to n. See also: floor."+linSeparator + 
 			"run(\"command\"[,\"options\"])####Executes an ImageJ menu command. The optional second argument contains values that are automatically entered into dialog boxes (must be GenericDialog or OpenDialog). Use the Command Recorder (Plugins>Macros>Record) to generate run() function calls. Use string concatentation to pass a variable as an argument. For examples,see the ArgumentPassingDemo macro."+linSeparator + 
 			"runMacro(name)####Runs the specified macro file,which is assumed to be in the Image macros folder. A full file path may also be used. The \".txt\" extension is optional. Returns any string argument returned by the macro. May have an optional second string argument that is passed to macro. For an example,see the CalculateMean macro. See also: eval and getArgument."+linSeparator + 
