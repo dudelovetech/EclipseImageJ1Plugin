@@ -2162,10 +2162,20 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 				if (IJ.debugMode)
 					IJ.log("saveRoi: " + roi2);
 			}
+			if ((roi2 instanceof PointRoi) && ((PointRoi)roi2).promptBeforeDeleting()) {
+				PointRoi.savedPoints = (PointRoi)roi2.clone();
+				if (IJ.debugMode) IJ.log("saveRoi: saving multi-point selection");
+			}
 		}
 	}
 
 	public void restoreRoi() {
+		if (Toolbar.getToolId()==Toolbar.POINT && PointRoi.savedPoints!=null) {
+			roi = (Roi)PointRoi.savedPoints.clone();
+			draw();
+			roi.notifyListeners(RoiListener.MODIFIED);
+			return;
+		}
 		if (Roi.previousRoi != null) {
 			Roi pRoi = Roi.previousRoi;
 			Rectangle r = pRoi.getBounds();
