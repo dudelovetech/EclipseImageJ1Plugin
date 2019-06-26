@@ -1,4 +1,4 @@
-// Generated from ImageJMacro.g4 by ANTLR 4.6
+// Generated from ImageJMacro.g4 by ANTLR 4.7.2
 package com.eco.bio7.ijmacro.editor.antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ImageJMacroParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.6", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -41,40 +41,49 @@ public class ImageJMacroParser extends Parser {
 		RULE_expressionSequence = 27, RULE_singleExpression = 28, RULE_assignmentOperator = 29, 
 		RULE_literal = 30, RULE_numericLiteral = 31, RULE_identifierName = 32, 
 		RULE_reservedWord = 33, RULE_keyword = 34, RULE_eos = 35, RULE_eof = 36;
-	public static final String[] ruleNames = {
-		"program", "sourceElements", "sourceElement", "statement", "block", "statementList", 
-		"variableStatement", "variableDeclarationList", "variableDeclaration", 
-		"initialiser", "emptyStatement", "expressionStatement", "ifStatement", 
-		"iterationStatement", "breakStatement", "returnStatement", "labelledStatement", 
-		"functionDeclaration", "formalParameterList", "functionBody", "macroBody", 
-		"arrayLiteral", "elementList", "elision", "propertySetParameterList", 
-		"arguments", "argumentList", "expressionSequence", "singleExpression", 
-		"assignmentOperator", "literal", "numericLiteral", "identifierName", "reservedWord", 
-		"keyword", "eos", "eof"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"program", "sourceElements", "sourceElement", "statement", "block", "statementList", 
+			"variableStatement", "variableDeclarationList", "variableDeclaration", 
+			"initialiser", "emptyStatement", "expressionStatement", "ifStatement", 
+			"iterationStatement", "breakStatement", "returnStatement", "labelledStatement", 
+			"functionDeclaration", "formalParameterList", "functionBody", "macroBody", 
+			"arrayLiteral", "elementList", "elision", "propertySetParameterList", 
+			"arguments", "argumentList", "expressionSequence", "singleExpression", 
+			"assignmentOperator", "literal", "numericLiteral", "identifierName", 
+			"reservedWord", "keyword", "eos", "eof"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "':'", "'!=='", null, null, "'['", "']'", "'('", "')'", "'{'", "'}'", 
-		"';'", "','", "'='", "'?'", "'.'", "'++'", "'--'", "'+'", "'-'", "'~'", 
-		"'!'", "'*'", "'/'", "'%'", "'>>'", "'<<'", "'<'", "'>'", "'<='", "'>='", 
-		"'=='", "'!='", "'&'", "'^'", "'|'", "'&&'", "'||'", "'*='", "'/='", "'+='", 
-		"'-='", null, null, null, null, "'macro'", "'break'", "'do'", "'else'", 
-		"'var'", "'return'", "'continue'", "'for'", "'while'", "'function'", "'with'", 
-		"'if'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, "RegularExpressionLiteral", "LineTerminator", "OpenBracket", 
-		"CloseBracket", "OpenParen", "CloseParen", "OpenBrace", "CloseBrace", 
-		"SemiColon", "Comma", "Assign", "QuestionMark", "Dot", "PlusPlus", "MinusMinus", 
-		"Plus", "Minus", "BitNot", "Not", "Multiply", "Divide", "Modulus", "RightShiftArithmetic", 
-		"LeftShiftArithmetic", "LessThan", "MoreThan", "LessThanEquals", "GreaterThanEquals", 
-		"Equals", "NotEquals", "BitAnd", "BitXOr", "BitOr", "And", "Or", "MultiplyAssign", 
-		"DivideAssign", "PlusAssign", "MinusAssign", "BooleanLiteral", "DecimalLiteral", 
-		"HexIntegerLiteral", "OctalIntegerLiteral", "Macro", "Break", "Do", "Else", 
-		"Var", "Return", "Continue", "For", "While", "Function", "With", "If", 
-		"Identifier", "StringLiteral", "WhiteSpaces", "MultiLineComment", "SingleLineComment", 
-		"UnexpectedCharacter"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "':'", "'!=='", null, null, "'['", "']'", "'('", "')'", "'{'", 
+			"'}'", "';'", "','", "'='", "'?'", "'.'", "'++'", "'--'", "'+'", "'-'", 
+			"'~'", "'!'", "'*'", "'/'", "'%'", "'>>'", "'<<'", "'<'", "'>'", "'<='", 
+			"'>='", "'=='", "'!='", "'&'", "'^'", "'|'", "'&&'", "'||'", "'*='", 
+			"'/='", "'+='", "'-='", null, null, null, null, "'macro'", "'break'", 
+			"'do'", "'else'", "'var'", "'return'", "'continue'", "'for'", "'while'", 
+			"'function'", "'with'", "'if'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, "RegularExpressionLiteral", "LineTerminator", "OpenBracket", 
+			"CloseBracket", "OpenParen", "CloseParen", "OpenBrace", "CloseBrace", 
+			"SemiColon", "Comma", "Assign", "QuestionMark", "Dot", "PlusPlus", "MinusMinus", 
+			"Plus", "Minus", "BitNot", "Not", "Multiply", "Divide", "Modulus", "RightShiftArithmetic", 
+			"LeftShiftArithmetic", "LessThan", "MoreThan", "LessThanEquals", "GreaterThanEquals", 
+			"Equals", "NotEquals", "BitAnd", "BitXOr", "BitOr", "And", "Or", "MultiplyAssign", 
+			"DivideAssign", "PlusAssign", "MinusAssign", "BooleanLiteral", "DecimalLiteral", 
+			"HexIntegerLiteral", "OctalIntegerLiteral", "Macro", "Break", "Do", "Else", 
+			"Var", "Return", "Continue", "For", "While", "Function", "With", "If", 
+			"Identifier", "StringLiteral", "WhiteSpaces", "MultiLineComment", "SingleLineComment", 
+			"UnexpectedCharacter"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -188,6 +197,7 @@ public class ImageJMacroParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class ProgramContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(ImageJMacroParser.EOF, 0); }
 		public SourceElementsContext sourceElements() {
@@ -607,6 +617,8 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
+		public TerminalNode OpenBrace() { return getToken(ImageJMacroParser.OpenBrace, 0); }
+		public TerminalNode CloseBrace() { return getToken(ImageJMacroParser.CloseBrace, 0); }
 		public StatementListContext statementList() {
 			return getRuleContext(StatementListContext.class,0);
 		}
@@ -781,6 +793,10 @@ public class ImageJMacroParser extends Parser {
 		public VariableDeclarationContext variableDeclaration(int i) {
 			return getRuleContext(VariableDeclarationContext.class,i);
 		}
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
+		}
 		public VariableDeclarationListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -895,6 +911,7 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class InitialiserContext extends ParserRuleContext {
+		public TerminalNode Assign() { return getToken(ImageJMacroParser.Assign, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -1020,9 +1037,11 @@ public class ImageJMacroParser extends Parser {
 
 	public static class IfStatementContext extends ParserRuleContext {
 		public TerminalNode If() { return getToken(ImageJMacroParser.If, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
 		public ExpressionSequenceContext expressionSequence() {
 			return getRuleContext(ExpressionSequenceContext.class,0);
 		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
 		}
@@ -1102,9 +1121,11 @@ public class ImageJMacroParser extends Parser {
 			return getRuleContext(StatementContext.class,0);
 		}
 		public TerminalNode While() { return getToken(ImageJMacroParser.While, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
 		public ExpressionSequenceContext expressionSequence() {
 			return getRuleContext(ExpressionSequenceContext.class,0);
 		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public EosContext eos() {
 			return getRuleContext(EosContext.class,0);
 		}
@@ -1120,10 +1141,16 @@ public class ImageJMacroParser extends Parser {
 	}
 	public static class ForVarStatementContext extends IterationStatementContext {
 		public TerminalNode For() { return getToken(ImageJMacroParser.For, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
 		public TerminalNode Var() { return getToken(ImageJMacroParser.Var, 0); }
 		public VariableDeclarationListContext variableDeclarationList() {
 			return getRuleContext(VariableDeclarationListContext.class,0);
 		}
+		public List<TerminalNode> SemiColon() { return getTokens(ImageJMacroParser.SemiColon); }
+		public TerminalNode SemiColon(int i) {
+			return getToken(ImageJMacroParser.SemiColon, i);
+		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1145,9 +1172,11 @@ public class ImageJMacroParser extends Parser {
 	}
 	public static class WhileStatementContext extends IterationStatementContext {
 		public TerminalNode While() { return getToken(ImageJMacroParser.While, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
 		public ExpressionSequenceContext expressionSequence() {
 			return getRuleContext(ExpressionSequenceContext.class,0);
 		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1163,6 +1192,12 @@ public class ImageJMacroParser extends Parser {
 	}
 	public static class ForStatementContext extends IterationStatementContext {
 		public TerminalNode For() { return getToken(ImageJMacroParser.For, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
+		public List<TerminalNode> SemiColon() { return getTokens(ImageJMacroParser.SemiColon); }
+		public TerminalNode SemiColon(int i) {
+			return getToken(ImageJMacroParser.SemiColon, i);
+		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1489,9 +1524,13 @@ public class ImageJMacroParser extends Parser {
 	public static class FunctionDeclarationContext extends ParserRuleContext {
 		public TerminalNode Function() { return getToken(ImageJMacroParser.Function, 0); }
 		public TerminalNode Identifier() { return getToken(ImageJMacroParser.Identifier, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
+		public TerminalNode OpenBrace() { return getToken(ImageJMacroParser.OpenBrace, 0); }
 		public FunctionBodyContext functionBody() {
 			return getRuleContext(FunctionBodyContext.class,0);
 		}
+		public TerminalNode CloseBrace() { return getToken(ImageJMacroParser.CloseBrace, 0); }
 		public FormalParameterListContext formalParameterList() {
 			return getRuleContext(FormalParameterListContext.class,0);
 		}
@@ -1557,6 +1596,10 @@ public class ImageJMacroParser extends Parser {
 		public List<TerminalNode> Identifier() { return getTokens(ImageJMacroParser.Identifier); }
 		public TerminalNode Identifier(int i) {
 			return getToken(ImageJMacroParser.Identifier, i);
+		}
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
 		}
 		public FormalParameterListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1705,9 +1748,12 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class ArrayLiteralContext extends ParserRuleContext {
+		public TerminalNode OpenBracket() { return getToken(ImageJMacroParser.OpenBracket, 0); }
+		public TerminalNode CloseBracket() { return getToken(ImageJMacroParser.CloseBracket, 0); }
 		public ElementListContext elementList() {
 			return getRuleContext(ElementListContext.class,0);
 		}
+		public TerminalNode Comma() { return getToken(ImageJMacroParser.Comma, 0); }
 		public ElisionContext elision() {
 			return getRuleContext(ElisionContext.class,0);
 		}
@@ -1792,6 +1838,10 @@ public class ImageJMacroParser extends Parser {
 		public ElisionContext elision(int i) {
 			return getRuleContext(ElisionContext.class,i);
 		}
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
+		}
 		public ElementListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1868,6 +1918,10 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class ElisionContext extends ParserRuleContext {
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
+		}
 		public ElisionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1954,6 +2008,8 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class ArgumentsContext extends ParserRuleContext {
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public ArgumentListContext argumentList() {
 			return getRuleContext(ArgumentListContext.class,0);
 		}
@@ -2011,6 +2067,10 @@ public class ImageJMacroParser extends Parser {
 		}
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
+		}
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
 		}
 		public ArgumentListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2070,6 +2130,10 @@ public class ImageJMacroParser extends Parser {
 		}
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
+		}
+		public List<TerminalNode> Comma() { return getTokens(ImageJMacroParser.Comma); }
+		public TerminalNode Comma(int i) {
+			return getToken(ImageJMacroParser.Comma, i);
 		}
 		public ExpressionSequenceContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2143,6 +2207,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode QuestionMark() { return getToken(ImageJMacroParser.QuestionMark, 0); }
 		public TernaryExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2160,6 +2225,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode And() { return getToken(ImageJMacroParser.And, 0); }
 		public LogicalAndExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2192,6 +2258,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode Or() { return getToken(ImageJMacroParser.Or, 0); }
 		public LogicalOrExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2203,6 +2270,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class NotExpressionContext extends SingleExpressionContext {
+		public TerminalNode Not() { return getToken(ImageJMacroParser.Not, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -2250,9 +2318,13 @@ public class ImageJMacroParser extends Parser {
 	}
 	public static class FunctionExpressionContext extends SingleExpressionContext {
 		public TerminalNode Function() { return getToken(ImageJMacroParser.Function, 0); }
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
+		public TerminalNode OpenBrace() { return getToken(ImageJMacroParser.OpenBrace, 0); }
 		public FunctionBodyContext functionBody() {
 			return getRuleContext(FunctionBodyContext.class,0);
 		}
+		public TerminalNode CloseBrace() { return getToken(ImageJMacroParser.CloseBrace, 0); }
 		public TerminalNode Identifier() { return getToken(ImageJMacroParser.Identifier, 0); }
 		public FormalParameterListContext formalParameterList() {
 			return getRuleContext(FormalParameterListContext.class,0);
@@ -2268,6 +2340,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class UnaryMinusExpressionContext extends SingleExpressionContext {
+		public TerminalNode Minus() { return getToken(ImageJMacroParser.Minus, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -2288,6 +2361,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode Assign() { return getToken(ImageJMacroParser.Assign, 0); }
 		public AssignmentExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2314,6 +2388,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class UnaryPlusExpressionContext extends SingleExpressionContext {
+		public TerminalNode Plus() { return getToken(ImageJMacroParser.Plus, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -2334,6 +2409,8 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode Equals() { return getToken(ImageJMacroParser.Equals, 0); }
+		public TerminalNode NotEquals() { return getToken(ImageJMacroParser.NotEquals, 0); }
 		public EqualityExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2351,6 +2428,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode BitXOr() { return getToken(ImageJMacroParser.BitXOr, 0); }
 		public BitXOrExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2368,6 +2446,9 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode Multiply() { return getToken(ImageJMacroParser.Multiply, 0); }
+		public TerminalNode Divide() { return getToken(ImageJMacroParser.Divide, 0); }
+		public TerminalNode Modulus() { return getToken(ImageJMacroParser.Modulus, 0); }
 		public MultiplicativeExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2385,6 +2466,8 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode LeftShiftArithmetic() { return getToken(ImageJMacroParser.LeftShiftArithmetic, 0); }
+		public TerminalNode RightShiftArithmetic() { return getToken(ImageJMacroParser.RightShiftArithmetic, 0); }
 		public BitShiftExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2396,9 +2479,11 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class ParenthesizedExpressionContext extends SingleExpressionContext {
+		public TerminalNode OpenParen() { return getToken(ImageJMacroParser.OpenParen, 0); }
 		public ExpressionSequenceContext expressionSequence() {
 			return getRuleContext(ExpressionSequenceContext.class,0);
 		}
+		public TerminalNode CloseParen() { return getToken(ImageJMacroParser.CloseParen, 0); }
 		public ParenthesizedExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2416,6 +2501,8 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode Plus() { return getToken(ImageJMacroParser.Plus, 0); }
+		public TerminalNode Minus() { return getToken(ImageJMacroParser.Minus, 0); }
 		public AdditiveExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2433,6 +2520,10 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode LessThan() { return getToken(ImageJMacroParser.LessThan, 0); }
+		public TerminalNode MoreThan() { return getToken(ImageJMacroParser.MoreThan, 0); }
+		public TerminalNode LessThanEquals() { return getToken(ImageJMacroParser.LessThanEquals, 0); }
+		public TerminalNode GreaterThanEquals() { return getToken(ImageJMacroParser.GreaterThanEquals, 0); }
 		public RelationalExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2461,9 +2552,11 @@ public class ImageJMacroParser extends Parser {
 	public static class MacroExpressionContext extends SingleExpressionContext {
 		public TerminalNode Macro() { return getToken(ImageJMacroParser.Macro, 0); }
 		public TerminalNode StringLiteral() { return getToken(ImageJMacroParser.StringLiteral, 0); }
+		public TerminalNode OpenBrace() { return getToken(ImageJMacroParser.OpenBrace, 0); }
 		public MacroBodyContext macroBody() {
 			return getRuleContext(MacroBodyContext.class,0);
 		}
+		public TerminalNode CloseBrace() { return getToken(ImageJMacroParser.CloseBrace, 0); }
 		public MacroExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2475,6 +2568,7 @@ public class ImageJMacroParser extends Parser {
 		}
 	}
 	public static class BitNotExpressionContext extends SingleExpressionContext {
+		public TerminalNode BitNot() { return getToken(ImageJMacroParser.BitNot, 0); }
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
@@ -2520,6 +2614,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
+		public TerminalNode Dot() { return getToken(ImageJMacroParser.Dot, 0); }
 		public IdentifierNameContext identifierName() {
 			return getRuleContext(IdentifierNameContext.class,0);
 		}
@@ -2537,9 +2632,11 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression() {
 			return getRuleContext(SingleExpressionContext.class,0);
 		}
+		public TerminalNode OpenBracket() { return getToken(ImageJMacroParser.OpenBracket, 0); }
 		public ExpressionSequenceContext expressionSequence() {
 			return getRuleContext(ExpressionSequenceContext.class,0);
 		}
+		public TerminalNode CloseBracket() { return getToken(ImageJMacroParser.CloseBracket, 0); }
 		public MemberIndexExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2569,6 +2666,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode BitAnd() { return getToken(ImageJMacroParser.BitAnd, 0); }
 		public BitAndExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2586,6 +2684,7 @@ public class ImageJMacroParser extends Parser {
 		public SingleExpressionContext singleExpression(int i) {
 			return getRuleContext(SingleExpressionContext.class,i);
 		}
+		public TerminalNode BitOr() { return getToken(ImageJMacroParser.BitOr, 0); }
 		public BitOrExpressionContext(SingleExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3100,6 +3199,10 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static class AssignmentOperatorContext extends ParserRuleContext {
+		public TerminalNode MultiplyAssign() { return getToken(ImageJMacroParser.MultiplyAssign, 0); }
+		public TerminalNode DivideAssign() { return getToken(ImageJMacroParser.DivideAssign, 0); }
+		public TerminalNode PlusAssign() { return getToken(ImageJMacroParser.PlusAssign, 0); }
+		public TerminalNode MinusAssign() { return getToken(ImageJMacroParser.MinusAssign, 0); }
 		public AssignmentOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3643,7 +3746,7 @@ public class ImageJMacroParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3A\u01a7\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3A\u01a7\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -3677,9 +3780,9 @@ public class ImageJMacroParser extends Parser {
 		"\3 \3 \5 \u0191\n \3!\3!\3\"\3\"\5\"\u0197\n\"\3#\3#\5#\u019b\n#\3$\3"+
 		"$\3%\3%\3%\3%\5%\u01a3\n%\3&\3&\3&\2\3:\'\2\4\6\b\n\f\16\20\22\24\26\30"+
 		"\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJ\2\13\3\2\30\32\3\2\24\25\3\2"+
-		"\33\34\3\2\35 \4\2\4\4!\"\3\2(+\5\2\5\5,,==\3\2-/\4\2\609;;\u01cf\2M\3"+
-		"\2\2\2\4R\3\2\2\2\6X\3\2\2\2\bd\3\2\2\2\nf\3\2\2\2\fm\3\2\2\2\16q\3\2"+
-		"\2\2\20u\3\2\2\2\22}\3\2\2\2\24\u0081\3\2\2\2\26\u0084\3\2\2\2\30\u0086"+
+		"\33\34\3\2\35 \4\2\4\4!\"\3\2(+\5\2\5\5,,==\3\2-/\4\2\609;;\2\u01cf\2"+
+		"M\3\2\2\2\4R\3\2\2\2\6X\3\2\2\2\bd\3\2\2\2\nf\3\2\2\2\fm\3\2\2\2\16q\3"+
+		"\2\2\2\20u\3\2\2\2\22}\3\2\2\2\24\u0081\3\2\2\2\26\u0084\3\2\2\2\30\u0086"+
 		"\3\2\2\2\32\u008a\3\2\2\2\34\u00bf\3\2\2\2\36\u00c1\3\2\2\2 \u00c8\3\2"+
 		"\2\2\"\u00cf\3\2\2\2$\u00d3\3\2\2\2&\u00de\3\2\2\2(\u00e7\3\2\2\2*\u00ea"+
 		"\3\2\2\2,\u00ec\3\2\2\2.\u00f9\3\2\2\2\60\u0107\3\2\2\2\62\u010b\3\2\2"+

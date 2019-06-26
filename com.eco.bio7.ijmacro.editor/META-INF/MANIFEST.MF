@@ -26,7 +26,7 @@ Export-Package: com.eco.bio7.ijmacro.editor,
  com.eco.bio7.ijmacro.editor.preferences,
  com.eco.bio7.ijmacro.editor.preferences.template,
  com.eco.bio7.ijmacro.editors
-Bundle-ClassPath: libs/antlr-runtime-4.6.jar,
- .
+Bundle-ClassPath: .,
+ libs/antlr-runtime-4.7.2.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 

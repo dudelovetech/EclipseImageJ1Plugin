@@ -4,3 +4,5 @@
 /ImageJMacroLexer.tokens
 /ImageJMacroListener.java
 /ImageJMacroParser.java
+/ImageJMacro.interp
+/ImageJMacroLexer.interp

@@ -1,4 +1,4 @@
-// Generated from ImageJMacro.g4 by ANTLR 4.6
+// Generated from ImageJMacro.g4 by ANTLR 4.7.2
 package com.eco.bio7.ijmacro.editor.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
