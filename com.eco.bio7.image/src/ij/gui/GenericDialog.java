@@ -216,7 +216,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (units == null || units.equals("")) {
 			add(tf, c);
 		} else {
-			Panel panel = new Panel();
+			JPanel panel = new JPanel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			panel.add(tf);
 			panel.add(new Label(" " + units));
@@ -443,7 +443,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 *                      http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int nRows = headings != null ? rows + 1 : rows;
 		panel.setLayout(new GridLayout(nRows, columns, 6, 0));
 		int startCBIndex = cbIndex;
@@ -485,7 +485,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				if (Recorder.record || macro)
 					saveLabel(cb, labels[i1]);
 				if (IJ.isLinux()) {
-					Panel panel2 = new Panel();
+					JPanel panel2 = new JPanel();
 					panel2.setLayout(new BorderLayout());
 					panel2.add("West", cb);
 					panel.add(panel2);
@@ -514,7 +514,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 */
 	public void addRadioButtonGroup(String label, String[] items, int rows, int columns, String defaultItem) {
 		addToSameRow = false;
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		int n = items.length;
 		panel.setLayout(new GridLayout(rows, columns, 0, 0));
 		CheckboxGroup cg = new CheckboxGroup();
@@ -791,7 +791,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		tf.setEditable(true);
 		firstSlider = false;
 
-		Panel panel = new Panel();
+		JPanel panel = new JPanel();
 		GridBagLayout pgrid = new GridBagLayout();
 		GridBagConstraints pc = new GridBagConstraints();
 		panel.setLayout(pgrid);
@@ -1335,7 +1335,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		} else {
 			if (pfr != null) // prepare preview (not in macro mode): tell the PlugInFilterRunner to listen
 				pfr.setDialog(this);
-			Panel buttons = new Panel();
+			JPanel buttons = new JPanel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new Button(cancelLabel);
 			cancel.addActionListener(this);
