@@ -79,6 +79,7 @@ import com.eco.bio7.ImageJPluginActions.ImageJWindowAction;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
+import ij.Macro;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
@@ -90,7 +91,12 @@ import ij.io.OpenDialog;
 import ij.io.Opener;
 import ij.plugin.CommandLister;
 import ij.plugin.DragAndDrop;
+import ij.plugin.FileInfoVirtualStack;
 import ij.plugin.FolderOpener;
+import ij.plugin.TextReader;
+import ij.plugin.frame.Recorder;
+import ij.process.ImageProcessor;
+
 import com.eco.bio7.image.swtawtutil.*;
 
 public class CanvasView extends ViewPart {
@@ -135,6 +141,10 @@ public class CanvasView extends ViewPart {
 	private static CanvasView canvas_view;
 
 	public static CTabFolder tabFolder;
+	
+	private static boolean convertToRGB;
+	private static boolean virtualStack;
+	private boolean openAsVirtualStack;
 
 	// private ArrayList<String> detachedSecViewIDs = new ArrayList<String>();
 
@@ -458,6 +468,8 @@ public class CanvasView extends ViewPart {
 
 		initializeToolBar();
 		tabFolder = new CTabFolder(parent, SWT.TOP);
+		/*Get access to the ImageJ drag and drop methods!*/
+		DragAndDrop dragAndDrop=new DragAndDrop();
 		DropTarget dt = new DropTarget(tabFolder, DND.DROP_DEFAULT | DND.DROP_MOVE);
 		dt.setTransfer(new Transfer[] { FileTransfer.getInstance() });
 		dt.addDropListener(new DropTargetAdapter() {
@@ -479,7 +491,7 @@ public class CanvasView extends ViewPart {
 
 								final int x = i;
 
-								openFile(new File(fileList[x].toString()));
+								dragAndDrop.openFile(new File(fileList[x].toString()));
 								/*
 								 * if (javaFXEmbedded) {
 								 * 
@@ -796,77 +808,7 @@ public class CanvasView extends ViewPart {
 		return parent2;
 	}
 
-	/**
-	 * Open a file. If it's a directory, ask to open all images as a sequence in a
-	 * stack or individually.
-	 */
-	private void openFile(File f) {
-		try {
-			if (null == f)
-				return;
-			String path = f.getCanonicalPath();
-			if (f.exists()) {
-				if (f.isDirectory())
-					openDirectory(f, path);
-				else {
-					(new Opener()).openAndAddToRecent(path);
-					OpenDialog.setLastDirectory(f.getParent() + File.separator);
-					OpenDialog.setLastName(f.getName());
-				}
-			} else {
-				IJ.log("File not found: " + path);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void openDirectory(File f, String path) {
-		if (path == null)
-			return;
-		if (!(path.endsWith(File.separator) || path.endsWith("/")))
-			path += File.separator;
-		String[] names = f.list();
-		names = (new FolderOpener()).trimFileList(names);
-		if (names == null)
-			return;
-		String msg = "Open all " + names.length + " images in \"" + f.getName() + "\" as a stack?";
-		GenericDialog gd = new GenericDialog("Open Folder");
-		gd.setInsets(10, 5, 0);
-		gd.addMessage(msg);
-		gd.setInsets(15, 35, 0);
-		gd.addCheckbox("Convert to RGB", DragAndDrop.convertToRGB);
-		gd.setInsets(0, 35, 0);
-		gd.addCheckbox("Use Virtual Stack", DragAndDrop.virtualStack);
-		gd.enableYesNoCancel();
-		gd.showDialog();
-		if (gd.wasCanceled())
-			return;
-		if (gd.wasOKed()) {
-			DragAndDrop.convertToRGB = gd.getNextBoolean();
-			DragAndDrop.virtualStack = gd.getNextBoolean();
-			String options = " sort";
-			if (DragAndDrop.convertToRGB)
-				options += " convert_to_rgb";
-			if (DragAndDrop.virtualStack)
-				options += " use";
-			IJ.run("Image Sequence...", "open=[" + path + "]" + options);
-			DirectoryChooser.setDefaultDirectory(path);
-		} else {
-			for (int k = 0; k < names.length; k++) {
-				if (!names[k].startsWith(".")) {
-					IJ.redirectErrorMessages(true);
-					ImagePlus imp = IJ.openImage(path + names[k]);
-					if (imp != null) {
-						imp.setIJMenuBar(k == names.length - 1);
-						imp.show();
-					}
-					IJ.redirectErrorMessages(false);
-				}
-			}
-		}
-		IJ.register(DragAndDrop.class);
-	}
+	
 
 	/*
 	 * public ArrayList<String> getDetachedSecViewIDs() { return detachedSecViewIDs;

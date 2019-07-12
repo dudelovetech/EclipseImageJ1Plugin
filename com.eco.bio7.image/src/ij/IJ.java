@@ -615,7 +615,11 @@ public class IJ {
 	public static void deleteRows(int row1, int row2) {
 
 		ResultsTable rt = Analyzer.getResultsTable();
+		int tableSize = rt.size();
 		rt.deleteRows(row1, row2);
+		ImagePlus imp = WindowManager.getCurrentImage();
+		if (imp!=null)
+			Overlay.updateTableOverlay(imp, row1, row2, tableSize);
 		rt.show("Results");
 	}
 

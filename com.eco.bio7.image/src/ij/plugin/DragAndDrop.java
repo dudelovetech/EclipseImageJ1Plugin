@@ -3,6 +3,7 @@ import ij.*;
 import ij.gui.*;
 import ij.io.*;
 import ij.process.ImageProcessor;
+import ij.plugin.frame.Recorder;
 import java.io.*;
 import java.awt.Point;
 import java.awt.datatransfer.*;
@@ -28,9 +29,8 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 		ImageJ ij = IJ.getInstance();
 		ij.setDropTarget(null);
 		new DropTarget(ij, this);
-		/*Changed for Bio7! Deadlock from Navigator view!*/
-		//new DropTarget(Toolbar.getInstance(), this);
-		//new DropTarget(ij.getStatusBar(), this);
+		new DropTarget(Toolbar.getInstance(), this);
+		new DropTarget(ij.getStatusBar(), this);
 	}  
 	    
 	public void drop(DropTargetDropEvent dtde)  {
@@ -189,8 +189,10 @@ public class DragAndDrop implements PlugIn, DropTargetListener, Runnable {
 							ImageProcessor ip = (new TextReader()).open(path);
 							if (ip!=null)
 								new ImagePlus(f.getName(),ip).show();
-						} else
+						} else {
+							Recorder.recordOpen(path);
 							(new Opener()).openAndAddToRecent(path);
+						}
 						OpenDialog.setLastDirectory(f.getParent()+File.separator);
 						OpenDialog.setLastName(f.getName());
 					}

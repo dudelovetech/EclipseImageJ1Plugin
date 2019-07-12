@@ -557,6 +557,9 @@ public class ImageWindow extends JFrame implements FocusListener, WindowListener
 		 * help avoid thread deadlocks return true; dispose(); if (imp!=null)
 		 * imp.flush(); imp = null; return true;
 		 */
+		
+		/*if (imp.isLocked())
+				msg += "\nWARNING: This image is locked.\nProbably, processing is unfinished (slow or still previewing).";*/
 
 		/* Changed for Bio7! */
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();

@@ -169,7 +169,10 @@ public class Plot implements Cloneable {
 	float scale = 1.0f;
 	Rectangle frame = null;							//the clip frame, do not use for image scale
 	//The following are the margin sizes actually used. They are modified for font size and also scaled for high-resolution plots
-	public int leftMargin = LEFT_MARGIN, rightMargin = RIGHT_MARGIN, topMargin = TOP_MARGIN, bottomMargin = BOTTOM_MARGIN;
+	public int leftMargin = LEFT_MARGIN;
+	public int rightMargin = RIGHT_MARGIN;
+	public int topMargin = TOP_MARGIN;
+	public int bottomMargin = BOTTOM_MARGIN;
 	int frameWidth;									//width corresponding to plot range; frame.width is larger by 1
 	int frameHeight;								//height corresponding to plot range; frame.height is larger by 1
 	int preferredPlotWidth = PlotWindow.plotWidth;  //default size of plot frame (not taking 'High-Resolution' scale factor into account)
@@ -528,20 +531,20 @@ public class Plot implements Cloneable {
 	 *  If a label has the form {txt1,txt2,txt3}, the corresponding axis will be labeled
 	 *  not by numbers but rather with the texts "txt1", "txt2" ... instead of 0, 1, ...
 	 *  In this special case, there will be no label for the axis on the plot.
-	 *	Call update() thereafter to make the change visible (if the image is shown already). */
+	 *	Call update() thereafter to make the change visible (if it is shown already). */
 	public void setXYLabels(String xLabel, String yLabel) {
 		pp.xLabel.label = xLabel!=null ? xLabel : "";
 		pp.yLabel.label = yLabel!=null ? yLabel : "";
 	}
 
 	/** Sets the maximum number of intervals in a plot.
-	 *	Call updateImage() thereafter to make the change visible (if the image is shown already). */
+	 *	Call update() thereafter to make the change visible (if the image is shown already). */
 	public void setMaxIntervals(int intervals) {
 			maxIntervals = intervals;
 	}
 
 	/** Sets the length of the major tick in pixels.
-	 *	Call updateImage() thereafter to make the change visible (if the image is shown already). */
+	 *	Call update() thereafter to make the change visible (if the image is shown already). */
 	public void setTickLength(int tickLength) {
 			tickLength = tickLength;
 	}
@@ -606,7 +609,8 @@ public class Plot implements Cloneable {
 			pp.axisFlags |= Y_TICKS;
 	}
 
-	/** Sets the properties of the axes. Call update() thereafter to make the change visible (if the image is shown already). */
+	/** Sets the properties of the axes. Call update() thereafter to make the change visible
+	 *	(if the image is shown already). */
 	public void setAxes(boolean xLog, boolean yLog, boolean xTicks, boolean yTicks, boolean xMinorTicks, boolean yMinorTicks,
 			int tickLenght, int minorTickLenght) {
 		setAxisXLog		  (xLog);
@@ -619,7 +623,8 @@ public class Plot implements Cloneable {
 		setMinorTickLength(minorTickLenght);
 	}
 
-	/** Sets log scale in x. Call update() thereafter to make the change visible (if the image is shown already). */
+	/** Sets log scale in x. Call update() thereafter to make the change visible
+	 *	(if the image is shown already). */
 
 	public void setLogScaleX() {
 		setAxisXLog(true);
@@ -913,6 +918,15 @@ public class Plot implements Cloneable {
 		pp.legend = new PlotObject(currentLineWidth == 0 ? 1 : currentLineWidth,
 				currentFont, currentColor == null ? Color.black : currentColor, flags);
 		if (plotDrawn) updateImage();
+	}
+
+	/** Sets the label for the plot object nuber 'index' in the sequence they were added.
+	 *  With index=-1, sets the label for the last object added.
+	 *  For x/y data, the label is used for the legend and as header in getResultsTableWithLabels.
+	 *  For Text/Label objects, it affects the label shown (but the plot is not redisplayed). */
+	public void setLabel(int index, String label) {
+		if (index < 0) index = allPlotObjects.size() + index;
+		allPlotObjects.get(index).label = label;
 	}
 
 	/** Returns an array of the available curve types ("Line", "Bar", "Circle", etc). */
@@ -1522,13 +1536,13 @@ public class Plot implements Cloneable {
 	public boolean isFrozen() {
 		return pp.isFrozen;
 	}
-	
+
 	/** Draws the plot again, ignored if the plot has not been drawn before or the plot is frozen. */
 	public void update() {
 		updateImage();
 	}
 
-	/** Draws the plot again, ignored if the plot has not been drawn before or the plot is frozen
+	/** Draws the plot again, ignored if the plot has not been drawn before or the plot is frozen.
 	 *	If the ImagePlus exist, updates it and its calibration. */
 	public void updateImage() {
 		if (!plotDrawn || pp.isFrozen) return;
@@ -2186,7 +2200,7 @@ public class Plot implements Cloneable {
 			gd.addNumericField(prompts[arrPair], currentMinMax[arrPair], 2);
 			gd.setCancelLabel("Set All Limits");
 			gd.showDialog();
-		
+
 			double val = gd.getNextNumber();
 			currentMinMax[arrPair] = val;
 			defaultMinMax[arrPair] = val;
@@ -3413,12 +3427,32 @@ public class Plot implements Cloneable {
 		return getResultsTable(true);
 	}
 
-	/** Creates a ResultsTable with the data of the plot. Returns an empty table if no data.
+	/** Creates a ResultsTable with the data of the plot. Returns null if no data.
 	 * Does not write the first x column if writeFirstXColumn is false.
 	 * When all columns are the same length, x columns equal to the first x column are
 	 * not written, independent of writeFirstXColumn.
+	 * Column headings are "X", "Y", "X1", "Y1", etc, irrespective of any labels of the data sets
 	 */
 	public ResultsTable getResultsTable(boolean writeFirstXColumn) {
+		return getResultsTable(writeFirstXColumn, false);
+	}
+
+	/** Creates a ResultsTable with the data of the plot. Returns null if no data.
+	 * When all columns are the same length, x columns equal to the first x column are
+	 * not written, independent of writeFirstXColumn.
+	 * When the data sets have labels, they are used for column headings
+	 */
+	public ResultsTable getResultsTableWithLabels() {
+		return getResultsTable(true, true);
+	}
+
+	/** Creates a ResultsTable with the data of the plot. Returns null if no data.
+	 * Does not write the first x column if writeFirstXColumn is false.
+	 * When all columns are the same length, x columns equal to the first x column are
+	 * not written, independent of writeFirstXColumn.
+	 * When the data sets have labels and useLabels is true, they are used for column headings,
+	 * otherwise columns are named X, Y, X1, Y1, ... */
+	ResultsTable getResultsTable(boolean writeFirstXColumn, boolean useLabels) {
 		ResultsTable rt = new ResultsTable();
 		// find the longest x-value data set and count the data sets
 		int nDataSets =	 0;
@@ -3452,13 +3486,13 @@ public class Plot implements Cloneable {
 			if (plotObject.type==PlotObject.XY_DATA) {
 				boolean sameX = firstXYobject!=null && Arrays.equals(firstXYobject.xValues, plotObject.xValues) && allSameLength;
 				boolean sameXY = sameX && Arrays.equals(firstXYobject.yValues, plotObject.yValues); //ignore duplicates (e.g. Markers plus Curve)
-				boolean writeX = firstXYobject==null?writeFirstXColumn:!sameX;
-				addToLists(headings, data, plotObject, dataSetNumber, writeX, /*writeY=*/!sameXY, nDataSets>1);
+				boolean writeX = firstXYobject==null ? writeFirstXColumn : !sameX;
+				addToLists(headings, data, plotObject, dataSetNumber, writeX, /*writeY=*/!sameXY, /*multipleSets=*/nDataSets>1, useLabels);
 				if (firstXYobject == null)
 					firstXYobject = plotObject;
 				dataSetNumber++;
 			} else if (plotObject.type==PlotObject.ARROWS) {
-				addToLists(headings, data, plotObject, arrowsNumber, /*writeX=*/true, /*writeY=*/true, nDataSets>1);
+				addToLists(headings, data, plotObject, arrowsNumber, /*writeX=*/true, /*writeY=*/true, /*multipleSets=*/nDataSets>1, /*useLabels=*/false);
 				arrowsNumber++;
 			}
 		}
@@ -3486,27 +3520,48 @@ public class Plot implements Cloneable {
 	// when writing float data, precision should be at least 1e-5*data range
 	static final double MIN_FLOAT_PRECISION = 1e-5;
 
-
 	void addToLists(ArrayList<String> headings, ArrayList<float[]>data, PlotObject plotObject,
-			int dataSetNumber, boolean writeX, boolean writeY, boolean multipleSets) {
+			int dataSetNumber, boolean writeX, boolean writeY, boolean multipleSets, boolean useLabels) {
+		String plotObjectLabel = useLabels ? replaceSpacesEtc(plotObject.label) : null;
 		if (writeX) {
-			String label = plotObject.type == PlotObject.ARROWS ? "XStart" : "X";
-			if (multipleSets) label += dataSetNumber;
-			if (dataSetNumber==0 && plotObject.type!=PlotObject.ARROWS) {
+			String label = null;                                                     // column header for x column
+			if (plotObject.type!=PlotObject.ARROWS) {
 				String plotXLabel = getLabel('x');
-				if (plotXLabel!=null && plotXLabel.startsWith(" ") && plotXLabel.endsWith(" "))
-					label = plotXLabel.substring(1,plotXLabel.length()-1);
+				if (dataSetNumber==0 && plotXLabel!=null) {                          // use x axis label for 1st dataset if permitted
+					if (useLabels)
+						label = replaceSpacesEtc(plotXLabel);
+					else if (plotXLabel.startsWith(" ") && plotXLabel.endsWith(" ")) // legacy: always use axis label for 1st data if spaces at start&end
+						label = plotXLabel.substring(1,plotXLabel.length()-1);
+				} else if (plotObjectLabel != null && dataSetNumber>0)
+					label = "X_"+plotObjectLabel;                                    // use "X_" + dataset label
+				if (label != null && headings.contains(label))
+					label = null; // avoid duplicate labels (not possible in ResultsTable)
+			}
+			if (label == null) {                                                     // create default label if no specific label yet
+				label = plotObject.type == PlotObject.ARROWS ? "XStart" : "X";
+				if (multipleSets) label += dataSetNumber;
 			}
 			headings.add(label);
 			data.add(plotObject.xValues);
 		}
 		if (writeY) {
-			String label = plotObject.type == PlotObject.ARROWS ? "YStart" : "Y";
-			if (multipleSets) label += dataSetNumber;
-			if (dataSetNumber==0 && plotObject.type!=PlotObject.ARROWS) {
+			String label = null;;                                                     // column header for y column
+			if (plotObject.type!=PlotObject.ARROWS) {
 				String plotYLabel = getLabel('y');
-				if (plotYLabel!=null && plotYLabel.startsWith(" ") && plotYLabel.endsWith(" "))
-					label = plotYLabel.substring(1,plotYLabel.length()-1);
+				if (dataSetNumber==0 && plotYLabel!=null) {
+					if (useLabels && plotObjectLabel == null)                         // use y axis label for 1st dataset if no data set label
+						label = replaceSpacesEtc(plotYLabel);
+					else if (plotYLabel.startsWith(" ") && plotYLabel.endsWith(" "))  // legacy: always use axis label for 1st data if spaces at start&end
+						label = plotYLabel.substring(1,plotYLabel.length()-1);
+				}
+				if (plotObjectLabel != null)
+					label = plotObjectLabel;
+				if (label != null && headings.contains(label))
+					label = null; // avoid duplicate labels (not possible in ResultsTable)
+			}
+			if (label == null) {                                                     // create default label if no specific label yet
+				label = plotObject.type == PlotObject.ARROWS ? "YStart" : "Y";
+				if (multipleSets) label += dataSetNumber;
 			}
 			headings.add(label);
 			data.add(plotObject.yValues);
@@ -3523,6 +3578,15 @@ public class Plot implements Cloneable {
 			headings.add(label);
 			data.add(plotObject.yEValues);
 		}
+	}
+
+	/** Convert a string to a label suitable for a ResultsTable without whitespace, quotes or commas,
+	 *  to avoid problems when saving and reading the table. Returns null if an empty string or null. */
+	static String replaceSpacesEtc(String s) {
+		if (s == null) return null;
+		s = s.trim().replaceAll("[\\s,]", "_").replace("\"","''");
+		if (s.length() == 0) return null;
+		return s;
 	}
 
 	/** get the number of digits for writing a column to the results table or the clipboard */

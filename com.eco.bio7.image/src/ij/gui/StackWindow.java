@@ -30,9 +30,9 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	public SwtAwtImageJ swtAwtMainFrameStackWindow;// Changed for Bio7!
 
 	public StackWindow(ImagePlus imp) {
-		 this(imp, null);
-		///* Changed for Bio7! */
-		//this(imp, new ImageCanvas(imp));
+		this(imp, null);
+		/// * Changed for Bio7! */
+		// this(imp, new ImageCanvas(imp));
 	}
 
 	public StackWindow(ImagePlus imp, ImageCanvas ic) {
@@ -73,7 +73,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		/*Necessary for highDPI layout SWT_AWT!*/
 		CanvasView canvasView = CanvasView.getCanvas_view();
 		canvasView.recalculateLayout();
-		//pack();
+		// pack();
 		/*
 		 * ic = imp.getCanvas(); if (ic != null) ic.setMaxBounds();
 		 */
@@ -120,7 +120,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 				cSelector.addKeyListener(ij);
 			cSelector.addAdjustmentListener(this);
 			cSelector.setFocusable(false); // prevents scroll bar from blinking
-											// on Windows
+							// on Windows
 			cSelector.setUnitIncrement(1);
 			cSelector.setBlockIncrement(1);
 		}
@@ -161,6 +161,20 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		ImageWindow win = imp.getWindow();
 		if (win != null)
 			win.setSliderHeight(sliderHeight);
+	}
+
+	/** Enables or disables the sliders. Used when locking/unlocking an image. */
+	public synchronized void setSlidersEnabled(boolean b) {
+		if (sliceSelector != null)
+			sliceSelector.setEnabled(b);
+		if (cSelector != null)
+			cSelector.setEnabled(b);
+		if (zSelector != null)
+			zSelector.setEnabled(b);
+		if (tSelector != null)
+			tSelector.setEnabled(b);
+		if (animationSelector != null)
+			animationSelector.setEnabled(b);
 	}
 
 	public synchronized void adjustmentValueChanged(AdjustmentEvent e) {
@@ -214,31 +228,31 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		synchronized(this) {
+		synchronized (this) {
 			int rotation = e.getWheelRotation();
-			boolean ctrl = (e.getModifiers()&Event.CTRL_MASK)!=0;
-			if ((ctrl||IJ.shiftKeyDown()) && ic!=null) {
+			boolean ctrl = (e.getModifiers() & Event.CTRL_MASK) != 0;
+			if ((ctrl || IJ.shiftKeyDown()) && ic != null) {
 				Point loc = ic.getCursorLoc();
 				int x = ic.screenX(loc.x);
 				int y = ic.screenY(loc.y);
-				if (rotation<0)
-					ic.zoomIn(x,y);
+				if (rotation < 0)
+					ic.zoomIn(x, y);
 				else
-					ic.zoomOut(x,y);
+					ic.zoomOut(x, y);
 				return;
 			}
 			if (hyperStack) {
-				if (rotation>0)
+				if (rotation > 0)
 					IJ.run(imp, "Next Slice [>]", "");
-				else if (rotation<0)
+				else if (rotation < 0)
 					IJ.run(imp, "Previous Slice [<]", "");
 			} else {
 				int slice = imp.getCurrentSlice() + rotation;
-				if (slice<1)
+				if (slice < 1)
 					slice = 1;
-				else if (slice>imp.getStack().getSize())
+				else if (slice > imp.getStack().getSize())
 					slice = imp.getStack().getSize();
-				setSlice(imp,slice);
+				setSlice(imp, slice);
 				imp.updateStatusbarValue();
 				SyncWindows.setZ(this, slice);
 			}
@@ -301,7 +315,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 
 	public String createSubtitle() {
 		String subtitle = super.createSubtitle();
-		if (!hyperStack || imp.getStackSize()==1)
+		if (!hyperStack || imp.getStackSize() == 1)
 			return subtitle;
 		String s = "";
 		int[] dim = imp.getDimensions(false);
@@ -334,7 +348,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	}
 
 	public boolean isHyperStack() {
-		return hyperStack && getNScrollbars()>0;
+		return hyperStack && getNScrollbars() > 0;
 	}
 
 	public void setPosition(int channel, int slice, int frame) {

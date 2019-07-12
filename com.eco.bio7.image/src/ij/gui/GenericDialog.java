@@ -3,12 +3,8 @@ package ij.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
-import javax.swing.JDialog;
 import javax.swing.JPanel;
-
 import com.eco.bio7.image.Util;
-
 import ij.*;
 import ij.plugin.frame.Recorder;
 import ij.plugin.ScreenGrabber;
@@ -115,7 +111,6 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	/** Creates a new GenericDialog using the specified title and parent frame. */
 	public GenericDialog(String title, Frame parent) {
 		super(parent == null ? new Frame() : parent, title, true);
-		
 		if (Prefs.blackCanvas) {
 			setForeground(SystemColor.controlText);
 			setBackground(SystemColor.control);
@@ -124,6 +119,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		c = new GridBagConstraints();
 		setLayout(grid);
 		macroOptions = Macro.getOptions();
+		// IJ.log("macroOptions: "+macroOptions+" "+title);
 		macro = macroOptions != null;
 		addKeyListener(this);
 		addWindowListener(this);
@@ -220,7 +216,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (units == null || units.equals("")) {
 			add(tf, c);
 		} else {
-			JPanel panel = new JPanel();
+			Panel panel = new Panel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			panel.add(tf);
 			panel.add(new Label(" " + units));
@@ -447,7 +443,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 *                      http://imagej.nih.gov/ij/plugins/multi-column-dialog/index.html
 	 */
 	public void addCheckboxGroup(int rows, int columns, String[] labels, boolean[] defaultValues, String[] headings) {
-		JPanel panel = new JPanel();
+		Panel panel = new Panel();
 		int nRows = headings != null ? rows + 1 : rows;
 		panel.setLayout(new GridLayout(nRows, columns, 6, 0));
 		int startCBIndex = cbIndex;
@@ -489,7 +485,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 				if (Recorder.record || macro)
 					saveLabel(cb, labels[i1]);
 				if (IJ.isLinux()) {
-					JPanel panel2 = new JPanel();
+					Panel panel2 = new Panel();
 					panel2.setLayout(new BorderLayout());
 					panel2.add("West", cb);
 					panel.add(panel2);
@@ -518,7 +514,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	 */
 	public void addRadioButtonGroup(String label, String[] items, int rows, int columns, String defaultItem) {
 		addToSameRow = false;
-		JPanel panel = new JPanel();
+		Panel panel = new Panel();
 		int n = items.length;
 		panel.setLayout(new GridLayout(rows, columns, 0, 0));
 		CheckboxGroup cg = new CheckboxGroup();
@@ -656,7 +652,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		if (textArea1 != null)
 			return;
 		Panel panel = new Panel();
-		Font font = new Font("SansSerif", Font.PLAIN, (int)(14*Prefs.getGuiScale()));
+		Font font = new Font("SansSerif", Font.PLAIN, (int) (14 * Prefs.getGuiScale()));
 		textArea1 = new TextArea(text1, rows, columns, TextArea.SCROLLBARS_NONE);
 		if (IJ.isLinux())
 			textArea1.setBackground(Color.white);
@@ -795,7 +791,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		tf.setEditable(true);
 		firstSlider = false;
 
-		JPanel panel = new JPanel();
+		Panel panel = new Panel();
 		GridBagLayout pgrid = new GridBagLayout();
 		GridBagConstraints pc = new GridBagConstraints();
 		panel.setLayout(pgrid);
@@ -1339,7 +1335,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		} else {
 			if (pfr != null) // prepare preview (not in macro mode): tell the PlugInFilterRunner to listen
 				pfr.setDialog(this);
-			JPanel buttons = new JPanel();
+			Panel buttons = new Panel();
 			buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			cancel = new Button(cancelLabel);
 			cancel.addActionListener(this);
@@ -1404,11 +1400,16 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			recorderOn = Recorder.record;
 			IJ.wait(25);
 		}
+		if (!(this instanceof NonBlockingGenericDialog))
+			finalizeRecording();
+		resetCounters();
+	}
 
-		/*
-		 * For plugins that read their input only via dialogItemChanged, call it at
-		 * least once
-		 */
+	/**
+	 * For plugins that read their input only via dialogItemChanged, call it at
+	 * least once, then stop recording
+	 */
+	void finalizeRecording() {
 		if (!wasCanceled && dialogListeners != null && dialogListeners.size() > 0) {
 			resetCounters();
 			((DialogListener) dialogListeners.elementAt(0)).dialogItemChanged(this, null);
@@ -1766,9 +1767,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 	public void windowDeactivated(WindowEvent e) {
 	}
 
-	@Override
+	/*Changed for Bio7!*/
+	
 	public void componentResized(ComponentEvent e) {
-
 		// TODO Auto-generated method stub
 		validate();
 		repaint();
