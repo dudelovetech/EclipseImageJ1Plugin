@@ -968,7 +968,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 			}
 		});
-		CanvasView.getCurrent().doLayout();
+		CanvasView.getCurrent().validate();
 		IJTabs.doSecondaryViewLayout();
 	}
 
@@ -1100,7 +1100,7 @@ public class ImageCanvas extends JPanel implements MouseListener, MouseWheelList
 
 				}
 			});
-			CanvasView.getCurrent().doLayout();
+			CanvasView.getCurrent().validate();
 			// adjustSourceRect(newMag, sx, sy);
 
 			return;
