@@ -136,6 +136,7 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 		 */
 		if (Util.getOS().equals("Linux")) {
 			setBackground(Util.getSWTBackgroundToAWT());
+			setForeground(Util.getSWTForegroundToAWT());
 		}
 	}
 

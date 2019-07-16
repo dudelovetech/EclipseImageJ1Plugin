@@ -63,6 +63,8 @@ public class IJtoolbarSwtAwt {
 		JPanel jpp = new JPanel();
 
 		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+		panel.setBackground(swtBackgroundToAWT);
+		roote.setBackground(swtBackgroundToAWT);
 		frame.setBackground(swtBackgroundToAWT);
 		jpp.setBackground(swtBackgroundToAWT);
 
