@@ -1,9 +1,14 @@
 package com.eco.bio7.image;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 
@@ -13,13 +18,11 @@ public class Bio7LinuxTheme extends OceanTheme {
 	// public String getName() { return "Moody Blues"; }
 
 	// blue shades
-	private final ColorUIResource primary1 = new ColorUIResource(new Color(100,
-			100, 100));
+	private final ColorUIResource primary1 = new ColorUIResource(new Color(100, 100, 100));
 	private final ColorUIResource primary2;
 	private final ColorUIResource primary3;
 
-	private final ColorUIResource secondary1 = new ColorUIResource(new Color(
-			100, 100, 100));
+	private final ColorUIResource secondary1 = new ColorUIResource(new Color(100, 100, 100));
 	private final ColorUIResource secondary2;
 	public final ColorUIResource secondary3;
 
@@ -51,6 +54,7 @@ public class Bio7LinuxTheme extends OceanTheme {
 	}
 
 	Color col = null;
+	private Color colForegr;
 
 	public Bio7LinuxTheme() {
 
@@ -61,6 +65,11 @@ public class Bio7LinuxTheme extends OceanTheme {
 		int g = colswt.getGreen();
 		int b = colswt.getBlue();
 		col = new Color(r, g, b);
+		org.eclipse.swt.graphics.Color colSwtForegr = s.getForeground();
+		int rf = colSwtForegr.getRed();
+		int gf = colSwtForegr.getGreen();
+		int bf = colSwtForegr.getBlue();
+		colForegr = new Color(rf, gf, bf);
 		primary3 = new ColorUIResource(col);
 		primary2 = new ColorUIResource(col);
 		secondary2 = new ColorUIResource(col);
@@ -69,10 +78,24 @@ public class Bio7LinuxTheme extends OceanTheme {
 	}
 
 	public void addCustomEntriesToTable(UIDefaults defaults) {
-		defaults.put("Button.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(col), new ColorUIResource(col) }));
-		defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
+		defaults.put("Button.gradient", Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(col), new ColorUIResource(col), new ColorUIResource(col) }));
+
+		List<String> colorKeys = new ArrayList<String>();
+		Set<Entry<Object, Object>> entries = UIManager.getLookAndFeelDefaults().entrySet();
+		for (Entry entry : entries) {
+			if (entry.getValue() instanceof Color) {
+				String key = ((String) entry.getKey());
+				if (key.endsWith("background") || key.endsWith("Background")) {
+					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(col), new ColorUIResource(col), new ColorUIResource(col) }));
+				}
+
+				else if (key.endsWith("foreground") || key.endsWith("Foreground") || key.endsWith("gridColor")) {
+					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colForegr), new ColorUIResource(colForegr), new ColorUIResource(colForegr) }));
+				}
+			}
+		}
+
+		/*defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.0), new ColorUIResource(col),
 				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
 		defaults.put("CheckBoxMenuItem.gradient", Arrays.asList(new Object[] {
@@ -107,10 +130,10 @@ public class Bio7LinuxTheme extends OceanTheme {
 						new ColorUIResource(221, 232, 243),
 						new ColorUIResource(col),
 						new ColorUIResource(184, 207, 229) }));
-
+		
 		defaults.put("Button.rollover", Boolean.TRUE);
-
+		
 		defaults.put("TabbedPane.selected", new ColorUIResource(200, 221, 242));
-		defaults.put("TabbedPane.unselectedBackground", secondary3);
+		defaults.put("TabbedPane.unselectedBackground", secondary3);*/
 	}
 }

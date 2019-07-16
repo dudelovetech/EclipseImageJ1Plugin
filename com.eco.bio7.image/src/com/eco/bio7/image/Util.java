@@ -112,6 +112,24 @@ public class Util {
 		return col;
 
 	}
+	public static Color getSWTForegroundToAWT() {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+
+				org.eclipse.swt.graphics.Color colswt = CanvasView.getCanvas_view().getParent2().getForeground();
+				int r = colswt.getRed();
+				int g = colswt.getGreen();
+				int b = colswt.getBlue();
+				col = new Color(r,g,b);
+
+			}
+		});
+		return col;
+
+	}
 
 	public static Color getSWTBackgroundToAWT(Composite parent) {
 
@@ -120,11 +138,30 @@ public class Util {
 
 			public void run() {
 
-				org.eclipse.swt.graphics.Color colswt = parent.getBackground();
+				org.eclipse.swt.graphics.Color colswt = parent.getParent().getBackground();
 				int r = colswt.getRed();
 				int g = colswt.getGreen();
 				int b = colswt.getBlue();
 				col = new Color(r, g, b);
+
+			}
+		});
+		return col;
+
+	}
+	
+	public static Color getSWTForegroundToAWT(Composite parent) {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+
+				org.eclipse.swt.graphics.Color colswt = parent.getParent().getForeground();
+				int r = colswt.getRed();
+				int g = colswt.getGreen();
+				int b = colswt.getBlue();
+				col = new Color(r,g,b);
 
 			}
 		});

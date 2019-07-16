@@ -296,6 +296,7 @@ public class CanvasView extends ViewPart {
 			try {
 				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); //$NON-NLS-1$
 				UIManager.getLookAndFeelDefaults().put("Panel.background", Util.getSWTBackgroundToAWT(parent));
+				UIManager.getLookAndFeelDefaults().put("Panel.foreground", Util.getSWTForegroundToAWT(parent));
 				// SwingUtilities.updateComponentTreeUI(this);
 			} catch (Exception e) {
 				System.out.println(e);
