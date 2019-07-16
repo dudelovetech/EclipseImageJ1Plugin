@@ -53,32 +53,32 @@ public class Bio7LinuxTheme extends OceanTheme {
 		return secondary3;
 	}
 
-	Color col = null;
+	Color colBackgr = null;
 	private Color colForegr;
 
 	public Bio7LinuxTheme() {
 
 		Shell s = new Shell();
 
-		org.eclipse.swt.graphics.Color colswt = s.getBackground();
-		int r = colswt.getRed();
-		int g = colswt.getGreen();
-		int b = colswt.getBlue();
-		col = new Color(r, g, b);
+		org.eclipse.swt.graphics.Color colSwtBackgr = s.getBackground();
+		int rb = colSwtBackgr.getRed();
+		int gb = colSwtBackgr.getGreen();
+		int bb = colSwtBackgr.getBlue();
+		colBackgr = new Color(rb, gb, bb);
 		org.eclipse.swt.graphics.Color colSwtForegr = s.getForeground();
 		int rf = colSwtForegr.getRed();
 		int gf = colSwtForegr.getGreen();
 		int bf = colSwtForegr.getBlue();
 		colForegr = new Color(rf, gf, bf);
-		primary3 = new ColorUIResource(col);
-		primary2 = new ColorUIResource(col);
-		secondary2 = new ColorUIResource(col);
-		secondary3 = new ColorUIResource(col);
+		primary3 = new ColorUIResource(colBackgr);
+		primary2 = new ColorUIResource(colBackgr);
+		secondary2 = new ColorUIResource(colBackgr);
+		secondary3 = new ColorUIResource(colBackgr);
 
 	}
 
 	public void addCustomEntriesToTable(UIDefaults defaults) {
-		defaults.put("Button.gradient", Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(col), new ColorUIResource(col), new ColorUIResource(col) }));
+		defaults.put("Button.gradient", Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
 
 		List<String> colorKeys = new ArrayList<String>();
 		Set<Entry<Object, Object>> entries = UIManager.getLookAndFeelDefaults().entrySet();
@@ -86,54 +86,14 @@ public class Bio7LinuxTheme extends OceanTheme {
 			if (entry.getValue() instanceof Color) {
 				String key = ((String) entry.getKey());
 				if (key.endsWith("background") || key.endsWith("Background")) {
-					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(col), new ColorUIResource(col), new ColorUIResource(col) }));
+					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
 				}
 
-				else if (key.endsWith("foreground") || key.endsWith("Foreground") || key.endsWith("gridColor")) {
+				else if (key.endsWith("foreground") || key.endsWith("Foreground") || key.endsWith("gridColor") || key.endsWith("tickColor")) {
 					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colForegr), new ColorUIResource(colForegr), new ColorUIResource(colForegr) }));
 				}
 			}
 		}
 
-		defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
-		defaults.put("CheckBoxMenuItem.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0),
-				new ColorUIResource(221, 232, 243),
-				new ColorUIResource(Color.WHITE),
-				new ColorUIResource(184, 207, 229) }));
-		defaults.put("MenuBar.gradient", Arrays.asList(new Object[] {
-				new Double(1.0), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(218, 218, 218),
-				new ColorUIResource(218, 218, 218) }));
-		defaults.put("RadioButton.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(col), new ColorUIResource(col) }));
-		defaults.put("RadioButtonMenuItem.gradient", Arrays
-				.asList(new Object[] { new Double(0.3), new Double(0.0),
-						new ColorUIResource(221, 232, 243),
-						new ColorUIResource(col),
-						new ColorUIResource(184, 207, 229) }));
-		defaults.put("ScrollBar.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0), new ColorUIResource(col),
-				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
-		defaults.put("Slider.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.2), new ColorUIResource(col),
-				new ColorUIResource(col), new ColorUIResource(col) }));
-		defaults.put("ToggleButton.gradient", Arrays.asList(new Object[] {
-				new Double(0.3), new Double(0.0),
-				new ColorUIResource(221, 232, 243), new ColorUIResource(col),
-				new ColorUIResource(184, 207, 229) }));
-		defaults.put("InternalFrame.activeTitleGradient", Arrays
-				.asList(new Object[] { new Double(0.3), new Double(0.0),
-						new ColorUIResource(221, 232, 243),
-						new ColorUIResource(col),
-						new ColorUIResource(184, 207, 229) }));
-		
-		defaults.put("Button.rollover", Boolean.TRUE);
-		
-		defaults.put("TabbedPane.selected", new ColorUIResource(200, 221, 242));
-		defaults.put("TabbedPane.unselectedBackground", secondary3);
 	}
 }
