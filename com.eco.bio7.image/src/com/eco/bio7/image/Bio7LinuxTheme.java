@@ -95,7 +95,7 @@ public class Bio7LinuxTheme extends OceanTheme {
 			}
 		}
 
-		/*defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
+		defaults.put("CheckBox.gradient", Arrays.asList(new Object[] {
 				new Double(0.3), new Double(0.0), new ColorUIResource(col),
 				new ColorUIResource(Color.WHITE), new ColorUIResource(col) }));
 		defaults.put("CheckBoxMenuItem.gradient", Arrays.asList(new Object[] {
@@ -134,6 +134,6 @@ public class Bio7LinuxTheme extends OceanTheme {
 		defaults.put("Button.rollover", Boolean.TRUE);
 		
 		defaults.put("TabbedPane.selected", new ColorUIResource(200, 221, 242));
-		defaults.put("TabbedPane.unselectedBackground", secondary3);*/
+		defaults.put("TabbedPane.unselectedBackground", secondary3);
 	}
 }
