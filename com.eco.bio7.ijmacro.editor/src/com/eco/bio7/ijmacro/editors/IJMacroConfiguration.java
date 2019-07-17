@@ -178,7 +178,7 @@ private int isBold(String string2) {
 		ContentAssistant assistant = new ContentAssistant();
 		assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
-		IContentAssistProcessor processor = new IJMacroCompletionProcessor();
+		IContentAssistProcessor processor = new IJMacroCompletionProcessor(editor);
 		assistant.setContentAssistProcessor(processor, IDocument.DEFAULT_CONTENT_TYPE);
 		assistant.enableAutoActivation(true);
 		assistant.setAutoActivationDelay(200);

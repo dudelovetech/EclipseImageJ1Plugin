@@ -14,6 +14,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.ForStatementContext;
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.FormalParameterListContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroBodyContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroExpressionContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MemberIndexExpressionContext;
@@ -28,18 +29,41 @@ import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 
 	private Stack<IJMacroEditorOutlineNode> methods = new Stack<IJMacroEditorOutlineNode>();
+	private Stack<VariableScope> variables = new Stack<VariableScope>();
+	private ArrayList<String> functions = new ArrayList<String>();
+
 	private IJMacroEditor editor;
 	public ArrayList<String> startStop = new ArrayList<String>();
+	private int offsetCodeCompl = -1;
+	private int tempDifferenceStart = 10000000;
+	private VariableScope currentScope;
+	private VariableScope tempCodeComplScope;
+
+	public ArrayList<String> getFunctions() {
+		return functions;
+	}
+
+	public VariableScope getTempCodeComplScope() {
+		return tempCodeComplScope;
+	}
 
 	public ImageJMacroBaseListen(IJMacroEditor editor) {
 		this.editor = editor;
 	}
 
+	public ImageJMacroBaseListen(IJMacroEditor editor, int offset) {
+		this.editor = editor;
+		this.offsetCodeCompl = offset;
+	}
+
 	public void enterProgram(ImageJMacroParser.ProgramContext ctx) {
+		VariableScope base = new VariableScope(null);
+		tempCodeComplScope = base;
+		variables.add(base);
 	}
 
 	public void exitProgram(ImageJMacroParser.ProgramContext ctx) {
-
+		variables.pop();
 		if (methods.empty() == false) {
 			methods.pop();
 		}
@@ -50,8 +74,8 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		Token firstToken = ctx.getStart();
 		int lineStart = firstToken.getStartIndex();
 		String name = ctx.singleExpression(0).getText();
-		/*Omit array assignments (x[i]=5;!*/
-		if(ctx.singleExpression(0) instanceof MemberIndexExpressionContext){
+		/* Omit array assignments (x[i]=5;! */
+		if (ctx.singleExpression(0) instanceof MemberIndexExpressionContext) {
 			return;
 		}
 		/* Omit for loop variables! */
@@ -73,6 +97,9 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		else {
 			new IJMacroEditorOutlineNode(name, line, "variable", methods.peek());
 		}
+		VariableScope currentScope = variables.peek();
+		currentScope.vars.add(name);
+
 	}
 
 	public void enterVariableDeclarationStatement(ImageJMacroParser.VariableDeclarationStatementContext ctx) {
@@ -109,6 +136,10 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
 		startStop.add(lineStart + "," + lineEnd);
 
+		currentScope = variables.peek();
+		/* Give parent scope as Argument! */
+		variables.add(new VariableScope(currentScope));
+
 		/* Here we create the outline nodes in the Outline view! */
 		if (methods.size() == 0) {
 
@@ -118,9 +149,29 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 			methods.push(new IJMacroEditorOutlineNode(name, lineMethod, "function", methods.peek()));
 
 		}
+		FormalParameterListContext args = ctx.formalParameterList();
+		if (args == null) {
+			functions.add(name + "()");
+		} else {
+			functions.add(name + "(" + args.getText() + ")");
+		}
+
 	}
 
 	public void exitFunctionDeclaration(ImageJMacroParser.FunctionDeclarationContext ctx) {
+		/*
+		 * For code completion detect the parentheses index according to grammar!
+		 */
+
+		int startIndex = ctx.OpenBrace().getSymbol().getStartIndex();
+		int stopIndex = ctx.CloseBrace().getSymbol().getStopIndex() + 1;
+		/*
+		 * Calculate the closest function to the offset when closest found at the exit
+		 * of the prog calculate the functions in the scope!
+		 */
+		setCurrentScopeFromOffset(startIndex, stopIndex);
+
+		variables.pop();
 		if (methods.empty() == false) {
 			methods.pop();
 		}
@@ -199,6 +250,37 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 			}
 		}
 		return line;
+	}
+
+	/*
+	 * Calculate the current scope of the given (selected) offset (in which function
+	 * the offset is embedded)
+	 */
+	private void setCurrentScopeFromOffset(int startIndex, int stopIndex) {
+		/* If we have a selected offset (not by opening the file)! */
+		if (offsetCodeCompl >= 0) {
+			int distanceFromStart = offsetCodeCompl - startIndex;
+			int distanceFromStop = offsetCodeCompl - stopIndex;
+			/* If we have an positive offset after function parentheses! */
+			if (distanceFromStart > 0 && distanceFromStop < 0) {
+
+				/*
+				 * Lookup if we have already the closest distance. If not take this distance as
+				 * closest!
+				 */
+				if (distanceFromStart < tempDifferenceStart) {
+					tempDifferenceStart = distanceFromStart;
+					/*
+					 * Store temporary the scope! Used at program in this file exit!
+					 */
+					tempCodeComplScope = variables.peek();
+					// System.out.println(startIndex +" "+stopIndex);
+
+					// }
+				}
+
+			}
+		}
 	}
 
 }

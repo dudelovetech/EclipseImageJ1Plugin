@@ -151,5 +151,36 @@ public class Parse {
 		markerJob.schedule();
 
 	}
+	public ImageJMacroBaseListen parseFromOffset(int offset) {
+
+		
+
+		IDocumentProvider dp = editor.getDocumentProvider();
+		IDocument doc = dp.getDocument(editor.getEditorInput());
+		ANTLRInputStream input = new ANTLRInputStream(doc.get());
+		ImageJMacroLexer lexer = new ImageJMacroLexer(input);
+
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+		//UnderlineListener li = new UnderlineListener();
+
+		ImageJMacroParser parser = new ImageJMacroParser(tokens);
+
+		parser.removeErrorListeners();
+		//parser.addErrorListener(li);
+
+		ParseTreeWalker walker = new ParseTreeWalker();
+
+		RuleContext tree = parser.program();
+		/* Create the listener to create the outline, etc. */
+		ImageJMacroBaseListen listener = new ImageJMacroBaseListen(editor,offset);
+
+		// list.startStop.clear();
+		walker.walk(listener, tree);
+
+		
+		return listener;
+
+	}
 
 }

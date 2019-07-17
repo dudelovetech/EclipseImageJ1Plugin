@@ -13,12 +13,14 @@ package com.eco.bio7.ijmacro.editor.preferences.template;
 import org.eclipse.swt.graphics.Image;
 
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
+import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroBaseListen;
+import com.eco.bio7.ijmacro.editor.antlr.VariableScope;
+import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 import com.eco.bio7.ijmacro.editors.TemplateEditorUI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -46,9 +48,11 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	private int count = 0;// Variable to count the listed template.
 	private int defaultTemplatesLength;
 	private IPreferenceStore store;
+	private IJMacroEditor editor;
 
-	public IJMacroCompletionProcessor() {
+	public IJMacroCompletionProcessor(IJMacroEditor editor) {
 		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
+		this.editor=editor;
 
 	}
 
@@ -123,6 +127,24 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		String prefix = extractPrefix(viewer, offset);
 
 		Region region = null;
+		
+		ImageJMacroBaseListen ref = new com.eco.bio7.ijmacro.editor.antlr.Parse(editor).parseFromOffset(offset);
+		
+		VariableScope varScope=ref.getTempCodeComplScope();
+		
+		
+		
+		ArrayList<String> buffVars=varScope.getAllVariables(varScope);
+		
+		for (int i = 0; i < buffVars.size(); i++) {
+			//System.out.println(buffVars.get(i));
+		}
+		
+		ArrayList<String> functions=ref.getFunctions();
+		for (int i = 0; i < functions.size(); i++) {
+			System.out.println(functions.get(i));
+		}
+		
 		List<ICompletionProposal> matches = new ArrayList<ICompletionProposal>();
 		region = new Region(offset - prefix.length(), prefix.length());
 		TemplateContext context = createContext(viewer, region);
