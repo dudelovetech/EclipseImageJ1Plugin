@@ -43,16 +43,21 @@ import org.eclipse.jface.text.templates.TemplateContext;
 public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	private static final String DEFAULT_IMAGE = "$nl$/icons/template_obj.png"; //$NON-NLS-1$
 	private static final String METHOD_IMAGE = "$nl$/icons/methpub_obj.png"; //$NON-NLS-1$
+	private static final String VAR_EDITOR__IMAGE = "$nl$/icons/field_public_obj.png"; //$NON-NLS-1$
+	private static final String GLOBAL_VAR_EDITOR_IMAGE = "$nl$/icons/field_private_obj.png"; //$NON-NLS-1$
+	private static final String FUNCTION_EDITOR__IMAGE = "$nl$/icons/brkp_obj.png";
 	private static final Comparator fgProposalComparator = new ProposalComparator();
-	private static String[] splitted = IJMacroFunctions.functions.split(System.lineSeparator());
 	private int count = 0;// Variable to count the listed template.
 	private int defaultTemplatesLength;
 	private IPreferenceStore store;
 	private IJMacroEditor editor;
+	private int editorVarSize;
+	private int editorFunctionSize;
+	private int editorGlobalVarSize;
 
 	public IJMacroCompletionProcessor(IJMacroEditor editor) {
 		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
-		this.editor=editor;
+		this.editor = editor;
 
 	}
 
@@ -127,28 +132,12 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		String prefix = extractPrefix(viewer, offset);
 
 		Region region = null;
-		
-		ImageJMacroBaseListen ref = new com.eco.bio7.ijmacro.editor.antlr.Parse(editor).parseFromOffset(offset);
-		
-		VariableScope varScope=ref.getTempCodeComplScope();
-		
-		
-		
-		ArrayList<String> buffVars=varScope.getAllVariables(varScope);
-		
-		for (int i = 0; i < buffVars.size(); i++) {
-			//System.out.println(buffVars.get(i));
-		}
-		
-		ArrayList<String> functions=ref.getFunctions();
-		for (int i = 0; i < functions.size(); i++) {
-			System.out.println(functions.get(i));
-		}
-		
-		List<ICompletionProposal> matches = new ArrayList<ICompletionProposal>();
 		region = new Region(offset - prefix.length(), prefix.length());
 		TemplateContext context = createContext(viewer, region);
 
+		List<ICompletionProposal> matches = new ArrayList<ICompletionProposal>();
+
+		/* The user defined templates from the Template UI! */
 		Template[] templates = getTemplates(context.getContextType().getId());
 		defaultTemplatesLength = templates.length;
 
@@ -165,11 +154,60 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 
 		}
 
-		Template[] tempLocalFunctions = new Template[splitted.length];
-		for (int i = 0; i < splitted.length; i++) {
-			String[] funArray = splitted[i].split("####");
+		ImageJMacroBaseListen ref = new com.eco.bio7.ijmacro.editor.antlr.Parse(editor).parseFromOffset(offset);
+		/* Editor Variables! */
+		VariableScope varScope = ref.getTempCodeComplScope();
 
-			String str = funArray[0];
+		ArrayList<String> buffVars = varScope.getAllVariables(varScope);
+		editorVarSize = buffVars.size();
+		Template[] tempLocalFunctionsEditorVars = new Template[editorVarSize];
+
+		for (int i = 0; i < editorVarSize; i++) {
+			// System.out.println(buffVars.get(i));
+			String str = buffVars.get(i);
+			tempLocalFunctionsEditorVars[i] = new Template(str, "Editor defined variable",
+					context.getContextType().getId(), str  + "${cursor}", true);
+
+			Template template = tempLocalFunctionsEditorVars[i];
+			try {
+				context.getContextType().validate(template.getPattern());
+			} catch (TemplateException e) {
+				continue;
+			}
+			if (template.matches(prefix, context.getContextType().getId()))
+				matches.add(createProposal(template, context, (IRegion) region, getRelevance(template, prefix)));
+
+		}
+		/* Editor Global Variables! */
+		//VariableScope globalVarvScope = ref.getTempCodeComplScope();
+
+		ArrayList<String> buffGlobalVars =  ref.getGlobalVariables();
+		editorGlobalVarSize = buffGlobalVars.size();
+		Template[] tempLocalsEditorGlobalVars = new Template[editorGlobalVarSize];
+
+		for (int i = 0; i < editorGlobalVarSize; i++) {
+			// System.out.println(buffVars.get(i));
+			String str = buffGlobalVars.get(i);
+			tempLocalsEditorGlobalVars[i] = new Template(str, "Editor defined global variable",
+					context.getContextType().getId(), str  + "${cursor}", true);
+
+			Template template = tempLocalsEditorGlobalVars[i];
+			try {
+				context.getContextType().validate(template.getPattern());
+			} catch (TemplateException e) {
+				continue;
+			}
+			if (template.matches(prefix, context.getContextType().getId()))
+				matches.add(createProposal(template, context, (IRegion) region, getRelevance(template, prefix)));
+
+		}
+		/* Editor Functions! */
+		ArrayList<String> functions = ref.getFunctions();
+		editorFunctionSize = functions.size();
+		Template[] tempLocalFunctions = new Template[editorFunctionSize];
+		for (int i = 0; i < editorFunctionSize; i++) {
+
+			String str = functions.get(i);
 			int firstBracket = str.indexOf('(');
 			if (firstBracket > -1) {
 				String contentOfBrackets = str.substring(firstBracket + 1, str.indexOf(')'));
@@ -178,10 +216,13 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 					StringBuffer buf = new StringBuffer();
 					String[] args = contentOfBrackets.split(",");
 					for (int j = 0; j < args.length; j++) {
-						/*Arguments with quotes are Constants and will not work with placeholder. We handle them separately!*/
+						/*
+						 * Arguments with quotes are Constants and will not work with placeholder. We
+						 * handle them separately!
+						 */
 						if (args[j].contains("\"")) {
 							buf.append(args[j]);
-						} 
+						}
 						/*
 						 * The ${} placeholder will be removed in the
 						 * IJMacroSimpleDefaultInformationControl to get the context information!
@@ -194,15 +235,74 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 						}
 					}
 					String argFun = buf.toString();
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), contentBegin + "(" + argFun + ");" + "${cursor}", true);
+					tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+							contentBegin + "(" + argFun + ");" + "${cursor}", true);
 				} else {
-					tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";" + "${cursor}", true);
+					tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+							str + ";" + "${cursor}", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(), funArray[0] + ";" + "${cursor}", true);
+				tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+						str + ";" + "${cursor}", true);
 			}
 
 			Template template = tempLocalFunctions[i];
+			try {
+				context.getContextType().validate(template.getPattern());
+			} catch (TemplateException e) {
+				continue;
+			}
+			if (template.matches(prefix, context.getContextType().getId()))
+				matches.add(createProposal(template, context, (IRegion) region, getRelevance(template, prefix)));
+
+		}
+
+		/* The ImageJ macro API functions! */
+		String[] splitted = IJMacroFunctions.functions.split(System.lineSeparator());
+		Template[] tempLocalFunctions2 = new Template[splitted.length];
+		for (int i = 0; i < splitted.length; i++) {
+			String[] funArray = splitted[i].split("####");
+
+			String str = funArray[0];
+			int firstBracket = str.indexOf('(');
+			if (firstBracket > -1) {
+				String contentOfBrackets = str.substring(firstBracket + 1, str.indexOf(')'));
+				String contentBegin = str.substring(0, str.indexOf('('));
+				if (contentOfBrackets.isEmpty() == false) {
+					StringBuffer buf = new StringBuffer();
+					String[] args = contentOfBrackets.split(",");
+					for (int j = 0; j < args.length; j++) {
+						/*
+						 * Arguments with quotes are Constants and will not work with placeholder. We
+						 * handle them separately!
+						 */
+						if (args[j].contains("\"")) {
+							buf.append(args[j]);
+						}
+						/*
+						 * The ${} placeholder will be removed in the
+						 * IJMacroSimpleDefaultInformationControl to get the context information!
+						 */
+						else {
+							buf.append("${" + args[j] + "}");
+						}
+						if (j < args.length - 1) {
+							buf.append(",");
+						}
+					}
+					String argFun = buf.toString();
+					tempLocalFunctions2[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(),
+							contentBegin + "(" + argFun + ");" + "${cursor}", true);
+				} else {
+					tempLocalFunctions2[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(),
+							funArray[0] + ";" + "${cursor}", true);
+				}
+			} else {
+				tempLocalFunctions2[i] = new Template(funArray[0], funArray[1], context.getContextType().getId(),
+						funArray[0] + ";" + "${cursor}", true);
+			}
+
+			Template template = tempLocalFunctions2[i];
 			try {
 				context.getContextType().validate(template.getPattern());
 			} catch (TemplateException e) {
@@ -251,7 +351,8 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	 * @return the supported XML context type
 	 */
 	protected TemplateContextType getContextType(ITextViewer viewer, IRegion region) {
-		return TemplateEditorUI.getDefault().getContextTypeRegistry().getContextType(IJMacroContextType.XML_CONTEXT_TYPE);
+		return TemplateEditorUI.getDefault().getContextTypeRegistry()
+				.getContextType(IJMacroContextType.XML_CONTEXT_TYPE);
 	}
 
 	/**
@@ -274,8 +375,38 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 			}
 			return image;
 
-		} else {
+		}
 
+		else if (count < defaultTemplatesLength + editorVarSize) {
+			count++;
+			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
+			Image image = registry.get(VAR_EDITOR__IMAGE);
+			if (image == null) {
+				ImageDescriptor desc = TemplateEditorUI.imageDescriptorFromPlugin("com.eco.bio7.ijmacro.editor", //$NON-NLS-1$
+						VAR_EDITOR__IMAGE);
+				registry.put(VAR_EDITOR__IMAGE, desc);
+				image = registry.get(VAR_EDITOR__IMAGE);
+			}
+			return image;
+
+		}
+		
+		else if (count < defaultTemplatesLength +editorVarSize+editorGlobalVarSize) {
+			count++;
+			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
+			Image image = registry.get(GLOBAL_VAR_EDITOR_IMAGE);
+			if (image == null) {
+				ImageDescriptor desc = TemplateEditorUI.imageDescriptorFromPlugin("com.eco.bio7.ijmacro.editor", //$NON-NLS-1$
+						GLOBAL_VAR_EDITOR_IMAGE);
+				registry.put(GLOBAL_VAR_EDITOR_IMAGE, desc);
+				image = registry.get(GLOBAL_VAR_EDITOR_IMAGE);
+			}
+			return image;
+
+		}
+
+		else if (count < defaultTemplatesLength + editorVarSize + +editorGlobalVarSize+editorFunctionSize) {
+			count++;
 			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
 			Image image = registry.get(METHOD_IMAGE);
 			if (image == null) {
@@ -283,6 +414,20 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 						METHOD_IMAGE);
 				registry.put(METHOD_IMAGE, desc);
 				image = registry.get(METHOD_IMAGE);
+			}
+			return image;
+
+		}
+
+		else {
+
+			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
+			Image image = registry.get(FUNCTION_EDITOR__IMAGE);
+			if (image == null) {
+				ImageDescriptor desc = TemplateEditorUI.imageDescriptorFromPlugin("com.eco.bio7.ijmacro.editor", //$NON-NLS-1$
+						FUNCTION_EDITOR__IMAGE);
+				registry.put(FUNCTION_EDITOR__IMAGE, desc);
+				image = registry.get(FUNCTION_EDITOR__IMAGE);
 			}
 			return image;
 

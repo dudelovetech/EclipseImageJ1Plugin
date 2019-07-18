@@ -30,14 +30,18 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 
 	private Stack<IJMacroEditorOutlineNode> methods = new Stack<IJMacroEditorOutlineNode>();
 	private Stack<VariableScope> variables = new Stack<VariableScope>();
+	private ArrayList<String> globalVariables = new ArrayList<String>();
 	private ArrayList<String> functions = new ArrayList<String>();
-
 	private IJMacroEditor editor;
 	public ArrayList<String> startStop = new ArrayList<String>();
 	private int offsetCodeCompl = -1;
 	private int tempDifferenceStart = 10000000;
 	private VariableScope currentScope;
 	private VariableScope tempCodeComplScope;
+
+	public ArrayList<String> getGlobalVariables() {
+		return globalVariables;
+	}
 
 	public ArrayList<String> getFunctions() {
 		return functions;
@@ -119,6 +123,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		else {
 			new IJMacroEditorOutlineNode(name, line, "globalvariable", methods.peek());
 		}
+		globalVariables.add(name);
 	}
 
 	public void exitAssignmentExpression(ImageJMacroParser.AssignmentExpressionContext ctx) {
