@@ -12,6 +12,7 @@
  *******************************************************************************/
 package com.eco.bio7.ijmacro.editors;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,6 +57,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -64,6 +67,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -86,12 +90,15 @@ import com.eco.bio7.ijmacro.editor.antlr.WordMarkerCreation;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
+import com.eco.bio7.image.DebugVariablesView;
 import com.eco.bio7.image.Util;
 
 import ij.IJ;
+import ij.WindowManager;
 import ij.macro.Debugger;
 import ij.macro.Interpreter;
 import ij.plugin.Macro_Runner;
+import ij.text.TextPanel;
 import ij.text.TextWindow;
 
 /**
@@ -161,7 +168,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	private IJMacroConfiguration ijMacroConfig;
 
 	private ImageJForumCopy imagejForumCopy;
-	
+
 	private static Shell tempShell;
 
 	public void createPartControl(Composite parent) {
@@ -564,10 +571,12 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			} else
 				return 0;
 		}
-		/*
-		 * if (!isVisible()) { // abort macro if user closes window interp.abortMacro();
-		 * return 0; }
-		 */
+
+		/*if (!DebugVariablesView.getDebugVariablesGrid().isVisible()) { // abort macro if user closes window
+																		// interp.abortMacro();
+			return 0;
+		}*/
+
 		if (n == previousLine) {
 			previousLine = 0;
 			return 0;
@@ -576,6 +585,19 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		 * Window win = WindowManager.getActiveWindow(); if (win!=this) IJ.wait(50);
 		 * toFront();
 		 */
+		/*Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+			public void run() {
+				try {
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					page.showView("com.eco.bio7.image.view.debug");
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+			}
+		});*/
 		previousLine = n;
 		String text = getText();
 		if (IJ.isWindows())
@@ -602,11 +624,14 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		if ((debugStart == 0 || debugStart == len) && debugEnd == len)
 			return 0; // skip code added with Interpreter.setAdditionalFunctions()
 		select(IJMacroEditor.this, debugStart, debugEnd);
-		if (debugWindow != null && !debugWindow.isShowing()) {
-			interp.setDebugger(null);
-			debugWindow = null;
-		} else
-			debugWindow = interp.updateDebugWindow(interp.getVariables(), debugWindow);
+		/*
+		 * if (debugWindow != null && !debugWindow.isShowing()) {
+		 * interp.setDebugger(null); debugWindow = null;
+		 */
+		// } else
+
+		Table debugWindow = updateDebugWindow(interp.getVariables(), DebugVariablesView.getDebugVariablesGrid(),
+				interp);
 		if (debugWindow != null) {
 			interp.updateArrayInspector();
 			// toFront();
@@ -624,6 +649,57 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		}
 
 		return 0;
+	}
+
+	public Table updateDebugWindow(String[] variables, Table table, Interpreter interp) {
+		/*
+		 * if (debugWindow == null) { Frame f = WindowManager.getFrame("Debug"); if (f
+		 * != null && (f instanceof TextWindow)) { debugWindow = (TextWindow) f;
+		 * debugWindow.toFront(); } } if (debugWindow == null) debugWindow = new
+		 * TextWindow("Debug", "Name\t*\tValue", "", 300, 400); TextPanel panel =
+		 * debugWindow.getTextPanel();
+		 */
+
+		int n = variables.length;
+		if (n == 0) {
+			Display dis = Util.getDisplay();
+			dis.syncExec(new Runnable() {
+
+				public void run() {
+					// panel.clear();
+					table.removeAll();
+				}
+			});
+
+			return table;
+		}
+		// int lines = panel.getLineCount();
+		String[] markedVariables = interp.markChanges(variables);
+		/* Using SWT tables! */
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+
+				table.removeAll();
+				for (int i = 0; i < markedVariables.length; i++) {
+					if (i < n) {
+						// panel.setLine(i, markedVariables[i]);
+						new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
+
+					} else {
+						// panel.setLine(i, "");
+						new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
+
+					}
+				}
+			}
+		});
+		/*
+		 * for (int i = lines; i < n; i++) debugWindow.append(markedVariables[i]);
+		 */
+
+		return table;
 	}
 
 	public IDocument getDocument() {

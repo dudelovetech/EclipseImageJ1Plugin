@@ -41,6 +41,15 @@
             name="ImageJ Extra"
             parentCategory="com.eco.bio7.image.plugin">
       </category>
+      <view
+            allowMultiple="true"
+            category="com.eco.bio7.image.plugin"
+            class="com.eco.bio7.image.DebugVariablesView"
+            icon="pics/imagejview.png"
+            id="com.eco.bio7.image.view.debug"
+            name="Debug"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

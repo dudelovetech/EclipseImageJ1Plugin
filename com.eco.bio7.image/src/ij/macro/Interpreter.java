@@ -1347,7 +1347,7 @@ public class Interpreter implements MacroConstants {
 
 	private static String[] prevVars; //previous variables for comparison
 
-	private String[] markChanges(String[] newVars) {//add asterisk if variable has changed
+	public String[] markChanges(String[] newVars) {//add asterisk if variable has changed
 		int len = newVars.length;
 		String[] copyOfNew = new String[len];
 		String[] hilitedVars = new String[len];
@@ -2340,3 +2340,8 @@ public class Interpreter implements MacroConstants {
 	}
 			
 } // class Interpreter
+
+
+
+
+
