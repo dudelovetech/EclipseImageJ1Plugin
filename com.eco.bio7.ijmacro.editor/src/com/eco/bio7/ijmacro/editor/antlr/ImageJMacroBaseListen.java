@@ -156,9 +156,9 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		}
 		FormalParameterListContext args = ctx.formalParameterList();
 		if (args == null) {
-			functions.add(name + "()");
+			functions.add(lineMethod+"####"+name + "()");
 		} else {
-			functions.add(name + "(" + args.getText() + ")");
+			functions.add(lineMethod+"####"+name + "(" + args.getText() + ")");
 		}
 
 	}

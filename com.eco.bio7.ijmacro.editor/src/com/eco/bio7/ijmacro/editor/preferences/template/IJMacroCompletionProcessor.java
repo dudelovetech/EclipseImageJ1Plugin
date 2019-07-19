@@ -20,6 +20,7 @@ import com.eco.bio7.ijmacro.editors.TemplateEditorUI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -54,6 +55,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	private int editorVarSize;
 	private int editorFunctionSize;
 	private int editorGlobalVarSize;
+	public static HashMap<String, String> mapFunctionAndContext;
 
 	public IJMacroCompletionProcessor(IJMacroEditor editor) {
 		store = IJMacroEditorPlugin.getDefault().getPreferenceStore();
@@ -130,7 +132,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		count = 0;
 		String prefix = extractPrefix(viewer, offset);
-
+		mapFunctionAndContext = new HashMap<String, String>();
 		Region region = null;
 		region = new Region(offset - prefix.length(), prefix.length());
 		TemplateContext context = createContext(viewer, region);
@@ -154,7 +156,9 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 
 		}
 
-		ImageJMacroBaseListen ref = new com.eco.bio7.ijmacro.editor.antlr.Parse(editor).parseFromOffset(offset);
+		com.eco.bio7.ijmacro.editor.antlr.Parse parse = new com.eco.bio7.ijmacro.editor.antlr.Parse(editor);
+		ImageJMacroBaseListen ref = parse.parseFromOffset(offset);
+		HashMap<Integer, String> map = parse.getMap();
 		/* Editor Variables! */
 		VariableScope varScope = ref.getTempCodeComplScope();
 
@@ -166,7 +170,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 			// System.out.println(buffVars.get(i));
 			String str = buffVars.get(i);
 			tempLocalFunctionsEditorVars[i] = new Template(str, "Editor defined variable",
-					context.getContextType().getId(), str  + "${cursor}", true);
+					context.getContextType().getId(), str + "${cursor}", true);
 
 			Template template = tempLocalFunctionsEditorVars[i];
 			try {
@@ -181,7 +185,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		/* Editor Global Variables! */
 		//VariableScope globalVarvScope = ref.getTempCodeComplScope();
 
-		ArrayList<String> buffGlobalVars =  ref.getGlobalVariables();
+		ArrayList<String> buffGlobalVars = ref.getGlobalVariables();
 		editorGlobalVarSize = buffGlobalVars.size();
 		Template[] tempLocalsEditorGlobalVars = new Template[editorGlobalVarSize];
 
@@ -189,7 +193,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 			// System.out.println(buffVars.get(i));
 			String str = buffGlobalVars.get(i);
 			tempLocalsEditorGlobalVars[i] = new Template(str, "Editor defined global variable",
-					context.getContextType().getId(), str  + "${cursor}", true);
+					context.getContextType().getId(), str + "${cursor}", true);
 
 			Template template = tempLocalsEditorGlobalVars[i];
 			try {
@@ -208,10 +212,25 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 		for (int i = 0; i < editorFunctionSize; i++) {
 
 			String str = functions.get(i);
+			String[] splitNumber = str.split("####");
+			String methodLineNumber = splitNumber[0];
+
+			String description = "Editor function";
+
+			str = splitNumber[1];
 			int firstBracket = str.indexOf('(');
 			if (firstBracket > -1) {
 				String contentOfBrackets = str.substring(firstBracket + 1, str.indexOf(')'));
 				String contentBegin = str.substring(0, str.indexOf('('));
+                /*Here we get the map from the Parse class and we get the comment from the line number (hashmap key)*/
+				String editorMethodDoc = map.get(new Integer(methodLineNumber));
+				if (editorMethodDoc != null) {
+					//System.out.println("str is: "+str);
+					//System.out.println("editor doc is: "+editorMethodDoc);
+					/*For the InformationControl context (our comments) we create a new map here which will be accessed from the control!*/
+					mapFunctionAndContext.put(str+";", editorMethodDoc);
+				}
+
 				if (contentOfBrackets.isEmpty() == false) {
 					StringBuffer buf = new StringBuffer();
 					String[] args = contentOfBrackets.split(",");
@@ -234,15 +253,16 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 							buf.append(",");
 						}
 					}
+
 					String argFun = buf.toString();
-					tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+					tempLocalFunctions[i] = new Template(str, description, context.getContextType().getId(),
 							contentBegin + "(" + argFun + ");" + "${cursor}", true);
 				} else {
-					tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+					tempLocalFunctions[i] = new Template(str, description, context.getContextType().getId(),
 							str + ";" + "${cursor}", true);
 				}
 			} else {
-				tempLocalFunctions[i] = new Template(str, "Editor function", context.getContextType().getId(),
+				tempLocalFunctions[i] = new Template(str, description, context.getContextType().getId(),
 						str + ";" + "${cursor}", true);
 			}
 
@@ -390,8 +410,8 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 			return image;
 
 		}
-		
-		else if (count < defaultTemplatesLength +editorVarSize+editorGlobalVarSize) {
+
+		else if (count < defaultTemplatesLength + editorVarSize + editorGlobalVarSize) {
 			count++;
 			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
 			Image image = registry.get(GLOBAL_VAR_EDITOR_IMAGE);
@@ -405,7 +425,7 @@ public class IJMacroCompletionProcessor extends TemplateCompletionProcessor {
 
 		}
 
-		else if (count < defaultTemplatesLength + editorVarSize + +editorGlobalVarSize+editorFunctionSize) {
+		else if (count < defaultTemplatesLength + editorVarSize + +editorGlobalVarSize + editorFunctionSize) {
 			count++;
 			ImageRegistry registry = TemplateEditorUI.getDefault().getImageRegistry();
 			Image image = registry.get(METHOD_IMAGE);

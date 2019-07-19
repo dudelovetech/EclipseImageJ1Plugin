@@ -542,7 +542,7 @@ singleExpression
  | arrayLiteral                                                           # ArrayLiteralExpression
  | '(' expressionSequence ')'                                             # ParenthesizedExpression
  ;
-
+ 
 /// AssignmentOperator : one of
 ///     *=	/=	%=	+=	-=	<<=	>>=	>>>=	&=	^=	|=
 assignmentOperator
@@ -718,11 +718,11 @@ WhiteSpaces
 
 /// 7.4 Comments
 MultiLineComment
- : '/*' .*? '*/' -> channel(HIDDEN)
+ : '/*' .*? '*/' -> channel(2)
  ;
 
 SingleLineComment
- : '//' ~[\r\n\u2028\u2029]* -> channel(HIDDEN)
+ : '//' ~[\r\n\u2028\u2029]* -> channel(2)
  ;
 
 UnexpectedCharacter

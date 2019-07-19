@@ -11,10 +11,12 @@
 package com.eco.bio7.ijmacro.editor.antlr;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -37,6 +39,12 @@ public class Parse {
 	private IJMacroEditor editor;
 	private CommonTokenStream tokens;
 	private int numberOfMainParseErrors;
+
+	public HashMap<Integer, String> map;
+
+	public HashMap<Integer, String> getMap() {
+		return map;
+	}
 
 	public Parse(IJMacroEditor editor) {
 
@@ -151,9 +159,10 @@ public class Parse {
 		markerJob.schedule();
 
 	}
+
 	public ImageJMacroBaseListen parseFromOffset(int offset) {
 
-		
+		map = new HashMap<Integer, String>();
 
 		IDocumentProvider dp = editor.getDocumentProvider();
 		IDocument doc = dp.getDocument(editor.getEditorInput());
@@ -161,6 +170,25 @@ public class Parse {
 		ImageJMacroLexer lexer = new ImageJMacroLexer(input);
 
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		tokens.fill();
+		for (int index = 0; index < tokens.size(); index++) {
+			Token token = tokens.get(index);
+           /*Filter out comments on channel 2!*/
+			if (token.getChannel() == 2) {
+				if (index + 1 < tokens.size()) {
+					//Get the token after the comment!
+					Token tokenNext = tokens.get(index + 1);
+					//Get the line number of the following method!
+					int methodLineNumber = tokenNext.getLine() + 1;
+					
+					String out = token.getText();
+					/*Put the comment text and the line number in a map!*/
+					map.put(methodLineNumber, out);
+				}
+
+			}
+
+		}
 
 		//UnderlineListener li = new UnderlineListener();
 
@@ -173,12 +201,11 @@ public class Parse {
 
 		RuleContext tree = parser.program();
 		/* Create the listener to create the outline, etc. */
-		ImageJMacroBaseListen listener = new ImageJMacroBaseListen(editor,offset);
+		ImageJMacroBaseListen listener = new ImageJMacroBaseListen(editor, offset);
 
 		// list.startStop.clear();
 		walker.walk(listener, tree);
 
-		
 		return listener;
 
 	}

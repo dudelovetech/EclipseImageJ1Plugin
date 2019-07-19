@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroCompletionProcessor;
 import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroFunctions;
 
 /**
@@ -61,16 +62,11 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 		 * <strong>Note:</strong> The given display must only be used for measuring.
 		 * </p>
 		 *
-		 * @param display
-		 *            the display of the information control
-		 * @param hoverInfo
-		 *            the information to be presented
-		 * @param presentation
-		 *            the presentation to be updated
-		 * @param maxWidth
-		 *            the maximal width in pixels
-		 * @param maxHeight
-		 *            the maximal height in pixels
+		 * @param display      the display of the information control
+		 * @param hoverInfo    the information to be presented
+		 * @param presentation the presentation to be updated
+		 * @param maxWidth     the maximal width in pixels
+		 * @param maxHeight    the maximal height in pixels
 		 *
 		 * @return the manipulated information
 		 * @deprecated As of 3.2, replaced by
@@ -101,16 +97,11 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 		 * calculate the size of the text to be presented.
 		 * </p>
 		 *
-		 * @param drawable
-		 *            the drawable of the information control
-		 * @param hoverInfo
-		 *            the information to be presented
-		 * @param presentation
-		 *            the presentation to be updated
-		 * @param maxWidth
-		 *            the maximal width in pixels
-		 * @param maxHeight
-		 *            the maximal height in pixels
+		 * @param drawable     the drawable of the information control
+		 * @param hoverInfo    the information to be presented
+		 * @param presentation the presentation to be updated
+		 * @param maxWidth     the maximal width in pixels
+		 * @param maxHeight    the maximal height in pixels
 		 *
 		 * @return the manipulated information
 		 */
@@ -153,10 +144,8 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * information presenter that can handle simple HTML is used to process the
 	 * information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param isResizeable
-	 *            <code>true</code> if the control should be resizable
+	 * @param parent       the parent shell
+	 * @param isResizeable <code>true</code> if the control should be resizable
 	 * @since 3.4
 	 */
 
@@ -165,11 +154,9 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * information presenter that can handle simple HTML is used to process the
 	 * information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parent          the parent shell
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.4
 	 */
 
@@ -178,14 +165,11 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
-	 * @param presenter
-	 *            the presenter to be used, or <code>null</code> if no presenter
-	 *            should be used
+	 * @param parent          the parent shell
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
+	 * @param presenter       the presenter to be used, or <code>null</code> if no
+	 *                        presenter should be used
 	 * @since 3.4
 	 */
 	public IJMacroSimpleDefaultInformationControl(Shell parent, String statusFieldText,
@@ -201,10 +185,9 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * parent. An information presenter that can handle simple HTML is used to
 	 * process the information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param toolBarManager
-	 *            the manager or <code>null</code> if toolbar is not desired
+	 * @param parent         the parent shell
+	 * @param toolBarManager the manager or <code>null</code> if toolbar is not
+	 *                       desired
 	 * @since 3.4
 	 */
 
@@ -213,13 +196,11 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * parent. The given information presenter is used to process the information to
 	 * be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param toolBarManager
-	 *            the manager or <code>null</code> if toolbar is not desired
-	 * @param presenter
-	 *            the presenter to be used, or <code>null</code> if no presenter
-	 *            should be used
+	 * @param parent         the parent shell
+	 * @param toolBarManager the manager or <code>null</code> if toolbar is not
+	 *                       desired
+	 * @param presenter      the presenter to be used, or <code>null</code> if no
+	 *                       presenter should be used
 	 * @since 3.4
 	 */
 	public IJMacroSimpleDefaultInformationControl(Shell parent, ToolBarManager toolBarManager,
@@ -235,8 +216,7 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * Creates a default information control with the given shell as parent. No
 	 * information presenter is used to process the information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
+	 * @param parent the parent shell
 	 */
 	public IJMacroSimpleDefaultInformationControl(Shell parent) {
 		this(parent, (String) null, null);
@@ -248,10 +228,8 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent    the parent shell
+	 * @param presenter the presenter to be used
 	 */
 	public IJMacroSimpleDefaultInformationControl(Shell parent, IInformationPresenter presenter) {
 		this(parent, (String) null, presenter);
@@ -263,14 +241,10 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed. The given styles are applied to the created styled text widget.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param shellStyle
-	 *            the additional styles for the shell
-	 * @param style
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent     the parent shell
+	 * @param shellStyle the additional styles for the shell
+	 * @param style      the additional styles for the styled text widget
+	 * @param presenter  the presenter to be used
 	 * @deprecated As of 3.4, replaced by simpler constructors
 	 */
 
@@ -279,17 +253,12 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed. The given styles are applied to the created styled text widget.
 	 *
-	 * @param parentShell
-	 *            the parent shell
-	 * @param shellStyle
-	 *            the additional styles for the shell
-	 * @param style
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parentShell     the parent shell
+	 * @param shellStyle      the additional styles for the shell
+	 * @param style           the additional styles for the styled text widget
+	 * @param presenter       the presenter to be used
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.0
 	 * @deprecated As of 3.4, replaced by simpler constructors
 	 */
@@ -299,12 +268,9 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param textStyles
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent     the parent shell
+	 * @param textStyles the additional styles for the styled text widget
+	 * @param presenter  the presenter to be used
 	 * @deprecated As of 3.4, replaced by
 	 *             {@link #DefaultInformationControl(Shell, IJMacroSimpleDefaultInformationControl.IInformationPresenter)}
 	 */
@@ -317,15 +283,11 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param textStyles
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parent          the parent shell
+	 * @param textStyles      the additional styles for the styled text widget
+	 * @param presenter       the presenter to be used
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.0
 	 * @deprecated As of 3.4, replaced by
 	 *             {@link #DefaultInformationControl(Shell, String, IJMacroSimpleDefaultInformationControl.IInformationPresenter)}
@@ -374,22 +336,33 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 * @see IInformationControl#setInformation(String)
 	 */
 	public void setInformation(String content) {
+		System.out.println("content is"+content);
+		/*From the ImageJMacroCompletion get the hashmap with editor defined functions (key) and the comments (value)!*/
+		String commentsEditorFunctions = IJMacroCompletionProcessor.mapFunctionAndContext.get(content);
 		/*Remove the API template placeholder chars added in class IJMacroCompletionProcessor!*/
-		content=content.replace("${", "");
-		content=content.replace("}", "");
-		content=content.replace(";", "");
+		content = content.replace("${", "");
+		content = content.replace("}", "");
+		content = content.replace(";", "");
 		Font font = JFaceResources.getFontRegistry().get("com.eco.bio7.ijmacro.editor.textfont");
 		fText.setFont(font);
 		String context = null;
+
+		/*Get all API function context!*/
 		String[] functions = IJMacroFunctions.functions.split(System.lineSeparator());
 		for (int i = 0; i < functions.length; i++) {
 			String[] finalContent = functions[i].split("####");
 			String temp = finalContent[0];
-
+			
 			if (content.equals(temp)) {
 				context = finalContent[0] + "\n\n" + finalContent[1];
 				break;
 			}
+
+			
+		}
+		/*Here the editor defined comments as context!*/
+		if (commentsEditorFunctions != null) {
+			context = commentsEditorFunctions;
 		}
 
 		if (context == null) {
