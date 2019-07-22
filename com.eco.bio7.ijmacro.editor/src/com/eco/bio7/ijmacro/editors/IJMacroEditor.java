@@ -667,7 +667,13 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 
 				public void run() {
 					// panel.clear();
-					table.removeAll();
+					if (table != null) {
+						if (table.isDisposed() == false) {
+							if (table != null) {
+								table.removeAll();
+							}
+						}
+					}
 				}
 			});
 
@@ -680,21 +686,25 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		dis.syncExec(new Runnable() {
 
 			public void run() {
+				if (table != null) {
+					if (table.isDisposed() == false) {
+						table.removeAll();
+						for (int i = 0; i < markedVariables.length; i++) {
+							if (i < n) {
+								// panel.setLine(i, markedVariables[i]);
+								new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
 
-				table.removeAll();
-				for (int i = 0; i < markedVariables.length; i++) {
-					if (i < n) {
-						// panel.setLine(i, markedVariables[i]);
-						new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
+							} else {
+								// panel.setLine(i, "");
+								new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
 
-					} else {
-						// panel.setLine(i, "");
-						new TableItem(table, SWT.NONE).setText(markedVariables[i].split("\t"));
-
+							}
+						}
 					}
 				}
 			}
 		});
+
 		/*
 		 * for (int i = lines; i < n; i++) debugWindow.append(markedVariables[i]);
 		 */

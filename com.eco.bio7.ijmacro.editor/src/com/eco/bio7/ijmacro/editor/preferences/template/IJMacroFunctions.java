@@ -44,6 +44,7 @@ public class IJMacroFunctions {
 			"d2s(n,decimalPlaces)####Converts the number n into a string using the specified number of decimal places. Note that d2s stands for \"double to string\". This function will probably be replaced by one with a better name."+linSeparator +
 			"Dialog.create(\"Title\")####Creates a dialog box with the specified title. Call Dialog.addString(),Dialog.addNumber(),etc. to add components to the dialog. Call Dialog.show() to display the dialog and Dialog.getString(),Dialog.getNumber(),etc. to retrieve the values entered by the user. Refer to the DialogDemo macro for an example."+linSeparator+
 			"Dialog.addMessage(string)####Adds a message to the dialog. The message can be broken into multiple lines by inserting new line characters (\"\\n\") into the string."+linSeparator + 
+			"Dialog.addMessage(string,fontSize,fontColor)####Adds a message to the dialog. The font color and font size can be changed. The message can be broken into multiple lines by inserting new line characters (\"\\n\") into the string."+linSeparator + 
 			"Dialog.addString(\"Label\",\"Initial text\")####Adds a text field to the dialog,using the specified label and initial text."+linSeparator + 
 			"Dialog.addString(\"Label\",\"Initial text\",columns)####Adds a text field to the dialog,where columns specifies the field width in characters."+linSeparator + 
 			"Dialog.addNumber(\"Label\",default)####Adds a numeric field to the dialog,using the specified label and default value."+linSeparator + 

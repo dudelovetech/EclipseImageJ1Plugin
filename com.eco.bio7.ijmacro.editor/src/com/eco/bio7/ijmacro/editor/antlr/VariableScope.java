@@ -15,30 +15,36 @@ public class VariableScope {
 	public VariableScope getParent() {
 		return parent;
 	}
-    /*Here we collect all variables in the current function scope and of the global scope (ImageJ macro specific!)
-     *Nested scopes (or parent functions) are not considered in the macro language!*/
+
+	/*Here we collect all variables in the current function scope and of the global scope (ImageJ macro specific!)
+	 *Nested scopes (or parent functions) are not considered in the macro language!*/
 	public ArrayList<String> getAllVariables(VariableScope current) {
 
-		for (int i = 0; i < current.vars.size(); i++) {
+		if (current.getParent() != null) {
+			for (int i = 0; i < current.vars.size(); i++) {
 
-			list.add(current.vars.get(i));
+				list.add(current.vars.get(i));
 
+			}
 		}
 		/*Add the global variables, too!*/
-		getGlobaleVariables(current);
+		
+			getGlobaleVariables(current);
+		
 
 		return list;
 
 	}
 
 	private void getGlobaleVariables(VariableScope current) {
+
 		if (current.getParent() == null) {
 			for (int i = 0; i < current.vars.size(); i++) {
 				list.add(current.vars.get(i));
-
 			}
-
+			
 		} else {
+
 			getGlobaleVariables(current.getParent());
 
 		}
