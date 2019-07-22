@@ -7,9 +7,11 @@ public class VariableScope {
 	private VariableScope parent;
 	public ArrayList<String> vars = new ArrayList<String>();
 	public ArrayList<String> list = new ArrayList<String>();
+	private String functionArguments;
 
-	public VariableScope(VariableScope parent) {
+	public VariableScope(VariableScope parent, String functionArguments) {
 		this.parent = parent;
+		this.functionArguments = functionArguments;
 	}
 
 	public VariableScope getParent() {
@@ -27,10 +29,16 @@ public class VariableScope {
 
 			}
 		}
+		/*Add the function arguments of the current scope function, too!*/
+		if (functionArguments != null) {
+			String[] args = functionArguments.split(",");
+			for (int j = 0; j < args.length; j++) {
+				list.add(args[j]);
+			}
+		}
 		/*Add the global variables, too!*/
-		
-			getGlobaleVariables(current);
-		
+
+		getGlobaleVariables(current);
 
 		return list;
 
@@ -42,7 +50,7 @@ public class VariableScope {
 			for (int i = 0; i < current.vars.size(); i++) {
 				list.add(current.vars.get(i));
 			}
-			
+
 		} else {
 
 			getGlobaleVariables(current.getParent());

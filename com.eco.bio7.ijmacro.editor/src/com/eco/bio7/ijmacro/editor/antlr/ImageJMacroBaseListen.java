@@ -61,7 +61,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 	}
 
 	public void enterProgram(ImageJMacroParser.ProgramContext ctx) {
-		VariableScope base = new VariableScope(null);
+		VariableScope base = new VariableScope(null,null);
 		tempCodeComplScope = base;
 		variables.add(base);
 	}
@@ -141,9 +141,7 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		int lineEnd = lastToken.getStopIndex() + 1 - lineStart;
 		startStop.add(lineStart + "," + lineEnd);
 
-		currentScope = variables.peek();
-		/* Give parent scope as Argument! */
-		variables.add(new VariableScope(currentScope));
+		
 
 		/* Here we create the outline nodes in the Outline view! */
 		if (methods.size() == 0) {
@@ -154,12 +152,20 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 			methods.push(new IJMacroEditorOutlineNode(name, lineMethod, "function", methods.peek()));
 
 		}
+		/*For the variable we set the current scope!*/
+		currentScope = variables.peek();
+		
 		FormalParameterListContext args = ctx.formalParameterList();
 		if (args == null) {
 			functions.add(lineMethod+"####"+name + "()");
+			/* Give parent scope as Argument! */
+			variables.add(new VariableScope(currentScope,null));
 		} else {
 			functions.add(lineMethod+"####"+name + "(" + args.getText() + ")");
+			/* Give parent scope as Argument! */
+			variables.add(new VariableScope(currentScope,args.getText()));
 		}
+		
 
 	}
 
