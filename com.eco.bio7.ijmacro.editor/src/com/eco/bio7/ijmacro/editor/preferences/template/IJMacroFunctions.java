@@ -331,7 +331,7 @@ public class IJMacroFunctions {
 			"Plot.addLegend(labels)####Adds a legend to a plot."+linSeparator + 
 			"Plot.addLegend(labels,options)####Adds a legend with options to a plot."+linSeparator + 
 			"Plot.drawVectors(xStarts,yStarts,xEnds,yEnds)####Draws arrows from the starting to ending coordinates contained in the arrays."+linSeparator +
-			"Plot.appendToStack()####No documentation! available"+linSeparator +
+			"Plot.appendToStack()####Appends a plot to a stack (see example 'Dynamic Plot')."+linSeparator +
 			"Plot.drawShapes(\"rectangles\",lefts,tops,rights,bottoms)####Draws one or more rectangles. The four arguments (values or arrays) hold rectangle coordinates. Requires 1.49u."+linSeparator +
 			"Plot.drawGrid()####Redraws the grid above previous plots. Requires 1.49u."+linSeparator +
 			"Plot.drawLine(x1,y1,x2,y2)####Draws a line between x1,y1 and x2,y2,using the coordinate system defined by Plot.setLimits()."+linSeparator +

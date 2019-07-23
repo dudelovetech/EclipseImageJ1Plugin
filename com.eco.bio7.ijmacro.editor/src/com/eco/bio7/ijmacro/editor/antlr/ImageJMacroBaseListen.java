@@ -3,20 +3,13 @@ package com.eco.bio7.ijmacro.editor.antlr;
 
 import java.util.ArrayList;
 import java.util.Stack;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.ForStatementContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.FormalParameterListContext;
-import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroBodyContext;
-import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MacroExpressionContext;
 import com.eco.bio7.ijmacro.editor.antlr.ImageJMacroParser.MemberIndexExpressionContext;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
@@ -158,11 +151,11 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 		FormalParameterListContext args = ctx.formalParameterList();
 		if (args == null) {
 			functions.add(lineMethod+"####"+name + "()");
-			/* Give parent scope as Argument! */
+			/* Give parent scope as Argument and null if we have no function arguments defined! */
 			variables.add(new VariableScope(currentScope,null));
 		} else {
 			functions.add(lineMethod+"####"+name + "(" + args.getText() + ")");
-			/* Give parent scope as Argument! */
+			/* Give parent scope as Argument and add function parameters as arguments if available for code completion! */
 			variables.add(new VariableScope(currentScope,args.getText()));
 		}
 		
@@ -214,9 +207,25 @@ public class ImageJMacroBaseListen extends ImageJMacroBaseListener {
 			methods.push(new IJMacroEditorOutlineNode(name, lineMethod, "macro", methods.peek()));
 
 		}
+		/*For the variable we set the current scope!*/
+		currentScope = variables.peek();
+		/* Give parent scope as Argument! In a macro definition we have no function arguments!*/
+		variables.add(new VariableScope(currentScope,null));
 	}
 
 	public void exitMacroExpression(ImageJMacroParser.MacroExpressionContext ctx) {
+		/*
+		 * For code completion detect the parentheses index according to grammar!
+		 */
+
+		int startIndex = ctx.OpenBrace().getSymbol().getStartIndex();
+		int stopIndex = ctx.CloseBrace().getSymbol().getStopIndex() + 1;
+		/*
+		 * Calculate the closest function to the offset when closest found at the exit
+		 * of the prog calculate the functions in the scope!
+		 */
+		setCurrentScopeFromOffset(startIndex, stopIndex);
+		variables.pop();
 		if (methods.empty() == false) {
 			methods.pop();
 		}
