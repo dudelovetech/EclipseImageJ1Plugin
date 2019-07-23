@@ -1,6 +1,18 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52q (1.52q30):
+
+1. Updated ImageJ plugin to version 1.52q30
+2. A new integrated Eclipse ImageJ macro debug view is available as an replacement for the debug dialog (close and reopen the perspective if you update this plugin to add the new view!)
+3. Improved the Linux dark theme GUI for embedded AWT and Swing dialogs
+4. Improved the ImageJ macro code completion in general
+5. Editor defined variables are added to the code completion and shown according to their scope (function or macro defined variables are added when opening the code completion inside this scope. Function arguments are added, too)
+6. Editor defined functions are added to code completion.
+7. Editor defined function arguments are added as selectable templates
+8. Comments and multiline comments of editor defined functions are shown in the context code completion view (must be defined above the function)
+
+
 ### New in 1.52p (1.52p61):
 
 1. Updated ImageJ plugin to version 1.52p61
