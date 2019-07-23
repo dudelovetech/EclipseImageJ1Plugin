@@ -78,7 +78,8 @@ public class Bio7LinuxTheme extends OceanTheme {
 	}
 
 	public void addCustomEntriesToTable(UIDefaults defaults) {
-		defaults.put("Button.gradient", Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
+		defaults.put("Button.gradient", Arrays.asList(new Object[] { new ColorUIResource(colBackgr),
+				new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
 
 		List<String> colorKeys = new ArrayList<String>();
 		Set<Entry<Object, Object>> entries = UIManager.getLookAndFeelDefaults().entrySet();
@@ -86,14 +87,18 @@ public class Bio7LinuxTheme extends OceanTheme {
 			if (entry.getValue() instanceof Color) {
 				String key = ((String) entry.getKey());
 				if (key.endsWith("background") || key.endsWith("Background")) {
-					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
+					defaults.put(key, Arrays.asList(new Object[] { new ColorUIResource(colBackgr),
+							new ColorUIResource(colBackgr), new ColorUIResource(colBackgr) }));
 				}
 
-				else if (key.endsWith("foreground") || key.endsWith("Foreground") || key.endsWith("gridColor") || key.endsWith("tickColor")) {
-					defaults.put(key, Arrays.asList(new Object[] { new Double(0.3), new Double(0.0), new ColorUIResource(colForegr), new ColorUIResource(colForegr), new ColorUIResource(colForegr) }));
+				else if (key.endsWith("foreground") || key.endsWith("Foreground") || key.endsWith("gridColor")
+						|| key.endsWith("tickColor")) {
+					defaults.put(key, Arrays.asList(new Object[] { new ColorUIResource(colForegr),
+							new ColorUIResource(colForegr), new ColorUIResource(colForegr) }));
 				}
 			}
 		}
-
+		defaults.put("ScrollBar.thumb", Arrays.asList(new Object[] { new ColorUIResource(colForegr),
+				new ColorUIResource(colForegr), new ColorUIResource(colForegr) }));
 	}
 }
