@@ -179,7 +179,7 @@ public class SwtAwtImageJ {
 
 		a = new JPanel();
 
-		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT(top);
 		panel.setBackground(swtBackgroundToAWT);
 		frame.setBackground(swtBackgroundToAWT);
 		a.setBackground(swtBackgroundToAWT);

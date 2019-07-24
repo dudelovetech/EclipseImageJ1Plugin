@@ -62,7 +62,7 @@ public class IJtoolbarSwtAwt {
 		java.awt.Container contentPane = roote.getContentPane();
 		JPanel jpp = new JPanel();
 
-		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT(parent);
 		panel.setBackground(swtBackgroundToAWT);
 		roote.setBackground(swtBackgroundToAWT);
 		frame.setBackground(swtBackgroundToAWT);
