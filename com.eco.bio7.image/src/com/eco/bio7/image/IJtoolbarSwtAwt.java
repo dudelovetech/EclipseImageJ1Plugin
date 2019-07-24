@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 import ij.IJ;
 
@@ -23,6 +24,7 @@ public class IJtoolbarSwtAwt {
 	public Composite top;
 	public Frame frame;
 	public Shell parent;
+	protected static Color col;
 
 	public Composite getTop() {
 		return top;
@@ -62,7 +64,7 @@ public class IJtoolbarSwtAwt {
 		java.awt.Container contentPane = roote.getContentPane();
 		JPanel jpp = new JPanel();
 
-		Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT(parent);
+		Color swtBackgroundToAWT = getSWTBackgroundToAWT(parent);
 		panel.setBackground(swtBackgroundToAWT);
 		roote.setBackground(swtBackgroundToAWT);
 		frame.setBackground(swtBackgroundToAWT);
@@ -88,6 +90,24 @@ public class IJtoolbarSwtAwt {
 				}
 			});
 		}
+	}
+	public static Color getSWTBackgroundToAWT(Composite parent) {
+
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
+
+			public void run() {
+
+				org.eclipse.swt.graphics.Color colswt = parent.getBackground();
+				int r = colswt.getRed();
+				int g = colswt.getGreen();
+				int b = colswt.getBlue();
+				col = new Color(r, g, b);
+
+			}
+		});
+		return col;
+
 	}
 
 }
