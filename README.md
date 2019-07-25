@@ -1,6 +1,11 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52q (1.52q34):
+
+1. Fixed a toolbar exception when the toolbar was embedded in the Image perspective and not saved detached (eclipse restart)
+2. Fixed wrong tab colors
+
 ### New in 1.52q (1.52q30):
 
 1. Updated ImageJ plugin to version 1.52q30
