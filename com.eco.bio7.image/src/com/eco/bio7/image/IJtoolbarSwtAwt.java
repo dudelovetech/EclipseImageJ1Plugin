@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import ij.IJ;
@@ -35,8 +37,26 @@ public class IJtoolbarSwtAwt {
 	}
 
 	public IJtoolbarSwtAwt() {
+		/*If we have no ImageJ instance (e.g. inside an Eclipse installation) we open the ImageJ view first!*/
+		if(IJ.getInstance()==null) {
+			Display display = PlatformUI.getWorkbench().getDisplay();
+			display.syncExec(new Runnable() {
+				public void run() {
+					try {
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						page.showView("com.eco.bio7.imagej");
+					} catch (PartInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			});
+		}
 
 		parent = new Shell(Util.getDisplay());
+		
+		
 		top = new Composite(parent, SWT.NO_BACKGROUND | SWT.EMBEDDED);
 
 		frame = SWT_AWT.new_Frame(top);
@@ -64,50 +84,43 @@ public class IJtoolbarSwtAwt {
 		java.awt.Container contentPane = roote.getContentPane();
 		JPanel jpp = new JPanel();
 
-		Color swtBackgroundToAWT = getSWTBackgroundToAWT(parent);
-		panel.setBackground(swtBackgroundToAWT);
-		roote.setBackground(swtBackgroundToAWT);
-		frame.setBackground(swtBackgroundToAWT);
-		jpp.setBackground(swtBackgroundToAWT);
-
 		jpp.setLayout(new GridLayout(2, 1));
-		if (IJ.getInstance() != null) {
+		
+			Color swtBackgroundToAWT = Util.getSWTBackgroundToAWT();
+			panel.setBackground(swtBackgroundToAWT);
+			roote.setBackground(swtBackgroundToAWT);
+			frame.setBackground(swtBackgroundToAWT);
+			jpp.setBackground(swtBackgroundToAWT);
 			jpp.add(IJ.getInstance().toolbar);
 			jpp.add(IJ.getInstance().statusBar);
 
 			contentPane.add(jpp);
 
-		} else {
+		 /*else {
 			Display display = Util.getDisplay();
 			display.syncExec(new Runnable() {
 				public void run() {
 					MessageBox messageBox = new MessageBox(Util.getShell(),
-
+			
 							SWT.ICON_WARNING);
 					messageBox.setText("Info!");
 					messageBox.setMessage("Please reopen the ImageJ-Toolbar view!\n\n" + "Only a detached toolbar will be reopened automatically\n" + "in a saved and restored Eclipse session.");
 					messageBox.open();
 				}
 			});
-		}
-	}
-	public static Color getSWTBackgroundToAWT(Composite parent) {
-
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() {
-
-			public void run() {
-
-				org.eclipse.swt.graphics.Color colswt = parent.getBackground();
-				int r = colswt.getRed();
-				int g = colswt.getGreen();
-				int b = colswt.getBlue();
-				col = new Color(r, g, b);
-
-			}
-		});
-		return col;
-
+			
+			Close the stored toolbar layout (not valid in RCP) if the view is embedded in a perspective for the plugin version (the embedded view will be opened before the ImageJ instance is available!)
+			Display display = PlatformUI.getWorkbench().getDisplay();
+			display.syncExec(new Runnable() {
+				public void run() {
+					IWorkbenchPage wbp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			
+					wbp.hideView(wbp.findView("com.eco.bio7.ijtoolbar"));
+			
+				}
+			
+			});
+			}*/
 	}
 
 }

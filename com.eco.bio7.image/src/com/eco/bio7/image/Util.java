@@ -100,12 +100,14 @@ public class Util {
 		display.syncExec(new Runnable() {
 
 			public void run() {
-
-				org.eclipse.swt.graphics.Color colswt = CanvasView.getCanvas_view().getParent2().getBackground();
+                Composite parent2 = CanvasView.getCanvas_view().getParent2();
+				if(parent2.isDisposed()==false) {
+				org.eclipse.swt.graphics.Color colswt = parent2.getBackground();
 				int r = colswt.getRed();
 				int g = colswt.getGreen();
 				int b = colswt.getBlue();
 				col = new Color(r, g, b);
+                }
 
 			}
 		});
@@ -118,13 +120,14 @@ public class Util {
 		display.syncExec(new Runnable() {
 
 			public void run() {
-
+				 Composite parent2 = CanvasView.getCanvas_view().getParent2();
+					if(parent2.isDisposed()==false) {
 				org.eclipse.swt.graphics.Color colswt = CanvasView.getCanvas_view().getParent2().getForeground();
 				int r = colswt.getRed();
 				int g = colswt.getGreen();
 				int b = colswt.getBlue();
 				col = new Color(r,g,b);
-
+					}
 			}
 		});
 		return col;

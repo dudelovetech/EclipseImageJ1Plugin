@@ -116,7 +116,7 @@ public class IJtoolbar extends ViewPart {
 			}
 		});
 		/*
-		 * On MacOSX the javaFX integration works fine and avoids some errors!
+		 * On MacOSX the javaFX integration works fine and avoids some errors but has lower resolution!
 		 */
 		boolean enable = false;
 		if (enable) { //
