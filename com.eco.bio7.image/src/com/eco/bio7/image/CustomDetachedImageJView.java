@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -39,7 +41,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.WindowManager;
@@ -55,7 +56,7 @@ import ij.gui.PlotWindow;
  * @author Bio7
  * 
  */
-public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2 {
+public class CustomDetachedImageJView extends ViewPart  {//implements ISaveablePart2
 
 	protected int insertMark = -1;
 
@@ -107,6 +108,18 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "com.eco.bio7.imagej");
 
 		this.customViewParent = parent;
+		parent.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				Object data = customViewParent.getData();
+				if (data instanceof Vector) {
+					Vector<?> ve = (Vector<?>) data;
+					closeTabPanels(ve);
+				}
+
+			}
+		});
 
 		parent.addControlListener(new ControlAdapter() {
 			@Override
@@ -348,44 +361,44 @@ public class CustomDetachedImageJView extends ViewPart implements ISaveablePart2
 		this.customViewParent = parent2;
 	}
 
-	public void doSave(IProgressMonitor monitor) {
-
+	/*public void doSave(IProgressMonitor monitor) {
+	
 		Object data = customViewParent.getData();
 		if (data instanceof Vector) {
 			Vector<?> ve = (Vector<?>) data;
 			closeTabPanels(ve);
 		}
-
+	
 	}
-
+	
 	@Override
 	public void doSaveAs() {
-
+	
 	}
-
+	
 	@Override
 	public boolean isDirty() {
 		// Needed to save on close!
 		return true;
 	}
-
+	
 	@Override
 	public boolean isSaveAsAllowed() {
-
+	
 		return false;
 	}
-
+	
 	@Override
 	public boolean isSaveOnCloseNeeded() {
 		// Needed to save on close!
 		return true;
 	}
-
+	
 	@Override
 	public int promptToSaveOnClose() {
-
+	
 		return 0;
-	}
+	}*/
 
 	/*
 	 * Close tab items and dispose different GUI references. Called if the view or a
