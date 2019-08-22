@@ -16,7 +16,8 @@ import com.eco.bio7.image.SwtAwtImageJ;
 /**
  * This class is an extended ImageWindow that displays stacks and hyperstacks.
  */
-public class StackWindow extends ImageWindow implements Runnable, AdjustmentListener, ActionListener, MouseWheelListener {
+public class StackWindow extends ImageWindow
+		implements Runnable, AdjustmentListener, ActionListener, MouseWheelListener {
 
 	protected JScrollBar sliceSelector; // for backward compatibity with Image5D
 	protected ScrollbarWithLabel cSelector, zSelector, tSelector;
@@ -120,7 +121,7 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 				cSelector.addKeyListener(ij);
 			cSelector.addAdjustmentListener(this);
 			cSelector.setFocusable(false); // prevents scroll bar from blinking
-							// on Windows
+			// on Windows
 			cSelector.setUnitIncrement(1);
 			cSelector.setBlockIncrement(1);
 		}
@@ -164,17 +165,21 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 	}
 
 	/** Enables or disables the sliders. Used when locking/unlocking an image. */
-	public synchronized void setSlidersEnabled(boolean b) {
-		if (sliceSelector != null)
-			sliceSelector.setEnabled(b);
-		if (cSelector != null)
-			cSelector.setEnabled(b);
-		if (zSelector != null)
-			zSelector.setEnabled(b);
-		if (tSelector != null)
-			tSelector.setEnabled(b);
-		if (animationSelector != null)
-			animationSelector.setEnabled(b);
+	public synchronized void setSlidersEnabled(final boolean b) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				if (sliceSelector != null)
+					sliceSelector.setEnabled(b);
+				if (cSelector != null)
+					cSelector.setEnabled(b);
+				if (zSelector != null)
+					zSelector.setEnabled(b);
+				if (tSelector != null)
+					tSelector.setEnabled(b);
+				if (animationSelector != null)
+					animationSelector.setEnabled(b);
+			}
+		});
 	}
 
 	public synchronized void adjustmentValueChanged(AdjustmentEvent e) {
@@ -337,7 +342,8 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		int index = subtitle.indexOf(";");
 		if (index != -1) {
 			int index2 = subtitle.indexOf("(");
-			if (index2 >= 0 && index2 < index && subtitle.length() > index2 + 4 && !subtitle.substring(index2 + 1, index2 + 4).equals("ch:")) {
+			if (index2 >= 0 && index2 < index && subtitle.length() > index2 + 4
+					&& !subtitle.substring(index2 + 1, index2 + 4).equals("ch:")) {
 				index = index2;
 				s = s + " ";
 			}
