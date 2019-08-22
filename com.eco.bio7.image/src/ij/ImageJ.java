@@ -89,7 +89,8 @@ import com.eco.bio7.image.Util;
  * 
  * @author Wayne Rasband (wsr@nih.gov)
  */
-public class ImageJ extends Frame implements ActionListener, MouseListener, KeyListener, WindowListener, ItemListener, Runnable {
+public class ImageJ extends Frame
+		implements ActionListener, MouseListener, KeyListener, WindowListener, ItemListener, Runnable {
 
 	/**
 	 * Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version
@@ -232,7 +233,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					setIcon();
 				} catch (Exception e) {
 				}
-			
+
 			setResizable(false);
 			setAlwaysOnTop(Prefs.alwaysOnTop);
 			pack();
@@ -336,7 +337,7 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	public Point getPreferredLocation() {
-		
+
 		int ijX = Prefs.getInt(IJ_X, -99);
 		int ijY = Prefs.getInt(IJ_Y, -99);
 		Rectangle maxBounds = GUI.getMaxWindowBounds();
@@ -372,7 +373,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				/*
 				 * if (customImageJView != null) { customImageJView.setstatusline(s); }
 				 */
-				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getViewReferences();
 				for (int i = 0; i < viewRefs.length; i++) {
 					String id = viewRefs[i].getId();
 					if (id.equals("com.eco.bio7.image.detachedImage")) {
@@ -383,8 +385,12 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 						ImagePlus plu = WindowManager.getImage(Integer.valueOf(secId));
 						if (plu != null) {
 							ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
-							if (WindowManager.getCurrentWindow().equals(ip.getWindow())) {
-								cdview.setstatusline(s);
+							ImageWindow currentWindow = WindowManager.getCurrentWindow();
+							ImageWindow window = ip.getWindow();
+							if (currentWindow != null && window != null) {
+								if (currentWindow.equals(window)) {
+									cdview.setstatusline(s);
+								}
 							}
 						}
 
@@ -499,11 +505,13 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 	}
 
 	public String getInfo() {
-		return version() + System.getProperty("os.name") + " " + System.getProperty("os.version") + "; " + IJ.freeMemory();
+		return version() + System.getProperty("os.name") + " " + System.getProperty("os.version") + "; "
+				+ IJ.freeMemory();
 	}
 
 	private String version() {
-		return "ImageJ " + VERSION + BUILD + "; " + "Java " + System.getProperty("java.version") + (IJ.is64Bit() ? " [64-bit]; " : " [32-bit]; ");
+		return "ImageJ " + VERSION + BUILD + "; " + "Java " + System.getProperty("java.version")
+				+ (IJ.is64Bit() ? " [64-bit]; " : " [32-bit]; ");
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -527,7 +535,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		char keyChar = e.getKeyChar();
 		int flags = e.getModifiers();
 		if (IJ.debugMode)
-			IJ.log("keyPressed: code=" + keyCode + " (" + KeyEvent.getKeyText(keyCode) + "), char=\"" + keyChar + "\" (" + (int) keyChar + "), flags=" + KeyEvent.getKeyModifiersText(flags));
+			IJ.log("keyPressed: code=" + keyCode + " (" + KeyEvent.getKeyText(keyCode) + "), char=\"" + keyChar + "\" ("
+					+ (int) keyChar + "), flags=" + KeyEvent.getKeyModifiersText(flags));
 		boolean shift = (flags & KeyEvent.SHIFT_MASK) != 0;
 		boolean control = (flags & KeyEvent.CTRL_MASK) != 0;
 		boolean alt = (flags & KeyEvent.ALT_MASK) != 0;
@@ -539,7 +548,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		if (imp != null && !meta && ((keyChar >= 32 && keyChar <= 255) || keyChar == '\b' || keyChar == '\n')) {
 			Roi roi = imp.getRoi();
 			if (roi != null && roi instanceof TextRoi) {
-				if (imp.getOverlay() != null && (control || alt || meta) && (keyCode == KeyEvent.VK_BACK_SPACE || keyCode == KeyEvent.VK_DELETE)) {
+				if (imp.getOverlay() != null && (control || alt || meta)
+						&& (keyCode == KeyEvent.VK_BACK_SPACE || keyCode == KeyEvent.VK_DELETE)) {
 					if (deleteOverlayRoi(imp))
 						return;
 				}
@@ -582,7 +592,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		if (keyCode == KeyEvent.VK_SEPARATOR)
 			keyCode = KeyEvent.VK_DECIMAL;
 		boolean functionKey = keyCode >= KeyEvent.VK_F1 && keyCode <= KeyEvent.VK_F12;
-		boolean numPad = keyCode == KeyEvent.VK_DIVIDE || keyCode == KeyEvent.VK_MULTIPLY || keyCode == KeyEvent.VK_DECIMAL || (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9);
+		boolean numPad = keyCode == KeyEvent.VK_DIVIDE || keyCode == KeyEvent.VK_MULTIPLY
+				|| keyCode == KeyEvent.VK_DECIMAL || (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9);
 		if ((!Prefs.requireControlKey || control || meta || functionKey || numPad) && keyChar != '+') {
 			Hashtable shortcuts = Menus.getShortcuts();
 			if (shift && !functionKey)
@@ -678,9 +689,11 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 					cmd = "Next Slice [>]";
 				else if (stackKey && keyCode == KeyEvent.VK_LEFT)
 					cmd = "Previous Slice [<]";
-				else if (zoomKey && keyCode == KeyEvent.VK_DOWN && !ignoreArrowKeys(imp) && Toolbar.getToolId() < Toolbar.SPARE6)
+				else if (zoomKey && keyCode == KeyEvent.VK_DOWN && !ignoreArrowKeys(imp)
+						&& Toolbar.getToolId() < Toolbar.SPARE6)
 					cmd = "Out [-]";
-				else if (zoomKey && keyCode == KeyEvent.VK_UP && !ignoreArrowKeys(imp) && Toolbar.getToolId() < Toolbar.SPARE6)
+				else if (zoomKey && keyCode == KeyEvent.VK_UP && !ignoreArrowKeys(imp)
+						&& Toolbar.getToolId() < Toolbar.SPARE6)
 					cmd = "In [+]";
 				else if (roi != null) {
 					if ((flags & KeyEvent.ALT_MASK) != 0 || (flags & KeyEvent.CTRL_MASK) != 0)
@@ -796,7 +809,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 		char keyChar = e.getKeyChar();
 		int flags = e.getModifiers();
 		if (IJ.debugMode)
-			IJ.log("keyTyped: char=\"" + keyChar + "\" (" + (int) keyChar + "), flags= " + Integer.toHexString(flags) + " (" + KeyEvent.getKeyModifiersText(flags) + ")");
+			IJ.log("keyTyped: char=\"" + keyChar + "\" (" + (int) keyChar + "), flags= " + Integer.toHexString(flags)
+					+ " (" + KeyEvent.getKeyModifiersText(flags) + ")");
 		if (keyChar == '\\' || keyChar == 171 || keyChar == 223) {
 			if (((flags & Event.ALT_MASK) != 0))
 				doCommand("Animation Options...");
@@ -1039,7 +1053,8 @@ public class ImageJ extends Frame implements ActionListener, MouseListener, KeyL
 				}
 			}
 		}
-		if (windowClosed && !changes && Menus.window.getItemCount() > Menus.WINDOW_MENU_ITEMS && !(IJ.macroRunning() && WindowManager.getImageCount() == 0)) {
+		if (windowClosed && !changes && Menus.window.getItemCount() > Menus.WINDOW_MENU_ITEMS
+				&& !(IJ.macroRunning() && WindowManager.getImageCount() == 0)) {
 			GenericDialog gd = new GenericDialog("ImageJ", this);
 			gd.addMessage("Are you sure you want to quit ImageJ?");
 			gd.showDialog();

@@ -14,6 +14,8 @@ package com.eco.bio7.ImageJPluginActions;
 import java.util.UUID;
 import java.util.Vector;
 
+import javax.swing.JPanel;
+
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainerElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -42,6 +44,7 @@ import com.eco.bio7.image.IJTabs;
 import com.eco.bio7.image.Util;
 
 import ij.ImagePlus;
+import ij.WindowManager;
 import ij.gui.ImageWindow;
 
 public class ImageJWindowAction extends Action implements IMenuCreator {
@@ -180,11 +183,26 @@ public class ImageJWindowAction extends Action implements IMenuCreator {
 							ImagePlus plu = (ImagePlus) ve.get(0);
 
 							ImageWindow win = (ImageWindow) ve.get(1);
+							/*In the menu action we also need to set the panel! Not necessary in the
+							 *CanvasView action!*/
+							// Wrap to avoid deadlock of awt frame access!
+							java.awt.EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									WindowManager.setTempCurrentImage(plu);
+									WindowManager.setCurrentWindow(win);
+								}
+							});
+
+							/* import to set current Panel for the menu action (as if we select a tab)! */
+							CanvasView.setCurrent((JPanel) ve.get(2));
+
 							// JPanel current = (JPanel) ve.get(2);
 
 							CustomDetachedImageJView custom = new CustomDetachedImageJView();
 							/* Create ImageJ view with unique ID! */
-							String id = UUID.randomUUID().toString();
+							//String id = UUID.randomUUID().toString();
+							/* Create ImageJ view with unique image ID of the ImagePlus image! */
+							String id = Integer.toString(plu.getID());
 							// detachedSecViewIDs.add(id);
 							custom.setPanel(CanvasView.getCurrent(), id, plu.getTitle());
 							custom.setData(plu, win);
