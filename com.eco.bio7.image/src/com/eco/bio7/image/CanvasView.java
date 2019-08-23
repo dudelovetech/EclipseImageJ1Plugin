@@ -388,7 +388,7 @@ public class CanvasView extends ViewPart {
 				// ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 				if (win != null) {
 					if (win instanceof PlotWindow) {
-
+                       /*Avoid the resizing of the CanvasView if a detached view is resized!*/
 						CTabItem item = tabFolder.getSelection();
 						if (item != null) {
 							Vector ve = (Vector) item.getData();
