@@ -56,7 +56,7 @@ import ij.gui.PlotWindow;
  * @author Bio7
  * 
  */
-public class CustomDetachedImageJView extends ViewPart  {//implements ISaveablePart2
+public class CustomDetachedImageJView extends ViewPart {//implements ISaveablePart2
 
 	protected int insertMark = -1;
 
@@ -74,7 +74,7 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 
 	public ImageWindow win;
 
-	private JPanel viewPanel;
+	public JPanel viewPanel;
 
 	public IViewReference ref2;
 
@@ -83,6 +83,12 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 	protected ImageJPartListener2 palist;
 
 	protected FXSwtAwtCustom swt;
+
+	private boolean isDetached;
+
+	public boolean isDetached() {
+		return isDetached;
+	}
 
 	public CustomDetachedImageJView getCustomView() {
 		return customView;
@@ -128,6 +134,7 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 				 * Here we write the values in the com.eco.bio7 plugin preferences with the help
 				 * of scoped preferences!
 				 */
+				updateDetached();
 				Rectangle rec = parent.getClientArea();
 
 				IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.eco.bio7");
@@ -142,11 +149,15 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
 
-						store.setValue("DEVICE_DEFINITION",
-								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo
+								+ "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = "
+								+ (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
 						store.setValue("DEVICE_DEFINITION",
-								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff"
+										+ "\") { tiff(filename,width =  " + rec.width + ", height = "
+										+ (rec.height - correction)
+										+ ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
@@ -154,17 +165,26 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 				ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 
 				if (currentPlotWindow != null) {
+					if (currentPlotWindow instanceof PlotWindow) {
 
-					CanvasView view = CanvasView.getCanvas_view();
-					view.resizePlotWindow(parent, currentPlotWindow);
-				}
-				else {
+						CanvasView view = CanvasView.getCanvas_view();
+						view.resizePlotWindow(parent, currentPlotWindow);
+					} else {
+						parent.layout();
+					}
+				} else {
 					parent.layout();
 				}
 			}
 
 		});
 
+		updateDetached();
+
+	}
+
+	private void updateDetached() {
+		isDetached = customViewParent.getShell().getText().length() == 0;
 	}
 
 	public void setFocus() {
@@ -173,8 +193,6 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 
 	class ImageJPartListener2 implements IPartListener2 {
 		public void partActivated(IWorkbenchPartReference ref) {
-			
-			
 
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
@@ -183,7 +201,7 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 				ref2 = page.findViewReference("com.eco.bio7.image.detachedImage", secId);
 
 				if (ref.equals(ref2)) {
-					
+
 					// Wrap to avoid deadlock of awt frame access!
 					java.awt.EventQueue.invokeLater(new Runnable() {
 						public void run() {
@@ -195,7 +213,8 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 									if (frameSwtAwt != null) {
 
 										if (frameSwtAwt != null)
-											frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+											frameSwtAwt.dispatchEvent(
+													new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
 										// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
 										// WindowEvent.WINDOW_GAINED_FOCUS));
 
@@ -248,6 +267,8 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 							}
 						}
 					});
+					/*Remove the part listener?*/
+					page.removePartListener(palist);
 
 					/*
 					 * ArrayList arrL = CanvasView.getCanvas_view().getDetachedSecViewIDs();
@@ -316,7 +337,7 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 					swt = new FXSwtAwtCustom(viewPanel, customView);
 					swt.addTab(id);
 					//ImageJ.setCustomView(customView);
-					Composite top=swt.getTop();
+					Composite top = swt.getTop();
 					top.setParent(customView.getCustomViewParent());
 
 				}
@@ -325,7 +346,7 @@ public class CustomDetachedImageJView extends ViewPart  {//implements ISaveableP
 		});
 
 	}
-	
+
 	public void dispose() {
 		customViewParent.dispose();
 		super.dispose();

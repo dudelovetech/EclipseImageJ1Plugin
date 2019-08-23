@@ -64,6 +64,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -141,7 +144,7 @@ public class CanvasView extends ViewPart {
 	private static CanvasView canvas_view;
 
 	public static CTabFolder tabFolder;
-	
+
 	private static boolean convertToRGB;
 	private static boolean virtualStack;
 	private boolean openAsVirtualStack;
@@ -183,9 +186,9 @@ public class CanvasView extends ViewPart {
 				 **/
 				int x = parent2.getSize().x;
 				int y = parent2.getSize().y;
-				parent2.setSize(x-1,y-1);
+				parent2.setSize(x - 1, y - 1);
 				parent2.setSize(x, y);
-				
+
 				/*
 				 * For the following see:
 				 * https://www.eclipse.org/eclipse/news/4.6/platform_isv.php#swt-requestlayout
@@ -200,7 +203,7 @@ public class CanvasView extends ViewPart {
 		if (parent.isDisposed() == false) {
 
 			if (win != null) {
-
+				
 				// System.out.println("right");
 				// Wrap to avoid deadlock of awt frame access!
 				Display dis = Util.getDisplay();
@@ -212,33 +215,58 @@ public class CanvasView extends ViewPart {
 
 					}
 				});
-				// Rectangle rec = parent.getClientArea();
-				java.awt.EventQueue.invokeLater(new Runnable() {
-					public void run() {
-
-						if (win instanceof PlotWindow) {
-							PlotWindow plo = (PlotWindow) win;
-
-							if (plo != null) {
-								Dimension rec = CanvasView.getCurrent().getSize();
-								Plot plot = plo.getPlot();
-								if (plot != null) {
-									int correctionX = plot.leftMargin + plot.rightMargin;
-									int correctionY = plot.topMargin + plot.bottomMargin;
-									plot.getImagePlus().getCanvas().setSize(rec.width + correctionX, rec.height + correctionY);
-									plot.setFrameSize(rec.width, rec.height);
-									plot.setSize(rec.width - correctionX, rec.height - correctionY);
-									current.doLayout();
-								}
+				plotWindowResize(win,current);
+				
+				/*IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IViewReference[] ref = page.getViewReferences();
+				for (int i = 0; i < ref.length; i++) {
+					String secondaryId = ref[i].getSecondaryId();
+					if (secondaryId != null) {
+						IViewPart part=ref[i].getView(false);
+						CustomDetachedImageJView customView=(CustomDetachedImageJView) part;
+						if(customView.isDetached()==false) {
+							if(customView.plus!=null) {
+							JPanel panel=(JPanel)WindowManager.getImage(secondaryId).getCanvas().getParent();
+							System.out.println(WindowManager.getImage(secondaryId).getTitle());
+							plotWindowResize(win,panel);
 							}
+							
 						}
-
-						// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
+						
 					}
-				});
+				}*/
+				// Rectangle rec = parent.getClientArea();
+				
 
 			}
 		}
+	}
+
+	private void plotWindowResize(ImageWindow win,JPanel panel) {
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+
+				if (win instanceof PlotWindow) {
+					PlotWindow plo = (PlotWindow) win;
+
+					if (plo != null) {
+						Dimension rec = panel.getSize();
+						Plot plot = plo.getPlot();
+						if (plot != null) {
+							int correctionX = plot.leftMargin + plot.rightMargin;
+							int correctionY = plot.topMargin + plot.bottomMargin;
+							plot.getImagePlus().getCanvas().setSize(rec.width + correctionX,
+									rec.height + correctionY);
+							plot.setFrameSize(rec.width, rec.height);
+							plot.setSize(rec.width - correctionX, rec.height - correctionY);
+							panel.doLayout();
+						}
+					}
+				}
+
+				// plo.setLocationAndSize(rec.x, rec.y, rec.width, rec.height);
+			}
+		});
 	}
 
 	public void createPartControl(Composite parent) {
@@ -344,20 +372,32 @@ public class CanvasView extends ViewPart {
 
 					if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE_CAIRO")) {
 
-						store.setValue("DEVICE_DEFINITION",
-								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = " + (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
+						store.setValue("DEVICE_DEFINITION", ".bio7Device <- function(filename = \"" + pathTo
+								+ "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width = " + rec.width + ", height = "
+								+ (rec.height - correction) + ", type=\"cairo\")}; options(device=\".bio7Device\")");
 					} else if (selection.equals("PLOT_IMAGEJ_DISPLAYSIZE")) {
 						store.setValue("DEVICE_DEFINITION",
-								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff" + "\") { tiff(filename,width =  " + rec.width + ", height = " + (rec.height - correction) + ", units = \"px\")}; options(device=\".bio7Device\")");
+								".bio7Device <- function(filename = \"" + pathTo + "tempDevicePlot%05d.tiff"
+										+ "\") { tiff(filename,width =  " + rec.width + ", height = "
+										+ (rec.height - correction)
+										+ ", units = \"px\")}; options(device=\".bio7Device\")");
 
 					}
 				}
 				/* Here we resize the ImageJ plot window! */
 				// ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
-
 				if (win != null) {
+					if (win instanceof PlotWindow) {
 
-					resizePlotWindow(parent, win);
+						CTabItem item = tabFolder.getSelection();
+						if (item != null) {
+							Vector ve = (Vector) item.getData();
+							JPanel panel = (JPanel) ve.get(2);
+
+							if (current == panel)
+								resizePlotWindow(parent, win);
+						}
+					}
 				}
 			}
 
@@ -383,7 +423,8 @@ public class CanvasView extends ViewPart {
 										if (frameSwtAwt != null)
 											// frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt,
 											// WindowEvent.WINDOW_ACTIVATED));
-											frameSwtAwt.dispatchEvent(new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
+											frameSwtAwt.dispatchEvent(
+													new WindowEvent(frameSwtAwt, WindowEvent.WINDOW_ACTIVATED));
 
 									}
 								}
@@ -470,7 +511,7 @@ public class CanvasView extends ViewPart {
 		initializeToolBar();
 		tabFolder = new CTabFolder(parent, SWT.TOP);
 		/*Get access to the ImageJ drag and drop methods!*/
-		DragAndDrop dragAndDrop=new DragAndDrop();
+		DragAndDrop dragAndDrop = new DragAndDrop();
 		DropTarget dt = new DropTarget(tabFolder, DND.DROP_DEFAULT | DND.DROP_MOVE);
 		dt.setTransfer(new Transfer[] { FileTransfer.getInstance() });
 		dt.addDropListener(new DropTargetAdapter() {
@@ -808,8 +849,6 @@ public class CanvasView extends ViewPart {
 	public static Composite getParent2() {
 		return parent2;
 	}
-
-	
 
 	/*
 	 * public ArrayList<String> getDetachedSecViewIDs() { return detachedSecViewIDs;
