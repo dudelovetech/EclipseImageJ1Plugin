@@ -337,7 +337,10 @@ public class IJMacroSimpleDefaultInformationControl extends AbstractInformationC
 	 */
 	public void setInformation(String content) {
 		/*From the ImageJMacroCompletion get the hashmap with editor defined functions (key) and the comments (value)!*/
-		String commentsEditorFunctions = IJMacroCompletionProcessor.mapFunctionAndContext.get(content);
+		String commentsEditorFunctions=null;
+		if(IJMacroCompletionProcessor.mapFunctionAndContext!=null) {
+			commentsEditorFunctions = IJMacroCompletionProcessor.mapFunctionAndContext.get(content);
+		}
 		/*Remove the API template placeholder chars added in class IJMacroCompletionProcessor!*/
 		content = content.replace("${", "");
 		content = content.replace("}", "");

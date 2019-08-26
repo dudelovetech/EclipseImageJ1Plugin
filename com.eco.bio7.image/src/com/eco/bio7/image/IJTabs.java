@@ -26,6 +26,7 @@ import org.eclipse.ui.PlatformUI;
 
 import ij.ImagePlus;
 import ij.WindowManager;
+import ij.gui.ImageCanvas;
 import ij.gui.ImageWindow;
 
 /**
@@ -123,7 +124,8 @@ public class IJTabs {
 
 		}
 		/* Close all detached views if available! */
-		IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+		IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getViewReferences();
 		for (int i = 0; i < viewRefs.length; i++) {
 			String id = viewRefs[i].getId();
 			if (id.equals("com.eco.bio7.image.detachedImage")) {
@@ -416,7 +418,8 @@ public class IJTabs {
 		Display dis = CanvasView.getParent2().getDisplay();
 		dis.syncExec(new Runnable() {
 			public void run() {
-				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViewReferences();
+				IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getViewReferences();
 				for (int i = 0; i < viewRefs.length; i++) {
 					String id = viewRefs[i].getId();
 					if (id.equals("com.eco.bio7.image.detachedImage")) {
@@ -424,10 +427,16 @@ public class IJTabs {
 						String secId = viewRefs[i].getSecondaryId();
 						CustomDetachedImageJView cdview = (CustomDetachedImageJView) view;
 						cdview.customViewParent.layout();
-						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));						
-						Container parent = ip.getCanvas().getParent();
-						parent.doLayout();
-						parent.repaint();
+						ImagePlus ip = WindowManager.getImage(Integer.valueOf(secId));
+						ImageCanvas canvas = ip.getCanvas();
+						if (canvas != null) {
+							Container parentOfCanvas = canvas.getParent();
+							if (parentOfCanvas != null) {
+								Container parent = parentOfCanvas;
+								parent.doLayout();
+								parent.repaint();
+							}
+						}
 					}
 				}
 			}

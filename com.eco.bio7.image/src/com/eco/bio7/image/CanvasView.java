@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.UUID;
@@ -203,20 +204,33 @@ public class CanvasView extends ViewPart {
 		if (parent.isDisposed() == false) {
 
 			if (win != null) {
+
 				
-				// System.out.println("right");
 				// Wrap to avoid deadlock of awt frame access!
 				Display dis = Util.getDisplay();
 				dis.syncExec(new Runnable() {
 
 					public void run() {
 						/* Call parent layout before the plot layout! */
+						/*The layout of tab items plots will be changed in the tab selection listener (see tab listener below)!
+						 *This is by the way not so expansive as to relayout all PlotWindows. Only the visible tab item PlotWindows will be relayouted!*/
 						parent.layout();
 
 					}
 				});
-				plotWindowResize(win,current);
-				
+				//plotWindowResize(win,current);
+
+				int ids[] = WindowManager.getIDList();
+				for (int i = 0; i < ids.length; i++) {
+					ImagePlus ip = WindowManager.getImage(ids[i]);
+					//JPanel panel=(JPanel)win.getCanvas().getParent();
+					if (ip.getWindow() instanceof PlotWindow) {
+						JPanel panel = (JPanel) ip.getCanvas().getParent();
+						plotWindowResize(ip.getWindow(), panel);
+
+					}
+
+				}
 				/*IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				IViewReference[] ref = page.getViewReferences();
 				for (int i = 0; i < ref.length; i++) {
@@ -236,13 +250,12 @@ public class CanvasView extends ViewPart {
 					}
 				}*/
 				// Rectangle rec = parent.getClientArea();
-				
 
 			}
 		}
 	}
 
-	private void plotWindowResize(ImageWindow win,JPanel panel) {
+	private void plotWindowResize(ImageWindow win, JPanel panel) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
@@ -255,8 +268,7 @@ public class CanvasView extends ViewPart {
 						if (plot != null) {
 							int correctionX = plot.leftMargin + plot.rightMargin;
 							int correctionY = plot.topMargin + plot.bottomMargin;
-							plot.getImagePlus().getCanvas().setSize(rec.width + correctionX,
-									rec.height + correctionY);
+							plot.getImagePlus().getCanvas().setSize(rec.width + correctionX, rec.height + correctionY);
 							plot.setFrameSize(rec.width, rec.height);
 							plot.setSize(rec.width - correctionX, rec.height - correctionY);
 							panel.doLayout();
@@ -387,17 +399,12 @@ public class CanvasView extends ViewPart {
 				/* Here we resize the ImageJ plot window! */
 				// ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 				if (win != null) {
-					if (win instanceof PlotWindow) {
-                       /*Avoid the resizing of the CanvasView if a detached view is resized!*/
-						CTabItem item = tabFolder.getSelection();
-						if (item != null) {
-							Vector ve = (Vector) item.getData();
-							JPanel panel = (JPanel) ve.get(2);
+					//if (win instanceof PlotWindow) {
+						/*Avoid the resizing of the CanvasView if a detached view is resized!*/
 
-							if (current == panel)
-								resizePlotWindow(parent, win);
-						}
-					}
+						resizePlotWindow(parent, win);
+
+					//}
 				}
 			}
 
@@ -721,8 +728,10 @@ public class CanvasView extends ViewPart {
 				/* import to set current Panel! */
 				current = (JPanel) ve.get(2);
 				// current.requestFocus();
-
-				// resizePlotWindow(parent, win);
+				/*Here we resize a PlotWindow in thhe tabFolder when a tabItem has been selected the item plot windows have the same size!*/
+				if (win instanceof PlotWindow) {
+					resizePlotWindow(parent, win);
+				}
 
 			}
 
