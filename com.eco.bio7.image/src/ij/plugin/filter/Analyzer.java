@@ -998,6 +998,7 @@ public class Analyzer implements PlugInFilter, Measurements {
 	/** Returns the default results table. This table should only
 		be displayed in a the "Results" window. */
 	public static ResultsTable getResultsTable() {
+		systemRT.showRowNumbers(true);
 		return systemRT;
 	}
 

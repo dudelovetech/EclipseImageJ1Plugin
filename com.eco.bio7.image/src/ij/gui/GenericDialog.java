@@ -738,6 +738,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 			columns = 4;
 		if (minValue < 0.0)
 			columns++;
+		String mv = IJ.d2s(maxValue,0);
+		if (mv.length()>4 && digits==0)
+			columns += mv.length()-4;
 		String label2 = label;
 		if (label2.indexOf('_') != -1)
 			label2 = label2.replace('_', ' ');

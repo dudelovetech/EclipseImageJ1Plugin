@@ -1,20 +1,16 @@
 package ij.plugin.frame;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.JDialog;
 import ij.gui.ImageWindow;
 import ij.*;
 import ij.plugin.*;
 
 /**  This is a non-modal dialog that plugins can extend. */
-public class PlugInDialog extends JDialog implements PlugIn, WindowListener, FocusListener {
+public class PlugInDialog extends Dialog implements PlugIn, WindowListener, FocusListener {
 
-	String title;
-	
 	public PlugInDialog(String title) {
 		super(IJ.isMacOSX()?IJ.getInstance():null,title);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-		this.title = title;
 		ImageJ ij = IJ.getInstance();
 		if (IJ.isMacOSX() && ij!=null) {
 			ij.toFront(); // needed for keyboard shortcuts to work
@@ -49,9 +45,6 @@ public class PlugInDialog extends JDialog implements PlugIn, WindowListener, Foc
     }
 
 	public void windowActivated(WindowEvent e) {
-		ImageJ ij = IJ.getInstance();
-		if (IJ.isMacOSX() && ij!=null)
-			ij.toFront();
 		WindowManager.setWindow(this);
 	}
 
