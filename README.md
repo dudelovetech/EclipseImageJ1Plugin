@@ -1,6 +1,13 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52q (1.52q44):
+
+1. Updated ImageJ plugin to version 1.52q44
+2. Improved the embedded and detached PlotWindows. Now all plot windows are simultaneously resized according to their parent canvas (embedded or detached).
+3. Fixed a bug in the detach menu action (wrong id and panel settings)
+4. Removed the '*' tab icon (usually indicating an unsaved editor file) from the detached custom view by deleting the 'ISaveablePart2' interface
+
 ### New in 1.52q (1.52q34):
 
 1. Fixed a toolbar exception when the toolbar was embedded in the Image perspective and not saved detached (eclipse restart)
