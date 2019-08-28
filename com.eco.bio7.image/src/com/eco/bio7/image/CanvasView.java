@@ -205,7 +205,6 @@ public class CanvasView extends ViewPart {
 
 			if (win != null) {
 
-				
 				// Wrap to avoid deadlock of awt frame access!
 				Display dis = Util.getDisplay();
 				dis.syncExec(new Runnable() {
@@ -221,15 +220,17 @@ public class CanvasView extends ViewPart {
 				//plotWindowResize(win,current);
 
 				int ids[] = WindowManager.getIDList();
-				for (int i = 0; i < ids.length; i++) {
-					ImagePlus ip = WindowManager.getImage(ids[i]);
-					//JPanel panel=(JPanel)win.getCanvas().getParent();
-					if (ip.getWindow() instanceof PlotWindow) {
-						JPanel panel = (JPanel) ip.getCanvas().getParent();
-						plotWindowResize(ip.getWindow(), panel);
+				if (ids != null) {
+					for (int i = 0; i < ids.length; i++) {
+						ImagePlus ip = WindowManager.getImage(ids[i]);
+						//JPanel panel=(JPanel)win.getCanvas().getParent();
+						if (ip.getWindow() instanceof PlotWindow) {
+							JPanel panel = (JPanel) ip.getCanvas().getParent();
+							plotWindowResize(ip.getWindow(), panel);
+
+						}
 
 					}
-
 				}
 				/*IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				IViewReference[] ref = page.getViewReferences();
@@ -400,9 +401,9 @@ public class CanvasView extends ViewPart {
 				// ImageWindow currentPlotWindow = WindowManager.getCurrentWindow();
 				if (win != null) {
 					//if (win instanceof PlotWindow) {
-						/*Avoid the resizing of the CanvasView if a detached view is resized!*/
+					/*Avoid the resizing of the CanvasView if a detached view is resized!*/
 
-						resizePlotWindow(parent, win);
+					resizePlotWindow(parent, win);
 
 					//}
 				}
@@ -730,7 +731,11 @@ public class CanvasView extends ViewPart {
 				// current.requestFocus();
 				/*Here we resize a PlotWindow in thhe tabFolder when a tabItem has been selected the item plot windows have the same size!*/
 				if (win instanceof PlotWindow) {
-					resizePlotWindow(parent, win);
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							resizePlotWindow(parent, win);
+						}
+					});
 				}
 
 			}

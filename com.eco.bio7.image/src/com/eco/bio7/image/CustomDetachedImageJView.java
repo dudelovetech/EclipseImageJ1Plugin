@@ -167,8 +167,12 @@ public class CustomDetachedImageJView extends ViewPart {//implements ISaveablePa
 				if (currentPlotWindow != null) {
 					//if (currentPlotWindow instanceof PlotWindow) {
 
-						CanvasView view = CanvasView.getCanvas_view();
-						view.resizePlotWindow(parent, currentPlotWindow);
+					CanvasView view = CanvasView.getCanvas_view();
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							view.resizePlotWindow(parent, currentPlotWindow);
+						}
+					});
 					//} else {
 					//	parent.layout();
 					//}
