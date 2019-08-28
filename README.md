@@ -1,6 +1,10 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52q (1.52q45):
+
+1. Fixed a PlotWindow deadlock
+
 ### New in 1.52q (1.52q44):
 
 1. Updated ImageJ plugin to version 1.52q44
