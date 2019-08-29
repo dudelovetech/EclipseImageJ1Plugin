@@ -20,9 +20,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.ViewPart;
+
+import ij.macro.Interpreter;
 
 public class DebugVariablesView extends ViewPart {
 
@@ -89,6 +94,9 @@ public class DebugVariablesView extends ViewPart {
 		createActions();
 		initializeToolBar();
 		initializeMenu();
+		
+		
+		
 
 		/* Resize column width if shell changes! */
 		parent.addControlListener(new ControlAdapter() {
@@ -127,6 +135,20 @@ public class DebugVariablesView extends ViewPart {
 				parent.layout();
 			}
 		});
+		
+		grid.addListener(SWT.Selection, new Listener() {
+		      public void handleEvent(Event e) {
+		       
+		        int selection = grid.getSelectionIndex();
+		        
+				Interpreter interp = Interpreter.getInstance();
+				if (interp!=null )
+					interp.showArrayInspector(selection);
+		        }
+		      
+
+			
+		    });
 
 	}
 
