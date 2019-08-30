@@ -6,9 +6,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
+import com.eco.bio7.ijmacro.editor.toolbar.debug.DebugVariablesView;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
-import com.eco.bio7.image.DebugVariablesView;
-
 import ij.IJ;
 import ij.macro.Interpreter;
 

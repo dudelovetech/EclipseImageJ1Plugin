@@ -90,7 +90,7 @@ import com.eco.bio7.ijmacro.editor.antlr.WordMarkerCreation;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorLabelProvider;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorOutlineNode;
 import com.eco.bio7.ijmacro.editor.outline.IJMacroEditorTreeContentProvider;
-import com.eco.bio7.image.DebugVariablesView;
+import com.eco.bio7.ijmacro.editor.toolbar.debug.DebugVariablesView;
 import com.eco.bio7.image.Util;
 
 import ij.IJ;

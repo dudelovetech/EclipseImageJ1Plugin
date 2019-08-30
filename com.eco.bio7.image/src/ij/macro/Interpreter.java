@@ -32,7 +32,7 @@ public class Interpreter implements MacroConstants {
 	boolean checkingType;
 	int prefixValue;
 	
-	Variable[] stack;
+	public Variable[] stack;
 	int topOfStack = -1;
 	int topOfGlobals = -1;
 	int startOfLocals = 0;
@@ -42,7 +42,7 @@ public class Interpreter implements MacroConstants {
 	static Vector imageTable; // images opened in batch mode
 	static Vector imageActivations; // images ordered by activation time
 	volatile boolean done;
-	Program pgm;
+	public Program pgm;
 	Functions func;
 	boolean inFunction;
 	String macroName;

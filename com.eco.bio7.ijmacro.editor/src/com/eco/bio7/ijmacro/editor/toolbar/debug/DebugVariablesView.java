@@ -8,7 +8,7 @@
  * Contributors:
  *     M. Austenfeld
  *******************************************************************************/
-package com.eco.bio7.image;
+package com.eco.bio7.ijmacro.editor.toolbar.debug;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -143,7 +143,9 @@ public class DebugVariablesView extends ViewPart {
 		        
 				Interpreter interp = Interpreter.getInstance();
 				if (interp!=null )
+					//interp.setVariable("aa", 2);
 					interp.showArrayInspector(selection);
+				
 		        }
 		      
 
@@ -168,6 +170,14 @@ public class DebugVariablesView extends ViewPart {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+		toolbarManager.add(new DebugIjMacroScript());
+		toolbarManager.add(new DebugNextAction());
+		toolbarManager.add(new DebugStepIntoAction());
+		toolbarManager.add(new DebugTraceAction());
+		toolbarManager.add(new DebugStepFinishAction());
+		toolbarManager.add(new DebugStopAction());
+		toolbarManager.add(new DebugInfoAction());
+		
 	}
 
 	/**

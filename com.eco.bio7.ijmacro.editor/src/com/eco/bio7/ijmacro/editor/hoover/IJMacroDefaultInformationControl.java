@@ -29,6 +29,11 @@ import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editor.actions.OpenHelpBrowserAction;
 import com.eco.bio7.ijmacro.editor.preferences.template.IJMacroFunctions;
 
+import ij.IJ;
+import ij.macro.Interpreter;
+import ij.macro.Variable;
+import ij.measure.ResultsTable;
+
 /**
  * Default implementation of {@link org.eclipse.jface.text.IInformationControl}.
  * <p>
@@ -58,16 +63,11 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 		 * <strong>Note:</strong> The given display must only be used for measuring.
 		 * </p>
 		 *
-		 * @param display
-		 *            the display of the information control
-		 * @param hoverInfo
-		 *            the information to be presented
-		 * @param presentation
-		 *            the presentation to be updated
-		 * @param maxWidth
-		 *            the maximal width in pixels
-		 * @param maxHeight
-		 *            the maximal height in pixels
+		 * @param display      the display of the information control
+		 * @param hoverInfo    the information to be presented
+		 * @param presentation the presentation to be updated
+		 * @param maxWidth     the maximal width in pixels
+		 * @param maxHeight    the maximal height in pixels
 		 *
 		 * @return the manipulated information
 		 * @deprecated As of 3.2, replaced by
@@ -98,16 +98,11 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 		 * calculate the size of the text to be presented.
 		 * </p>
 		 *
-		 * @param drawable
-		 *            the drawable of the information control
-		 * @param hoverInfo
-		 *            the information to be presented
-		 * @param presentation
-		 *            the presentation to be updated
-		 * @param maxWidth
-		 *            the maximal width in pixels
-		 * @param maxHeight
-		 *            the maximal height in pixels
+		 * @param drawable     the drawable of the information control
+		 * @param hoverInfo    the information to be presented
+		 * @param presentation the presentation to be updated
+		 * @param maxWidth     the maximal width in pixels
+		 * @param maxHeight    the maximal height in pixels
 		 *
 		 * @return the manipulated information
 		 */
@@ -144,7 +139,6 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 
 	private String contentFromHoover;
 
-	private StringBuffer con = null;
 	private StringBuffer content = null;
 
 	/**
@@ -152,10 +146,8 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * information presenter that can handle simple HTML is used to process the
 	 * information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param isResizeable
-	 *            <code>true</code> if the control should be resizable
+	 * @param parent       the parent shell
+	 * @param isResizeable <code>true</code> if the control should be resizable
 	 * @since 3.4
 	 */
 
@@ -164,11 +156,9 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * information presenter that can handle simple HTML is used to process the
 	 * information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parent          the parent shell
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.4
 	 */
 
@@ -177,14 +167,11 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
-	 * @param presenter
-	 *            the presenter to be used, or <code>null</code> if no presenter
-	 *            should be used
+	 * @param parent          the parent shell
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
+	 * @param presenter       the presenter to be used, or <code>null</code> if no
+	 *                        presenter should be used
 	 * @since 3.4
 	 */
 	public IJMacroDefaultInformationControl(Shell parent, String statusFieldText, IInformationPresenter presenter) {
@@ -199,10 +186,9 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * parent. An information presenter that can handle simple HTML is used to
 	 * process the information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param toolBarManager
-	 *            the manager or <code>null</code> if toolbar is not desired
+	 * @param parent         the parent shell
+	 * @param toolBarManager the manager or <code>null</code> if toolbar is not
+	 *                       desired
 	 * @since 3.4
 	 */
 
@@ -211,16 +197,15 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * parent. The given information presenter is used to process the information to
 	 * be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param toolBarManager
-	 *            the manager or <code>null</code> if toolbar is not desired
-	 * @param presenter
-	 *            the presenter to be used, or <code>null</code> if no presenter
-	 *            should be used
+	 * @param parent         the parent shell
+	 * @param toolBarManager the manager or <code>null</code> if toolbar is not
+	 *                       desired
+	 * @param presenter      the presenter to be used, or <code>null</code> if no
+	 *                       presenter should be used
 	 * @since 3.4
 	 */
-	public IJMacroDefaultInformationControl(Shell parent, ToolBarManager toolBarManager, IInformationPresenter presenter) {
+	public IJMacroDefaultInformationControl(Shell parent, ToolBarManager toolBarManager,
+			IInformationPresenter presenter) {
 		super(parent, toolBarManager);
 		this.toolBarManager = toolBarManager;
 		fAdditionalTextStyles = SWT.V_SCROLL | SWT.H_SCROLL;
@@ -232,8 +217,7 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * Creates a default information control with the given shell as parent. No
 	 * information presenter is used to process the information to be displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
+	 * @param parent the parent shell
 	 */
 	public IJMacroDefaultInformationControl(Shell parent) {
 		this(parent, (String) null, null);
@@ -244,10 +228,8 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent    the parent shell
+	 * @param presenter the presenter to be used
 	 */
 	public IJMacroDefaultInformationControl(Shell parent, IInformationPresenter presenter) {
 		this(parent, (String) null, presenter);
@@ -258,14 +240,10 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed. The given styles are applied to the created styled text widget.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param shellStyle
-	 *            the additional styles for the shell
-	 * @param style
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent     the parent shell
+	 * @param shellStyle the additional styles for the shell
+	 * @param style      the additional styles for the styled text widget
+	 * @param presenter  the presenter to be used
 	 * @deprecated As of 3.4, replaced by simpler constructors
 	 */
 
@@ -274,17 +252,12 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed. The given styles are applied to the created styled text widget.
 	 *
-	 * @param parentShell
-	 *            the parent shell
-	 * @param shellStyle
-	 *            the additional styles for the shell
-	 * @param style
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parentShell     the parent shell
+	 * @param shellStyle      the additional styles for the shell
+	 * @param style           the additional styles for the styled text widget
+	 * @param presenter       the presenter to be used
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.0
 	 * @deprecated As of 3.4, replaced by simpler constructors
 	 */
@@ -294,12 +267,9 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param textStyles
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
+	 * @param parent     the parent shell
+	 * @param textStyles the additional styles for the styled text widget
+	 * @param presenter  the presenter to be used
 	 * @deprecated As of 3.4, replaced by
 	 *             {@link #DefaultInformationControl(Shell, IJMacroDefaultInformationControl.IInformationPresenter)}
 	 */
@@ -312,15 +282,11 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * given information presenter is used to process the information to be
 	 * displayed.
 	 *
-	 * @param parent
-	 *            the parent shell
-	 * @param textStyles
-	 *            the additional styles for the styled text widget
-	 * @param presenter
-	 *            the presenter to be used
-	 * @param statusFieldText
-	 *            the text to be used in the status field or <code>null</code> to
-	 *            hide the status field
+	 * @param parent          the parent shell
+	 * @param textStyles      the additional styles for the styled text widget
+	 * @param presenter       the presenter to be used
+	 * @param statusFieldText the text to be used in the status field or
+	 *                        <code>null</code> to hide the status field
 	 * @since 3.0
 	 * @deprecated As of 3.4, replaced by
 	 *             {@link #DefaultInformationControl(Shell, String, IJMacroDefaultInformationControl.IInformationPresenter)}
@@ -367,8 +333,8 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 	 * @see IInformationControl#setInformation(String)
 	 */
 	public void setInformation(String contentFromHoover) {
-		con=new StringBuffer();
-		con.append(contentFromHoover+System.lineSeparator()+System.lineSeparator());
+		StringBuffer con = new StringBuffer();
+
 		/* The given String for the browser only! */
 		this.contentFromHoover = contentFromHoover;
 		/* Here we split the functions array for our hoover popup! */
@@ -378,33 +344,107 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 			String finals = functions[i];
 			/*Extract functions with and without parentheses!*/
 			int subSplitChar = finals.indexOf('#');
-			String methodNameToSplitChar=finals.substring(0, subSplitChar);
+			String methodNameToSplitChar = finals.substring(0, subSplitChar);
 			int positionToParentheses = methodNameToSplitChar.indexOf('(');
 			String finals2;
 			if (positionToParentheses > -1) {
 				finals2 = finals.substring(0, positionToParentheses);
-			}
-			else {
+			} else {
 				finals2 = methodNameToSplitChar;
 			}
-			
-			if (finals2.equals(contentFromHoover)) {
 
+			if (finals2.equals(contentFromHoover)) {
+				con.append(contentFromHoover + System.lineSeparator() + System.lineSeparator());
 				String[] temp = finals.split("####");
 				// String parsedStr = temp[1];//.replaceAll("(.{70})", "$1\n");
 				con.append(temp[0]);
 				con.append(System.lineSeparator() + temp[1]);
 				con.append(System.lineSeparator());
 				con.append(System.lineSeparator());
-				 
+
 			}
 
 		}
-		/* Return if we have no match! */
-		if (con == null) {
-			return;
+		/* Return if we have no function match we display possible debugger (if in debug mode) variables!*/
+		if (con.length() == 0) {
+
+			if (Interpreter.getInstance() != null) {
+				if (Interpreter.getInstance().stack != null) {
+					Variable[] variables = Interpreter.getInstance().stack;
+					if (variables != null) {
+						for (int i = 0; i < variables.length; i++) {
+							if (variables[i] != null) {
+								//System.out.println(variables[i].getType());
+								if (variables[i].getType() == Variable.ARRAY) {
+									int symIndex = variables[i].symTabIndex;
+									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
+									System.out.println(arrName + "  " + contentFromHoover);
+									if (arrName.equals(contentFromHoover)) {
+
+										Variable[] elements = variables[i].getArray();
+
+										//con.append("Array" + System.lineSeparator() + System.lineSeparator());
+										con.append("Index          Value" + System.lineSeparator() + System.lineSeparator());
+
+										for (int jj = 0; jj < elements.length; jj++) {
+
+											Variable element = elements[jj];
+											if (element.getType() == Variable.STRING) {
+												String valueStr = elements[jj].getString();
+												valueStr = valueStr.replaceAll("\n", "\\\\n");
+												valueStr = "\"" + valueStr + "\""; //show it's a string
+												con.append("  "+jj + "               " + valueStr);
+												con.append(System.lineSeparator());
+											} else if (element.getType() == Variable.VALUE) {
+												double v = elements[jj].getValue();
+												String valueStr;
+												if ((int) v == v) {
+													valueStr = IJ.d2s(v, 0);
+													con.append("  "+jj + "               " + valueStr);
+													con.append(System.lineSeparator());
+												} else {
+													valueStr = ResultsTable.d2s(v, 4);
+													con.append("  "+jj + "               " + valueStr);
+													con.append(System.lineSeparator());
+												}
+											}
+										}
+									}
+
+									
+								} else if (variables[i].getType() == Variable.STRING) {
+									int symIndex = variables[i].symTabIndex;
+									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
+									if (arrName.equals(contentFromHoover)) {
+										con.append("String" + System.lineSeparator()+ System.lineSeparator());
+										con.append(variables[i].getString());
+										break;
+									}
+
+								} else if (variables[i].getType() == Variable.VALUE) {
+									int symIndex = variables[i].symTabIndex;
+									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
+									//System.out.println(arrName + "  " + contentFromHoover);
+									if (arrName.equals(contentFromHoover)) {
+										con.append("Numeric" + System.lineSeparator()+ System.lineSeparator());
+										con.append(String.valueOf(variables[i].getValue()));
+										break;
+									}
+
+								}
+							}
+
+						}
+					}
+				}
+			}
+
 		}
-		String content=con.toString();
+		/*if (con == null) {
+			return;
+		}*/
+
+		String content = con.toString();
 		if (fPresenter == null) {
 			fText.setText(content.toString());
 		} else {

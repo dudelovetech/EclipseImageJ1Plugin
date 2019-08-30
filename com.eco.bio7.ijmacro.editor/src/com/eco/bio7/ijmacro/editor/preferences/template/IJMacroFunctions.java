@@ -15,6 +15,7 @@ public class IJMacroFunctions {
 			"Array.fourier(array,windowType)####Calculates and returns the Fourier amplitudes of array. WindowType can be \"none\",\"Hamming\",\"Hann\",or \"flat-top\",or may be omitted (meaning \"none\"). See the TestArrayFourier macro for an example and more documentation. Requires 1.49i."+linSeparator + 
 			"Array.getSequence(n)####Returns an array containing the numeric sequence 0,1,2...n-1. Requires 1.49u."+linSeparator + 
 			"Array.getStatistics(array,min,max,mean,stdDev)####Returns the min,max,mean,and stdDev of array,which must contain all numbers."+linSeparator + 
+			"Array.invert(array)####Inverts an array."+linSeparator +
 			"Array.print(array)####Prints the array on a single line."+linSeparator + 
 			"Array.rankPositions(array)####Returns,as an array,the rank position indexes of array,starting with the index of the smallest value."+linSeparator + 
 			"Array.resample(array,len)####Returns an array which is linearly resampled to a different length."+linSeparator + 

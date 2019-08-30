@@ -19,7 +19,7 @@ public class ImageJEditPerspective implements IPerspectiveFactory {
 			IFolderLayout folderLayout = layout.createFolder("folder", IPageLayout.BOTTOM, 0.5f, "org.eclipse.ui.navigator.ProjectExplorer");
 			folderLayout.addView("org.eclipse.ui.views.ContentOutline");
 			folderLayout.addView("org.eclipse.ui.console.ConsoleView");
-			folderLayout.addView("com.eco.bio7.image.view.debug");
+			folderLayout.addView("com.eco.bio7.ijmacro.editor.toolbar.debug");
 			
 		}
 		layout.addView("com.eco.bio7.imagej", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);

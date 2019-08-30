@@ -1,8 +1,10 @@
 package ij.macro;
 
 public class Variable implements MacroConstants, Cloneable {
-	static final int VALUE=0, ARRAY=1, STRING=2;
-    int symTabIndex;
+	public static final int VALUE=0;
+	public static final int ARRAY=1;
+	public static final int STRING=2;
+    public int symTabIndex;
     private double value;
     private String str;
     private Variable[] array;
@@ -86,7 +88,7 @@ public class Variable implements MacroConstants, Cloneable {
         array = null;
     }
 
-    Variable[] getArray() {
+    public Variable[] getArray() {
         return array;
     }
 
@@ -111,7 +113,7 @@ public class Variable implements MacroConstants, Cloneable {
     	return size;
     }
 
-    int getType() {
+    public int getType() {
     	if (array!=null)
     		return ARRAY;
     	else if (str!=null)

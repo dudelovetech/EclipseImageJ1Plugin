@@ -3,6 +3,7 @@ package com.eco.bio7.ijmacro.editor.actions.debug;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -22,6 +23,9 @@ final public class DebugHandler extends AbstractHandler {
 		IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		IJMacroEditor editor = (IJMacroEditor) editore;
 		editor.enableDebugging();
+		if (editor.isDirty()) {
+			editor.doSave(new NullProgressMonitor());
+		}
 		/*
 		 * Changes Mac OS 9 (CR) and Windows (CRLF) line separators to line feeds (LF).
 		 */

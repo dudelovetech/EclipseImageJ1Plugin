@@ -714,4 +714,16 @@
          </menu>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            category="com.eco.bio7.image.plugin"
+            class="com.eco.bio7.ijmacro.editor.toolbar.debug.DebugVariablesView"
+            icon="icons/imagejview.png"
+            id="com.eco.bio7.ijmacro.editor.toolbar.debug"
+            name="Debug"
+            restorable="true">
+      </view>
+   </extension>
 </plugin>

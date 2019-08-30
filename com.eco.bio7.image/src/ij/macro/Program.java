@@ -11,7 +11,7 @@ public class Program implements MacroConstants {
 	
 	int stLoc = -1;
 	int symTabLoc;
-	Symbol[] table = new Symbol[maxSymbols];
+	public Symbol[] table = new Symbol[maxSymbols];
     static Symbol[] systemTable;
 	int[] code = new int[maxProgramSize];
 	int[] lineNumbers = new int[maxProgramSize];
