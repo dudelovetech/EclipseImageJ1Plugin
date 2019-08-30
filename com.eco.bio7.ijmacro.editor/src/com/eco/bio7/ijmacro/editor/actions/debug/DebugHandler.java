@@ -23,14 +23,14 @@ final public class DebugHandler extends AbstractHandler {
 		IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		IJMacroEditor editor = (IJMacroEditor) editore;
 		editor.enableDebugging();
-		if (editor.isDirty()) {
-			editor.doSave(new NullProgressMonitor());
-		}
 		/*
 		 * Changes Mac OS 9 (CR) and Windows (CRLF) line separators to line feeds (LF).
 		 */
 		editor.fixLineEndings();
 		editor.runMacro(true);
+		if (editor.isDirty()) {
+			editor.doSave(new NullProgressMonitor());
+		}
 		return null;
 	}
 
