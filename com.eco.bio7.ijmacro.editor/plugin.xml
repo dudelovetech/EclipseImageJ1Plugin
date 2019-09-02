@@ -726,4 +726,79 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+    id="com.eco.bio7.ijmacro.editor.debugrulermark"
+    name="IJMacro Editor Word"
+    point="org.eclipse.core.resources.markers">
+  <super
+    type="org.eclipse.core.resources.textmarker">
+  </super>
+</extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="com.eco.bio7.ijmacro.editor.debugrulermark"
+            name="com.eco.bio7.ijmacro.editor.debugrulermark">
+      </type>
+   </extension>
+
+ <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="com.eco.bio7.ijmacro.editor.debugrulermark"
+            colorPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.color"
+            colorPreferenceValue="180,230,180"
+            contributesToHeader="false"
+            highlightPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.highlight"
+            highlightPreferenceValue="true"
+            icon="/icons/occ_match.png"
+            includeOnPreferencePage="true"
+            label="ImageJ Macro Editor Debug Ruler Marker"
+            overviewRulerPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+ <extension
+       point="org.eclipse.ui.popupMenus">
+    <viewerContribution
+          id="IJMacroDebug.rulerActions"
+          targetID="com.eco.bio7.editors.ijmacro.editor.RulerContext">
+       <action
+             class="com.eco.bio7.ijmacro.editor.toolbar.debug.DeleteBreakpointAction"
+             id="DeleteBreakpointAction"
+             label="Delete All Breakpoints"
+             menubarPath="debug">
+       </action>
+       <action
+             class="com.eco.bio7.ijmacro.editor.toolbar.debug.DeleteSelBreakpointAction"
+             id="DeleteSelectedBreakpointAction"
+             label="Delete Selected Breakpoint"
+             menubarPath="debug">
+       </action>
+       <action
+             class="com.eco.bio7.ijmacro.editor.toolbar.debug.EditSelBreakpointAction"
+             id="EditConditionalBreakpointAction"
+             label="Edit Conditional Breakpoint"
+             menubarPath="debug">
+       </action>
+       <action
+             class="com.eco.bio7.ijmacro.editor.toolbar.debug.ToggleDebugConditionalBreakpointAction"
+             id="AddConditionalBreakpointAction"
+             label="Add Conditional Breakpoint"
+             menubarPath="debug">
+       </action>
+       <action
+             class="com.eco.bio7.ijmacro.editor.toolbar.debug.ToggleDebugBreakpointAction"
+             id="AddBreakpointAction"
+             label="Add Breakpoint"
+             menubarPath="debug">
+       </action>
+    </viewerContribution>
+ </extension>
 </plugin>

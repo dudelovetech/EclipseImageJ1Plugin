@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IRegion;
@@ -571,6 +572,63 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			} else
 				return 0;
 		}
+		if (mode == RUN_TO_EXPRESSION) {
+			
+			String[] valueOfEx = markerExpression.split(" ");
+			String existingVar = valueOfEx[0];
+			String operator = valueOfEx[1];
+			String valueToCompare = valueOfEx[2];
+			double val = interp.getVariable(existingVar);
+
+			if (operator.equals("==")) {
+				if (val == Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+			else if (operator.equals("!=")) {
+				if (val != Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+			else if (operator.equals("<=")) {
+				if (val <= Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+			else if (operator.equals(">=")) {
+				if (val >= Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+			else if (operator.equals("<")) {
+				if (val < Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+			else if (operator.equals(">")) {
+				if (val > Double.parseDouble(valueToCompare)) {
+					mode = STEP;
+					interp.setDebugMode(mode);
+				} else {
+					return 0;
+				}
+			}
+		}
 
 		/*if (!DebugVariablesView.getDebugVariablesGrid().isVisible()) { // abort macro if user closes window
 																		// interp.abortMacro();
@@ -864,10 +922,46 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	 * Changes Mac OS 9 (CR) and Windows (CRLF) line separators to line feeds (LF).
 	 */
 	public void fixLineEndings() {
-		String text = getText();
+
+		IDocumentProvider dp = this.getDocumentProvider();
+		IDocument doc = dp.getDocument(this.getEditorInput());
+		/*We use the document adapter here to preserve editor markers. Else they are deleted!*/
+		replace(doc, "\r\n", "\n", true, true, true, false, false);
+		replace(doc, "\r", "\n", true, true, true, false, false);
+		/*String text = getText();
 		text = text.replaceAll("\r\n", "\n");
 		text = text.replaceAll("\r", "\n");
-		setText(text);
+		setText(text);*/
+	}
+
+	public int replace(IDocument doc, String word1, String word2, boolean forwardSearch, boolean caseSensitive,
+			boolean wholeWord, boolean showmessage, boolean regularExpressions) {
+		int x = 0;
+		try {
+			FindReplaceDocumentAdapter fr = new FindReplaceDocumentAdapter(doc);
+			IRegion docRegion = new IRegion() {
+
+				public int getOffset() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+
+				public int getLength() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+			};
+			while ((docRegion = fr.find(docRegion.getOffset() + 1, word1, true, caseSensitive, wholeWord,
+					regularExpressions)) != null) {
+				fr.replace(word2, regularExpressions);
+				x++;
+			}
+
+		} catch (BadLocationException e) {
+
+			e.printStackTrace();
+		}
+		return x;
 	}
 
 	public final void runToInsertionPoint() {
@@ -878,6 +972,17 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			runToLine = getCurrentLine(IJMacroEditor.this);
 			// System.out.println("current Line: " + runToLine);
 			setDebugMode(RUN_TO_CARET);
+		}
+	}
+
+	public final void runToExpression() {
+		Interpreter interp = Interpreter.getInstance();
+		if (interp == null)
+			IJ.beep();
+		else {
+			runToLine = getCurrentLine(IJMacroEditor.this);
+			// System.out.println("current Line: " + runToLine);
+			setDebugMode(RUN_TO_EXPRESSION);
 		}
 	}
 
@@ -947,6 +1052,8 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		}
 
 	};
+
+	private String markerExpression;
 
 	private static void goToLine(IEditorPart editorPart, int toLine) {
 		if ((editorPart instanceof IJMacroEditor) || toLine <= 0) {
@@ -1142,6 +1249,11 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			for (int i = 0; subs != null && i < subs.size(); i++)
 				addNode(item, (IJMacroEditorOutlineNode) subs.elementAt(i));
 		}
+	}
+
+	public void setMarkerExpression(String expression) {
+		this.markerExpression = expression;
+
 	}
 
 }

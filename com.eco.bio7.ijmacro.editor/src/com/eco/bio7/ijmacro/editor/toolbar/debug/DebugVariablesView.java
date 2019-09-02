@@ -171,12 +171,13 @@ public class DebugVariablesView extends ViewPart {
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
 		toolbarManager.add(new DebugIjMacroScript());
-		toolbarManager.add(new DebugNextAction());
-		toolbarManager.add(new DebugStepIntoAction());
-		toolbarManager.add(new DebugTraceAction());
-		toolbarManager.add(new DebugStepFinishAction());
 		toolbarManager.add(new DebugStopAction());
-		toolbarManager.add(new DebugInfoAction());
+		toolbarManager.add(new DebugNextAction());
+		toolbarManager.add(new DebugRunToInsertionAction());
+		toolbarManager.add(new DebugTraceAction());
+		toolbarManager.add(new DebugMarkerAction());
+		toolbarManager.add(new DebugStepFinishAction());		
+		toolbarManager.add(new DebugSetVariableAction());
 		
 	}
 

@@ -54,9 +54,7 @@ public class DeleteBreakpointAction extends AbstractRulerActionDelegate implemen
 			IMarker[] markersfind = findMyMarkers(resource);
 			for (int i = 0; i < markersfind.length; i++) {
 				try {
-					String func = (String) markersfind[i].getAttribute(IMarker.TEXT);
-					System.out.println(func);
-					System.out.println("untrace(" + func + ")");
+					//String func = (String) markersfind[i].getAttribute(IMarker.TEXT);
 					
 					markersfind[i].delete();
 

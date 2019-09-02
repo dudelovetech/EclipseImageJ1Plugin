@@ -25,6 +25,7 @@ import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -34,7 +35,10 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.eco.bio7.image.Util;
 
-public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionDelegate implements IEditorActionDelegate {
+import ij.macro.Interpreter;
+
+public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionDelegate
+		implements IEditorActionDelegate {
 
 	private class ToggleBreakpointAction extends Action {
 
@@ -51,14 +55,27 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 
 		@Override
 		public void run() {
-			
-			String rDebugExpression = null;
-			IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-			InputDialog dlg = new InputDialog(Util.getShell(), "", "Enter Expressions:  e.g. 'if(x==5) browser()'", "", null);
-			if (dlg.open() == Window.OK) {
-				
-				rDebugExpression = dlg.getValue();
+			String rDebugExpression = null;
+			IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor();
+
+			//InputDialog dlg = new InputDialog(Util.getShell(), "", "Enter Expressions:  e.g. 'if(x==5) browser()'", "", null);
+			//if (dlg.open() == Window.OK) {
+
+			//rDebugExpression = dlg.getValue();
+			SetDebugBreakpointMacroValueDialog dialog = new SetDebugBreakpointMacroValueDialog(
+					new Shell(Util.getDisplay()), "Set Equality and Relational Expression",null);
+
+			// get the new values from the dialog
+			if (dialog.open() == Window.OK) {
+
+				String name = dialog.getUser();
+				String value = dialog.getPassword();
+				String operator = dialog.getOperator();
+
+				rDebugExpression = name + " " + operator + " " + value;
+
 				IResource resource = (IResource) editore.getEditorInput().getAdapter(IResource.class);
 				if (resource != null) {
 					try {
@@ -105,8 +122,7 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 				}
 
 			}
-			
-			
+
 			else {
 				return;
 			}

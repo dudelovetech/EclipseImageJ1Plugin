@@ -22,14 +22,14 @@ import com.eco.bio7.image.Util;
 
 import ij.macro.Interpreter;
 
-public class DebugInfoAction extends Action {
+public class DebugSetVariableAction extends Action {
 
-	public DebugInfoAction() {
+	public DebugSetVariableAction() {
 		super("SetVar");
 
 		setId("SetVar");
 		setText("Set Variable");
-
+		setToolTipText("Sets or changes a defined variable expression in debug mode.");
 		// ImageDescriptor desc = ImageDescriptor.createFromImage(new
 		// Image(Display.getCurrent(),
 		// getClass().getResourceAsStream("/pics/help.gif")));

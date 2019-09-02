@@ -25,6 +25,7 @@ import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -98,13 +99,26 @@ public class EditSelBreakpointAction extends AbstractRulerActionDelegate impleme
 
 								e.printStackTrace();
 							}
+							
+							
+                             
+							SetDebugBreakpointMacroValueDialog dialog = new SetDebugBreakpointMacroValueDialog(
+									new Shell(Util.getDisplay()), "Set", expression);
+							
+							
 
-							InputDialog dlg = new InputDialog(Util.getShell(), "Expression", "Enter Expressions:  e.g. 'if(x==5) browser()'", expression, null);
-
-							if (dlg.open() == Window.OK) {
+							// get the new values from the dialog
+							if (dialog.open() == Window.OK) {
 								
+								
+
+								String name = dialog.getUser();
+								String value = dialog.getPassword();
+								String operator = dialog.getOperator();
+
+								String rDebugExpression = name + " " + operator + " " + value;
 								try {
-									markersfind[i].setAttribute(IMarker.MESSAGE, dlg.getValue());
+									markersfind[i].setAttribute(IMarker.MESSAGE, rDebugExpression);
 								} catch (CoreException e) {
 									
 									e.printStackTrace();

@@ -31,7 +31,7 @@ public class DebugTraceAction extends Action {
 
 		setId("Trace");
 		setText("Trace/Fast Trace");
-
+		setToolTipText("Runs the macro, displaying variable names and values in the \"Debug\" window as they are encountered. Fast Trace - Same as above, but faster.");
 		ImageDescriptor desc = IJMacroEditorPlugin.getImageDescriptor("/icons/ijmacrodebug/stepreturn_co.png");
 
 		this.setImageDescriptor(desc);

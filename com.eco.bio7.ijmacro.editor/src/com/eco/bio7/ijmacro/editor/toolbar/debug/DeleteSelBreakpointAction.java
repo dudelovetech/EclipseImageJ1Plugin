@@ -86,9 +86,8 @@ public class DeleteSelBreakpointAction extends AbstractRulerActionDelegate imple
 
 						if (line + 1 == markersfind[i].getAttribute(IMarker.LINE_NUMBER, -1)) {
 							try {
-								String func = (String) markersfind[i].getAttribute(IMarker.TEXT);
-								System.out.println(func);
-								System.out.println("untrace(" + func + ")");
+								//String func = (String) markersfind[i].getAttribute(IMarker.TEXT);
+								
 								
 								markersfind[i].delete();
 
