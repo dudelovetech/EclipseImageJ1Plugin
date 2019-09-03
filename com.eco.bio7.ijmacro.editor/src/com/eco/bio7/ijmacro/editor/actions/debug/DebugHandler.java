@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.eco.bio7.ijmacro.editor.toolbar.debug.DebugVariablesView;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 
 /**
@@ -30,6 +31,11 @@ final public class DebugHandler extends AbstractHandler {
 		editor.runMacro(true);
 		if (editor.isDirty()) {
 			editor.doSave(new NullProgressMonitor());
+		}
+		DebugVariablesView debugVariablesViewInstance = DebugVariablesView.getInstance();
+
+		if (debugVariablesViewInstance != null) {
+			debugVariablesViewInstance.getDebugStopAction().setEnabled(true);
 		}
 		return null;
 	}

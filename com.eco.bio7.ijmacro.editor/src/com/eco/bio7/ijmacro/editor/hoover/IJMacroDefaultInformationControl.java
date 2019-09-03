@@ -380,12 +380,10 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
 									System.out.println(arrName + "  " + contentFromHoover);
 									if (arrName.equals(contentFromHoover)) {
-
 										Variable[] elements = variables[i].getArray();
-
 										//con.append("Array" + System.lineSeparator() + System.lineSeparator());
-										con.append("Index          Value" + System.lineSeparator() + System.lineSeparator());
-
+										con.append("Index          Value" + System.lineSeparator()
+												+ System.lineSeparator());
 										for (int jj = 0; jj < elements.length; jj++) {
 
 											Variable element = elements[jj];
@@ -393,30 +391,29 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 												String valueStr = elements[jj].getString();
 												valueStr = valueStr.replaceAll("\n", "\\\\n");
 												valueStr = "\"" + valueStr + "\""; //show it's a string
-												con.append("  "+jj + "               " + valueStr);
+												con.append("  " + jj + "               " + valueStr);
 												con.append(System.lineSeparator());
 											} else if (element.getType() == Variable.VALUE) {
 												double v = elements[jj].getValue();
 												String valueStr;
 												if ((int) v == v) {
 													valueStr = IJ.d2s(v, 0);
-													con.append("  "+jj + "               " + valueStr);
+													con.append("  " + jj + "               " + valueStr);
 													con.append(System.lineSeparator());
 												} else {
 													valueStr = ResultsTable.d2s(v, 4);
-													con.append("  "+jj + "               " + valueStr);
+													con.append("  " + jj + "               " + valueStr);
 													con.append(System.lineSeparator());
 												}
 											}
 										}
 									}
 
-									
 								} else if (variables[i].getType() == Variable.STRING) {
 									int symIndex = variables[i].symTabIndex;
 									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
 									if (arrName.equals(contentFromHoover)) {
-										con.append("String" + System.lineSeparator()+ System.lineSeparator());
+										con.append("String" + System.lineSeparator() + System.lineSeparator());
 										con.append(variables[i].getString());
 										break;
 									}
@@ -426,7 +423,7 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
 									//System.out.println(arrName + "  " + contentFromHoover);
 									if (arrName.equals(contentFromHoover)) {
-										con.append("Numeric" + System.lineSeparator()+ System.lineSeparator());
+										con.append("Numeric" + System.lineSeparator() + System.lineSeparator());
 										con.append(String.valueOf(variables[i].getValue()));
 										break;
 									}
@@ -445,6 +442,9 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 		}*/
 
 		String content = con.toString();
+		if (content.isEmpty()) {
+			content = contentFromHoover;
+		}
 		if (fPresenter == null) {
 			fText.setText(content.toString());
 		} else {

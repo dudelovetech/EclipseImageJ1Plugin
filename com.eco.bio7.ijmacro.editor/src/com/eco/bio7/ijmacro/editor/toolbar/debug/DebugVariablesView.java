@@ -34,25 +34,37 @@ public class DebugVariablesView extends ViewPart {
 	public static final String ID = "com.eco.bio7.rbridge.debug.ImageJMacroDebugVariablesView"; //$NON-NLS-1$
 	private static Table grid;
 	private TableColumn column;
-
 	private TableColumn column1;
-
 	private TableColumn column2;
-
 	private TableColumn column3;
-
-	public static Table getDebugVariablesGrid() {
-		
-		return grid;
-	}
-
 	protected int index;
 	protected Point pt;
-
 	protected TableEditor editor;
+	private DebugStopAction debugStopAction;
+	private DebugIjMacroScript startMacroDebugging;
+	private DebugNextAction debugNextAction;
+	private DebugRunToInsertionAction debugRunToInsertionPointAction;
+	private DebugTraceAction debugTraceAction;
+	private DebugMarkerAction debugMarkerAction;
+	private DebugStepFinishAction debugStepFinishAction;
+	private static DebugVariablesView instance;
+
+	public static DebugVariablesView getInstance() {
+		return instance;
+	}
+
+	public DebugIjMacroScript getStartMacroDebugging() {
+		return startMacroDebugging;
+	}
 
 	public DebugVariablesView() {
 		setPartName("Variables (x)");
+		instance=this;
+	}
+
+	public static Table getDebugVariablesGrid() {
+
+		return grid;
 	}
 
 	/**
@@ -62,9 +74,9 @@ public class DebugVariablesView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		
 
-		grid = new Table(parent, SWT.BORDER | SWT.V_SCROLL | SWT.SCROLL_LINE | SWT.MULTI | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		grid = new Table(parent,
+				SWT.BORDER | SWT.V_SCROLL | SWT.SCROLL_LINE | SWT.MULTI | SWT.FULL_SELECTION | SWT.VIRTUAL);
 
 		{
 			column1 = new TableColumn(grid, SWT.CENTER);
@@ -84,7 +96,7 @@ public class DebugVariablesView extends ViewPart {
 
 		grid.setHeaderVisible(true);
 		grid.setLinesVisible(true);
-		  
+
 		// Show row header
 
 		final TableEditor editor = new TableEditor(grid);
@@ -94,9 +106,6 @@ public class DebugVariablesView extends ViewPart {
 		createActions();
 		initializeToolBar();
 		initializeMenu();
-		
-		
-		
 
 		/* Resize column width if shell changes! */
 		parent.addControlListener(new ControlAdapter() {
@@ -119,7 +128,7 @@ public class DebugVariablesView extends ViewPart {
 						column1.setWidth(width / 3);
 						column2.setWidth(width / 3);
 						column3.setWidth(width / 3);
-						
+
 						grid.setSize(area.width, area.height);
 					} else {
 						// table is getting bigger so make the table
@@ -129,28 +138,26 @@ public class DebugVariablesView extends ViewPart {
 						column1.setWidth(width / 3);
 						column2.setWidth(width / 3);
 						column3.setWidth(width / 3);
-						
+
 					}
 				}
 				parent.layout();
 			}
 		});
-		
+
 		grid.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event e) {
-		       
-		        int selection = grid.getSelectionIndex();
-		        
+			public void handleEvent(Event e) {
+
+				int selection = grid.getSelectionIndex();
+
 				Interpreter interp = Interpreter.getInstance();
-				if (interp!=null )
+				if (interp != null)
 					//interp.setVariable("aa", 2);
 					interp.showArrayInspector(selection);
-				
-		        }
-		      
 
-			
-		    });
+			}
+
+		});
 
 	}
 
@@ -170,15 +177,27 @@ public class DebugVariablesView extends ViewPart {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
-		toolbarManager.add(new DebugIjMacroScript());
-		toolbarManager.add(new DebugStopAction());
-		toolbarManager.add(new DebugNextAction());
-		toolbarManager.add(new DebugRunToInsertionAction());
-		toolbarManager.add(new DebugTraceAction());
-		toolbarManager.add(new DebugMarkerAction());
-		toolbarManager.add(new DebugStepFinishAction());		
+		startMacroDebugging = new DebugIjMacroScript(this);
+		toolbarManager.add(startMacroDebugging);
+		debugStopAction = new DebugStopAction(this);
+		toolbarManager.add(debugStopAction);
+		debugStopAction.setEnabled(false);
+		debugNextAction = new DebugNextAction(this);
+		toolbarManager.add(debugNextAction);
+		debugRunToInsertionPointAction = new DebugRunToInsertionAction(this);
+		toolbarManager.add(debugRunToInsertionPointAction);
+		debugTraceAction = new DebugTraceAction(this);
+		toolbarManager.add(debugTraceAction);
+		debugMarkerAction = new DebugMarkerAction(this);
+		toolbarManager.add(debugMarkerAction);
+		debugStepFinishAction = new DebugStepFinishAction(this);
+		toolbarManager.add(debugStepFinishAction);
 		toolbarManager.add(new DebugSetVariableAction());
-		
+
+	}
+
+	public DebugStopAction getDebugStopAction() {
+		return debugStopAction;
 	}
 
 	/**

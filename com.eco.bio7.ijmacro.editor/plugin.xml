@@ -734,6 +734,12 @@
     type="org.eclipse.core.resources.textmarker">
   </super>
 </extension>
+<!--To make the ruler marker persistent we have to add the suffix from 'com.eco.bio7.ijmacro.editor.debugrulermark' id here: 'debugrulermark'-->
+<extension point="org.eclipse.core.resources.markers"   
+        id="debugrulermark">
+     <super type="org.eclipse.core.resources.textmarker"/>         
+     <persistent value="true"/>
+  </extension>
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
       <type
@@ -751,7 +757,7 @@
             contributesToHeader="false"
             highlightPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.highlight"
             highlightPreferenceValue="true"
-            icon="/icons/occ_match.png"
+            icon="/icons/brkp_obj.png"
             includeOnPreferencePage="true"
             label="ImageJ Macro Editor Debug Ruler Marker"
             overviewRulerPreferenceKey="com.eco.bio7.ijmacro.editor.debugrulermark.overview"

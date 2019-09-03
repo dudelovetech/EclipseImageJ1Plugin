@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2014 M. Austenfeld
+ * Copyright (c) 2004-2019 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,34 +27,32 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.ui.texteditor.ITextEditor;
-
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
+
+import ij.macro.Interpreter;
 
 public class DebugMarkerAction extends Action {
 
 	private IMarker[] markers;
 	private int counter;
-	private String expression;
+	private DebugVariablesView debugVariablesView;
 	private static int markerCount = 0;
 
 	public static void setMarkerCount(int markerCount) {
 		DebugMarkerAction.markerCount = markerCount;
 	}
 
-	public DebugMarkerAction() {
+	public DebugMarkerAction(DebugVariablesView debugVariablesView) {
 		super("RunToMarker");
-
+		this.debugVariablesView = debugVariablesView;
 		setId("RunTomarker");
 		setText("Run To Debug Marker");
-		setToolTipText("Runs the macro to the defined debug markers or debug markers with expression.");
+		setToolTipText(
+				"Runs the macro to the defined breakpoints or to the evaluated\nexpression of the expression breakpoints.");
 		//ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(Display.getCurrent(), getClass().getResourceAsStream("/pics/stepinto_co.gif")));
 		ImageDescriptor desc = IJMacroEditorPlugin.getImageDescriptor("/icons/ijmacrodebug/changevariablevalue_co.png");
 		this.setImageDescriptor(desc);
@@ -65,7 +63,7 @@ public class DebugMarkerAction extends Action {
 				.getActiveEditor();
 		IResource resource = (IResource) editore.getEditorInput().getAdapter(IResource.class);
 		if (editore != null) {
-			IJMacroEditor editor = (IJMacroEditor) editore;			
+			IJMacroEditor editor = (IJMacroEditor) editore;
 
 			if (resource != null) {
 				Map<Integer, String> map1 = findMyMarkers(resource);
@@ -73,24 +71,24 @@ public class DebugMarkerAction extends Action {
 				Map<Integer, String> map = new TreeMap<Integer, String>(map1);
 				counter = 0;
 				for (Map.Entry<Integer, String> entry : map.entrySet()) {
-					
+
 					Integer lineNum = entry.getKey();
 					String expression = entry.getValue();
-					
+
 					if (counter == markerCount) {
 						if (lineNum > 0) {
-							
-							if(expression!=null) {
+
+							if (expression != null) {
 								editor.setMarkerExpression(expression);
-								
-								IDocumentProvider dp = editor.getDocumentProvider();
+
+								/*IDocumentProvider dp = editor.getDocumentProvider();
 								IDocument doc = dp.getDocument(editor.getEditorInput());
 								
 								IRegion reg = null;
 								try {
 									reg = doc.getLineInformation(lineNum);
 								} catch (BadLocationException e1) {
-
+								
 									e1.printStackTrace();
 								}
 								
@@ -98,18 +96,14 @@ public class DebugMarkerAction extends Action {
 								
 								
 								
-								editor.runToInsertionPoint();
-								
-								
-								
-								
+								editor.runToInsertionPoint();*/
+
 								editor.runToExpression();
-							}
-							else {
-	
+							} else {
+
 								IDocumentProvider dp = editor.getDocumentProvider();
 								IDocument doc = dp.getDocument(editor.getEditorInput());
-								
+
 								IRegion reg = null;
 								try {
 									reg = doc.getLineInformation(lineNum);
@@ -117,29 +111,26 @@ public class DebugMarkerAction extends Action {
 
 									e1.printStackTrace();
 								}
-								
-								editor.selectAndReveal(reg.getOffset()-1, 0);
-								
-								
-								
+
+								editor.selectAndReveal(reg.getOffset() - 1, 0);
+
 								editor.runToInsertionPoint();
 							}
-							
-							
+
 							markerCount++;
 							break;
 						}
 					}
 					counter++;
 				}
-				
+
 			}
 		}
 
 	}
 
 	public Map<Integer, String> findMyMarkers(IResource target) {
-		String type = "com.eco.bio7.redit.debugMarker";
+		String type = "com.eco.bio7.ijmacro.editor.debugrulermark";
 
 		try {
 			markers = target.findMarkers(type, false, IResource.DEPTH_ZERO);

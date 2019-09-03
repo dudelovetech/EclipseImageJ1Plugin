@@ -23,17 +23,20 @@ import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
 
 public class DebugIjMacroScript extends Action {
-	
+
 	private IEditorPart part;
-	
-	
+	private DebugVariablesView debugVariablesView;
 
-	public DebugIjMacroScript() {
+	public DebugIjMacroScript(DebugVariablesView debugVariablesView) {
 		super("Debug");
-
+		 this.debugVariablesView=debugVariablesView;
 		setId("Debug");
 		setText("Debug Action");
-        setToolTipText("Executes the highlighted statement and advances to the next. The variable names and values in the \"Debug\" window are updated.");
+		setToolTipText(
+				"Starts running the macro in debug mode and opens the \"Debug\" window, which\n"
+				+ "initially displays the memory usage, number of open images, and the active image's title.\n"
+				+ "The macro stops running at the first executable line of code, which is highlighted.\n"
+				+ "Use one of the following commands to continue execution.");
 		//ImageDescriptor desc = ImageDescriptor.createFromImage(new Image(Display.getCurrent(), getClass().getResourceAsStream("/pics/rundebug.gif")));
 		ImageDescriptor desc = IJMacroEditorPlugin.getImageDescriptor("/icons/ijmacrodebug/rundebug.png");
 		this.setImageDescriptor(desc);
@@ -52,24 +55,25 @@ public class DebugIjMacroScript extends Action {
 		IEditorPart editore = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (editore != null) {
-			IJMacroEditor editor = (IJMacroEditor) editore;
-			editor.enableDebugging();
-			/*
-			 * Changes Mac OS 9 (CR) and Windows (CRLF) line separators to line feeds (LF).
-			 */		
-			editor.fixLineEndings();
-			editor.runMacro(true);
 
-			//editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			IJMacroEditor editor = (IJMacroEditor) editore;
 			if (editor.isDirty()) {
 				editor.doSave(new NullProgressMonitor());
 			}
+			editor.enableDebugging();
+			/*
+			 * Changes Mac OS 9 (CR) and Windows (CRLF) line separators to line feeds (LF).
+			 */
+			editor.fixLineEndings();
+			editor.runMacro(true);
+			
+			debugVariablesView.getDebugStopAction().setEnabled(true);
+
+			//editor = (IEditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 		}
 
 	}
-
-	
 
 	public void selectionChanged(IAction action, ISelection selection) {
 

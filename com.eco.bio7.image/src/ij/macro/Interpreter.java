@@ -54,7 +54,7 @@ public class Interpreter implements MacroConstants {
 	boolean inPrint;
 	static String additionalFunctions;
 	Debugger debugger;
-	int debugMode = Debugger.NOT_DEBUGGING;
+	public int debugMode = Debugger.NOT_DEBUGGING;
 	boolean showDebugFunctions;
 	static boolean showVariables;
 	boolean wasError;

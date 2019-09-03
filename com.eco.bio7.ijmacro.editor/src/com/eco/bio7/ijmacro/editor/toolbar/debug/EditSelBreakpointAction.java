@@ -139,7 +139,7 @@ public class EditSelBreakpointAction extends AbstractRulerActionDelegate impleme
 	}
 
 	public IMarker[] findMyMarkers(IResource target) {
-		String type = "com.eco.bio7.redit.debugMarker";
+		String type = "com.eco.bio7.ijmacro.editor.debugrulermark";
 
 		IMarker[] markers = null;
 		try {

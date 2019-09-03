@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2014 M. Austenfeld
+ * Copyright (c) 2004-2019 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,16 +13,20 @@ package com.eco.bio7.ijmacro.editor.toolbar.debug;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import com.eco.bio7.ijmacro.editor.IJMacroEditorPlugin;
 import com.eco.bio7.ijmacro.editors.IJMacroEditor;
+import ij.macro.Interpreter;
 
 public class DebugStepFinishAction extends Action {
 
-	public DebugStepFinishAction() {
-		super("Run");
+	private DebugVariablesView debugVariablesView;
 
+	public DebugStepFinishAction(DebugVariablesView debugVariablesView) {
+		super("Run");
+		this.debugVariablesView = debugVariablesView;
 		setId("Run");
 		setText("Run");
 		setToolTipText("Runs the macro to completion at normal speed.");
@@ -37,6 +41,24 @@ public class DebugStepFinishAction extends Action {
 		if (editore != null) {
 			IJMacroEditor editor = (IJMacroEditor) editore;
 			editor.setDebugMode(ij.macro.Debugger.RUN_TO_COMPLETION);
+			int numLines = editor.getDocument().getNumberOfLines();
+			int lineOffset = 0;
+			try {
+				lineOffset = editor.getDocument().getLineOffset(numLines - 1);
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			editor.selectAndReveal(lineOffset, 0);
+			DebugMarkerAction.setMarkerCount(0);
+			editor.setMarkerExpression(null);
+			DebugTraceAction.setFastTrace(false);
+			Interpreter interp = Interpreter.getInstance();
+			if (interp != null) {
+
+				debugVariablesView.getDebugStopAction().setEnabled(false);
+
+			}
 		}
 
 	}

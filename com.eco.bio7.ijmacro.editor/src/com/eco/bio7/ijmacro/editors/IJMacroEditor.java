@@ -573,59 +573,55 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 				return 0;
 		}
 		if (mode == RUN_TO_EXPRESSION) {
-			
-			String[] valueOfEx = markerExpression.split(" ");
-			String existingVar = valueOfEx[0];
-			String operator = valueOfEx[1];
-			String valueToCompare = valueOfEx[2];
-			double val = interp.getVariable(existingVar);
+			if (markerExpression != null) {
+				String[] valueOfEx = markerExpression.split(" ");
+				String existingVar = valueOfEx[0];
+				String operator = valueOfEx[1];
+				String valueToCompare = valueOfEx[2];
+				double val = interp.getVariable(existingVar);
 
-			if (operator.equals("==")) {
-				if (val == Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
-				}
-			}
-			else if (operator.equals("!=")) {
-				if (val != Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
-				}
-			}
-			else if (operator.equals("<=")) {
-				if (val <= Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
-				}
-			}
-			else if (operator.equals(">=")) {
-				if (val >= Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
-				}
-			}
-			else if (operator.equals("<")) {
-				if (val < Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
-				}
-			}
-			else if (operator.equals(">")) {
-				if (val > Double.parseDouble(valueToCompare)) {
-					mode = STEP;
-					interp.setDebugMode(mode);
-				} else {
-					return 0;
+				if (operator.equals("==")) {
+					if (val == Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
+				} else if (operator.equals("!=")) {
+					if (val != Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
+				} else if (operator.equals("<=")) {
+					if (val <= Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
+				} else if (operator.equals(">=")) {
+					if (val >= Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
+				} else if (operator.equals("<")) {
+					if (val < Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
+				} else if (operator.equals(">")) {
+					if (val > Double.parseDouble(valueToCompare)) {
+						mode = STEP;
+						interp.setDebugMode(mode);
+					} else {
+						return 0;
+					}
 				}
 			}
 		}
@@ -811,7 +807,7 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		return selection.getText();
 	}
 
-	private ITextSelection getTextSelection(IEditorPart rEditor) {
+	public ITextSelection getTextSelection(IEditorPart rEditor) {
 		ITextEditor editor = (ITextEditor) rEditor;
 
 		ISelectionProvider sp = editor.getSelectionProvider();

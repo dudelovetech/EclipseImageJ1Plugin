@@ -87,7 +87,7 @@ public class ToggleDebugBreakpointAction extends AbstractRulerActionDelegate imp
 
 						IMarker marker;
 
-						marker = resource.createMarker("com.eco.bio7.redit.debugMarker");
+						marker = resource.createMarker("com.eco.bio7.ijmacro.editor.debugrulermark");
 						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
 						marker.setAttribute(IMarker.LINE_NUMBER, new Integer(startline));
 						marker.setAttribute(IMarker.MESSAGE, null);
