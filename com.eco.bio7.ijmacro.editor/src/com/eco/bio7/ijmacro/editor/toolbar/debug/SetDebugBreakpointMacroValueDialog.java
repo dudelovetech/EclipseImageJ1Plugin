@@ -69,9 +69,10 @@ public class SetDebugBreakpointMacroValueDialog extends Dialog {
 		
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-		this.expression = expression;
+		
 		parentShell.setLocation(x, y);*/
 		this.buttonText = buttonText;
+		this.expression = expression;
 		setShellStyle(SWT.RESIZE | SWT.TITLE);
 
 	}
