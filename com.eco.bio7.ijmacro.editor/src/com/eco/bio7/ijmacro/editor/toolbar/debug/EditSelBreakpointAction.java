@@ -112,8 +112,8 @@ public class EditSelBreakpointAction extends AbstractRulerActionDelegate impleme
 								
 								
 
-								String name = dialog.getUser();
-								String value = dialog.getPassword();
+								String name = dialog.getName();
+								String value = dialog.getValue();
 								String operator = dialog.getOperator();
 
 								String rDebugExpression = name + " " + operator + " " + value;

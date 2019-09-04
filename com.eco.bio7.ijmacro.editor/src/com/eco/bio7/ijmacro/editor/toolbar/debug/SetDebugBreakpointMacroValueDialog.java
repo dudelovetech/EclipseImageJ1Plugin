@@ -153,7 +153,7 @@ public class SetDebugBreakpointMacroValueDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(564, 300);
 	}
 
 	@Override
@@ -163,20 +163,12 @@ public class SetDebugBreakpointMacroValueDialog extends Dialog {
 		super.okPressed();
 	}
 
-	public String getUser() {
+	public String getName() {
 		return name;
 	}
 
-	public void setUser(String user) {
-		this.name = user;
-	}
-
-	public String getPassword() {
+	public String getValue() {
 		return value;
-	}
-
-	public void setPassword(String password) {
-		this.value = password;
 	}
 
 }

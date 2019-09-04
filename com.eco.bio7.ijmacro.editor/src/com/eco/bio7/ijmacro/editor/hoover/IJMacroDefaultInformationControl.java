@@ -367,21 +367,17 @@ public class IJMacroDefaultInformationControl extends AbstractInformationControl
 		}
 		/* Return if we have no function match we display possible debugger (if in debug mode) variables!*/
 		if (con.length() == 0) {
-
 			if (Interpreter.getInstance() != null) {
 				if (Interpreter.getInstance().stack != null) {
 					Variable[] variables = Interpreter.getInstance().stack;
 					if (variables != null) {
 						for (int i = 0; i < variables.length; i++) {
-							if (variables[i] != null) {
-								//System.out.println(variables[i].getType());
+							if (variables[i] != null) {								
 								if (variables[i].getType() == Variable.ARRAY) {
 									int symIndex = variables[i].symTabIndex;
-									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;
-									System.out.println(arrName + "  " + contentFromHoover);
+									String arrName = Interpreter.getInstance().pgm.table[symIndex].str;									
 									if (arrName.equals(contentFromHoover)) {
-										Variable[] elements = variables[i].getArray();
-										//con.append("Array" + System.lineSeparator() + System.lineSeparator());
+										Variable[] elements = variables[i].getArray();										
 										con.append("Index          Value" + System.lineSeparator()
 												+ System.lineSeparator());
 										for (int jj = 0; jj < elements.length; jj++) {

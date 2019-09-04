@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2014 M. Austenfeld
+ * Copyright (c) 2004-2019 M. Austenfeld
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -24,7 +23,6 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
@@ -32,10 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractRulerActionDelegate;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-
 import com.eco.bio7.image.Util;
-
-import ij.macro.Interpreter;
 
 public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionDelegate
 		implements IEditorActionDelegate {
@@ -65,16 +60,9 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 
 			//rDebugExpression = dlg.getValue();
 			SetDebugBreakpointMacroValueDialog dialog = new SetDebugBreakpointMacroValueDialog(
-					new Shell(Util.getDisplay()), "Set Equality and Relational Expression",null);
+					new Shell(Util.getDisplay()), "Set Expression",null);
 
-			// get the new values from the dialog
-			if (dialog.open() == Window.OK) {
-
-				String name = dialog.getUser();
-				String value = dialog.getPassword();
-				String operator = dialog.getOperator();
-
-				rDebugExpression = name + " " + operator + " " + value;
+			
 
 				IResource resource = (IResource) editore.getEditorInput().getAdapter(IResource.class);
 				if (resource != null) {
@@ -103,6 +91,20 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 
 							startline = selection.getStartLine() + 1;
 							stopline = selection.getEndLine() + 1;
+							
+							// get the new values from the dialog
+							if (dialog.open() == Window.OK) {
+
+								String name = dialog.getName();
+								String value = dialog.getValue();
+								String operator = dialog.getOperator();
+
+								rDebugExpression = name + " " + operator + " " + value;
+							}
+
+							else {
+								return;
+							}
 
 							IMarker marker;
 
@@ -121,11 +123,7 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 					}
 				}
 
-			}
-
-			else {
-				return;
-			}
+			
 
 		}
 	}

@@ -896,8 +896,9 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 		step = true;
 		Interpreter interp = Interpreter.getInstance();
 		if (interp != null) {
-			if (interp.getDebugger() == null)
-				fixLineEndings();
+			if (interp.getDebugger() == null) {
+				//fixLineEndings();
+			}
 			interp.setDebugger(this);
 			interp.setDebugMode(mode);
 		}
@@ -919,11 +920,11 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 	 */
 	public void fixLineEndings() {
 
-		IDocumentProvider dp = this.getDocumentProvider();
-		IDocument doc = dp.getDocument(this.getEditorInput());
+		//IDocumentProvider dp = this.getDocumentProvider();
+		//IDocument doc = dp.getDocument(this.getEditorInput());
 		/*We use the document adapter here to preserve editor markers. Else they are deleted!*/
-		replace(doc, "\r\n", "\n", true, true, true, false, false);
-		replace(doc, "\r", "\n", true, true, true, false, false);
+		//replace(doc, "\r\n", "\n", true, false, true, false, false);
+		//replace(doc, "\r", "", true, false, true, false, false);
 		/*String text = getText();
 		text = text.replaceAll("\r\n", "\n");
 		text = text.replaceAll("\r", "\n");
@@ -949,7 +950,13 @@ public class IJMacroEditor extends TextEditor implements IPropertyChangeListener
 			};
 			while ((docRegion = fr.find(docRegion.getOffset() + 1, word1, true, caseSensitive, wholeWord,
 					regularExpressions)) != null) {
-				fr.replace(word2, regularExpressions);
+				
+				try {
+					 fr.replace(word2, regularExpressions);
+				} catch (Exception e) {
+					System.out.println("Line: "+(doc.getLineOfOffset(docRegion.getOffset() + 1)+1));
+					e.printStackTrace();
+				}
 				x++;
 			}
 
