@@ -26,27 +26,21 @@ public class SetDebugMacroValueDialog extends Dialog {
 	private String name = "";
 	private String value = "";
 	private String buttonText;
-	
-	@Override
-	protected int getShellStyle()
-	{
-	    return super.getShellStyle() & (~SWT.RESIZE);
-	}
 
 	public SetDebugMacroValueDialog(Shell parentShell, String buttonText) {
 		super(parentShell);
 		parentShell.setText(buttonText);
 		/* Center the dialog! */
-		Monitor primary = Util.getDisplay().getPrimaryMonitor();
+		/*Monitor primary = Util.getDisplay().getPrimaryMonitor();
 		Rectangle bounds = primary.getBounds();
 		Rectangle rect = parentShell.getBounds();
-
+		
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-
-		parentShell.setLocation(x, y);
+		
+		parentShell.setLocation(x, y);*/
 		this.buttonText = buttonText;
-		//setShellStyle(SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.RESIZE | SWT.TITLE);
 
 	}
 
@@ -104,7 +98,7 @@ public class SetDebugMacroValueDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(600, 300);
+		return new Point(450, 300);
 	}
 
 	@Override

@@ -57,26 +57,22 @@ public class SetDebugBreakpointMacroValueDialog extends Dialog {
 	public String getOperator() {
 		return operator;
 	}
-	@Override
-	protected int getShellStyle()
-	{
-	    return super.getShellStyle() & (~SWT.RESIZE);
-	}
+	
 
 	public SetDebugBreakpointMacroValueDialog(Shell parentShell, String buttonText, String expression) {
 		super(parentShell);
 		parentShell.setText(buttonText);
 		/* Center the dialog! */
-		Monitor primary = Util.getDisplay().getPrimaryMonitor();
+		/*Monitor primary = Util.getDisplay().getPrimaryMonitor();
 		Rectangle bounds = primary.getBounds();
 		Rectangle rect = parentShell.getBounds();
-
+		
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
 		this.expression = expression;
-		parentShell.setLocation(x, y);
+		parentShell.setLocation(x, y);*/
 		this.buttonText = buttonText;
-		//setShellStyle(SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.RESIZE | SWT.TITLE);
 
 	}
 
@@ -158,7 +154,7 @@ public class SetDebugBreakpointMacroValueDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(600, 300);
+		return new Point(564, 300);
 	}
 
 	@Override
