@@ -1,6 +1,17 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52.q (1.52q46):
+
+1. New debug view toolbar actions availabe to easily debug ImageJ macros (without loosing editor key focus on MacOSX when an image is created or opened).
+2. Implemented all default ImageJ debug actions as toolbar actions (one action for 'Trace' and 'Fast Trace')
+3. New debug functions available to set a variable value in debug mode.
+4. New breakpoint actions available to set, edit, delete breakpoints and simple expression breakpoints (evaluate  boolean variable expression) in the ruler menu of the editor. Created breakpoints are automatically stored, too.
+5. Extended the editor hoover to display the variable values when you hoover the editor. Array values will be displayed, too.
+6. The default array value display table will be opened if you click on the debug view table column.
+7. Implemented several text editor and toolbar changes to visualize the debugging process.
+8. Fixed several bugs.
+
 ### New in 1.52q (1.52q45):
 
 1. Fixed a PlotWindow deadlock
