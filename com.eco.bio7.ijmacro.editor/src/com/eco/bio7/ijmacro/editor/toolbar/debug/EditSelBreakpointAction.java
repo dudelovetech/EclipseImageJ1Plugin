@@ -103,7 +103,7 @@ public class EditSelBreakpointAction extends AbstractRulerActionDelegate impleme
 							
                              
 							SetDebugBreakpointMacroValueDialog dialog = new SetDebugBreakpointMacroValueDialog(
-									new Shell(Util.getDisplay()), "Set", expression);
+									Util.getShell(), "Set", expression);
 							
 							
 

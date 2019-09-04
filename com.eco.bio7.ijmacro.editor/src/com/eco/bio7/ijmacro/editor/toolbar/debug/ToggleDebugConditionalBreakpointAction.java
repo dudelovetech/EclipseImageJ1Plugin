@@ -60,7 +60,7 @@ public class ToggleDebugConditionalBreakpointAction extends AbstractRulerActionD
 
 			//rDebugExpression = dlg.getValue();
 			SetDebugBreakpointMacroValueDialog dialog = new SetDebugBreakpointMacroValueDialog(
-					new Shell(Util.getDisplay()), "Set Expression",null);
+					Util.getShell(), "Set Expression",null);
 
 			
 

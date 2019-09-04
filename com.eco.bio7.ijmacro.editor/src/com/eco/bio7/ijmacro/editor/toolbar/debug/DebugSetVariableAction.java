@@ -39,7 +39,7 @@ public class DebugSetVariableAction extends Action {
 
 	public void run() {
 
-		SetDebugMacroValueDialog dialog = new SetDebugMacroValueDialog(new Shell(Util.getDisplay()), "Set Value");
+		SetDebugMacroValueDialog dialog = new SetDebugMacroValueDialog(Util.getShell(), "Set Value");
 
 		// get the new values from the dialog
 		if (dialog.open() == Window.OK) {
