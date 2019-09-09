@@ -1,6 +1,11 @@
 # EclipseImageJ1Plugin
 A repository for an Eclipse ImageJ1 plugin contributed from the Bio7 project.
 
+### New in 1.52.q (1.52q48):
+
+1. Fixed a deadlock occuring  on MacoSX when detaching image tabs.
+2. Fixed a PlotWindow deadlock when using the action "Close All".
+
 ### New in 1.52.q (1.52q46):
 
 1. New debug view toolbar actions availabe to easily debug ImageJ macros (without loosing editor key focus on MacOSX when an image is created or opened).
