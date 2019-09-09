@@ -200,23 +200,26 @@ public class CanvasView extends ViewPart {
 		});
 	}
 
+	public void layoutParent(Composite parent) {
+		// Wrap to avoid deadlock of awt frame access!
+		Display dis = Util.getDisplay();
+		dis.syncExec(new Runnable() {
+
+			public void run() {
+				/* Call parent layout before the plot layout! */
+				/*The layout of tab items plots will be changed in the tab selection listener (see tab listener below)!
+				 *This is by the way not so expansive as to relayout all PlotWindows. Only the visible tab item PlotWindows will be relayouted!*/
+				parent.layout();
+
+			}
+		});
+	}
+
 	void resizePlotWindow(Composite parent, ImageWindow win) {
 		if (parent.isDisposed() == false) {
 
 			if (win != null) {
 
-				// Wrap to avoid deadlock of awt frame access!
-				Display dis = Util.getDisplay();
-				dis.syncExec(new Runnable() {
-
-					public void run() {
-						/* Call parent layout before the plot layout! */
-						/*The layout of tab items plots will be changed in the tab selection listener (see tab listener below)!
-						 *This is by the way not so expansive as to relayout all PlotWindows. Only the visible tab item PlotWindows will be relayouted!*/
-						parent.layout();
-
-					}
-				});
 				//plotWindowResize(win,current);
 
 				int ids[] = WindowManager.getIDList();
@@ -402,7 +405,7 @@ public class CanvasView extends ViewPart {
 				if (win != null) {
 					//if (win instanceof PlotWindow) {
 					/*Avoid the resizing of the CanvasView if a detached view is resized!*/
-
+					layoutParent(parent);
 					resizePlotWindow(parent, win);
 
 					//}
@@ -731,6 +734,7 @@ public class CanvasView extends ViewPart {
 				// current.requestFocus();
 				/*Here we resize a PlotWindow in thhe tabFolder when a tabItem has been selected the item plot windows have the same size!*/
 				if (win instanceof PlotWindow) {
+					layoutParent(parent);
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							resizePlotWindow(parent, win);
