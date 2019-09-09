@@ -91,6 +91,15 @@ public class IJTabs {
 	 * Closes all tabs in the ImageJ view.
 	 */
 	public static void deleteAllTabs() {
+		/* Close all detached views if available! */
+		IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getViewReferences();
+		for (int i = 0; i < viewRefs.length; i++) {
+			String id = viewRefs[i].getId();
+			if (id.equals("com.eco.bio7.image.detachedImage")) {
+				viewRefs[i].getPage().hideView(viewRefs[i]);
+			}
+		}
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean javaFXEmbedded = store.getBoolean("JAVAFX_EMBEDDED");
 		final CTabItem[] items = CanvasView.getCanvas_view().tabFolder.getItems();
@@ -122,15 +131,6 @@ public class IJTabs {
 				});
 			}
 
-		}
-		/* Close all detached views if available! */
-		IViewReference[] viewRefs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getViewReferences();
-		for (int i = 0; i < viewRefs.length; i++) {
-			String id = viewRefs[i].getId();
-			if (id.equals("com.eco.bio7.image.detachedImage")) {
-				viewRefs[i].getPage().hideView(viewRefs[i]);
-			}
 		}
 
 	}

@@ -213,7 +213,7 @@ public class CanvasView extends ViewPart {
 
 			}
 		});
-	}
+	} 
 
 	void resizePlotWindow(Composite parent, ImageWindow win) {
 		if (parent.isDisposed() == false) {
