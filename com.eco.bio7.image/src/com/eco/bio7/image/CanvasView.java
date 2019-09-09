@@ -213,7 +213,7 @@ public class CanvasView extends ViewPart {
 
 			}
 		});
-	} 
+	}
 
 	void resizePlotWindow(Composite parent, ImageWindow win) {
 		if (parent.isDisposed() == false) {
@@ -406,7 +406,12 @@ public class CanvasView extends ViewPart {
 					//if (win instanceof PlotWindow) {
 					/*Avoid the resizing of the CanvasView if a detached view is resized!*/
 					layoutParent(parent);
-					resizePlotWindow(parent, win);
+					SwingUtilities.invokeLater(new Runnable() {
+						// !!
+						public void run() {
+							resizePlotWindow(parent, win);
+						}
+					});
 
 					//}
 				}
