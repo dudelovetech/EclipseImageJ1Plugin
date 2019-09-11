@@ -1043,6 +1043,15 @@ public class IJ {
 			str = "0" + str;
 		return str;
 	}
+	
+	/** Pad 's' with leading zeros to the specified number of digits. */
+	public static String pad(String s, int digits) {
+		String str = ""+s;
+		while (str.length()<digits)
+			str = "0"+str;
+		return str;
+	}
+
 
 	/**
 	 * Adds the specified class to a Vector to keep it from being garbage collected,
